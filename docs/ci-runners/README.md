@@ -385,11 +385,11 @@ Having the peering rules in minds we've designed such networking layout:
 
 For `ephemeral-runners` subnetworks we've decided to use subsequent CIDRs, starting from `10.10.0.0/21`.
 
-The `/21` network gives use place for 2046 nodes per network. In case we need more, we should consider
-creating specific GCP projects for part of the ephemeral runners for such shard. This is what we did for `shared`
-(which uses the `gitlab-ci-plan-free-X` projects).
+The `/21` network gives use place for 2046 nodes per network. In case we need more, we scale up the saturated
+shard.
 
-Every new CIDR should start at directly after the previously reserved one ends.
+Ideally, every new CIDR should start at directly after the previously reserved one ends, although that's not
+the case now.
 
 **The list bellow is the SSOT of the CIDRs we should use!**
 
@@ -398,141 +398,72 @@ Every new CIDR should start at directly after the previously reserved one ends.
 **When adding any new ephemeral-runners subnetwork don't forget to update the
 [`ci-gateway` firewall](#ci-gateway-ilb-firewall)!**
 
-| Environment                                | Network `{$PROJECT}/$VPC/$SUBNETWORK`       | CIDR             |
-|--------------------------------------------|---------------------------------------------|------------------|
-| `GCP/gitlab-ci-plan-free-7`                | `ephemeral-runners/ephemeral-runners`       | `10.10.0.0/21`   |
-| `GCP/gitlab-ci-plan-free-6`                | `ephemeral-runners/ephemeral-runners`       | `10.10.8.0/21`   |
-| `GCP/gitlab-ci-plan-free-5`                | `ephemeral-runners/ephemeral-runners`       | `10.10.16.0/21`  |
-| `GCP/gitlab-ci-plan-free-4`                | `ephemeral-runners/ephemeral-runners`       | `10.10.24.0/21`  |
-| `GCP/gitlab-ci-plan-free-3`                | `ephemeral-runners/ephemeral-runners`       | `10.10.32.0/21`  |
-| `GCP/gitlab-ci`                            | `ci/ephemeral-runners-private`              | `10.10.40.0/21`  |
-| `GCP/gl-r-saas-l-m-amd64-gpu-1`            | `gitlab-ci/saas-l-m-gpu-s/p1`               | `10.10.48.0/21`  |
-| `GCP/gitlab-ci`                            | `ci/ephemeral-runners-private-2`            | `10.10.56.0/21`  |
-| `GCP/gitlab-ci-private-1`                  | `ephemeral-runners/ephemeral-runners`       | `10.10.64.0/21`  |
-| `GCP/gitlab-ci-private-2`                  | `ephemeral-runners/ephemeral-runners`       | `10.10.72.0/21`  |
-| `GCP/gitlab-ci-private-3`                  | `ephemeral-runners/ephemeral-runners`       | `10.10.80.0/21`  |
-| `GCP/gitlab-ci-private-4`                  | `ephemeral-runners/ephemeral-runners`       | `10.10.88.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gpu-1`        | `ephemeral-runners/ephemeral-runners`       | `10.10.96.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gpu-2`        | `ephemeral-runners/ephemeral-runners`       | `10.10.104.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-gpu-3`        | `ephemeral-runners/ephemeral-runners`       | `10.10.112.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.10.120.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.10.128.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.10.136.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-4`            | `ephemeral-runners/ephemeral-runners`       | `10.10.144.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-5`            | `ephemeral-runners/ephemeral-runners`       | `10.10.152.0/21` |
-| `GCP/gitlab-r-saas-l-l-amd64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.10.160.0/21` |
-| `GCP/gitlab-r-saas-l-l-amd64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.10.168.0/21` |
-| `GCP/gitlab-r-saas-l-l-amd64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.10.176.0/21` |
-| `GCP/gitlab-r-saas-l-l-amd64-4`            | `ephemeral-runners/ephemeral-runners`       | `10.10.184.0/21` |
-| `GCP/gitlab-r-saas-l-l-amd64-5`            | `ephemeral-runners/ephemeral-runners`       | `10.10.192.0/21` |
-| `GCP/gitlab-r-saas-l-s-amd64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.10.200.0/21` |
-| `GCP/gitlab-r-saas-l-s-amd64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.10.208.0/21` |
-| `GCP/gitlab-r-saas-l-s-amd64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.10.216.0/21` |
-| `GCP/gitlab-r-saas-l-s-amd64-4`            | `ephemeral-runners/ephemeral-runners`       | `10.10.224.0/21` |
-| `GCP/gitlab-r-saas-l-s-amd64-5`            | `ephemeral-runners/ephemeral-runners`       | `10.10.232.0/21` |
-| `GCP/gitlab-r-saas-l-s-amd64-6`            | `ephemeral-runners/ephemeral-runners`       | `10.10.240.0/21` |
-| `GCP/gl-r-saas-l-m-amd64-gpu-2`            | `gitlab-ci/saas-l-m-gpu-s/p2`               | `10.10.248.0/21` |
-| `GCP/gl-r-saas-l-m-amd64-gpu-3`            | `gitlab-ci/saas-l-m-gpu-s/p3`               | `10.11.8.0/21`   |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-5` | `ephemeral-runners/ephemeral-runners`       | `10.11.16.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-6` | `ephemeral-runners/ephemeral-runners`       | `10.11.24.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-1` | `ephemeral-runners/ephemeral-runners`       | `10.11.32.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-2` | `ephemeral-runners/ephemeral-runners`       | `10.11.40.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-3` | `ephemeral-runners/ephemeral-runners`       | `10.11.48.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-4` | `ephemeral-runners/ephemeral-runners`       | `10.11.56.0/21`  |
-| `GCP/gitlab-ci-private-5`                  | `ephemeral-runners/ephemeral-runners`       | `10.11.64.0/21`  |
-| `GCP/gitlab-ci-private-6`                  | `ephemeral-runners/ephemeral-runners`       | `10.11.72.0/21`  |
-| `GCP/gitlab-r-saas-l-xl-amd64-1`           | `ephemeral-runners/ephemeral-runners`       | `10.11.104.0/21` |
-| `GCP/gitlab-r-saas-l-xl-amd64-2`           | `ephemeral-runners/ephemeral-runners`       | `10.11.112.0/21` |
-| `GCP/gitlab-r-saas-l-xl-amd64-3`           | `ephemeral-runners/ephemeral-runners`       | `10.11.120.0/21` |
-| `GCP/gitlab-r-saas-l-xl-amd64-4`           | `ephemeral-runners/ephemeral-runners`       | `10.11.128.0/21` |
-| `GCP/gitlab-r-saas-l-xl-amd64-5`           | `ephemeral-runners/ephemeral-runners`       | `10.11.136.0/21` |
-| `GCP/gitlab-r-saas-l-2xl-amd64-1`          | `ephemeral-runners/ephemeral-runners`       | `10.11.144.0/21` |
-| `GCP/gitlab-r-saas-l-2xl-amd64-2`          | `ephemeral-runners/ephemeral-runners`       | `10.11.152.0/21` |
-| `GCP/gitlab-r-saas-l-2xl-amd64-3`          | `ephemeral-runners/ephemeral-runners`       | `10.11.160.0/21` |
-| `GCP/gitlab-r-saas-l-2xl-amd64-4`          | `ephemeral-runners/ephemeral-runners`       | `10.11.168.0/21` |
-| `GCP/gitlab-r-saas-l-2xl-amd64-5`          | `ephemeral-runners/ephemeral-runners`       | `10.11.176.0/21` |
-| `GCP/gitlab-r-saas-l-m-arm64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.11.184.0/21` |
-| `GCP/gitlab-r-saas-l-m-arm64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.11.192.0/21` |
-| `GCP/gitlab-r-saas-l-m-arm64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.11.200.0/21` |
-| `GCP/gitlab-r-saas-l-l-arm64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.11.208.0/21` |
-| `GCP/gitlab-r-saas-l-l-arm64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.11.216.0/21` |
-| `GCP/gitlab-r-saas-l-l-arm64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.11.224.0/21` |
-| `GCP/gitlab-r-saas-l-s-arm64-1`            | `gitlab-ci/saas-l-s-arm64/p1`               | `10.12.48.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-2`            | `gitlab-ci/saas-l-s-arm64/p2`               | `10.12.56.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-3`            | `gitlab-ci/saas-l-s-arm64/p3`               | `10.12.64.0/21`  |
-| `GCP/gitlab-r-saas-l-m-arm64-1`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.11.232.0/21` |
-| `GCP/gitlab-r-saas-l-m-arm64-2`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.11.240.0/21` |
-| `GCP/gitlab-r-saas-l-m-arm64-3`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.11.248.0/21` |
-| `GCP/gitlab-r-saas-l-l-arm64-1`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.8.0/21`   |
-| `GCP/gitlab-r-saas-l-l-arm64-2`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.16.0/21`  |
-| `GCP/gitlab-r-saas-l-l-arm64-3`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.24.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-1`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.72.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-2`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.80.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-3`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.88.0/21`  |
-| `GCP/gitlab-ci`                            | `gitlab-ci-private/private-services`        | `10.12.40.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-1`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p1`      | `10.12.8.0/21`   |
-| `GCP/gitlab-r-saas-l-p-amd64-2`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p2`      | `10.12.16.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-3`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p3`      | `10.12.24.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-4`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p4`      | `10.12.72.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-5`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p5`      | `10.12.80.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-6`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p6`      | `10.12.88.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-7`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p7`      | `10.12.96.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-8`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p8`      | `10.12.104.0/21` |
-| `GCP/gitlab-ci-private-1`                  | `gitlab-ci/gitlab-ci-private/p3`            | `10.13.16.0/21`  |
-| `GCP/gitlab-ci-private-2`                  | `gitlab-ci/gitlab-ci-private/p4`            | `10.13.24.0/21`  |
-| `GCP/gitlab-ci-private-3`                  | `gitlab-ci/gitlab-ci-private/p5`            | `10.13.32.0/21`  |
-| `GCP/gitlab-ci-private-4`                  | `gitlab-ci/gitlab-ci-private/p6`            | `10.13.40.0/21`  |
-| `GCP/gitlab-ci-private-5`                  | `gitlab-ci/gitlab-ci-private/p7`            | `10.13.48.0/21`  |
-| `GCP/gitlab-ci-private-6`                  | `gitlab-ci/gitlab-ci-private/p8`            | `10.13.56.0/21`  |
-| `GCP/r-saas-l-m-amd64-1`                   | `gitlab-ci/r-saas-l-m-amd64/p1`             | `10.13.64.0/21`  |
-| `GCP/r-saas-l-m-amd64-2`                   | `gitlab-ci/r-saas-l-m-amd64/p2`             | `10.13.72.0/21`  |
-| `GCP/r-saas-l-m-amd64-3`                   | `gitlab-ci/r-saas-l-m-amd64/p3`             | `10.13.80.0/21`  |
-| `GCP/r-saas-l-m-amd64-4`                   | `gitlab-ci/r-saas-l-m-amd64/p4`             | `10.13.88.0/21`  |
-| `GCP/r-saas-l-m-amd64-5`                   | `gitlab-ci/r-saas-l-m-amd64/p5`             | `10.13.96.0/21`  |
-| `GCP/r-saas-l-l-amd64-1`                   | `gitlab-ci/r-saas-l-l-amd64/p1`             | `10.13.104.0/21` |
-| `GCP/r-saas-l-l-amd64-2`                   | `gitlab-ci/r-saas-l-l-amd64/p2`             | `10.13.112.0/21` |
-| `GCP/r-saas-l-l-amd64-3`                   | `gitlab-ci/r-saas-l-l-amd64/p3`             | `10.13.120.0/21` |
-| `GCP/r-saas-l-l-amd64-4`                   | `gitlab-ci/r-saas-l-l-amd64/p4`             | `10.13.128.0/21` |
-| `GCP/r-saas-l-l-amd64-5`                   | `gitlab-ci/r-saas-l-l-amd64/p5`             | `10.13.136.0/21` |
-| `GCP/r-saas-l-xl-amd64-1`                  | `gitlab-ci/r-saas-l-xl-amd64/p1`            | `10.13.144.0/21` |
-| `GCP/r-saas-l-xl-amd64-2`                  | `gitlab-ci/r-saas-l-xl-amd64/p2`            | `10.13.152.0/21` |
-| `GCP/r-saas-l-xl-amd64-3`                  | `gitlab-ci/r-saas-l-xl-amd64/p3`            | `10.13.160.0/21` |
-| `GCP/r-saas-l-xl-amd64-4`                  | `gitlab-ci/r-saas-l-xl-amd64/p4`            | `10.13.168.0/21` |
-| `GCP/r-saas-l-xl-amd64-5`                  | `gitlab-ci/r-saas-l-xl-amd64/p5`            | `10.13.176.0/21` |
-| `GCP/r-saas-l-2xl-amd64-1`                 | `gitlab-ci/r-saas-l-2xl-amd64/p1`           | `10.13.184.0/21` |
-| `GCP/r-saas-l-2xl-amd64-2`                 | `gitlab-ci/r-saas-l-2xl-amd64/p2`           | `10.13.192.0/21` |
-| `GCP/r-saas-l-2xl-amd64-3`                 | `gitlab-ci/r-saas-l-2xl-amd64/p3`           | `10.13.200.0/21` |
-| `GCP/r-saas-l-2xl-amd64-4`                 | `gitlab-ci/r-saas-l-2xl-amd64/p4`           | `10.13.208.0/21` |
-| `GCP/r-saas-l-2xl-amd64-5`                 | `gitlab-ci/r-saas-l-2xl-amd64/p5`           | `10.13.216.0/21` |
-| `GCP/r-saas-l-m-arm64-1`                   | `gitlab-ci/r-saas-l-m-arm64/p1`             | `10.13.224.0/21` |
-| `GCP/r-saas-l-m-arm64-2`                   | `gitlab-ci/r-saas-l-m-arm64/p2`             | `10.13.232.0/21` |
-| `GCP/r-saas-l-m-arm64-3`                   | `gitlab-ci/r-saas-l-m-arm64/p3`             | `10.13.240.0/21` |
-| `GCP/r-saas-l-l-arm64-1`                   | `gitlab-ci/r-saas-l-l-arm64/p1`             | `10.13.248.0/21` |
-| `GCP/r-saas-l-l-arm64-2`                   | `gitlab-ci/r-saas-l-l-arm64/p2`             | `10.14.0.0/21`   |
-| `GCP/r-saas-l-l-arm64-3`                   | `gitlab-ci/r-saas-l-l-arm64/p3`             | `10.14.8.0/21`   |
-| `GCP/r-saas-l-m-amd64-org-1`               | `gitlab-ci/r-saas-l-m-amd64-org/p1`         | `10.14.16.0/21`  |
-| `GCP/r-saas-l-m-amd64-org-2`               | `gitlab-ci/r-saas-l-m-amd64-org/p2`         | `10.14.24.0/21`  |
-| `GCP/r-saas-l-m-amd64-org-3`               | `gitlab-ci/r-saas-l-m-amd64-org/p3`         | `10.14.32.0/21`  |
-| `GCP/r-saas-l-m-amd64-org-4`               | `gitlab-ci/r-saas-l-m-amd64-org/p4`         | `10.14.40.0/21`  |
-| `GCP/r-saas-l-m-amd64-org-5`               | `gitlab-ci/r-saas-l-m-amd64-org/p5`         | `10.14.48.0/21`  |
-| `GCP/r-saas-l-m-amd64-org-6`               | `gitlab-ci/r-saas-l-m-amd64-org/p6`         | `10.14.56.0/21`  |
-| `GCP/r-saas-l-s-amd64-1`                   | `gitlab-ci/r-saas-l-s-amd64/p1`             | `10.14.64.0/21`  |
-| `GCP/r-saas-l-s-amd64-2`                   | `gitlab-ci/r-saas-l-s-amd64/p2`             | `10.14.72.0/21`  |
-| `GCP/r-saas-l-s-amd64-3`                   | `gitlab-ci/r-saas-l-s-amd64/p3`             | `10.14.80.0/21`  |
-| `GCP/r-saas-l-s-amd64-4`                   | `gitlab-ci/r-saas-l-s-amd64/p4`             | `10.14.88.0/21`  |
-| `GCP/r-saas-l-s-amd64-5`                   | `gitlab-ci/r-saas-l-s-amd64/p5`             | `10.14.96.0/21`  |
-| `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-1`        | `10.20.0.0/21`   |
-| `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-2`        | `10.20.8.0/21`   |
-| `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-green-1`       | `10.20.16.0/21`  |
-| `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-green-2`       | `10.20.24.0/21`  |
-| `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-blue-1`             | `10.30.0.0/21`   |
-| `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-blue-2`             | `10.30.8.0/21`   |
-| `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-green-1`            | `10.30.16.0/21`  |
-| `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-green-2`            | `10.30.24.0/21`  |
-| `AWS/r-saas-m-l-m2pro`                     | `jobs-vpc/saas-macos-l-m2pro-blue-1`        | `10.40.0.0/21`   |
-| `AWS/r-saas-m-l-m2pro`                     | `jobs-vpc/saas-macos-l-m2pro-blue-2`        | `10.40.8.0/21`   |
-| `AWS/r-saas-m-l-m2pro`                     | `jobs-vpc/saas-macos-l-m2pro-green-1`       | `10.40.16.0/21`  |
-| `AWS/r-saas-m-l-m2pro`                     | `jobs-vpc/saas-macos-l-m2pro-green-2`       | `10.40.24.0/21`  |
+| Environment                         | Network `{$PROJECT}/$VPC/$SUBNETWORK` | CIDR             |
+|-------------------------------------|---------------------------------------|------------------|
+| `GCP/gl-r-saas-l-m-amd64-gpu-1`     | `gitlab-ci/saas-l-m-gpu-s/p1`         | `10.10.48.0/21`  |
+| `GCP/gl-r-saas-l-m-amd64-gpu-2`     | `gitlab-ci/saas-l-m-gpu-s/p2`         | `10.10.248.0/21` |
+| `GCP/gl-r-saas-l-m-amd64-gpu-3`     | `gitlab-ci/saas-l-m-gpu-s/p3`         | `10.11.8.0/21`   |
+| `GCP/gitlab-r-saas-l-s-arm64-1`     | `gitlab-ci/saas-l-s-arm64/p1`         | `10.12.48.0/21`  |
+| `GCP/gitlab-r-saas-l-s-arm64-2`     | `gitlab-ci/saas-l-s-arm64/p2`         | `10.12.56.0/21`  |
+| `GCP/gitlab-r-saas-l-s-arm64-3`     | `gitlab-ci/saas-l-s-arm64/p3`         | `10.12.64.0/21`  |
+| `GCP/gitlab-ci`                     | `gitlab-ci/saas-l-p-amd64/psc`        | `10.12.0.0/24`   |
+| `GCP/gitlab-r-saas-l-p-amd64-1`     | `gitlab-ci/saas-l-p-amd64/p1`         | `10.12.8.0/21`   |
+| `GCP/gitlab-r-saas-l-p-amd64-2`     | `gitlab-ci/saas-l-p-amd64/p2`         | `10.12.16.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-3`     | `gitlab-ci/saas-l-p-amd64/p3`         | `10.12.24.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-4`     | `gitlab-ci/saas-l-p-amd64/p4`         | `10.12.72.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-5`     | `gitlab-ci/saas-l-p-amd64/p5`         | `10.12.80.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-6`     | `gitlab-ci/saas-l-p-amd64/p6`         | `10.12.88.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-7`     | `gitlab-ci/saas-l-p-amd64/p7`         | `10.12.96.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-8`     | `gitlab-ci/saas-l-p-amd64/p8`         | `10.12.104.0/21` |
+| `GCP/gitlab-r-saas-l-m-amd64-1`     | `gitlab-ci/saas-l-m-amd64/p1`         | `10.13.64.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-2`     | `gitlab-ci/saas-l-m-amd64/p2`         | `10.13.72.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-3`     | `gitlab-ci/saas-l-m-amd64/p3`         | `10.13.80.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-4`     | `gitlab-ci/saas-l-m-amd64/p4`         | `10.13.88.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-5`     | `gitlab-ci/saas-l-m-amd64/p5`         | `10.13.96.0/21`  |
+| `GCP/gitlab-r-saas-l-l-amd64-1`     | `gitlab-ci/saas-l-l-amd64/p1`         | `10.13.104.0/21` |
+| `GCP/gitlab-r-saas-l-l-amd64-2`     | `gitlab-ci/saas-l-l-amd64/p2`         | `10.13.112.0/21` |
+| `GCP/gitlab-r-saas-l-l-amd64-3`     | `gitlab-ci/saas-l-l-amd64/p3`         | `10.13.120.0/21` |
+| `GCP/gitlab-r-saas-l-l-amd64-4`     | `gitlab-ci/saas-l-l-amd64/p4`         | `10.13.128.0/21` |
+| `GCP/gitlab-r-saas-l-l-amd64-5`     | `gitlab-ci/saas-l-l-amd64/p5`         | `10.13.136.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-1`    | `gitlab-ci/saas-l-xl-amd64/p1`        | `10.13.144.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-2`    | `gitlab-ci/saas-l-xl-amd64/p2`        | `10.13.152.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-3`    | `gitlab-ci/saas-l-xl-amd64/p3`        | `10.13.160.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-4`    | `gitlab-ci/saas-l-xl-amd64/p4`        | `10.13.168.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-5`    | `gitlab-ci/saas-l-xl-amd64/p5`        | `10.13.176.0/21` |
+| `GCP/gitlab-r-saas-l-2xl-amd64-1`   | `gitlab-ci/saas-l-2xl-amd64/p1`       | `10.13.184.0/21` |
+| `GCP/gitlab-r-saas-l-2xl-amd64-2`   | `gitlab-ci/saas-l-2xl-amd64/p2`       | `10.13.192.0/21` |
+| `GCP/gitlab-r-saas-l-2xl-amd64-3`   | `gitlab-ci/saas-l-2xl-amd64/p3`       | `10.13.200.0/21` |
+| `GCP/gitlab-r-saas-l-2xl-amd64-4`   | `gitlab-ci/saas-l-2xl-amd64/p4`       | `10.13.208.0/21` |
+| `GCP/gitlab-r-saas-l-2xl-amd64-5`   | `gitlab-ci/saas-l-2xl-amd64/p5`       | `10.13.216.0/21` |
+| `GCP/gitlab-r-saas-l-m-arm64-1`     | `gitlab-ci/saas-l-m-arm64/p1`         | `10.13.224.0/21` |
+| `GCP/gitlab-r-saas-l-m-arm64-2`     | `gitlab-ci/saas-l-m-arm64/p2`         | `10.13.232.0/21` |
+| `GCP/gitlab-r-saas-l-m-arm64-3`     | `gitlab-ci/saas-l-m-arm64/p3`         | `10.13.240.0/21` |
+| `GCP/gitlab-r-saas-l-l-arm64-1`     | `gitlab-ci/saas-l-l-arm64/p1`         | `10.13.248.0/21` |
+| `GCP/gitlab-r-saas-l-l-arm64-2`     | `gitlab-ci/saas-l-l-arm64/p2`         | `10.14.0.0/21`   |
+| `GCP/gitlab-r-saas-l-l-arm64-3`     | `gitlab-ci/saas-l-l-arm64/p3`         | `10.14.8.0/21`   |
+| `GCP/gitlab-r-saas-l-m-amd64-org-1` | `gitlab-ci/saas-l-m-amd64-org/p1`     | `10.14.16.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-org-2` | `gitlab-ci/saas-l-m-amd64-org/p2`     | `10.14.24.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-org-3` | `gitlab-ci/saas-l-m-amd64-org/p3`     | `10.14.32.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-org-4` | `gitlab-ci/saas-l-m-amd64-org/p4`     | `10.14.40.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-org-5` | `gitlab-ci/saas-l-m-amd64-org/p5`     | `10.14.48.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-org-6` | `gitlab-ci/saas-l-m-amd64-org/p6`     | `10.14.56.0/21`  |
+| `GCP/gitlab-r-saas-l-s-amd64-1`     | `gitlab-ci/saas-l-s-amd64/p1`         | `10.14.64.0/21`  |
+| `GCP/gitlab-r-saas-l-s-amd64-2`     | `gitlab-ci/saas-l-s-amd64/p2`         | `10.14.72.0/21`  |
+| `GCP/gitlab-r-saas-l-s-amd64-3`     | `gitlab-ci/saas-l-s-amd64/p3`         | `10.14.80.0/21`  |
+| `GCP/gitlab-r-saas-l-s-amd64-4`     | `gitlab-ci/saas-l-s-amd64/p4`         | `10.14.88.0/21`  |
+| `GCP/gitlab-r-saas-l-s-amd64-5`     | `gitlab-ci/saas-l-s-amd64/p5`         | `10.14.96.0/21`  |
+| `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-blue-1`  | `10.20.0.0/21`   |
+| `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-blue-2`  | `10.20.8.0/21`   |
+| `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-green-1` | `10.20.16.0/21`  |
+| `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-green-2` | `10.20.24.0/21`  |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-blue-1`       | `10.30.0.0/21`   |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-blue-2`       | `10.30.8.0/21`   |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-green-1`      | `10.30.16.0/21`  |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-green-2`      | `10.30.24.0/21`  |
+| `AWS/r-saas-m-l-m2pro`              | `jobs-vpc/saas-macos-l-m2pro-blue-1`  | `10.40.0.0/21`   |
+| `AWS/r-saas-m-l-m2pro`              | `jobs-vpc/saas-macos-l-m2pro-blue-2`  | `10.40.8.0/21`   |
+| `AWS/r-saas-m-l-m2pro`              | `jobs-vpc/saas-macos-l-m2pro-green-1` | `10.40.16.0/21`  |
+| `AWS/r-saas-m-l-m2pro`              | `jobs-vpc/saas-macos-l-m2pro-green-2` | `10.40.24.0/21`  |
 
 ##### `ci-gateway` ILB firewall
 
