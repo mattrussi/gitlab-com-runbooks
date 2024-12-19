@@ -32,8 +32,8 @@ The middleware is currently controlled by two feature flags:
 In case of an incident with this middleware, look at:
 
 * The two `Middleware check path traversal *` dashboards in the `Rails` components panel for the current performance. It is available in the [web: Overview](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1).
-  * The first dashboard will show the executions rate.
-  * The second dashboard is an Apdex chart on the execution time with a threshold of `1 ms`.
+  * The [`Middleware check path traversal executions rate` chart](https://dashboards.gitlab.net/d/web-main/web3a-overview?orgId=1&viewPanel=panel-132) will show the executions rate.
+  * The [`Middleware check path traversal execution time Apdex` chart](https://dashboards.gitlab.net/d/web-main/web3a-overview?orgId=1&viewPanel=panel-133) is an Apdex chart on the execution time with a threshold of `1 ms`.
   * Each dashboard will show two lines: one for rejected request and one for accepted requests.
 * [Kibana logs](https://log.gprd.gitlab.net/app/r/s/8bYSz) for a detailed report on requests detected as attempts.
 
@@ -41,7 +41,7 @@ In case of an incident with this middleware, look at:
 
 ### Rejecting requests that should be accepted
 
-The `Middleware check path traversal executions rate` chart will show an increasing rate for rejected requests.
+Symptom: The [`Middleware check path traversal executions rate` chart](https://dashboards.gitlab.net/d/web-main/web3a-overview?orgId=1&viewPanel=panel-132) shows an increasing rate for rejected requests.
 
 * Check the [Kibana logs](https://log.gprd.gitlab.net/app/r/s/8bYSz) and investigate the paths of the request that are rejected.
   * If these are genuine path traversal attempts, then we might be the target of an automated script that tries different urls with path traversal in bulks.
@@ -50,7 +50,8 @@ The `Middleware check path traversal executions rate` chart will show an increas
 
 ### Longer execution time
 
-In this case, the `Middleware check path traversal execution time Apdex` chart should show low numbers.
+Symptom: The [`Middleware check path traversal execution time Apdex` chart](https://dashboards.gitlab.net/d/web-main/web3a-overview?orgId=1&viewPanel=panel-133) shows low numbers.
+
 This is a clear indication that the middleware is taking too much time to run the path traversal regexp.
 
 This should be a symptom of a root cause external to the middleware.
