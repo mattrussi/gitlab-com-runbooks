@@ -288,12 +288,13 @@ metricsCatalog.serviceDefinition({
   },
 
   capacityPlanning+: {
+    local dimensionedShards = $.shards + ['tamland'],
     saturation_dimensions: [
       { selector: selectors.serializeHash({ shard: shard }) }
-      for shard in $.shards
+      for shard in dimensionedShards
     ] + [
       {
-        selector: selectors.serializeHash({ shard: { noneOf: $.shards } }),
+        selector: selectors.serializeHash({ shard: { noneOf: dimensionedShards } }),
         label: 'shard=rest-aggregated',
       },
     ],
