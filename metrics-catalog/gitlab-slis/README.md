@@ -1,5 +1,7 @@
 # User Journeys and Service Level Indicators
 
+[[_TOC_]]
+
 In software systems, a user journey represents the sequence of interactions and steps a user takes to accomplish a specific goal. Each of these steps represents a real human interaction with your system. User journeys help us understand the complete experience from the user's perspective, including their goals, challenges, and expectations.
 
 Service Level Indicators (SLIs), on the other hand, are the specific measurements we use to evaluate how well our system is serving users during these journeys.
