@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: LooseForeignKeyProcessedDeletedQueueTooLarge
     expr: >
-      count by(relname, type) (pg_stat_user_tables_n_live_tup{env="gprd", relname=~"loose_foreign_keys_.*", schemaname="gitlab_partitions_dynamic", type=~"(patroni|patroni-ci|patroni-sec)"}) > 2
+      count by(relname, type) (pg_stat_user_tables_n_live_tup{env="gprd", relname=~"loose_foreign_keys_.*", schemaname="gitlab_partitions_dynamic", type=~"(patroni|patroni-ci|patroni-sec)"}) > 10
     for: 60m
     labels:
       severity: 's3'
