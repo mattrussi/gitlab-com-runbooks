@@ -78,6 +78,7 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-cache': true,
     'redis-cluster-database-lb': true,
     'redis-cluster-repo-cache': true,
+    'redis-cluster-sessions': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
