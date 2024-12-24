@@ -7,6 +7,9 @@ This runbook covers the operations of the [rails middleware path traversal](http
 ## Overview
 
 The main idea behind the middleware is to run a [path traversal guard function](https://gitlab.com/gitlab-org/gitlab/-/blob/13bd92ac334c714318ba507efcca8b007d3e90ff/lib/gitlab/path_traversal.rb#L35) on the accessed path for web requests.
+This way, bad actors trying to leverage a [path traversal](https://en.wikipedia.org/wiki/Directory_traversal_attack) vulnerability will be detected and rejected.
+This follows the [path traversal guidelines](https://docs.gitlab.com/ee/development/secure_coding_guidelines.html#path-traversal-guidelines) from the secure coding guidelines.
+
 It will also take into account encoded characters (`%2F` for `/`) and the query parameters value (for example: `/foo?parameter=value`).
 Nested parameters(`/foo?param[test]=bar`) are also checked up to a depth level of `5`.
 
@@ -15,10 +18,12 @@ Since this is a Rails middleware, the backend will:
 * execute this for _all_ web requests.
 * execute this pretty early in the request processing (before the Rails router and several other middlewares).
 
-If a path traversal is detected,
+If a path traversal attempt is detected,
 
 * the request processing is interrupted and a `400 Bad Request` response with the body `Potential path traversal attempt detected.`.
 * the attempt is logged.
+
+If no path traversal is detected, the request is allowed to be processed by the Rails backend.
 
 ### Controlling the behavior
 
@@ -42,13 +47,17 @@ In case of an incident with this middleware, look at:
 ### Rejecting requests that should be accepted
 
 Symptom: The [`Middleware check path traversal executions rate` chart](https://dashboards.gitlab.net/d/web-main/web3a-overview?orgId=1&viewPanel=panel-132) shows an increasing rate for rejected requests.
+These requests will receive a `400 Bad Request` response.
 
 * Check the [Kibana logs](https://log.gprd.gitlab.net/app/r/s/8bYSz) and investigate the paths of the request that are rejected.
-  * If these are genuine path traversal attempts, then we might be the target of an automated script that tries different urls with path traversal in bulks.
-    * Dig in of these request come from the same source or not.
-  * If these are valid requests that should be accepted, reach out the owning team to fill a bug issue.
+  * From the accessed paths, locate and reach the owning team to categorize the attempt as valid or not.
+  * If these are genuine attempts, then we might be the target of an automated script that tries different urls with path traversal in bulks.
+    * The middleware is working as expected. However, it can be valuable to investigate if these requests come from a single originating source and block that source temporarily.
+  * If these are valid requests that should be accepted, this is a bug with the middleware detection logic.
+    * We could [disable](#controlling_the_behavior) the middleware temporarily to solve the problem.
+    * An issue should be created to update the middleware detection logic.
 
-### Longer execution time
+### Slower execution time
 
 Symptom: The [`Middleware check path traversal execution time Apdex` chart](https://dashboards.gitlab.net/d/web-main/web3a-overview?orgId=1&viewPanel=panel-133) shows low numbers.
 
