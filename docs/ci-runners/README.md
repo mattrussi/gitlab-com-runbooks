@@ -37,14 +37,19 @@ CI Runners are the backbone of GitLab's CI/CD workflows. They are specialized co
 2. **Resource Isolation**: Maintain isolated environments to ensure jobs do not interfere with each other.
 3. **Environment Management**: Set up required dependencies, containers, or virtual machines dynamically.
 4. **Scalability**: Scale infrastructure dynamically based on job load.
+5. **Artifact Management**: Handle the storage and transfer of job artifacts between pipeline stages.
+6. **Cache Management**: Manage caching mechanisms to speed up subsequent pipeline runs.
+7. **Security Scanning**: Execute security scans and vulnerability checks as part of the pipeline.
 
 #### Why CI Runners Matter
 
 * **Reliability**: Each job runs in a clean, reproducible environment, reducing flakiness.
-
 * **Automation**: Automates testing, deployment, and integration processes.
 * **Scalability**: Accommodates thousands of jobs simultaneously through autoscaling.
 * **Flexibility**: Supports different environments, platforms, and architectures (Linux, Windows, macOS).
+* **Cost Efficiency**: Optimizes resource usage by spinning up environments only when needed.
+* **Compliance**: Helps maintain compliance requirements through consistent, tracked execution environments.
+* **Debug Capability**: Provides detailed logs and execution traces for troubleshooting.
 
 ---
 
@@ -67,6 +72,14 @@ These runners are shared or self-managed by external users of GitLab.com. Extern
 * **Shared Runners**: Provided by GitLab as a service for all public and private repositories.
 * **Self-Managed Runners**: Users or organizations host their own runners on private infrastructure for additional control.
 
+#### 3. **Group Runners**
+
+These runners are shared across all projects within a specific GitLab group, providing:
+
+* Balanced resource sharing within teams
+* Centralized runner management at the group level
+* Cost optimization for group-wide CI/CD operations
+
 **Comparison of Internal vs. External Runners:**
 
 | Feature               | Internal Runners                         | External Runners                 |
@@ -75,6 +88,70 @@ These runners are shared or self-managed by external users of GitLab.com. Extern
 | **Access**            | Restricted to GitLab projects           | Available to all users           |
 | **Performance**       | Optimized for GitLab workflows          | Dependent on host environment    |
 | **Security**          | Enhanced isolation & dedicated resources| Varies based on implementation   |
+
+---
+
+#### Runner Workflow
+
+The workflow of a CI Runner involves multiple steps:
+
+1. **Pre-job Checks**:
+   * Verify runner capabilities match job requirements
+   * Ensure required resources are available
+
+2. **Job Retrieval**: Runners fetch job details from the GitLab API.
+
+3. **Cache Restoration**:
+   * Restore cached dependencies
+   * Download artifacts from previous stages
+
+4. **Environment Setup**: Prepare the required execution environment (e.g., Docker containers or VMs).
+
+5. **Job Execution**: Run the scripts, commands, or pipelines as specified.
+
+6. **Health Checking**:
+   * Regular status reporting to GitLab
+   * Monitor resource usage and job progress
+
+7. **Job Reporting**: Send job status, logs, and artifacts back to GitLab.
+
+8. **Cleanup**: Terminate or clean up the environment to ensure isolation.
+
+---
+
+### 1.3 High-Level Runner Architecture
+
+Below is a description of the runner components and their relationships:
+
+#### Components of the Runner System
+
+1. **Runner Managers**:
+   * Purpose: Coordinate the retrieval and execution of jobs.
+   * Functionality: Manage scaling, orchestration, and job lifecycle.
+
+2. **Load Balancers**:
+   * Purpose: Distribute job load across multiple runner managers.
+   * Implementation: Use Internal Load Balancers (ILBs) and HAProxy for routing.
+
+3. **Compute Resources**:
+   * Virtual Machines or containers provisioned dynamically for job execution.
+   * Categories: Shared VM pools, private pools, macOS pools, and Windows pools.
+
+4. **Monitoring Stack**:
+   * Components: Prometheus, Grafana, and Thanos.
+   * Functionality: Monitor job performance, health, and resource usage.
+
+5. **Cache Server**:
+   * Purpose: Store and serve cached dependencies and build artifacts
+   * Implementation: S3 or similar object storage systems
+   * Functionality: Optimize pipeline execution times through intelligent caching
+
+6. **Network Components**:
+   * Purpose: Handle secure communication between runners and GitLab
+   * Implementation: VPN tunnels, security groups, and network policies
+   * Security: Manage access controls and network isolation
+
+**Note**: The details of the architecture will be further elaborated in Section 3.
 
 ---
 
