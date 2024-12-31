@@ -29,7 +29,7 @@
 
 ### 1.1 What are CI Runners?
 
-CI Runners are the backbone of GitLab's CI/CD workflows. They are specialized components responsible for executing the tasks and jobs defined in the `.gitlab-ci.yml` configuration file. Runners interact with GitLab’s API to receive jobs and run them in isolated environments, ensuring clean states for every pipeline execution.
+CI Runners are the backbone of GitLab's CI/CD workflows. They are specialized components responsible for executing the tasks and jobs defined in a given project's `.gitlab-ci.yml` configuration file. Runners interact with GitLab’s API to receive jobs and run them in isolated environments, ensuring clean states for every pipeline execution.
 
 #### Key Responsibilities
 
@@ -177,6 +177,7 @@ Currently the deployment supports the following architectures:
 
 1. [Linux Architecture](./linux/README.md)
 1. [Mac Architecture](./macos/README.md)
+1. [Windows Architecture](./windows/README.md)
 
 ## Cost Factors
 
