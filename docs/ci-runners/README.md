@@ -23,22 +23,60 @@
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
 <!-- END_MARKER -->
 
-# CI Runner Overview
+---
 
-We have several different kind of runners. Below is a brief overview of each.
-They all have acronyms as well, which are indicated next to each name.
+## 1. CI Runner Overview
 
-* [Logging](#logging)
-* [Troubleshooting Pointers](#troubleshooting-pointers)
-* [Configuration management for the Linux based Runners fleet](linux/README.md)
-* [SSH access](#ssh)
-* [Runner Shards](#runner-shards)
-  * [Internal Runners](#internal-runners)
-  * [External Runners](#external-runners)
-* [Cost Factors](#cost-factors)
-* [Network Info](#network-info)
-* [Monitoring](#monitoring)
-* [Production Change Lock (PCL)](#production-change-lock-pcl)
+### 1.1 What are CI Runners?
+
+CI Runners are the backbone of GitLab's CI/CD workflows. They are specialized components responsible for executing the tasks and jobs defined in the `.gitlab-ci.yml` configuration file. Runners interact with GitLab’s API to receive jobs and run them in isolated environments, ensuring clean states for every pipeline execution.
+
+#### Key Responsibilities
+
+1. **Job Execution**: Execute scripts, commands, and test suites provided in the CI/CD configuration.
+2. **Resource Isolation**: Maintain isolated environments to ensure jobs do not interfere with each other.
+3. **Environment Management**: Set up required dependencies, containers, or virtual machines dynamically.
+4. **Scalability**: Scale infrastructure dynamically based on job load.
+
+#### Why CI Runners Matter
+
+* **Reliability**: Each job runs in a clean, reproducible environment, reducing flakiness.
+
+* **Automation**: Automates testing, deployment, and integration processes.
+* **Scalability**: Accommodates thousands of jobs simultaneously through autoscaling.
+* **Flexibility**: Supports different environments, platforms, and architectures (Linux, Windows, macOS).
+
+---
+
+### 1.2 Runner Types
+
+GitLab supports two main categories of CI Runners:
+
+#### 1. **Internal Runners**
+
+These runners are used exclusively for GitLab-managed projects. They operate within dedicated infrastructure, ensuring higher performance, reliability, and security. Examples include:
+
+* **Private Runners**: Dedicated to internal teams and private instances.
+* **GitLab.org Runners**: Dedicated for projects managed under `gitlab-org` namespace.
+* **macOS Staging Runners**: Specialized runners for macOS jobs on staging environments.
+
+#### 2. **External Runners**
+
+These runners are shared or self-managed by external users of GitLab.com. External runners are typically:
+
+* **Shared Runners**: Provided by GitLab as a service for all public and private repositories.
+* **Self-Managed Runners**: Users or organizations host their own runners on private infrastructure for additional control.
+
+**Comparison of Internal vs. External Runners:**
+
+| Feature               | Internal Runners                         | External Runners                 |
+| ----------------------| ---------------------------------------- | -------------------------------- |
+| **Infrastructure**    | Managed by GitLab                       | Self-hosted or GitLab-managed    |
+| **Access**            | Restricted to GitLab projects           | Available to all users           |
+| **Performance**       | Optimized for GitLab workflows          | Dependent on host environment    |
+| **Security**          | Enhanced isolation & dedicated resources| Varies based on implementation   |
+
+---
 
 ## SSH
 
@@ -49,14 +87,6 @@ To ssh into any VM under the `gitlab-ci-155816` GCP project which hosts the runn
 Host *.gitlab-ci-155816.internal
         ProxyJump   lb-bastion.ci.gitlab.com
 ```
-
-## Runner Shards
-
-### Internal Runners
-
-* Private shard
-* gitlab-org shard
-* macos-staging shard
 
 ### External Runners
 
