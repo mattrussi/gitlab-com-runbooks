@@ -61,24 +61,17 @@ GitLab supports two main categories of CI Runners:
 
 These runners are used exclusively for GitLab-managed projects. They operate within dedicated infrastructure, ensuring higher performance, reliability, and security. Examples include:
 
-* **Private Runners**: Dedicated to internal teams and private instances.
-* **GitLab.org Runners**: Dedicated for projects managed under `gitlab-org` namespace.
-* **macOS Staging Runners**: Specialized runners for macOS jobs on staging environments.
+* **Private shard (PRM - Private Runners Manager)**: Dedicated to internal teams and private instances.
+* **gitlab-org shard (GSRM - GitLab Shared Runners Manager)**: Dedicated for projects managed under `gitlab-org` namespace.
+* **macos-staging shard**: Specialized runners for macOS jobs on staging environments.
 
 #### 2. **External Runners**
 
 These runners are shared or self-managed by external users of GitLab.com. External runners are typically:
 
-* **Shared Runners**: Provided by GitLab as a service for all public and private repositories.
-* **Self-Managed Runners**: Users or organizations host their own runners on private infrastructure for additional control.
-
-#### 3. **Group Runners**
-
-These runners are shared across all projects within a specific GitLab group, providing:
-
-* Balanced resource sharing within teams
-* Centralized runner management at the group level
-* Cost optimization for group-wide CI/CD operations
+* **Shared runners (SRM - Shared Runners Manager)**: Provided by GitLab as a service for all public and private repositories.
+* **gitlab-docker-shared-runners (GDSRM - GitLab Docker Shared Runners Manager)**: Manages the docker runners
+* **windows-runners (WSRM - Windows Shared Runners Manager)**: Handles the windows execution jobs
 
 **Comparison of Internal vs. External Runners:**
 
@@ -128,6 +121,11 @@ Below is a description of the runner components and their relationships:
 1. **Runner Managers**:
    * Purpose: Coordinate the retrieval and execution of jobs.
    * Functionality: Manage scaling, orchestration, and job lifecycle.
+   * GitLab.com specifically has several types:
+     * shared-runners-manager (srm)
+     * gitlab-shared-runners-manager (gsrm)
+     * gitlab-docker-shared-runners-manager (gdsrm)
+     * private-runners-manager (prm)
 
 2. **Load Balancers**:
    * Purpose: Distribute job load across multiple runner managers.
@@ -136,22 +134,16 @@ Below is a description of the runner components and their relationships:
 3. **Compute Resources**:
    * Virtual Machines or containers provisioned dynamically for job execution.
    * Categories: Shared VM pools, private pools, macOS pools, and Windows pools.
+   * Specific resource tiers (S, M, L, XL, 2XL)
 
 4. **Monitoring Stack**:
-   * Components: Prometheus, Grafana, and Thanos.
+   * Components: Prometheus, Grafana, and Mirmir.
    * Functionality: Monitor job performance, health, and resource usage.
 
-5. **Cache Server**:
-   * Purpose: Store and serve cached dependencies and build artifacts
-   * Implementation: S3 or similar object storage systems
-   * Functionality: Optimize pipeline execution times through intelligent caching
-
-6. **Network Components**:
+5. **Network Components**:
    * Purpose: Handle secure communication between runners and GitLab
-   * Implementation: VPN tunnels, security groups, and network policies
+   * Implementation: Shared VPC architecture, Strict firewall rules and network policies
    * Security: Manage access controls and network isolation
-
-**Note**: The details of the architecture will be further elaborated in Section 3.
 
 ---
 
