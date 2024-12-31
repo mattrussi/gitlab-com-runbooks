@@ -82,9 +82,9 @@ After this is established we can initiate a rollback procedure following these s
 - Ensure you are on the latest - `git pull main`
 - Ensure `ringctl` is updated - `mise install`
 - `ringctl rollback <VERSION> --ring <INT> [--pause-after-ring <INT>]` - Example:
-   - `ringctl rollback 17.7.202412021200-1921419d268.2414fa154a7 --ring 0`
-   - This rolls the version of GitLab back to `17.7.202412021200-1921419d268.2414fa154a7` starting at Ring `0` asynchronously targeting each ring until all rings (except for quarantine) have completed.
-   - Leverage the `--pause-after-ring` to prevent further rings from being patched unnecessarily.
+  - `ringctl rollback 17.7.202412021200-1921419d268.2414fa154a7 --ring 0`
+  - This rolls the version of GitLab back to `17.7.202412021200-1921419d268.2414fa154a7` starting at Ring `0` asynchronously targeting each ring until all rings (except for quarantine) have completed.
+  - Leverage the `--pause-after-ring` to prevent further rings from being patched unnecessarily.
 - This will automatically create a Merge Request
 - Seek approvals and merge as standard procedure
 - Watch the associated pipelines on the Ops instance to watch it proceed to rollback on the desired rings.
