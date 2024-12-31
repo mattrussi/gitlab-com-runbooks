@@ -130,7 +130,7 @@ basic.dashboard(
   'Host Detail',
   tags=['type:gitaly'],
 )
-.addTemplate(templates.fqdn(query='gitlab_version_info{type="gitaly", component="gitaly", environment="$environment"}', current='file-01-stor-gprd.c.gitlab-production.internal'))
+.addTemplate(templates.fqdn(query='gitlab_build_info{type="gitaly", component="gitaly", environment="$environment"}', current='file-01-stor-gprd.c.gitlab-production.internal'))
 .addPanels(
   headlineRow(startRow=100)
 )
