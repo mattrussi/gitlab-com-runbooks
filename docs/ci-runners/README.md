@@ -71,7 +71,7 @@ These runners are shared or self-managed by external users of GitLab.com. Extern
 
 * **Shared runners (SRM - Shared Runners Manager)**: Provided by GitLab as a service for all public and private repositories.
 * **gitlab-docker-shared-runners (GDSRM - GitLab Docker Shared Runners Manager)**: Manages the docker runners
-* **windows-runners (WSRM - Windows Shared Runners Manager)**: Handles the windows execution jobs
+* **windows-runners (WSRM - Windows Shared Runners Manager)**: Handles the windows runners
 
 **Comparison of Internal vs. External Runners:**
 
