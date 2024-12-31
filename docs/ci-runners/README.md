@@ -129,7 +129,12 @@ Below is a description of the runner components and their relationships:
 
 2. **Load Balancers**:
    * Purpose: Distribute job load across multiple runner managers.
-   * Implementation: Use Internal Load Balancers (ILBs) and HAProxy for routing.
+   * Implementation: CI runners use Internal Load Balancers (ILBs) called "ci-gateway" to reduce traffic costs and improve performance. There are ILBs in both GSTG (staging) and GPRD (production) environments and each environment has ILBs across different availability zones (us-east1-b, us-east1-c, us-east1-d). The ILBs connect to HaProxy nodes that have interfaces in both the main VPC and ci-gateway VPC and the load balancers are accessible through specific internal FQDNs like:
+      * git-us-east1-c.ci-gateway.int.gprd.gitlab.net
+      * git-us-east1-d.ci-gateway.int.gprd.gitlab.net
+      * git-us-east1-c.ci-gateway.int.gstg.gitlab.net
+      * git-us-east1-d.ci-gateway.int.gstg.gitlab.net
+   The setup helps optimize costs by keeping traffic within GCP's internal network when possible, only routing to the public internet when necessary (like for artifact uploads/downloads).
 
 3. **Compute Resources**:
    * Virtual Machines or containers provisioned dynamically for job execution.
