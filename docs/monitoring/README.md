@@ -19,6 +19,7 @@
 
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)

@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [design.gitlab.com Runbook](design-gitlab-com.md)
 * [../disaster-recovery/gameday.md](../disaster-recovery/gameday.md)
