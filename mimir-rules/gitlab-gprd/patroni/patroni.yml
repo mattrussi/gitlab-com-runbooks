@@ -63,3 +63,16 @@ groups:
           description: More than one postgres instance in read-write mode for cluster {{$labels.type}}.
           title: More than one postgres instance in read-write mode.
           runbook: docs/patroni/alerts/PostgresSplitBrain.md
+      - alert: PatroniScrapeFailures
+        expr: min(up{fqdn=~"patroni.*", job!~".*pgbouncer", env="gprd"}) by (fqdn) == 0
+        for: 2m
+        labels:
+          severity: s1
+          pager: pagerduty
+          alert_type: cause
+          incident_project: gitlab.com/gitlab-com/gl-infra/production
+        annotations:
+          grafana_datasource_id: mimir-gitlab-gprd
+          description: Prometheus is failing to scrape at least one exporter on {{$labels.fqdn}}.
+          title: Failing prometheus scrapes against a Patroni node.
+          runbook: docs/patroni/alerts/PatroniScrapeFailures.md
