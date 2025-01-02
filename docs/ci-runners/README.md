@@ -63,7 +63,7 @@ These runners are used exclusively for GitLab-managed projects. They operate wit
 
 * **Private shard (PRM - Private Runners Manager)**: Dedicated to internal teams and private instances.
 * **gitlab-org shard (GSRM - GitLab Shared Runners Manager)**: Dedicated for projects managed under `gitlab-org` namespace.
-* **macos-staging shard**: Specialized runners for macOS jobs on staging environments.
+* **macos shard**: Specialized runners for macOS jobs on staging and production environments.
 
 #### 2. **External Runners**
 
