@@ -58,12 +58,14 @@ There is no automated procedure to set this value back to `true`, so please ensu
 Currently, auto-deployments are only triggered for Ring 0 and 1.
 Any further ring **does not** receive an auto-deploy package automatically.
 Instead, a chunk of packages will begin to collect and an automated procedure creates a merge request to be reviewed that performs two operations:
+
 - it selects the latest package and removes a restriction, enabling it to be promoted to further rings
 - it cleans up any other remaining auto-deploy package patch file as they would no longer be needed
 
 This procedure occurs on a nightly basis, thus an MR should exist daily for this.
 
 References:
+
 - [Prepare a MR to graduate the latest auto_deploy package](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/-/pipeline_schedules)
 - [auto_deploy_cleanup.yml](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/blob/510cb612d1c3d12481755eb9a2f5915bb04a4e2b/templates/auto_deploy_cleanup.yml)
 
