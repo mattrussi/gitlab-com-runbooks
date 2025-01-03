@@ -25,6 +25,7 @@
 * [../bastions/gprd-bastions.md](../bastions/gprd-bastions.md)
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [Blackbox git exporter is down](../blackbox/blackbox-git-exporter.md)
+* [Cells and Auto-Deploy](../cells/auto-deploy.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
