@@ -74,22 +74,28 @@ If later it is deemed safe to perform the deploy, simply reset the environment v
 
 ## Rollbacks
 
-Rollbacks are currently a manual thing to accomplish with Cells.
+Rollbacks are currently a manually initiated by way of the tool [`ringctl`].
 It is advised to work with a Release Manager to determine which version to rollback to and if it is safe or not.
-After this is established, look for the appropriate deployment pipeline associated with that version, and run the manual rollback job at the end of that pipeline.
+After this is established we can initiate a rollback procedure following these steps:
 
-:warning: The rollback job found in a pipeline does not rollback to the prior version, one _must_ find the specific version we want to rollback too and play that job. :warning:
+- Change to the directory where your [`cells/tissue`] project resides
+- Ensure you are on the latest - `git pull main`
+- Ensure `ringctl` is updated - `mise install`
+- `ringctl rollback <VERSION> --ring <INT> [--pause-after-ring <INT>]` - Example:
+  - `ringctl rollback 17.7.202412021200-1921419d268.2414fa154a7 --ring 0`
+  - This rolls the version of GitLab back to `17.7.202412021200-1921419d268.2414fa154a7` starting at Ring `0` asynchronously targeting each ring until all rings (except for quarantine) have completed.
+  - Leverage the `--pause-after-ring` to prevent further rings from being patched unnecessarily.
+- This will automatically create a Merge Request
+- Seek approvals and merge as standard procedure
+- Watch the associated pipelines on the Ops instance to watch it proceed to rollback on the desired rings.
 
-Example, if you recently deployed version N+1, the rollback job on this pipeline will "rollback" to version N+1.
-This is effectively a NOOP and probably not what you had intended.
-In order to rollback to version N, one must find the pipeline associated with version N and run the rollback job associated with that pipeline.
+:warning: This procedure will currently target an entire ring, this is not capable of being Cell specific at the moment. :warning:
 
-There is no automated procedure to set the new desired value of the version running in the [`cells/tissue`] repository.
-Ensure any following procedure proceeds to do so, otherwise we run the risk of a [`configure`] job accidentally performing an upgrade.
 Also, consider that unless Auto-Deploy is paused, we may upgrade to a package which may not have an appropriate fix.
 Thus one should consider adding the `SKIP_RING_AUTO_DEPLOYMENT` environment variable described above until a fix has made it into a package.
 
 [`configure`]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor/-/blob/6047b164809733588931b94bd8327ea506d24449/bin/configure
 [`cells/tissue`]: https://gitlab.com/gitlab-com/gl-infra/cells/tissue
 [`post-deploy-db-migration`]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor/-/blob/6047b164809733588931b94bd8327ea506d24449/bin/post-deploy-db-migration
+[`ringctl`]: https://gitlab.com/gitlab-com/gl-infra/ringctl
 [`upgrade-gitlab`]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor/-/blob/6047b164809733588931b94bd8327ea506d24449/bin/upgrade-gitlab
