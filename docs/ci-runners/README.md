@@ -134,6 +134,7 @@ Below is a description of the runner components and their relationships:
       * git-us-east1-d.ci-gateway.int.gprd.gitlab.net
       * git-us-east1-c.ci-gateway.int.gstg.gitlab.net
       * git-us-east1-d.ci-gateway.int.gstg.gitlab.net
+
    The setup helps optimize costs by keeping traffic within GCP's internal network when possible, only routing to the public internet when necessary (like for artifact uploads/downloads).
 
 3. **Compute Resources**:
