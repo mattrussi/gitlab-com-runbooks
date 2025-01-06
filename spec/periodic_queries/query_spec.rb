@@ -65,7 +65,7 @@ describe PeriodicQueries::Query do
       it 'includes a failed status' do
         query.response = instance_double(PeriodicQueries::PrometheusApi::Response, success?: false, parsed_body: { error: "broken" })
 
-        expected = "❌ #{expected_text}\n{:error=>\"broken\"}"
+        expected = "❌ #{expected_text}\n{error: \"broken\"}"
 
         expect(query.summary).to eq(expected)
       end

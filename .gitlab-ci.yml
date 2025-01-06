@@ -472,6 +472,7 @@ rspec:
           - "**/*.rb"
           - "**/*.jsonnet"
           - "**/*.libsonnet"
+          - ".ruby-version"
   script:
     - make jsonnet-bundle
     - gem install bundler --no-document -v $BUNDLER_VERSION

@@ -133,11 +133,11 @@ describe 'Jsonnet Matcher' do
         }
 
         >>> Jsonnet compiled data:
-        {"a"=>"hello"}
+        {"a" => "hello"}
 
 
         >>> Expected:
-        {"a"=>"hi"}
+        {"a" => "hi"}
 
 
         >>> Diff:
@@ -180,19 +180,19 @@ describe 'Jsonnet Matcher' do
         { title: title, links: links }
 
         >>> Jsonnet compiled data:
-        {"links"=>
-          [{"tags"=>"type:api", "title"=>"api Detail", "type"=>"dashboards"},
-           {"tags"=>"type:web", "title"=>"web Detail", "type"=>"dashboards"},
-           {"tags"=>"type:git", "title"=>"git Detail", "type"=>"dashboards"}],
-         "title"=>"Group dashboard: enablement (Geo)"}
+        {"links" =>
+          [{"tags" => "type:api", "title" => "api Detail", "type" => "dashboards"},
+           {"tags" => "type:web", "title" => "web Detail", "type" => "dashboards"},
+           {"tags" => "type:git", "title" => "git Detail", "type" => "dashboards"}],
+         "title" => "Group dashboard: enablement (Geo)"}
 
 
         >>> Expected:
-        {"title"=>"Group dashboard: enablement (Geo)",
-         "links"=>
-          [{"title"=>"API Detail", "type"=>"dashboards", "tags"=>"type:api"},
-           {"title"=>"Web Detail", "type"=>"dashboards", "tags"=>"type:web"},
-           {"title"=>"Git Detail", "type"=>"dashboards", "tags"=>"type:git"}]}
+        {"title" => "Group dashboard: enablement (Geo)",
+         "links" =>
+          [{"title" => "API Detail", "type" => "dashboards", "tags" => "type:api"},
+           {"title" => "Web Detail", "type" => "dashboards", "tags" => "type:web"},
+           {"title" => "Git Detail", "type" => "dashboards", "tags" => "type:git"}]}
 
 
         >>> Diff:
