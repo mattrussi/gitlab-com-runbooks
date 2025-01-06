@@ -54,7 +54,7 @@ These requests will receive a `400 Bad Request` response.
   * If these are genuine attempts, then we might be the target of an automated script that tries different urls with path traversal in bulks.
     * The middleware is working as expected. However, it can be valuable to investigate if these requests come from a single originating source and block that source temporarily.
   * If these are valid requests that should be accepted, this is a bug with the middleware detection logic.
-    * We could [disable](#controlling_the_behavior) the middleware temporarily to solve the problem.
+    * We could [disable](#controlling-the-behavior) the middleware temporarily to solve the problem.
     * An issue should be created to update the middleware detection logic.
 
 ### Slower execution time
