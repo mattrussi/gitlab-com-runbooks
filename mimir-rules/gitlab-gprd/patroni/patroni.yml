@@ -64,7 +64,7 @@ groups:
           title: More than one postgres instance in read-write mode.
           runbook: docs/patroni/alerts/PostgresSplitBrain.md
       - alert: PatroniScrapeFailures
-        expr: min(up{fqdn=~"patroni.*", job!~".*pgbouncer", env="gprd"}) by (fqdn) == 0
+        expr: min(up{fqdn=~"patroni.*", job!~".*pgbouncer", env="gprd"}) by (fqdn, env) == 0
         for: 2m
         labels:
           severity: s1
