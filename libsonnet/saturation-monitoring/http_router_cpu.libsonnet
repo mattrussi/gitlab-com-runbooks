@@ -4,7 +4,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 {
   http_router_cpu: resourceSaturationPoint({
     title: 'HTTP Router CPU P999 Budget',
-    severity: 's2',
+    severity: 's3',  // Temporary disabled until we figure out https://gitlab.com/gitlab-com/gl-infra/capacity-planning-trackers/gitlab-com/-/issues/2026 to prevent pager noise.
     horizontallyScalable: true,
     appliesTo: ['http-router'],
     description: |||
