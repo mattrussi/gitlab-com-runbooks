@@ -65,15 +65,11 @@ local serviceWeights = {
 
 local weightableQuery(aggregation, service, rangeInterval) =
   local serviceWeightTemplate = '$%s' % [templateServiceName(service)];
-  // TODO: `slo_observation_status` only exists in Thanos
-  // whereas `slo:observation_status` only exists in Mimir. The or expression allows
-  // us to show the graph from both data sources. Remove the slo_observation_status expression
-  // once we have migrated to Mimir.
+  // The range here needs to be the same range as in `libsonnet/recording-rules/sla-rules.libsonnet`
+  //
   |||
     %(aggregation)s without (slo) (
-      avg_over_time(slo_observation_status{%(selector)s}[%(rangeInterval)s])
-      or
-      avg_over_time(slo:observation_status{%(selector)s}[%(rangeInterval)s])
+      avg_over_time(slo:observation_status{%(selector)s}[5m])
     ) * %(weight)s
   ||| % {
     aggregation: aggregation,
@@ -94,12 +90,16 @@ local adjustableWeightQuery(rangeInterval) =
     std.objectFields(serviceWeights)
   );
   |||
-    sum by (environment, env, stage) (
-      %(score)s
-    )
-    /
-    sum by (environment, env, stage) (
-      %(weight)s
+    avg_over_time(
+      (
+        sum by (environment, env, stage) (
+          %(score)s
+        )
+        /
+        sum by (environment, env, stage) (
+          %(weight)s
+        )
+      )[$__range:]
     )
   ||| % {
     score: strings.chomp(strings.indent(std.join('\nor\n', serviceScoreQueries), 2)),
