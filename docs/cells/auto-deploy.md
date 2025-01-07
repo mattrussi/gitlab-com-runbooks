@@ -41,7 +41,6 @@ sequenceDiagram
    1. We first check if a deploy shall continue (more on this below).
    1. We then perform the upgrade operation on the Cell itself. The upgrade operation calls a special command [`upgrade-gitlab`].
    1. After this, the Post Deployment Migrations (PDM) are run per Cell. The PDM calls a special command [`post-deploy-db-migration`].
-   1. The rollback job on this pipeline is a placeholder job that is manual (more on this below).
 
 ### Post Deployment Migrations
 
@@ -53,6 +52,24 @@ The behavior can be modified by setting the Environment Variable `PDM_AUTO_EXECU
 This is configured inside of [`cells/tissue`]: [Cells/Tissue CI Variables](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/-/settings/ci_cd)
 
 There is no automated procedure to set this value back to `true`, so please ensure any followup item resets this value as desired.
+
+## Graduation
+
+Currently, auto-deployments are only triggered for Ring 0 and 1.
+Any further ring **does not** receive an auto-deploy package automatically.
+Instead, a chunk of packages will begin to collect and an automated procedure creates a merge request to be reviewed that performs two operations:
+
+- it selects the latest package and removes a restriction, enabling it to be promoted to further rings
+- it cleans up any other remaining auto-deploy package patch file as they would no longer be needed
+
+This procedure occurs on a nightly basis, thus an MR should exist daily for this.
+[Here's an example Merge Request.](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/merge_requests/681)
+These MR's require approval based on the standard set of [CODEOWNER Rules for this project.](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/blob/main/CODEOWNERS)
+
+References:
+
+- [Prepare a MR to graduate the latest auto_deploy package](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/-/pipeline_schedules)
+- [auto_deploy_cleanup.yml](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/blob/510cb612d1c3d12481755eb9a2f5915bb04a4e2b/templates/auto_deploy_cleanup.yml)
 
 ## Pausing Auto-Deploy
 
