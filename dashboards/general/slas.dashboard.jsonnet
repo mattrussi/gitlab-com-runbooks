@@ -226,6 +226,7 @@ local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKe
 local serviceWeightTemplates = [
   template.custom(
     name=templateServiceName(service),
+    label=templateServiceName(service),
     query='0,1,5',
     current='%s' % [serviceWeights[service]]
   )
