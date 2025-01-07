@@ -63,7 +63,7 @@ Instead, a chunk of packages will begin to collect and an automated procedure cr
 - it cleans up any other remaining auto-deploy package patch file as they would no longer be needed
 
 This procedure occurs on a nightly basis, thus an MR should exist daily for this.
-An example MR: https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/merge_requests/681.
+[Here's an example Merge Request.](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/merge_requests/681)
 These MR's require approval based on the standard set of [CODEOWNER Rules for this project.](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/blob/main/CODEOWNERS)
 
 References:
