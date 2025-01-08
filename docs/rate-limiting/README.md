@@ -94,7 +94,26 @@ HAProxy is responsible for handling the `X-GitLab-Rate-Limit-Bypass` header. Thi
 
 ## Application (RackAttack)
 
-It is possible to enable RackAttack rate limiting rules in "Dry Run" mode which can be utilised when introducing new rate limits by setting the `GITLAB_THROTTLE_DRY_RUN` environment variable with the name of the new rule in a running Rails process.
+### Enable an Application Rate Limit in "Dry Run" mode
+
+It is possible to enable RackAttack rate limiting rules in "Dry Run" mode
+which can be utilised when introducing new rate limits
+by setting the `GITLAB_THROTTLE_DRY_RUN` environment variable
+[[source](https://docs.gitlab.com/ee/administration/settings/user_and_ip_rate_limits.html#try-out-throttling-settings-before-enforcing-them)].
+
+For `GitLab.com` these environment variables are managed in k8s-workloads,
+and set in the [extraEnv](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/donna/dry-run-authenticated-rate-limits/releases/gitlab/values/gprd.yaml.gotmpl?ref_type=heads#L359).
+
+Once the `GITLAB_THROTTLE_DRY_RUN` environment variable is configured in production,
+you can then turn the specified throttle on, for example `throttle_authenticated_web`.
+If the new limit that is being introduced is hit,
+you should see `event_type="track"` in the RackAttack metrics and logs.
+
+After validating the rate limit threshold is behaving as expected,
+you should remove the event name from the `GITLAB_THROTTLE_DRY_RUN` environment variable
+which will allow the rate limit to start throttling requests.
+
+- [Metrics: RackAttack events by event name and type](https://dashboards.gitlab.net/goto/XVO2kVvNg?orgId=1)
 
 ## How-Tos
 
