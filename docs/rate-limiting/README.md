@@ -114,6 +114,7 @@ you should remove the event name from the `GITLAB_THROTTLE_DRY_RUN` environment 
 which will allow the rate limit to start throttling requests.
 
 - [Metrics: RackAttack events by event name and type](https://dashboards.gitlab.net/goto/XVO2kVvNg?orgId=1)
+
 ## How-Tos
 
 So you're faced with some sort of urgent issue related to rate-limiting. What are your basic options?
