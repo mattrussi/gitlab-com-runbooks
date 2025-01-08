@@ -99,7 +99,7 @@ HAProxy is responsible for handling the `X-GitLab-Rate-Limit-Bypass` header. Thi
 It is possible to enable RackAttack rate limiting rules in "Dry Run" mode
 which can be utilised when introducing new rate limits
 by setting the `GITLAB_THROTTLE_DRY_RUN` environment variable
-[[source]](https://docs.gitlab.com/ee/administration/settings/user_and_ip_rate_limits.html#try-out-throttling-settings-before-enforcing-them).
+[[source](https://docs.gitlab.com/ee/administration/settings/user_and_ip_rate_limits.html#try-out-throttling-settings-before-enforcing-them)].
 
 For `GitLab.com` these environment variables are managed in k8s-workloads,
 and set in the [extraEnv](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/donna/dry-run-authenticated-rate-limits/releases/gitlab/values/gprd.yaml.gotmpl?ref_type=heads#L359).
