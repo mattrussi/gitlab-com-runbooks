@@ -639,7 +639,7 @@ services:
     tier: inf
     friendly_name: Google Cloud Storage
     label: GoogleCloudStorage
-    owner: reliability_foundations
+    owner: data-access:durability
     technical:
       documents:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/google-cloud-storage
