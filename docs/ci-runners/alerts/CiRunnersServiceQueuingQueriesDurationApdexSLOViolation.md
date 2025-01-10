@@ -10,6 +10,22 @@ This alert indicates that the CI Runners service is experiencing slower-than-exp
 
 ![alt text](../img/queing_queries_duration.png)
 
+---
+
+## Services
+
+- [CI Runners Service Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview)
+- **Team**: [Verify:Runner](https://handbook.gitlab.com/handbook/engineering/development/ops/verify/runner/)
+
+## Quick Links
+
+- [Dashboard](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1)
+- [Queuing_queries_duration SLI Apdex](https://dashboards.gitlab.net/goto/BCE8kFvNg?orgId=1)
+- [List of users in the queue](https://log.gprd.gitlab.net/goto/4109739640f8b21b278ca5060012fbf7)
+- [List of jobs per project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25)
+
+---
+
 ### Contributing Factors
 
 - High volume of concurrent CI job requests
@@ -28,25 +44,9 @@ This alert indicates that the CI Runners service is experiencing slower-than-exp
 
 Investigate the cause of increased queuing duration and take appropriate action to restore normal service performance.
 
----
-
-## Services
-
-- [CI Runners Service Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview)
-- **Team**: [Verify:Runner](https://handbook.gitlab.com/handbook/engineering/development/ops/verify/runner/)
-
-## Quick Links
-
-- [Dashboard](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1)
-- [Queuing_queries_duration SLI Apdex](https://dashboards.gitlab.net/goto/BCE8kFvNg?orgId=1)
-- [List of users in the queue](https://log.gprd.gitlab.net/goto/4109739640f8b21b278ca5060012fbf7)
-- [List of jobs per project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25)
-
----
-
 ## Metrics
 
-- [Metrics Catalogue](../../../metrics-catalog/services/ci-runners.jsonnet)
+[Metrics Catalog](../../../metrics-catalog/services/ci-runners.jsonnet)
 
 - **Metric**: Duration of queuing-related queries for CI runners
 - **Unit**: Milliseconds
