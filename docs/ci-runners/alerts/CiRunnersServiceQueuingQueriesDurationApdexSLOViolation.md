@@ -8,6 +8,8 @@
 
 This alert indicates that the CI Runners service is experiencing slower-than-expected queuing query response times, violating the defined Service Level Objectives (SLO) for job scheduling performance.
 
+![alt text](../img/image.png)
+
 ### Contributing Factors
 
 - High volume of concurrent CI job requests
@@ -36,12 +38,15 @@ Investigate the cause of increased queuing duration and take appropriate action 
 ## Quick Links
 
 - [Dashboard](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1)
+- [Queuing_queries_duration SLI Apdex](https://dashboards.gitlab.net/goto/BCE8kFvNg?orgId=1)
 - [List of users in the queue](https://log.gprd.gitlab.net/goto/4109739640f8b21b278ca5060012fbf7)
 - [List of jobs per project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25)
 
 ---
 
 ## Metrics
+
+- [Metrics Catalogue](../../../metrics-catalog/services/ci-runners.jsonnet)
 
 - **Metric**: Duration of queuing-related queries for CI runners
 - **Unit**: Milliseconds
@@ -77,8 +82,8 @@ Investigate the cause of increased queuing duration and take appropriate action 
 ## Verification
 
 - Check [shared runners logs](https://log.gprd.gitlab.net/goto/b9aed2474a7ffe194a10d4445a02893a).
-- Review runner manager metrics.
-- Monitor database performance metrics.
+- Review [runner manager metrics](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1).
+- Monitor [database performance metrics]((https://dashboards.gitlab.net/goto/jykuUODNR?orgId=1)).
 
 ---
 
@@ -110,6 +115,8 @@ Investigate the cause of increased queuing duration and take appropriate action 
 ### **Verify for deadtuples-related performance issues**
 
 During reindexing operations, deadtuples may accumulate and degrade query performance.
+
+![alt text](../img/dead_tuples.png)
 
 #### How to Check Ongoing Reindexing Operations
 
@@ -148,7 +155,25 @@ SELECT pg_cancel_backend(1641690);
 
 Once canceled, you should see immediate relief in the [gitlab_ci_queue_retrieval_duration_seconds_bucket](https://dashboards.gitlab.net/goto/uHOt_ODHR?orgId=1) metrics
 
+![alt text](../img/dead_tuple_after_autovacum.png)
+
+And SLI should recover
+
+![alt text](../img/queing_queries_sli.png)
+
 ---
+
+## Recent changes
+
+- [Recent Blackbox Production Change/Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3ACI%20Runners&first_page_size=20)
+- [Recent chef-repo Changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged)
+- [Recent k8s-workloads Changes](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests?scope=all&state=merged)
+
+## Recent incidents
+
+- [CiRunnersServiceQueuingQueriesDurationApdexSLOViolation](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17367)
+- [The queuing_queries_duration SLI of the ci-runners service (cny stage) has an apdex violating SLO](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18764)
+- [CiRunnersServiceQueuingQueriesDurationApdexSLOViolation](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17724)
 
 ## Dependencies
 
@@ -185,4 +210,4 @@ Once canceled, you should see immediate relief in the [gitlab_ci_queue_retrieval
 
 - [CI Runner Architecture Documentation](https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html)
 - [Runner Abuse Prevention](../service-ci-runners.md)
-- [ApdexSLOViolation Documentation](../alerts/ApdexSLOViolation.md)
+- [ApdexSLOViolation Documentation](../../alerts/ApdexSLOViolation.md)
