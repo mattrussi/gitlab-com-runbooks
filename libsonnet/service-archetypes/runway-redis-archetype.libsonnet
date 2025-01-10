@@ -11,7 +11,7 @@ function(
   {
     tenants: ['runway'],
     provisioning: {
-      runway: false,
+      runway: true,
       vms: false,
       kubernetes: false,
     },
