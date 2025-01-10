@@ -8,7 +8,7 @@
 
 This alert indicates that the CI Runners service is experiencing slower-than-expected queuing query response times, violating the defined Service Level Objectives (SLO) for job scheduling performance.
 
-![alt text](../img/image.png)
+![alt text](../img/queing_queries_duration.png)
 
 ### Contributing Factors
 
@@ -112,7 +112,7 @@ Investigate the cause of increased queuing duration and take appropriate action 
 3. Block abusive users/projects.
 4. Adjust job scheduling algorithms.
 
-### **Verify for deadtuples-related performance issues**
+### Verify for deadtuples-related performance issues
 
 During reindexing operations, deadtuples may accumulate and degrade query performance.
 
