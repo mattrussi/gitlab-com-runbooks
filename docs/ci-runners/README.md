@@ -114,52 +114,6 @@ The workflow of a CI Runner involves multiple steps:
 
 ### High-Level Runner Architecture
 
-Below is a description of the runner components and their relationships:
-
-#### Components of the Runner System
-
-1. **Runner Managers**:
-   * Purpose: Coordinate the retrieval and execution of jobs.
-   * Functionality: Manage scaling, orchestration, and job lifecycle.
-   * GitLab.com specifically has several types:
-     * shared-runners-manager (srm)
-     * gitlab-shared-runners-manager (gsrm)
-     * gitlab-docker-shared-runners-manager (gdsrm)
-     * private-runners-manager (prm)
-
-2. **Load Balancers**:
-   * Purpose: Distribute job load across multiple runner managers.
-   * Implementation: CI runners use Internal Load Balancers (ILBs) called "ci-gateway" to reduce traffic costs and improve performance. There are ILBs in both GSTG (staging) and GPRD (production) environments and each environment has ILBs across different availability zones (us-east1-b, us-east1-c, us-east1-d). The ILBs connect to HaProxy nodes that have interfaces in both the main VPC and ci-gateway VPC and the load balancers are accessible through specific internal FQDNs like:
-      * git-us-east1-c.ci-gateway.int.gprd.gitlab.net
-      * git-us-east1-d.ci-gateway.int.gprd.gitlab.net
-      * git-us-east1-c.ci-gateway.int.gstg.gitlab.net
-      * git-us-east1-d.ci-gateway.int.gstg.gitlab.net
-
-   The setup helps optimize costs by keeping traffic within GCP's internal network when possible, only routing to the public internet when necessary (like for artifact uploads/downloads).
-
-3. **Compute Resources**:
-   * Virtual Machines or containers provisioned dynamically for job execution.
-   * Categories: Shared VM pools, private pools, macOS pools, and Windows pools.
-   * Specific resource tiers (S, M, L, XL, 2XL)
-
-4. **Monitoring Stack**:
-   * Components: Prometheus, Grafana, and Mirmir.
-   * Functionality: Monitor job performance, health, and resource usage.
-
-5. **Network Components**:
-   * Purpose: Handle secure communication between runners and GitLab
-   * Implementation: Shared VPC architecture, Strict firewall rules and network policies
-   * Security: Manage access controls and network isolation
-
----
-
-### Key Takeaways for CI Runners
-
-* **Consistency**: Jobs always run in clean, isolated environments.
-* **Scalability**: Autoscaling ensures that infrastructure adapts to workload.
-* **Flexibility**: Supports multiple platforms, programming languages, and containerized workflows.
-* **Control**: Internal runners offer optimized performance for GitLab projects, while external runners provide user flexibility.
-
 ```mermaid
 graph TB
   subgraph GitLab.com
@@ -232,6 +186,52 @@ graph TB
   class Prometheus,Mirmir,AlertManager monitoring;
   class VM_Pools compute;
 ```
+
+Below is a description of the runner components and their relationships:
+
+#### Components of the Runner System
+
+1. **Runner Managers**:
+   * Purpose: Coordinate the retrieval and execution of jobs.
+   * Functionality: Manage scaling, orchestration, and job lifecycle.
+   * GitLab.com specifically has several types:
+     * shared-runners-manager (srm)
+     * gitlab-shared-runners-manager (gsrm)
+     * gitlab-docker-shared-runners-manager (gdsrm)
+     * private-runners-manager (prm)
+
+2. **Load Balancers**:
+   * Purpose: Distribute job load across multiple runner managers.
+   * Implementation: CI runners use Internal Load Balancers (ILBs) called "ci-gateway" to reduce traffic costs and improve performance. There are ILBs in both GSTG (staging) and GPRD (production) environments and each environment has ILBs across different availability zones (us-east1-b, us-east1-c, us-east1-d). The ILBs connect to HaProxy nodes that have interfaces in both the main VPC and ci-gateway VPC and the load balancers are accessible through specific internal FQDNs like:
+      * git-us-east1-c.ci-gateway.int.gprd.gitlab.net
+      * git-us-east1-d.ci-gateway.int.gprd.gitlab.net
+      * git-us-east1-c.ci-gateway.int.gstg.gitlab.net
+      * git-us-east1-d.ci-gateway.int.gstg.gitlab.net
+
+   The setup helps optimize costs by keeping traffic within GCP's internal network when possible, only routing to the public internet when necessary (like for artifact uploads/downloads).
+
+3. **Compute Resources**:
+   * Virtual Machines or containers provisioned dynamically for job execution.
+   * Categories: Shared VM pools, private pools, macOS pools, and Windows pools.
+   * Specific resource tiers (S, M, L, XL, 2XL)
+
+4. **Monitoring Stack**:
+   * Components: Prometheus, Grafana, and Mirmir.
+   * Functionality: Monitor job performance, health, and resource usage.
+
+5. **Network Components**:
+   * Purpose: Handle secure communication between runners and GitLab
+   * Implementation: Shared VPC architecture, Strict firewall rules and network policies
+   * Security: Manage access controls and network isolation
+
+---
+
+### Key Takeaways for CI Runners
+
+* **Consistency**: Jobs always run in clean, isolated environments.
+* **Scalability**: Autoscaling ensures that infrastructure adapts to workload.
+* **Flexibility**: Supports multiple platforms, programming languages, and containerized workflows.
+* **Control**: Internal runners offer optimized performance for GitLab projects, while external runners provide user flexibility.
 
 ---
 
