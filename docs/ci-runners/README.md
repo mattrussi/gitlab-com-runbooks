@@ -25,9 +25,9 @@
 
 ---
 
-## 1. CI Runner Overview
+## CI Runner Overview
 
-### 1.1 What are CI Runners?
+### What are CI Runners?
 
 CI Runners are the backbone of GitLab's CI/CD workflows. They are specialized components responsible for executing the tasks and jobs defined in a given project's `.gitlab-ci.yml` configuration file. Runners interact with GitLab’s API to receive jobs and run them in isolated environments, ensuring clean states for every pipeline execution.
 
@@ -53,11 +53,11 @@ CI Runners are the backbone of GitLab's CI/CD workflows. They are specialized co
 
 ---
 
-### 1.2 Runner Types
+### Runner Types
 
 GitLab supports two main categories of CI Runners:
 
-#### 1. **Internal Runners**
+#### **Internal Runners**
 
 These runners are used exclusively for GitLab-managed projects. They operate within dedicated infrastructure, ensuring higher performance, reliability, and security. Examples include:
 
@@ -65,7 +65,7 @@ These runners are used exclusively for GitLab-managed projects. They operate wit
 * **gitlab-org shard (GSRM - GitLab Shared Runners Manager)**: Dedicated for projects managed under `gitlab-org` namespace.
 * **macos shard**: Specialized runners for macOS jobs on staging and production environments.
 
-#### 2. **External Runners**
+#### **External Runners**
 
 These runners are shared or self-managed by external users of GitLab.com. External runners are typically:
 
@@ -112,7 +112,7 @@ The workflow of a CI Runner involves multiple steps:
 
 ---
 
-### 1.3 High-Level Runner Architecture
+### High-Level Runner Architecture
 
 Below is a description of the runner components and their relationships:
 
@@ -153,38 +153,143 @@ Below is a description of the runner components and their relationships:
 
 ---
 
-## SSH
+### Key Takeaways for CI Runners
 
-To ssh into any VM under the `gitlab-ci-155816` GCP project which hosts the runner-manager VMs, add the following to your `.config/ssh` file:
+* **Consistency**: Jobs always run in clean, isolated environments.
+* **Scalability**: Autoscaling ensures that infrastructure adapts to workload.
+* **Flexibility**: Supports multiple platforms, programming languages, and containerized workflows.
+* **Control**: Internal runners offer optimized performance for GitLab projects, while external runners provide user flexibility.
 
+```mermaid
+graph TB
+  subgraph GitLab.com
+      API[GitLab API]
+      Registry[Container Registry]
+  end
+
+  subgraph CI_Runner_Infrastructure
+      subgraph Runner_Managers
+          SRM[Shared Runner Manager]
+          PRM[Private Runner Manager]
+          GRM[GitLab-org Runner Manager]
+          WRM[Windows Runner Manager]
+          MRM[MacOS Runner Manager]
+      end
+
+      subgraph Load_Balancing
+          ILB[Internal Load Balancer]
+          HAProxy[HAProxy Cluster]
+      end
+
+      subgraph Compute_Resources
+          subgraph VM_Pools
+              SharedPool[Shared Runner Pool]
+              PrivatePool[Private Runner Pool]
+              GitLabPool[GitLab-org Pool]
+              WindowsPool[Windows Runner Pool]
+              MacPool[MacOS Runner Pool]
+          end
+      end
+
+      subgraph Monitoring
+          Prometheus[Prometheus]
+          Mirmir[Mirmir]
+          AlertManager[Alert Manager]
+      end
+  end
+
+  %% Connections
+  API --> ILB
+  ILB --> HAProxy
+  HAProxy --> Runner_Managers
+
+  SRM --> SharedPool
+  PRM --> PrivatePool
+  GRM --> GitLabPool
+  WRM --> WindowsPool
+  MRM --> MacPool
+
+  SharedPool --> Registry
+  PrivatePool --> Registry
+  GitLabPool --> Registry
+  WindowsPool --> Registry
+  MacPool --> Registry
+
+  %% Monitoring connections
+  Runner_Managers --> Prometheus
+  VM_Pools --> Prometheus
+  Prometheus --> Mirmir
+  Prometheus --> AlertManager
+
+  %% Styling
+  classDef primary fill:#00c7b7,stroke:#333,stroke-width:2px;
+  classDef secondary fill:#6666ff,stroke:#333,stroke-width:2px;
+  classDef monitoring fill:#ff9900,stroke:#333,stroke-width:2px;
+  classDef compute fill:#99cc00,stroke:#333,stroke-width:2px;
+
+  class API,Registry primary;
+  class Runner_Managers secondary;
+  class Prometheus,Mirmir,AlertManager monitoring;
+  class VM_Pools compute;
 ```
-# ci-runner manager VMs
+
+---
+
+## SSH Access
+
+Accessing the runner-manager virtual machines (VMs) is a critical step for debugging, configuration, and administrative tasks. The following instructions outline how to set up secure SSH access to these VMs hosted in the `gitlab-ci-155816` GCP project.
+
+### Steps to Configure SSH
+
+To SSH into any VM under the `gitlab-ci-155816` GCP project:
+
+1. Open or create the file `~/.config/ssh/config`.
+2. Add the following configuration block:
+
+```ssh
+# CI Runner Manager VMs
 Host *.gitlab-ci-155816.internal
-        ProxyJump   lb-bastion.ci.gitlab.com
+    ProxyJump lb-bastion.ci.gitlab.com
 ```
 
 ### External Runners
 
 See [Hosted runners for -com](https://docs.gitlab.com/ee/ci/runners/index.html#hosted-runners-for-gitlabcom).
 
+---
+
 ## Runner Deployments
 
-### blue-green-deployment
+### Blue-Green Deployment
 
-Each of the gitlab.com SaaS runners shards have two running clusters, consisting of a set of runner-manager VMs available at all time, we refer to them as blue and green. This is meant to speed up the release of [GitLab Runner](https://gitlab.com/gitlab-org/gitlab-runner) by shifting traffic
-between two identical environments that are running different versions of the application. For further info please see the [blue-green README](./release-cycle/blue_green_deployment.md).
+A blue-green deployment strategy is used to enhance the reliability and speed of GitLab Runner releases. This method involves running two clusters in parallel:
 
-Currently the deployment supports the following architectures:
+* **Blue Cluster**: Handles active traffic and production jobs.
+* **Green Cluster**: Hosts the next release candidate for testing and gradual rollout.
 
-1. [Linux Architecture](./linux/README.md)
-1. [Mac Architecture](./macos/README.md)
-1. [Windows Architecture](./windows/README.md)
+### Benefits
+
+1. **Zero Downtime**: Ensures continuous operation during upgrades.
+2. **Rollbacks**: Allows seamless traffic shift to a stable cluster in case of issues.
+3. **Faster Releases**: Traffic can be moved between clusters instantly.
+
+### Architectures Supported
+
+1. **Linux Architecture**: Comprehensive guide for Linux-based runner environments.
+2. **Mac Architecture**: Tailored for macOS-specific workloads.
+3. **Windows Architecture**: Focused on Windows VM environments and job execution.
+
+For additional details, refer to the [Blue-Green Deployment README](./release-cycle/blue_green_deployment.md).
+
+---
 
 ## Cost Factors
 
-Each runner has an associated `cost factor` that determines how many minutes are deducted from the customers account
-per minute used. For example, if a cost factor was 2.0, the customer would use 2 minutes for each minute a CI job
-runs. Below is a table that details the cost factor for each runner type.
+### Overview
+
+Cost factors determine the number of minutes deducted from a user's account based on the type of runner and the nature of the project (public vs. private). This helps balance resource allocation and encourages efficient usage.
+
+### Cost Factor Table
 
 | Runner Type                                 | Public Project Factor | Private Project Factor |
 | ------------------------------------------- | --------------------- | ---------------------- |
@@ -193,72 +298,61 @@ runs. Below is a table that details the cost factor for each runner type.
 | windows-runners-manager (wsrm)              | 0.0                   | 1.0                    |
 | gitlab-docker-shared-runners-manager (gsrm) | 0.0                   | 1.0                    |
 
+### Key Insights
+
+1. **Public Projects**: Benefit from free execution minutes with a cost factor of `0.0`.
+2. **Private Projects**: Deduct minutes at a `1.0` cost factor per minute of execution.
+3. **Specialized Runners**: All specialized runners have the same cost factor, simplifying billing.
+
+---
+
 ## Monitoring
 
-![CI Runners monitoring stack design](./img/ci-runners-monitoring.png)
+### Purpose
 
-Monitoring is be defined in almost the same configuration in all CI related projects. It is deployed using GKE and
-a cluster created by terraform. For that
-[a dedicated terraform module](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/modules/ci-runners/gke)
-was created. For it's purpose the GKE cluster is using the `runners-gke` network defined above.
+Monitoring ensures the health, performance, and reliability of CI Runner infrastructure. A robust monitoring stack is in place, leveraging tools like Prometheus, Thanos, and Traefik.
 
-Prometheus is deployed in at least two replicas. Both have a Thanos Sidecar running alongside. Sidecar's gRPC
-endpoint is exposed as publicly accessible (we don't want to peer the `ops` or `gprd` network here) and the GCP Firewall
-limits access to it to only Thanos Query public IPs. This service uses TCP port `10901`.
+### Architecture
 
-Long-term metrics storage is handled by using a dedicated GCS bucket created by the terraform module alongside
-the cluster. Thanos Sidecar is configured with write access to this bucket.
+1. **Prometheus Instances**: Deployed with high availability (minimum two replicas).
+2. **Thanos Sidecar**:
+   * Facilitates long-term metrics storage in Google Cloud Storage (GCS).
+   * Exposes gRPC endpoints for querying data.
+3. **Traefik Ingress**:
+   * Acts as the load balancer for gRPC services.
+   * Enforces HTTPS with Let's Encrypt certificates.
 
-Apart from the Sidecar we also have Thanos Store Gateway and Thanos Compact deployed and configured to use the same
-GCS bucket. Store Gateway's gRPC endpoint is exposed similarly to the Sidecar's one. This service uses TCP port `10903`.
+### External Access
 
-[Traefik](https://traefik.io/) is used as the ingress and load-balancing mechanism. It exposes gRPC services on given
-ports (using TCP routing), Prometheus UI and own dashboard. HTTP endpoints are automatically redirected to HTTPS,
-and Let's Encrypt certificates are used for TLS.
+Each monitoring project uses reserved public IP addresses. These addresses are mapped to DNS records:
 
-For external access each project where monitoring is deployed is using a reserved public IP address. This address
-is bound to two DNS A records:
+* **`monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net`**: Used for accessing the Traefik dashboard and Thanos Query store.
+* **`prometheus.[ENVIRONMENT].ci-runners.gitlab.net`**: Directly connects to Prometheus deployments.
 
-* `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
-  to access Traefik dashboard in the browser. Access to the Dashboard is limited by oAuth, using Google as the Identity
-  Provider allowing `@gitlab.com` accounts. Consent screen and oAuth2 secrets are defined in the `gitlab-ci-155816`
-  project and should be used for all deployments of this monitoring stack (**remember:** new deploys will use new
-  domains for the redirection URLs, which should be added to the oAuth2 credentials configuration; unfortunately this
-  can't be managed by terraform).
-* `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
-  the Traefik dashboard, access is limited by oAuth2 with the same configuration.
+### Authentication
 
-K8S deployment configuration is managed fully from CI. [A dedicated
-project](https://gitlab.com/gitlab-com/gl-infra/ci-runners/k8s-workloads) covers all monitoring clusters in different
-CI projects that we maintain.
+- Access is restricted via OAuth using Google as the identity provider.
+* Only `@gitlab.com` accounts are allowed access.
+
+### Example Diagram
+
+![CI Runners Monitoring Stack Design](./img/ci-runners-monitoring.png)
+
+### Terraform Integration
+
+The monitoring stack is managed entirely via Terraform, ensuring consistency across deployments. For details, see the [CI Runners Monitoring Terraform Module](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/modules/ci-runners/gke).
+
+---
 
 ## Production Change Lock (PCL)
 
-It is a good practice to temporarily halt production changes during
-certain events such as GitLab Summit, major global holidays, and
-Weekends. Apart from the list already documented in
-<https://about.gitlab.com/handbook/engineering/infrastructure/change-management/#production-change-lock-pcl>,
-GitLab Runner extends this with the following:
+### Purpose
+
+To minimize disruptions, GitLab enforces a **Production Change Lock** during critical periods such as holidays and summits.
+
+### Standard PCL Events
 
 | Dates                          | Type | Reason  |
 | ------------------------------ | ---- | ------- |
 | Recurring: Friday              | Soft | Friday  |
 | Recurring: Weekend (Sat - Sun) | Soft | Weekend |
-
-<!-- ## Summary -->
-
-<!-- ## Architecture -->
-
-<!-- ## Performance -->
-
-<!-- ## Scalability -->
-
-<!-- ## Availability -->
-
-<!-- ## Durability -->
-
-<!-- ## Security/Compliance -->
-
-<!-- ## Monitoring/Alerting -->
-
-<!-- ## Links to further Documentation -->
