@@ -331,10 +331,11 @@ Each monitoring project uses reserved public IP addresses. These addresses are m
 
 ### Authentication
 
-- Access is restricted via OAuth using Google as the identity provider.
+* Access is restricted via OAuth using Google as the identity provider.
+
 * Only `@gitlab.com` accounts are allowed access.
 
-### Example Diagram
+### Example Diagram showing monitoring stack
 
 ![CI Runners Monitoring Stack Design](./img/ci-runners-monitoring.png)
 
