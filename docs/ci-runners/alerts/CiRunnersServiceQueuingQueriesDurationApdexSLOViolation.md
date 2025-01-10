@@ -19,7 +19,6 @@ This alert indicates that the CI Runners service is experiencing slower-than-exp
 
 ## Quick Links
 
-- [Dashboard](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1)
 - [Queuing_queries_duration SLI Apdex](https://dashboards.gitlab.net/goto/BCE8kFvNg?orgId=1)
 - [List of users in the queue](https://log.gprd.gitlab.net/goto/4109739640f8b21b278ca5060012fbf7)
 - [List of jobs per project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25)
@@ -59,11 +58,13 @@ Investigate the cause of increased queuing duration and take appropriate action 
 
 - **Silencing**: Can be silenced temporarily during planned maintenance
 - **Expected Frequency**: Medium - may trigger during peak usage periods
-- **Historical Trends**: Check [CI Runner alerts dashboard](https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ci-runners%22%2C%20tier%3D%22sv%22%7D)
+- **Historical Trends**: Check [CI Runner alerts dashboard](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1)
 
 ---
 
 ## Severities
+
+- The incident severity can range from Sev3 to Sev1 depending on the specific shard affected.
 
 ### Impact Assessment
 
@@ -102,6 +103,7 @@ Investigate the cause of increased queuing duration and take appropriate action 
 - Review scheduled pipeline timing conflicts.
 - Verify runner pool capacity.
 - Check for stuck jobs.
+- Check for deadtuples-related issues below
 
 ---
 
