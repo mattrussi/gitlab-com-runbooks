@@ -31,7 +31,7 @@ Investigate the cause of increased queuing duration and take appropriate action 
 ## Services
 
 - [CI Runners Service Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview)
-- **Team**: GitLab Infrastructure Team
+- **Team**: [Verify:Runner](https://handbook.gitlab.com/handbook/engineering/development/ops/verify/runner/)
 
 ## Quick Links
 
