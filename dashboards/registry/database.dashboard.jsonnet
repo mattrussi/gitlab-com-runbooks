@@ -207,6 +207,21 @@ basic.dashboard(
         |||
       )
     ),
+    statPanel.new(
+      title='Batched Migration Worker Runs',
+      description='The cumulative count of batched migration worker runs.',
+      reducerFunction='last',
+      decimals=0,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          sum (
+            increase(registry_bbm_runs_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+          )
+        |||
+      )
+    ),
   ], cols=8, rowHeight=4, startRow=1)
 )
 
@@ -988,6 +1003,157 @@ basic.dashboard(
   gridPos={
     x: 0,
     y: 6000,
+    w: 24,
+    h: 1,
+  },
+)
+
+.addPanel(
+  row.new(title='Batched Background Migrations', collapse=true)
+  .addPanels(
+    layout.grid([
+      basic.timeseries(
+        title='Worker Runs',
+        description='The cumulative count of all batched migration worker runs.',
+        query=|||
+          sum (
+            increase(registry_bbm_runs_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+          )
+        |||,
+        legend_show=false,
+      ),
+      basic.timeseries(
+        title='Worker Run Latency (Aggregate)',
+        description='The p90 latency of all batched migration worker runs.',
+        query=|||
+          histogram_quantile(
+            0.900000,
+            sum by (le) (
+              rate(registry_bbm_query_duration_seconds_bucket{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+            )
+          )
+        |||,
+        legend_show=false,
+        format='s'
+      ),
+      basic.timeseries(
+        title='Records Migrated (Cumulative)',
+        description='The cumulative count of batched migration records migrated.',
+        query=|||
+          sum by (migration_id)(
+            increase(registry_bbm_migrated_tuples_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+          )
+        |||,
+        legendFormat='{{ migration_id }}',
+        format='short'
+      ),
+      basic.timeseries(
+        title='Query Rate (Aggregate)',
+        description='Rate of batched migration queries over time.',
+        query=|||
+          sum(
+            rate(registry_bbm_query_duration_seconds_count{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+          )
+        |||,
+        legend_show=false,
+        format='short'
+      ),
+      basic.timeseries(
+        title='Query Rate (Per Type)',
+        description='Rate of batched migration queries over time, broken down by migration ID.',
+        query=|||
+          sum by (migration_id)(
+            rate(registry_bbm_query_duration_seconds_count{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+          )
+        |||,
+        legendFormat='{{ migration_id }}',
+        format='short'
+      ),
+      basic.timeseries(
+        title='Query Latency (Aggregate)',
+        description='The p90 latency of all batched migration queries.',
+        query=|||
+          histogram_quantile(
+            0.900000,
+            sum by (le) (
+              rate(registry_bbm_query_duration_seconds_bucket{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+            )
+          )
+        |||,
+        legend_show=false,
+        format='s'
+      ),
+      graphPanel.new(
+        'Batched Migration Query Latency (Per Migration ID)',
+        description='The p90 latency of each batched migration query.',
+        format='s',
+        linewidth=1,
+        fill=0,
+        nullPointMode='connected',
+        legend_alignAsTable=true,
+        legend_values=true,
+        legend_min=true,
+        legend_max=true,
+        legend_current=true,
+        legend_sort='current',
+        legend_sortDesc=true,
+      )
+      .addTarget(
+        promQuery.target(
+          |||
+            histogram_quantile(
+              0.900000,
+              sum by (le, migration_id) (
+                rate(registry_bbm_query_duration_seconds_bucket{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+              )
+            )
+          |||,
+          legendFormat='{{ migration_id }}',
+        )
+      ),
+      basic.timeseries(
+        title='Job Latency (Aggregate)',
+        description='The 90th percentile duration for all migration jobs.',
+        query=|||
+          histogram_quantile(
+            0.90,
+            sum by (le) (
+              rate(registry_bbm_job_duration_seconds_bucket{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+            )
+          )
+        |||,
+        legend_show=false,
+        format='s'
+      ),
+      basic.timeseries(
+        title='Job Latency (Per Migration ID)',
+        description='The 90th percentile duration for migration jobs per migration ID.',
+        query=|||
+          histogram_quantile(
+            0.90,
+            sum by (le, migration_id) (
+              rate(registry_bbm_job_duration_seconds_bucket{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+            )
+          )
+        |||,
+        legendFormat='{{ migration_id }}',
+        format='s'
+      ),
+      basic.timeseries(
+        title='Job Size (Per Migration ID)',
+        description='The job size of a batched migration.',
+        query=|||
+          avg by (migration_id) (
+            max_over_time(registry_bbm_job_batch_size{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+          )
+        |||,
+        legendFormat='{{ migration_id }}',
+      ),
+    ], cols=4, rowHeight=13, startRow=7001),
+  ),
+  gridPos={
+    x: 0,
+    y: 7000,
     w: 24,
     h: 1,
   },
