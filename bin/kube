@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -efo pipefail
+set -eufo pipefail
 
 CLUSTERS_JSON="${RUNBOOKS_PATH:?}/kubernetes/clusters.json"
 
@@ -21,11 +21,17 @@ print_help() {
   echo >&2 "    glsh kube [SUBCOMMAND]"
   echo >&2
   echo >&2 "SUBCOMMANDS: "
-  echo >&2 "    setup: Configure the local machine with all cluster contexts"
-  echo >&2 "    use-cluster: Specify which cluster to use"
+  echo >&2 "    setup [--no-proxy]                  Configure the local machine with all cluster contexts, set --no-proxy to skip setting (or unset) the SOCKS5 proxy URL"
+  echo >&2 "    use-cluster <cluster> [--no-proxy]  Select which cluster to use and start a SOCKS5 proxy via SSH unless --no-proxy is set"
+}
+
+print_setup_help() {
+  echo >&2 "glsh kube setup [--no-proxy]"
 }
 
 print_use_cluster_help() {
+  echo >&2 "glsh kube use-cluster <cluster> [--no-proxy]"
+  echo >&2
   echo >&2 "Choose one of the following clusters:"
   for cluster in $(all_clusters); do
     echo >&2 "    ${cluster}"
@@ -33,47 +39,100 @@ print_use_cluster_help() {
 }
 
 setup() {
+  local context no_proxy=0 proxy_set
+
+  while [[ $# -ne 0 ]]; do
+    case $1 in
+    --no-proxy)
+      no_proxy=1
+      ;;
+    *)
+      print_setup_help
+      exit 1
+      ;;
+    esac
+    shift
+  done
+
   echo "Running gcloud commands to create kube contexts"
   jq -r '.[] | "\(.name) --project \(.project) --region \(.region)"' "${CLUSTERS_JSON}" | while read -r cluster_params; do
     # shellcheck disable=SC2086
     gcloud container clusters get-credentials ${cluster_params} || true
   done
 
-  socks_port=1080
-  echo "Setting up SOCKS5 Proxy"
-  for cluster in $(all_clusters); do
-    context="$(get_kube_context "${cluster}")"
-
-    proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
-    if [[ ${proxy_set} == "null" ]]; then
-      echo "WARNING: Proxy is not configured for ${cluster}, skipping..."
+  if [[ ${no_proxy} -eq 1 ]]; then
+    echo "Removing SOCKS5 proxy from all clusters"
+    for cluster in $(all_clusters); do
+      context="$(get_kube_context "${cluster}")"
       kubectl config unset "clusters.${context}.proxy-url"
-      continue
-    fi
+    done
+  else
+    local socks_port=1080
+    echo "Setting up SOCKS5 proxy for each cluster"
+    for cluster in $(all_clusters); do
+      context="$(get_kube_context "${cluster}")"
 
-    kubectl config set "clusters.${context}.proxy-url" "socks5://localhost:${socks_port}"
-    ((socks_port = socks_port + 1))
-  done
+      proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
+      if [[ ${proxy_set} == "null" ]]; then
+        echo "WARNING: Proxy is not configured for ${cluster}, skipping..."
+        kubectl config unset "clusters.${context}.proxy-url"
+        continue
+      fi
+
+      kubectl config set "clusters.${context}.proxy-url" "socks5://localhost:${socks_port}"
+      ((socks_port = socks_port + 1))
+    done
+  fi
 
   echo "Creating empty cluster context for fallback purposes"
   kubectl config set-context empty
 }
 
 use_cluster() {
-  cluster="$1"
-  context="$(get_kube_context "$cluster")"
+  local cluster="" context no_proxy=0 proxy_set proxy_url
+
+  while [[ $# -ne 0 ]]; do
+    case $1 in
+    --no-proxy)
+      no_proxy=1
+      ;;
+    -*)
+      print_use_cluster_help
+      exit 1
+      ;;
+    *)
+      if [[ -n ${cluster} ]]; then
+        print_use_cluster_help
+        exit 1
+      fi
+      cluster="$1"
+      ;;
+    esac
+    shift
+  done
+
+  if [[ -z ${cluster} ]] || ! has_cluster "${cluster}"; then
+    print_use_cluster_help
+    exit 1
+  fi
+
+  context="$(get_kube_context "${cluster}")"
+
+  kubectx "${context}"
+
+  if [[ ${no_proxy} -eq 1 ]]; then
+    exit 0
+  fi
 
   proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
   proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
-  if [ -z "$proxy_url" ] && [ "${proxy_set}" != "null" ]; then
+  if [ -z "${proxy_url}" ] && [ "${proxy_set}" != "null" ]; then
     # shellcheck disable=SC2016
     echo >&2 'glsh: proxy-url not set in $KUBECONFIG, run glsh kube setup'
     exit 1
   fi
 
-  kubectx "${context}"
-
-  if [ "${proxy_set}" == "null" ]; then
+  if [[ ${proxy_set} == "null" ]]; then
     exit 0
   fi
 
@@ -132,15 +191,12 @@ fi
 
 case $1 in
 setup)
-  setup
+  shift
+  setup "$@"
   ;;
 use-cluster)
-  if [[ $# -ne 2 ]] || ! has_cluster "$2"; then
-    print_use_cluster_help
-    exit 1
-  fi
-
-  use_cluster "$2"
+  shift
+  use_cluster "$@"
   ;;
 *)
   print_help
