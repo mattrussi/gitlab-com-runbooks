@@ -23,33 +23,43 @@ They include CI jobs that apply the relevant config to the right cluster. Most o
 
 # Kubernetes API Access
 
-Certain diagnostic steps can only be performed by interacting with kubernetes
-directly. For this reason you need to be able to run kubectl commands. Remember
+Certain diagnostic steps can only be performed by interacting with Kubernetes
+directly. For this reason you need to be able to run `kubectl` commands. Remember
 to avoid making any changes to the clusters config outside of git!
 
 We use private GKE clusters, with the control plane only accessible from within
-the cluster's VPC. So we need to set up our local machine to tunnel requests
-through a proxy.
+the cluster's VPC or the [VPN](https://handbook.gitlab.com/handbook/security/corporate/systems/vpn/).
 
 1. Setup Yubikey SSH keys: <https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/yubikey.md>
 1. Setup bastion for clusters: <https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/bastions>
 1. Install `gcloud`: <https://cloud.google.com/sdk/docs/install>
 1. Install [`gke-gcloud-auth-plugin`](https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke): `gcloud components install gke-gcloud-auth-plugin`.
 1. Install `kubectl`:
+
    * [MacOS](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
    * [Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
-1. Run `gcloud auth login`: The browser will open to choose with google email
-   address to use to allow for oauth.
 
-    💡 *If you see warnings about permissions issues related to `~/.config/gcloud/*`
-    check the permissions of this directory.  Simply change it to your user if
-    necessary: `sudo chown -R $(whoami) ~/.config`* 💡
-1. Run `glsh kube setup`: Use [`glsh`](../../README.md#running-helper-scripts-from-runbook) to set up `kubectl` configuration to be to talk to all clusters.
-1. Run `glsh kube use-cluster`: This will print all the available clusters.
-1. Run `glsh kube use-cluster gstg`: This will connect you to the `gstg`
-   regional cluster.
-1. In a new window run `kubectl get nodes`: This will list all the nodes
-   available in cluster.
+1. Run `gcloud auth login`: The browser will open to choose with google email address to use to allow for oauth.
+
+   💡 *If you see warnings about permissions issues related to `~/.config/gcloud/*` check the permissions of this directory. Simply change it to your user if necessary: `sudo chown -R $(whoami) ~/.config`* 💡
+
+**Option A: VPN**
+
+1. Run `glsh kube setup --no-proxy`: use [`glsh`](../../README.md#running-helper-scripts-from-runbook) to set up the `kubectl` configuration to be able to talk to all clusters without a proxy.
+1. Launch NordLayer and [connect to one of the organization gateways](https://handbook.gitlab.com/handbook/security/corporate/systems/vpn/#nordlayer-for-system-administration) (:warning: not to a shared gateway!)
+1. Run `glsh kube use-cluster`: this will print all the available clusters.
+1. Run `glsh kube use-cluster gstg --no-proxy`: this will connect you to the `gstg` regional cluster.
+
+   Alternatively, you can directly run `kubectx` to select a cluster from an interactive menu.
+
+1. Run `kubectl get nodes`: this will list all the nodes available in the cluster.
+
+**Option B: SOCKS5 proxy via SSH**
+
+1. Run `glsh kube setup`: use [`glsh`](../../README.md#running-helper-scripts-from-runbook) to set up `kubectl` configuration to be able to talk to all clusters via a SOCKS5 proxy.
+1. Run `glsh kube use-cluster`: this will print all the available clusters.
+1. Run `glsh kube use-cluster gstg`: this will connect you to the `gstg` regional cluster.
+1. In a new window run `kubectl get nodes`: this will list all the nodes available in the cluster.
 
 ## GUI consoles and metrics
 
