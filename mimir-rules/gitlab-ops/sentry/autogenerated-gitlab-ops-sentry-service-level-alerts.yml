@@ -760,6 +760,104 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 0.16667
       )
+  - alert: SentryServiceSentryEventsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Sentry is an application monitoring platform. This SLI monitors the sentry API. 5xx responses are considered failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2130486158"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(sentry_events_failed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      team: scalability:observability
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}
+          > (14.4 * 0.010000)
+        )
+        and on (env,environment,tier,type,stage,component)
+        (
+          gitlab_component_errors:ratio_5m{component="sentry_events",env="ops",monitor="global",type="sentry"}
+          > (14.4 * 0.010000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 1
+      )
+  - alert: SentryServiceSentryEventsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Sentry is an application monitoring platform. This SLI monitors the sentry API. 5xx responses are considered failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2130486158"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(sentry_events_failed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      team: scalability:observability
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}
+          > (6 * 0.010000)
+        )
+        and on (env,environment,tier,type,stage,component)
+        (
+          gitlab_component_errors:ratio_30m{component="sentry_events",env="ops",monitor="global",type="sentry"}
+          > (6 * 0.010000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 0.16667
+      )
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m
     annotations:
@@ -778,7 +876,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sentry_events_processed{environment="{{ $labels.environment }}",job="sentry-metrics",stage="{{ $labels.stage }}"}[5m])
+          rate(sentry_events_processed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
@@ -816,7 +914,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sentry_events_processed{environment="{{ $labels.environment }}",job="sentry-metrics",stage="{{ $labels.stage }}"}[5m])
+          rate(sentry_events_processed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
