@@ -47,7 +47,8 @@ You'll be using the following tooling:
 
 ### Setting a ["cached" touch policy](https://docs.yubico.com/yesdk/users-manual/application-piv/pin-touch-policies.html)
 
-**When following the below instructions, your Yubikey will be reset**
+**When following the below instructions, your YubiKey's PIV application will be reset. Existing FIDO
+applications where this YubiKey is used will not be affected.[^1]**
 
 When doing a rebase with multiple commits, or using ssh automation like `knife ssh ...` it will be painful using the default `yubikey-agent` configuration since a touch is required for every signature or ssh session.
 This is default configuration but we set a touch policy of "cached" with the following script, this will cache touches for 15 seconds:
@@ -55,9 +56,9 @@ This is default configuration but we set a touch policy of "cached" with the fol
 1. Validate `ykman` has access to the key, you may need to re-insert your yubikey, run `ykman info` to confirm.
 1. Run the [`scripts/yubikey-reset.sh` script](https://gitlab.com/gitlab-com/runbooks/-/blob/master/scripts/reset-yubikey.sh), `PIN=<your pin> scripts/reset-yubikey.sh`, **this will invalidate the previous key and set a new one**:
 
-### Workaround if your yubikey is not responding
+### Workaround if your YubiKey is not responding
 
-If you discover that your Yubikey is not responding, a restart of the `yubikey-agent` may be needed. Usually `ssh-add -l` will throw an error.
+If you discover that your yubikey is not responding, a restart of the `yubikey-agent` may be needed. Usually `ssh-add -l` will throw an error.
 
 Run the following brew command on your local machine.
 
@@ -66,3 +67,82 @@ brew services restart yubikey-agent
 ```
 
 We suspect that this is impacting only Macbook / macOS users.
+
+### Extra Setup for GNOME Users
+
+If you are using [a Linux laptop](https://handbook.gitlab.com/handbook/tools-and-tips/linux/) with
+either the GNOME Display Manager (GDM) as the login manager or GNOME as the desktop environment,
+then further steps are _recommended_ to improve the setup.
+
+#### Disable smart card authentication within GDM
+
+We are using the `pcscd` daemon, which was originally used for smartcard-based login. GDM will
+automatically prefer smart card authentication over password-based authentication, if the laptop has
+`pcscd` running and is booted with the YubiKey plugged in.
+
+In order to disable smart card authentication, we can update the settings usign this command:
+
+``` shell
+sudo -u gdm dbus-launch --exit-with-session env DCONF_PROFILE=gdm gsettings set org.gnome.login-screen enable-smartcard-authentication false
+```
+
+The value for this setting can be verified using `gsettings`:
+
+``` shell
+sudo -u gdm env DCONF_PROFILE=gdm gsettings get org.gnome.login-screen enable-smartcard-authentication
+```
+
+#### Disable `gsd_smartcard` from running on start-up
+
+GNOME Settings Daemon (GSD) is one of the components of the GNOME Desktop environment which runs when a
+GNOME session is started. GSD has several plugins, and one of the plugins is
+`org.gnome.SettingsDaemon.Smartcard`. This plugin runs the program `gsd_smartcard` which opens a
+connection to the YubiKey.
+
+This prevents `yubikey-agent` from connecting to the YubiKey. The following error an be seen in the journal:
+
+``` shell
+$ ssh-add -L
+error fetching identities: agent refused operation
+
+$ journalctl --user -u yubikey-agent.service | rg -i other | tail -1
+Jan 14 14:51:30 work-dell-1 yubikey-agent[21389]: 2025/01/14 14:51:30 agent 11: could not reach YubiKey: connecting to smart card: the smart card cannot be accessed because of other connections outstanding
+```
+
+To see whether `gsd_smartcard` is the root cause of this error, you can use `lsof` and see the users
+of the PCSCD socket as described
+[here](https://github.com/FiloSottile/yubikey-agent/issues/111#issuecomment-2478402886):
+
+``` shell
+$ sudo lsof +E /run/pcscd/pcscd.comm
+COMMAND    PID      USER   FD   TYPE             DEVICE SIZE/OFF  NODE NAME
+[snip]
+gsd-smart 3449 siddharth    8u  unix 0xffff8a5bccf4a400      0t0 16052 type=STREAM ->INO=4724 2220,pcscd,14u
+gsd-smart 3449 siddharth    9u  unix 0xffff8a5bf9711c00      0t0 18246 type=STREAM ->INO=13132 2220,pcscd,15u
+```
+
+You can stop the `gsd_smartcard` process from running on start-up by masking the related Systemd
+unit:[^2]
+
+``` shell
+$ systemctl --user mask org.gnome.SettingsDaemon.Smartcard.target
+Created symlink /home/siddharth/.config/systemd/user/org.gnome.SettingsDaemon.Smartcard.target → /dev/null.
+```
+
+### Limitation: Keeping multiple YubiKeys connected
+
+If you have multiple YubiKeys connected to your machine, there is no way to select a single YubiKey
+to be used within `yubikey-agent`. [The current
+logic](https://github.com/FiloSottile/yubikey-agent/blob/2e5376c5ec006250c12c1b6de65fa91de9afe687/main.go#L195-L196)
+uses the first YubiKey which can be opened.
+
+---
+
+[^1]: "The applications are all separate from each other, with separate storage for keys and
+    credentials." -- [Protocols and Applications -- YubiKey Technical
+    Manual](https://docs.yubico.com/hardware/yubikey/yk-tech-manual/yk5-apps.html)
+
+[^2]: Note that this will work only when the value `X-GNOME-HiddenUnderSystemd` is set to `true` in
+    the `/etc/xdg/autostart/org.gnome.SettingsDaemon.Smartcard.desktop` plugin desktop file. See
+    more information at the [manual page of
+    `gnome.session`](https://man.archlinux.org/man/gnome-session.1.en).
