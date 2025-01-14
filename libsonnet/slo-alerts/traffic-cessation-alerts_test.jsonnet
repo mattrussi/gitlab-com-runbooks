@@ -166,7 +166,7 @@ test.suite({
   testCessationPartialAlertsSelector: {
     actual: std.map(function(f) f.expr, underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts_with_selector, alertDescriptorFixture1, { env: 'gprd' })),
     expect: [|||
-      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"} == 0
+      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"} < 0.16666666666666666
       and
       operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h >= 0.16666666666666666
     |||, |||

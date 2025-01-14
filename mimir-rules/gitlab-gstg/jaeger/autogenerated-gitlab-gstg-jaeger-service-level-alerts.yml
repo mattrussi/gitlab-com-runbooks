@@ -129,7 +129,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="jaeger_agent",env="gstg",monitor="global",stage="main",type="jaeger"} == 0
+      gitlab_component_ops:rate_30m{component="jaeger_agent",env="gstg",monitor="global",stage="main",type="jaeger"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="jaeger_agent",env="gstg",monitor="global",stage="main",type="jaeger"} offset 1h >= 0.16666666666666666
   - alert: JaegerServiceJaegerAgentTrafficAbsent
@@ -293,7 +293,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="jaeger_collector",env="gstg",monitor="global",stage="main",type="jaeger"} == 0
+      gitlab_component_ops:rate_30m{component="jaeger_collector",env="gstg",monitor="global",stage="main",type="jaeger"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="jaeger_collector",env="gstg",monitor="global",stage="main",type="jaeger"} offset 1h >= 0.16666666666666666
   - alert: JaegerServiceJaegerCollectorTrafficAbsent
@@ -457,7 +457,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="jaeger_query",env="gstg",monitor="global",stage="main",type="jaeger"} == 0
+      gitlab_component_ops:rate_30m{component="jaeger_query",env="gstg",monitor="global",stage="main",type="jaeger"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="jaeger_query",env="gstg",monitor="global",stage="main",type="jaeger"} offset 1h >= 0.16666666666666666
   - alert: JaegerServiceJaegerQueryTrafficAbsent

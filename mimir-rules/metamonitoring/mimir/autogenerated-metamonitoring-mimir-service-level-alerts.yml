@@ -135,7 +135,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_compactor",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_compactor",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_compactor",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirCompactorTrafficAbsent
@@ -416,7 +416,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_distributor",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_distributor",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_distributor",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirDistributorTrafficAbsent
@@ -698,7 +698,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_ingester",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_ingester",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_ingester",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirIngesterTrafficAbsent
@@ -975,7 +975,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_querier",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_querier",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_querier",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirQuerierTrafficAbsent
@@ -1256,7 +1256,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_query_frontend",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_query_frontend",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_query_frontend",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirQueryFrontendTrafficAbsent
@@ -1538,7 +1538,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_query_scheduler",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_query_scheduler",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_query_scheduler",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirQuerySchedulerTrafficAbsent
@@ -1714,7 +1714,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_ruler",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_ruler",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_ruler",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirRulerTrafficAbsent
@@ -1996,7 +1996,7 @@ groups:
       team: scalability:observability
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mimir_store_gateway",monitor="global",stage="main",type="mimir"} == 0
+      gitlab_component_ops:rate_30m{component="mimir_store_gateway",monitor="global",stage="main",type="mimir"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mimir_store_gateway",monitor="global",stage="main",type="mimir"} offset 1h >= 0.16666666666666666
   - alert: MimirServiceMimirStoreGatewayTrafficAbsent

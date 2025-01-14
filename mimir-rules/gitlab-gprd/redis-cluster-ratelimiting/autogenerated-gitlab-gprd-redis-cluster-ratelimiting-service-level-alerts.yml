@@ -37,7 +37,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="primary_server",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
+      gitlab_component_ops:rate_30m{component="primary_server",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="primary_server",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h >= 0.16666666666666666
   - alert: RedisClusterRatelimitingServicePrimaryServerTrafficAbsent
@@ -313,7 +313,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_redis_client",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
+      gitlab_component_ops:rate_30m{component="rails_redis_client",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="rails_redis_client",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h >= 0.16666666666666666
   - alert: RedisClusterRatelimitingServiceRailsRedisClientTrafficAbsent
@@ -387,7 +387,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="secondary_servers",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
+      gitlab_component_ops:rate_30m{component="secondary_servers",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="secondary_servers",env="gprd",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h >= 0.16666666666666666
   - alert: RedisClusterRatelimitingServiceSecondaryServersTrafficAbsent

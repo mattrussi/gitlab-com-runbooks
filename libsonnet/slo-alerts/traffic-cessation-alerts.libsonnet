@@ -106,7 +106,7 @@ local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessa
   (if opsRateIntermediateMetric != null then
      [{
        local expr = |||
-         %(opsRateIntermediateMetric)s{%(selector)s} == 0
+         %(opsRateIntermediateMetric)s{%(selector)s} < %(requiredOpRate)s
        ||| + trafficCessationRequiredOpRateFormat(requiredOpRate),
 
        alert: serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'TrafficCessation' + alertDescriptor.alertSuffix),

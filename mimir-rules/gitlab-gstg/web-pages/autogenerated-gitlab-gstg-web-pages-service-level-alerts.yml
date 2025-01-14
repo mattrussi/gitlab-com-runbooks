@@ -217,7 +217,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="web-pages"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="web-pages"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="web-pages"} offset 1h >= 0.16666666666666666
   - alert: WebPagesServiceLoadbalancerTrafficAbsent
@@ -285,7 +285,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="web-pages"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="web-pages"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="web-pages"} offset 1h >= 0.16666666666666666
   - alert: WebPagesServiceLoadbalancerTrafficAbsentRegional
@@ -537,7 +537,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="loadbalancer_https",env="gstg",monitor="global",stage="main",type="web-pages"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer_https",env="gstg",monitor="global",stage="main",type="web-pages"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="loadbalancer_https",env="gstg",monitor="global",stage="main",type="web-pages"} offset 1h >= 0.16666666666666666
   - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsent
@@ -605,7 +605,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="loadbalancer_https",env="gstg",monitor="global",stage="main",type="web-pages"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer_https",env="gstg",monitor="global",stage="main",type="web-pages"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer_https",env="gstg",monitor="global",stage="main",type="web-pages"} offset 1h >= 0.16666666666666666
   - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsentRegional
@@ -1089,7 +1089,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="web_pages_server",env="gstg",monitor="global",stage="main",type="web-pages"} == 0
+      gitlab_component_ops:rate_30m{component="web_pages_server",env="gstg",monitor="global",stage="main",type="web-pages"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="web_pages_server",env="gstg",monitor="global",stage="main",type="web-pages"} offset 1h >= 0.16666666666666666
   - alert: WebPagesServiceWebPagesServerTrafficAbsent
@@ -1165,7 +1165,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="web_pages_server",env="gstg",monitor="global",stage="main",type="web-pages"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="web_pages_server",env="gstg",monitor="global",stage="main",type="web-pages"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="web_pages_server",env="gstg",monitor="global",stage="main",type="web-pages"} offset 1h >= 0.16666666666666666
   - alert: WebPagesServiceWebPagesServerTrafficAbsentRegional

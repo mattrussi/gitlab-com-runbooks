@@ -239,7 +239,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceGitlabSshdTrafficAbsent
@@ -527,7 +527,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceGoserverTrafficAbsent
@@ -789,7 +789,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServicePumaTrafficAbsent
@@ -967,7 +967,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_sql",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="rails_sql",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="rails_sql",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceRailsSqlTrafficAbsent
@@ -1243,7 +1243,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceRegistryServerTrafficAbsent
@@ -1515,7 +1515,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceSidekiqExecutionTrafficAbsent
@@ -1687,7 +1687,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceSidekiqQueueingTrafficAbsent
@@ -1965,7 +1965,7 @@ groups:
       team: reliability_foundations
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
+      gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h >= 0.16666666666666666
   - alert: OpsGitlabNetServiceWorkhorseTrafficAbsent

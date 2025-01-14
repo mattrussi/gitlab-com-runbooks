@@ -37,7 +37,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="primary_server",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} == 0
+      gitlab_component_ops:rate_30m{component="primary_server",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="primary_server",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisRegistryCacheServicePrimaryServerTrafficAbsent
@@ -308,7 +308,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="registry_redis_client",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} == 0
+      gitlab_component_ops:rate_30m{component="registry_redis_client",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="registry_redis_client",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisRegistryCacheServiceRegistryRedisClientTrafficAbsent
@@ -381,7 +381,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="secondary_servers",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} == 0
+      gitlab_component_ops:rate_30m{component="secondary_servers",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="secondary_servers",env="gstg",monitor="global",stage="main",type="redis-registry-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisRegistryCacheServiceSecondaryServersTrafficAbsent
