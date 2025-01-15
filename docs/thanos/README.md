@@ -19,7 +19,6 @@
 
 ## Troubleshooting Pointers
 
-* [Deadtuples affecting query performance](../ci-runners/CiRunnersServiceQueuingQueriesDurationApdexSLOViolation.md)
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
