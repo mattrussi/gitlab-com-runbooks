@@ -11,7 +11,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRequestErrors
         annotations:
           message: |
@@ -26,7 +26,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRequestLatency
         annotations:
           message: |
@@ -40,7 +40,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirQueriesIncorrect
         annotations:
           message: |
@@ -54,7 +54,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirInconsistentRuntimeConfig
         annotations:
           message: |
@@ -66,7 +66,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirBadRuntimeConfig
         annotations:
           message: |
@@ -79,7 +79,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirFrontendQueriesStuck
         annotations:
           message: |
@@ -91,7 +91,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirSchedulerQueriesStuck
         annotations:
           message: |
@@ -103,7 +103,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirCacheRequestErrors
         annotations:
           message: |
@@ -127,7 +127,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterRestarts
         annotations:
           message: Mimir {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has restarted {{ printf "%.2f" $value }} times in the last 30 mins.
@@ -146,7 +146,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirKVStoreFailure
         annotations:
           message: |
@@ -164,7 +164,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirMemoryMapAreasTooHigh
         annotations:
           message: '{{ $labels.job }}/{{ $labels.pod }} has a number of mmap-ed areas close to the limit.'
@@ -175,7 +175,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterInstanceHasNoTenants
         annotations:
           message: Mimir ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has no tenants assigned.
@@ -193,7 +193,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRulerInstanceHasNoRuleGroups
         annotations:
           message: Mimir ruler {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has no rule groups assigned.
@@ -211,7 +211,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngestedDataTooFarInTheFuture
         annotations:
           message: Mimir ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has ingested samples with timestamps more than 1h in the future.
@@ -226,7 +226,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirStoreGatewayTooManyFailedOperations
         annotations:
           message: Mimir store-gateway {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is experiencing {{ $value | humanizePercentage }} errors while doing {{ $labels.operation }} on the object storage.
@@ -237,7 +237,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRingMembersMismatch
         annotations:
           message: |
@@ -257,7 +257,7 @@ groups:
           component: ingester
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir_instance_limits_alerts
     rules:
       - alert: MimirIngesterReachingSeriesLimit
@@ -275,7 +275,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterReachingSeriesLimit
         annotations:
           message: |
@@ -291,7 +291,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterReachingTenantsLimit
         annotations:
           message: |
@@ -307,7 +307,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterReachingTenantsLimit
         annotations:
           message: |
@@ -323,7 +323,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirReachingTCPConnectionsLimit
         annotations:
           message: |
@@ -336,7 +336,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirDistributorReachingInflightPushRequestLimit
         annotations:
           message: |
@@ -352,7 +352,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir-rollout-alerts
     rules:
       - alert: MimirRolloutStuck
@@ -383,7 +383,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
           workload_type: statefulset
       - alert: MimirRolloutStuck
         annotations:
@@ -405,7 +405,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
           workload_type: deployment
       - alert: RolloutOperatorNotReconciling
         annotations:
@@ -418,7 +418,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir-provisioning
     rules:
       - alert: MimirAllocatingTooMuchMemory
@@ -441,7 +441,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAllocatingTooMuchMemory
         annotations:
           message: |
@@ -462,7 +462,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: ruler_alerts
     rules:
       - alert: MimirRulerTooManyFailedPushes
@@ -480,7 +480,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRulerTooManyFailedQueries
         annotations:
           message: |
@@ -496,7 +496,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRulerMissedEvaluations
         annotations:
           message: |
@@ -512,7 +512,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRulerFailedRingCheck
         annotations:
           message: |
@@ -525,7 +525,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirRulerRemoteEvaluationFailing
         annotations:
           message: |
@@ -541,7 +541,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
   - name: gossip_alerts
     rules:
       - alert: MimirGossipMembersTooHigh
@@ -556,7 +556,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirGossipMembersTooLow
         annotations:
           message: One or more Mimir instances in {{ $labels.cluster }}/{{ $labels.namespace }} consistently sees a lower than expected number of gossip members.
@@ -569,7 +569,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
   - name: etcd_alerts
     rules:
       - alert: EtcdAllocatingTooMuchMemory
@@ -587,7 +587,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: EtcdAllocatingTooMuchMemory
         annotations:
           message: |
@@ -603,7 +603,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: alertmanager_alerts
     rules:
       - alert: MimirAlertmanagerSyncConfigsFailing
@@ -617,7 +617,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerRingCheckFailing
         annotations:
           message: |
@@ -629,7 +629,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerPartialStateMergeFailing
         annotations:
           message: |
@@ -641,7 +641,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerReplicationFailing
         annotations:
           message: |
@@ -653,7 +653,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerPersistStateFailing
         annotations:
           message: |
@@ -665,7 +665,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerInitialSyncFailed
         annotations:
           message: |
@@ -676,7 +676,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerAllocatingTooMuchMemory
         annotations:
           message: |
@@ -690,7 +690,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerAllocatingTooMuchMemory
         annotations:
           message: |
@@ -704,7 +704,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAlertmanagerInstanceHasNoTenants
         annotations:
           message: Mimir alertmanager {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} owns no tenants.
@@ -719,7 +719,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir_blocks_alerts
     rules:
       - alert: MimirIngesterHasNotShippedBlocks
@@ -743,7 +743,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterHasNotShippedBlocksSinceStart
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has not shipped any block in the last 4 hours.
@@ -756,7 +756,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterHasUnshippedBlocks
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has compacted a block {{ $value | humanizeDuration }} ago but it hasn't been successfully uploaded to the storage yet.
@@ -769,7 +769,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBHeadCompactionFailed
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is failing to compact TSDB head.
@@ -780,7 +780,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBHeadTruncationFailed
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is failing to truncate TSDB head.
@@ -790,7 +790,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBCheckpointCreationFailed
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is failing to create TSDB checkpoint.
@@ -800,7 +800,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBCheckpointDeletionFailed
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is failing to delete TSDB checkpoint.
@@ -810,7 +810,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBWALTruncationFailed
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is failing to truncate TSDB WAL.
@@ -820,7 +820,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBWALCorrupted
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} got a corrupted TSDB WAL.
@@ -835,7 +835,7 @@ groups:
           deployment: single-zone
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBWALCorrupted
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} got a corrupted TSDB WAL.
@@ -850,7 +850,7 @@ groups:
           deployment: multi-zone
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirIngesterTSDBWALWritesFailed
         annotations:
           message: Mimir Ingester {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is failing to write to TSDB WAL.
@@ -861,7 +861,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirStoreGatewayHasNotSyncTheBucket
         annotations:
           message: Mimir store-gateway {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has not successfully synched the bucket since {{ $value | humanizeDuration }}.
@@ -874,7 +874,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirStoreGatewayNoSyncedTenants
         annotations:
           message: Mimir store-gateway {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} is not syncing any blocks for any tenant.
@@ -885,7 +885,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirBucketIndexNotUpdated
         annotations:
           message: Mimir bucket index for tenant {{ $labels.user }} in {{ $labels.cluster }}/{{ $labels.namespace }} has not been updated since {{ $value | humanizeDuration }}.
@@ -895,7 +895,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir_compactor_alerts
     rules:
       - alert: MimirCompactorHasNotSuccessfullyCleanedUpBlocks
@@ -910,7 +910,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirCompactorHasNotSuccessfullyRunCompaction
         annotations:
           message: Mimir Compactor {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has not run compaction in the last 24 hours.
@@ -926,7 +926,7 @@ groups:
           env: ops
           reason: in-last-24h
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirCompactorHasNotSuccessfullyRunCompaction
         annotations:
           message: Mimir Compactor {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has not run compaction in the last 24 hours.
@@ -940,7 +940,7 @@ groups:
           env: ops
           reason: since-startup
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirCompactorHasNotSuccessfullyRunCompaction
         annotations:
           message: Mimir Compactor {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} failed to run 2 consecutive compactions.
@@ -951,7 +951,7 @@ groups:
           env: ops
           reason: consecutive-failures
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirCompactorHasNotUploadedBlocks
         annotations:
           message: Mimir Compactor {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has not uploaded any block in the last 24 hours.
@@ -968,7 +968,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
           time_period: 24h
       - alert: MimirCompactorHasNotUploadedBlocks
         annotations:
@@ -984,7 +984,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
           time_period: since-start
       - alert: MimirCompactorSkippedUnhealthyBlocks
         annotations:
@@ -996,7 +996,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirCompactorSkippedUnhealthyBlocks
         annotations:
           message: Mimir Compactor {{ $labels.pod }} in {{ $labels.cluster }}/{{ $labels.namespace }} has found and ignored unhealthy blocks.
@@ -1007,7 +1007,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir_autoscaling
     rules:
       - alert: MimirAutoscalerNotActive
@@ -1035,7 +1035,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirAutoscalerKedaFailing
         annotations:
           message: The Keda ScaledObject {{ $labels.scaledObject }} in {{ $labels.namespace }} is experiencing errors.
@@ -1052,7 +1052,7 @@ groups:
         labels:
           env: ops
           severity: critical
-          team: scalability:observability
+          team: production-engineering:observability
   - name: mimir_continuous_test
     rules:
       - alert: MimirContinuousTestNotRunningOnWrites
@@ -1065,7 +1065,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirContinuousTestNotRunningOnReads
         annotations:
           message: Mimir continuous test {{ $labels.test }} in {{ $labels.cluster }}/{{ $labels.namespace }} is not effectively running because queries are failing.
@@ -1076,7 +1076,7 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability
       - alert: MimirContinuousTestFailed
         annotations:
           message: Mimir continuous test {{ $labels.test }} in {{ $labels.cluster }}/{{ $labels.namespace }} failed when asserting query results.
@@ -1086,4 +1086,4 @@ groups:
         labels:
           env: ops
           severity: warning
-          team: scalability:observability
+          team: production-engineering:observability

@@ -410,13 +410,18 @@
     name: 'Foundations',
     stage: 'production_engineering',
     feature_categories: [
-      'rTBD',
+      'rate_limiting',
     ],
   },
   observability: {
     name: 'Observability',
     stage: 'production_engineering',
-    feature_categories: [],
+    feature_categories: [
+      'error_budgets',
+      'infra_cost_data',
+      'capacity_planning',
+      'scalability',
+    ],
   },
   gitaly: {
     name: 'Gitaly',
@@ -449,6 +454,8 @@
     stage: 'data_access',
     feature_categories: [
       'backup_restore',
+      'redis',
+      'sidekiq',
     ],
   },
   organizations: {

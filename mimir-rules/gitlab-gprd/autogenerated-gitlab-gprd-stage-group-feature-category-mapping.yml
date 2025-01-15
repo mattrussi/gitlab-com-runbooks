@@ -125,6 +125,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: capacity_planning
+      monitor: global
+      product_stage: production_engineering
+      stage_group: observability
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: cell
       monitor: global
       product_stage: tenant_scale
@@ -377,6 +384,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: error_budgets
+      monitor: global
+      product_stage: production_engineering
+      stage_group: observability
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: feature_flags
       monitor: global
       product_stage: deploy
@@ -479,6 +493,20 @@ groups:
       monitor: global
       product_stage: monitor
       stage_group: platform_insights
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: infra_cost_data
+      monitor: global
+      product_stage: production_engineering
+      stage_group: observability
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: infrastructure_cost_data
+      monitor: global
+      product_stage: production_engineering
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -692,10 +720,17 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: rTBD
+      feature_category: rate_limiting
       monitor: global
       product_stage: production_engineering
       stage_group: foundations
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: redis
+      monitor: global
+      product_stage: data_access
+      stage_group: durability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -738,6 +773,13 @@ groups:
       monitor: global
       product_stage: production_engineering
       stage_group: ops
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: scalability
+      monitor: global
+      product_stage: production_engineering
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -794,6 +836,13 @@ groups:
       monitor: global
       product_stage: foundations
       stage_group: personal_productivity
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: sidekiq
+      monitor: global
+      product_stage: data_access
+      stage_group: durability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

@@ -42,7 +42,7 @@ metricsCatalog.serviceDefinition({
       severity: 's3',
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'scalability:observability',
+      team: 'production-engineering:observability',
       description: |||
         Sentry is an application monitoring platform.
         This SLI monitors the sentry API. 5xx responses are considered failures.
@@ -71,7 +71,7 @@ metricsCatalog.serviceDefinition({
       severity: 's3',
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'scalability:observability',
+      team: 'production-engineering:observability',
       description: |||
         Sentry is an application monitoring platform.
         This SLI monitors the sentry API. 5xx responses are considered failures.

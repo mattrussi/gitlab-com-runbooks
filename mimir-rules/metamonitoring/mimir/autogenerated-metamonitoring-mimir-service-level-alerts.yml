@@ -34,7 +34,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -83,7 +83,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -132,7 +132,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_compactor",monitor="global",stage="main",type="mimir"} == 0
@@ -170,7 +170,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_compactor",monitor="global",stage="main",type="mimir"} offset 1h
@@ -210,7 +210,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -263,7 +263,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -313,7 +313,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -363,7 +363,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -413,7 +413,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_distributor",monitor="global",stage="main",type="mimir"} == 0
@@ -452,7 +452,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_distributor",monitor="global",stage="main",type="mimir"} offset 1h
@@ -492,7 +492,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -545,7 +545,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -595,7 +595,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -645,7 +645,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -695,7 +695,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_ingester",monitor="global",stage="main",type="mimir"} == 0
@@ -734,7 +734,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_ingester",monitor="global",stage="main",type="mimir"} offset 1h
@@ -1050,7 +1050,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1103,7 +1103,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1153,7 +1153,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1203,7 +1203,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1253,7 +1253,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_query_frontend",monitor="global",stage="main",type="mimir"} == 0
@@ -1292,7 +1292,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_query_frontend",monitor="global",stage="main",type="mimir"} offset 1h
@@ -1332,7 +1332,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1385,7 +1385,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1435,7 +1435,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1485,7 +1485,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1535,7 +1535,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_query_scheduler",monitor="global",stage="main",type="mimir"} == 0
@@ -1574,7 +1574,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_query_scheduler",monitor="global",stage="main",type="mimir"} offset 1h
@@ -1611,7 +1611,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1661,7 +1661,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1711,7 +1711,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_ruler",monitor="global",stage="main",type="mimir"} == 0
@@ -1750,7 +1750,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_ruler",monitor="global",stage="main",type="mimir"} offset 1h
@@ -1790,7 +1790,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1843,7 +1843,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1893,7 +1893,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1943,7 +1943,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1993,7 +1993,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mimir_store_gateway",monitor="global",stage="main",type="mimir"} == 0
@@ -2032,7 +2032,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: scalability:observability
+      team: production-engineering:observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="mimir_store_gateway",monitor="global",stage="main",type="mimir"} offset 1h

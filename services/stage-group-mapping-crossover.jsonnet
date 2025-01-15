@@ -6,10 +6,5 @@
 //
 // Blank values will be ignored.
 {
-  scalability: '',
-  error_budgets: '',
-  infrastructure_cost_data: '',
-  capacity_planning: '',
-  redis: '',
-  rate_limiting: '',
+  infrastructure_cost_data: 'infra_cost_data',
 }

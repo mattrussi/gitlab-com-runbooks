@@ -135,10 +135,10 @@ teams:
 - name: runway
   slack_alerts_channel: f_runway_alerts
 
-- name: scalability:observability
+- name: production-engineering:observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
   manager: lmcandrew
-  label: team::Scalability-Observability
+  label: team::Observability
   slack_alerts_channel: g_infra_observability_alerts
   send_slo_alerts_to_team_slack_channel: true
   alerts:
@@ -523,7 +523,7 @@ teams:
   alerts:
   - ops
 
-- name: reliability_foundations
+- name: production-engineering:foundations
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/
   manager: sabrams
   label: team::Foundations
