@@ -42,10 +42,15 @@ groups:
 - name: 'SLI Aggregations: sentry - sentry_events - 5m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:sentry_events_failed:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(sentry_events_failed{env="ops",namespace=~"sentry",type=~"sentry"}[5m] offset 30s)
+      )
   - record: sli_aggregations:sentry_events_processed:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(sentry_events_processed{env="ops",job=~"sentry-metrics",type=~"sentry"}[5m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(sentry_events_processed{env="ops",namespace=~"sentry",type=~"sentry"}[5m] offset 30s)
       )
   - record: sli_aggregations:sentry_jobs_duration:rate_5m
     expr: |
@@ -106,10 +111,15 @@ groups:
 - name: 'SLI Aggregations: sentry - sentry_events - 30m burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:sentry_events_failed:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(sentry_events_failed{env="ops",namespace=~"sentry",type=~"sentry"}[30m] offset 30s)
+      )
   - record: sli_aggregations:sentry_events_processed:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(sentry_events_processed{env="ops",job=~"sentry-metrics",type=~"sentry"}[30m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(sentry_events_processed{env="ops",namespace=~"sentry",type=~"sentry"}[30m] offset 30s)
       )
   - record: sli_aggregations:sentry_jobs_duration:rate_30m
     expr: |
@@ -170,10 +180,15 @@ groups:
 - name: 'SLI Aggregations: sentry - sentry_events - 1h burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:sentry_events_failed:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(sentry_events_failed{env="ops",namespace=~"sentry",type=~"sentry"}[1h] offset 30s)
+      )
   - record: sli_aggregations:sentry_events_processed:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(sentry_events_processed{env="ops",job=~"sentry-metrics",type=~"sentry"}[1h] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(sentry_events_processed{env="ops",namespace=~"sentry",type=~"sentry"}[1h] offset 30s)
       )
   - record: sli_aggregations:sentry_jobs_duration:rate_1h
     expr: |
