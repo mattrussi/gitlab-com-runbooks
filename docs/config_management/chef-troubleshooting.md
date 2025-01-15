@@ -83,3 +83,16 @@ What to do:
 1. On that node, inspect the chef logs (`sudo grep chef-client /var/log/syslog|less`) to determine what's broken.
 
 * It could be anything, but td-agent and incompatible gem combinations is common.  In that case you can use `td-agent-gem` to manually adjust installed versions until the list of gems, often google-related, are all compatible with each other (compare to a still functional node for versions if necessary).  Or delete all the installed gems and start again (running chef-client may bootstrap things again in that case).
+
+### Overriding Alerts when Chef Cannot be Repaired
+
+There may be times where you cannot repair Chef, but you want to stop the paging.
+[This incident](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19048) is an example of a situation where bad Chef runs were the last run before disabling chef-client.
+We want to remove the alerts for clarity until the root cause can be fixed.
+The Prometheus Node Exporter stores chef-client metrics in `/opt/prometheus/node_exporter/metrics/chef-client.prom`, and we can over-write this files data, specifically the value in `chef_client_error`.
+
+Here is an example command to clear a single VMs chef-client error.
+
+```bash
+$ sudo sed -i "s/chef_client_error 1.0/chef_client_error 0.0/" /opt/prometheus/node_exporter/metrics/chef-client.prom"
+```
