@@ -20,6 +20,7 @@
 * [../bastions/ops-bastions.md](../bastions/ops-bastions.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
