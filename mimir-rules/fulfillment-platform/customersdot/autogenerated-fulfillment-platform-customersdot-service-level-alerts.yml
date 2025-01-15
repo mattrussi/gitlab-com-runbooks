@@ -225,7 +225,7 @@ groups:
       team: fulfillment_platform
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} == 0
+      gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
   - alert: CustomersdotServiceCustomersDotRequestsTrafficAbsent
@@ -487,7 +487,7 @@ groups:
       team: fulfillment_platform
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} == 0
+      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficAbsent

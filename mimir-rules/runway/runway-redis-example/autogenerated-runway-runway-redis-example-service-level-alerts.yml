@@ -39,7 +39,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_shard_ops:rate_30m{component="primary_server",monitor="global",type="runway-redis-example"} == 0
+      gitlab_component_shard_ops:rate_30m{component="primary_server",monitor="global",type="runway-redis-example"} < 0.16666666666666666
       and
       gitlab_component_shard_ops:rate_30m{component="primary_server",monitor="global",type="runway-redis-example"} offset 1h >= 0.16666666666666666
   - alert: RunwayRedisExampleServicePrimaryServerTrafficAbsentSingleShard

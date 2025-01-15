@@ -260,7 +260,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_30m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"} == 0
+      gitlab_component_shard_ops:rate_30m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_shard_ops:rate_30m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceCiRunnerJobsTrafficAbsentSingleShard
@@ -427,7 +427,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="ci-runners"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceLoadbalancerTrafficAbsent
@@ -601,7 +601,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="polling",env="gstg",monitor="global",stage="main",type="ci-runners"} == 0
+      gitlab_component_ops:rate_30m{component="polling",env="gstg",monitor="global",stage="main",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="polling",env="gstg",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServicePollingTrafficAbsent
@@ -880,7 +880,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="qa_runner_jobs",env="gstg",monitor="global",stage="main",type="ci-runners"} == 0
+      gitlab_component_ops:rate_30m{component="qa_runner_jobs",env="gstg",monitor="global",stage="main",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="qa_runner_jobs",env="gstg",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceQaRunnerJobsTrafficAbsent
@@ -1070,7 +1070,7 @@ groups:
       team: pipeline_execution
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="queuing_queries_duration",env="gstg",monitor="global",stage="main",type="ci-runners"} == 0
+      gitlab_component_ops:rate_30m{component="queuing_queries_duration",env="gstg",monitor="global",stage="main",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="queuing_queries_duration",env="gstg",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficAbsent
@@ -1245,7 +1245,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",stage="main",type="ci-runners"} == 0
+      gitlab_component_ops:rate_30m{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",stage="main",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresTrafficAbsent
@@ -1417,7 +1417,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",env="gstg",monitor="global",stage="main",type="ci-runners"} == 0
+      gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",env="gstg",monitor="global",stage="main",type="ci-runners"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",env="gstg",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficAbsent

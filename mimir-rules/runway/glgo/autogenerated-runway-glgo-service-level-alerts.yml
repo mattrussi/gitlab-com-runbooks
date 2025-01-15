@@ -239,7 +239,7 @@ groups:
       team: container_registry
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="runway_ingress",monitor="global",stage="main",type="glgo"} == 0
+      gitlab_component_ops:rate_30m{component="runway_ingress",monitor="global",stage="main",type="glgo"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="runway_ingress",monitor="global",stage="main",type="glgo"} offset 1h >= 0.16666666666666666
   - alert: GlgoServiceRunwayIngressTrafficAbsent
@@ -411,7 +411,7 @@ groups:
       team: container_registry
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="runway_lb",monitor="global",stage="main",type="glgo"} == 0
+      gitlab_component_ops:rate_30m{component="runway_lb",monitor="global",stage="main",type="glgo"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="runway_lb",monitor="global",stage="main",type="glgo"} offset 1h >= 0.16666666666666666
   - alert: GlgoServiceRunwayLbTrafficAbsent

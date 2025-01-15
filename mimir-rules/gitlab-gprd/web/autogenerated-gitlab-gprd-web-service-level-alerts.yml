@@ -242,7 +242,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="dependency_proxy",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="dependency_proxy",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="dependency_proxy",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceDependencyProxyTrafficAbsent
@@ -320,7 +320,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="dependency_proxy",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="dependency_proxy",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="dependency_proxy",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceDependencyProxyTrafficAbsentRegional
@@ -576,7 +576,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="global_search",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="global_search",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="global_search",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceGlobalSearchTrafficAbsent
@@ -650,7 +650,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="global_search",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="global_search",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="global_search",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceGlobalSearchTrafficAbsentRegional
@@ -934,7 +934,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="group_management",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="group_management",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="group_management",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceGroupManagementTrafficAbsent
@@ -1012,7 +1012,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="group_management",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="group_management",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="group_management",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceGroupManagementTrafficAbsentRegional
@@ -1301,7 +1301,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="imagescaler",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="imagescaler",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="imagescaler",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceImagescalerTrafficAbsent
@@ -1377,7 +1377,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="imagescaler",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="imagescaler",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="imagescaler",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceImagescalerTrafficAbsentRegional
@@ -1633,7 +1633,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceLoadbalancerTrafficAbsent
@@ -1701,7 +1701,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceLoadbalancerTrafficAbsentRegional
@@ -1978,7 +1978,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="logins",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="logins",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="logins",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceLoginsTrafficAbsent
@@ -2056,7 +2056,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="logins",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="logins",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="logins",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceLoginsTrafficAbsentRegional
@@ -2535,7 +2535,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceRailsRequestTrafficAbsent
@@ -2615,7 +2615,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="rails_request",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="rails_request",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceRailsRequestTrafficAbsentRegional
@@ -3105,7 +3105,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceWorkhorseTrafficAbsent
@@ -3181,7 +3181,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="workhorse",env="gprd",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="workhorse",env="gprd",monitor="global",stage="main",type="web"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="workhorse",env="gprd",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
   - alert: WebServiceWorkhorseTrafficAbsentRegional

@@ -132,7 +132,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="email_receiver",env="gstg",monitor="global",stage="main",type="mailroom"} == 0
+      gitlab_component_ops:rate_30m{component="email_receiver",env="gstg",monitor="global",stage="main",type="mailroom"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="email_receiver",env="gstg",monitor="global",stage="main",type="mailroom"} offset 1h >= 0.16666666666666666
   - alert: MailroomServiceEmailReceiverTrafficAbsent
@@ -303,7 +303,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="emailsProcessed",env="gstg",monitor="global",stage="main",type="mailroom"} == 0
+      gitlab_component_ops:rate_30m{component="emailsProcessed",env="gstg",monitor="global",stage="main",type="mailroom"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="emailsProcessed",env="gstg",monitor="global",stage="main",type="mailroom"} offset 1h >= 0.16666666666666666
   - alert: MailroomServiceEmailsProcessedTrafficAbsent

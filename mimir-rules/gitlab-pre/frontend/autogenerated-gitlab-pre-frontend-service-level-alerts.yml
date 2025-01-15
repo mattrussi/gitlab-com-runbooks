@@ -129,7 +129,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="cnyHttpsServices",env="pre",monitor="global",stage="main",type="frontend"} == 0
+      gitlab_component_ops:rate_30m{component="cnyHttpsServices",env="pre",monitor="global",stage="main",type="frontend"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="cnyHttpsServices",env="pre",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceCnyHttpsServicesTrafficAbsent
@@ -293,7 +293,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="mainHttpsServices",env="pre",monitor="global",stage="main",type="frontend"} == 0
+      gitlab_component_ops:rate_30m{component="mainHttpsServices",env="pre",monitor="global",stage="main",type="frontend"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="mainHttpsServices",env="pre",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceMainHttpsServicesTrafficAbsent
@@ -457,7 +457,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="sshServices",env="pre",monitor="global",stage="main",type="frontend"} == 0
+      gitlab_component_ops:rate_30m{component="sshServices",env="pre",monitor="global",stage="main",type="frontend"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="sshServices",env="pre",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceSshServicesTrafficAbsent
@@ -621,7 +621,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="websocketsServices",env="pre",monitor="global",stage="main",type="frontend"} == 0
+      gitlab_component_ops:rate_30m{component="websocketsServices",env="pre",monitor="global",stage="main",type="frontend"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="websocketsServices",env="pre",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceWebsocketsServicesTrafficAbsent

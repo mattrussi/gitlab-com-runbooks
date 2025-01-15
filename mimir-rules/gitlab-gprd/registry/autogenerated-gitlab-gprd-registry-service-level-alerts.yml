@@ -249,7 +249,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="database",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="database",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="database",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceDatabaseTrafficAbsent
@@ -325,7 +325,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="database",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="database",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="database",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceDatabaseTrafficAbsentRegional
@@ -804,7 +804,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="garbagecollector",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="garbagecollector",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="garbagecollector",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceGarbagecollectorTrafficAbsent
@@ -878,7 +878,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="garbagecollector",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="garbagecollector",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="garbagecollector",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceGarbagecollectorTrafficAbsentRegional
@@ -1133,7 +1133,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceLoadbalancerTrafficAbsent
@@ -1201,7 +1201,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceLoadbalancerTrafficAbsentRegional
@@ -1685,7 +1685,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="redis",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="redis",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="redis",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceRedisTrafficAbsent
@@ -1761,7 +1761,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="redis",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="redis",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="redis",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceRedisTrafficAbsentRegional
@@ -2027,7 +2027,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="registry_cdn",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="registry_cdn",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="registry_cdn",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceRegistryCdnTrafficAbsent
@@ -2099,7 +2099,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="registry_cdn",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="registry_cdn",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="registry_cdn",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceRegistryCdnTrafficAbsentRegional
@@ -2585,7 +2585,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="registry_server",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="registry_server",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="registry_server",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceRegistryServerTrafficAbsent
@@ -2661,7 +2661,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="registry_server",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="registry_server",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="registry_server",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceRegistryServerTrafficAbsentRegional
@@ -2959,7 +2959,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficAbsent
@@ -3040,7 +3040,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficAbsentRegional
@@ -3579,7 +3579,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficAbsent
@@ -3664,7 +3664,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficAbsentRegional
@@ -3957,7 +3957,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="server_route_manifest_reads",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="server_route_manifest_reads",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="server_route_manifest_reads",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsent
@@ -4033,7 +4033,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_reads",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_reads",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_reads",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsentRegional
@@ -4341,7 +4341,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="server_route_manifest_writes",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="server_route_manifest_writes",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_component_ops:rate_30m{component="server_route_manifest_writes",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsent
@@ -4425,7 +4425,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_writes",env="gprd",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_writes",env="gprd",monitor="global",stage="main",type="registry"} < 0.16666666666666666
       and
       gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_writes",env="gprd",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsentRegional
