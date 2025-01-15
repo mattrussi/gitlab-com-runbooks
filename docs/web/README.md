@@ -21,7 +21,6 @@
 * [ApdexSLOViolation](../alerts/ApdexSLOViolation.md)
 * [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [Atlantis Web UI](../atlantis/webui.md)
-* [Deadtuples affecting query performance](../ci-runners/CiRunnersServiceQueuingQueriesDurationApdexSLOViolation.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare](../cloudflare/intro.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
