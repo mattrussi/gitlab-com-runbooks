@@ -36,7 +36,6 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
 
-
     local sentryQuerySelector = { namespace: 'sentry' },
 
     sentry_events: {
@@ -57,7 +56,12 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sentry_events_processed',
-        selector={ job: 'sentry-metrics' },
+        selector=sentryQuerySelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='sentry_events_failed',
+        selector=sentryQuerySelector,
       ),
 
       significantLabels: [],
