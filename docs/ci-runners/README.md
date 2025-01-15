@@ -223,6 +223,7 @@ Below is a description of the runner components and their relationships:
    * Purpose: Handle secure communication between runners and GitLab
    * Implementation: Shared VPC architecture, Strict firewall rules and network policies
    * Security: Manage access controls and network isolation
+   * For more details see [ci-runner-networking.md](./ci-runner-networking.md)
 
 ---
 

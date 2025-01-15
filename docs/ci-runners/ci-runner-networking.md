@@ -31,6 +31,8 @@ The primary goal is to address scalability challenges due to the limitations of 
 
 Previously, the CI SaaS infrastructure employed individual VPC peering per project. Each project was paired directly with the central network through unique VPC peering links, which resulted in a highly complex and difficult-to-manage architecture. This approach also led to quickly reaching the VPC peering limit of 70 connections in GCP, which constrained our ability to scale and required re-evaluation of our networking strategy.
 
+![vpc-before](/uploads/065382a656c6f7160d3f262f84e31abf/vpc-before.png)
+
 ### New Architecture
 
 The new architecture transitions from individual VPC peerings to a Shared VPC model. This Shared VPC is managed within a central 'gitlab-ci' hub project, with each shard configured as a service project.
@@ -38,6 +40,8 @@ The new architecture transitions from individual VPC peerings to a Shared VPC mo
 The isolation between the shared VPC networks is a logical one, occuring on the application-level, where each runner-manager is configured to use its own isolated network.
 
 By using a Shared VPC, multiple projects can securely communicate through a common network structure, reducing the need for direct VPC peerings and thereby addressing the peering limits.
+
+![vpc-after](/uploads/daa0eb2cec9f1ccc0d2522966dab6167/vpc-after.png)
 
 The architecture provides:
 
