@@ -31,6 +31,7 @@ This alert indicates that the CI Runners service is experiencing slower-than-exp
 - Database performance issues
 - Runner manager capacity constraints
 - Resource exhaustion in the runner fleet
+- Runner manager unable to spin ephemeral VMs
 
 ### Affected Components
 
@@ -82,9 +83,9 @@ Investigate the cause of increased queuing duration and take appropriate action 
 
 ## Verification
 
-- Check [shared runners logs](https://log.gprd.gitlab.net/goto/b9aed2474a7ffe194a10d4445a02893a).
-- Review [runner manager metrics](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=1).
-- Monitor [database performance metrics]((https://dashboards.gitlab.net/goto/jykuUODNR?orgId=1)).
+- Check [.com hosted runners logs](https://log.gprd.gitlab.net/app/r/s/FCgzi).
+- Review [runner manager metrics](https://dashboards.gitlab.net/goto/Qk0JeBDNg?orgId=1).
+- Monitor [database performance metrics](https://dashboards.gitlab.net/goto/S--a6fDHg?orgId=1).
 
 ---
 
@@ -93,9 +94,8 @@ Investigate the cause of increased queuing duration and take appropriate action 
 ### Basic Steps
 
 1. Check for recent [surge in CI job creation](../service-ci-runners.md#surge-of-scheduled-pipelines).
-2. Verify [runner manager health](https://dashboards.gitlab.net/goto/uXCF8OvNg?orgId=).
-3. Review [database performance metrics](https://dashboards.gitlab.net/goto/jykuUODNR?orgId=1).
-4. Check for [cryptocurrency mining abuse.](../service-ci-runners.md#abuse-of-resources-cryptocurrency-mining)
+2. Verify [runner manager health](https://dashboards.gitlab.net/goto/xwXEeBDNR?orgId=1).
+3. Review [Patroni performance metrics](https://dashboards.gitlab.net/goto/SlRQeBvHg?orgId=1).
 5. Check if [GitLab.com usage has outgrown it's surge capacity](../service-ci-runners.md#gitlabcom-usage-has-outgrown-its-surge-capacity)
 
 ### Additional Checks
@@ -197,7 +197,9 @@ And SLI should recover
 ### Support Channels
 
 - `#production` Slack channel
-- `#ci-runners` Slack channel
+- `#g_hosted_runners` Slack channel
+- `#g_runner` Slack channel
+- `#f_hosted_runners_on_linux` Slack channel
 
 ---
 
@@ -210,6 +212,6 @@ And SLI should recover
 
 ## Related Links
 
-- [CI Runner Architecture Documentation](https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html)
+- [CI Runner Architecture Documentation](https://handbook.gitlab.com/handbook/engineering/infrastructure/production/architecture/ci-architecture)
 - [Runner Abuse Prevention](../service-ci-runners.md)
 - [ApdexSLOViolation Documentation](../../alerts/ApdexSLOViolation.md)
