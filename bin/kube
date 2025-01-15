@@ -136,13 +136,13 @@ use_cluster() {
     exit 0
   fi
 
-  ssh_proxy="$(get_ssh_proxy "$1")"
+  ssh_proxy="$(get_ssh_proxy "${cluster}")"
 
   proxy_port=$(echo "${proxy_url}" | awk -F: '{print $3}')
 
   msg="[kube] Starting SOCKS5 proxy on port ${proxy_port} through ${ssh_proxy}..."
 
-  if [ -n "${TMUX}" ]; then
+  if [ -n "${TMUX:-}" ]; then
     tmux split-pane -d -v -l 3 "echo \"${msg}\"; exec ssh -D \"${proxy_port}\" \"${ssh_proxy}\" 'echo \"Connected! Press Enter to disconnect.\"; read disconnect'"
   else
     notify_shell
