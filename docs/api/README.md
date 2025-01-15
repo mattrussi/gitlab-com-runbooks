@@ -20,6 +20,7 @@
 
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Shared CI Runner Timeouts](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)

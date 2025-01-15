@@ -27,6 +27,7 @@
 * [Blackbox git exporter is down](../blackbox/blackbox-git-exporter.md)
 * [Cells and Auto-Deploy](../cells/auto-deploy.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
