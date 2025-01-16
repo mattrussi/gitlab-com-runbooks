@@ -50,7 +50,7 @@ The major Linux fleets that support GitLab.com are:
 | Service | Owner | Exposure | Maintenance Impact | Automation | Cadence (weeks) |
 | ------- | ----- | -------- | :----------------: | :--------: | --------------- |
 | [GKE](systems/gke.md)     | reliability_foundations | external | low | partial | external |
-| [Runner Managers](systems/runner-managers.md) | scalability:practices | internal | low | no | 8 |
+| [Runner Managers](systems/runner-managers.md) | scalability:practices | internal | low | partial | 8 |
 | [HAProxy](systems/haproxy.md) | reliability_foundations | external | low | partial | 8 |
 | [Gitaly](systems/gitaly.md) | data-access::durability | internal | high | no | as needed |
 | [Patroni](systems/patroni.md) | reliability_database_reliability | internal | low | no | 8 |
