@@ -47,6 +47,10 @@ jsonnet-fmt:
 shell-fmt:
 	shfmt $(SHELL_FMT_FLAGS) -w $(SHELL_FILES)
 
+.PHONY: markdown-fmt
+markdown-fmt:
+	npm run markdownlint -- docs README.md --fix
+
 .PHONY: generate
 generate:
 	./scripts/generate.sh

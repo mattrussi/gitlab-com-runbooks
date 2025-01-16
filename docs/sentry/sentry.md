@@ -4,17 +4,16 @@
 
 [TOC]
 
-The following runbooks only applies to the instance of Sentry running in the `ops-gitlab-gke` cluster (running Sentry 22.9.0+). They are **not applicable** to the old instance of Sentry running on a single VM (version 9.1.2).
-
 ## Architecture
 
-The figure below is overly simplified and likely woefully incomplete, but should give you a good idea of how many moving parts are involved in this Sentry installation.
+Below is a simplified diagram of the Sentry installation.
 
 ```mermaid
 graph TD
 app["GitLab.com (Sentry SDKs)"] ==port 80==> lb{{Nginx Ingress}}
 sentry_web ==port 5432==> postgres[("Cloud SQL (Postgres)")]
-sentry_worker ==port 5432==> postgres
+sentry_worker ==port 5433==> postgres
+sentry_worker ==port 443==> big-table
 subgraph Sentry["Ops GKE cluster"]
     lb --> |"port 9000"| relay
     lb --> |"port 8080"| sentry_web["Sentry (web)"]
@@ -34,18 +33,18 @@ subgraph Sentry["Ops GKE cluster"]
 end
 ```
 
-The Cloud SQL Postgres database can be accessed in the GCP console [here](https://console.cloud.google.com/sql/instances/sentry/overview?project=gitlab-ops).
-
 ## Charts
 
-The Helm chart we are using to manage the Sentry deployment is located [here](https://github.com/sentry-kubernetes/charts/tree/develop/sentry). The maintainers are very open to contributions!
+The Helm chart we are using to manage the Sentry deployment is located [here](https://github.com/sentry-kubernetes/charts/tree/develop/sentry). The Helm release and its required extras can be found below:
 
-The Helm release for our deployment can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/sentry). Note the various extras needed:
-
+* [Sentry](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/sentry)
+* [Clickhouse](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/charts/sentry-extras/templates/clickhouse.yaml) (managed via an [operator](https://github.com/Altinity/clickhouse-operator), which uses [this chart](https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm))
+* [CloudSQL Proxy](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-sql-proxy.yaml.gotmpl) (which uses [this chart](https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy))
+* [Kafka](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/sentry/sentry-kafka)
 * [External secrets](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/secrets-values.yaml.gotmpl)
 * [Nginx ingress](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-ingress.yaml.gotmpl)
-* [Cloud SQL proxy](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-sql-proxy.yaml.gotmpl) (which uses [this chart](https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy))
-* [Clickhouse](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/charts/sentry-extras/templates/clickhouse.yaml) (managed via an [operator](https://github.com/Altinity/clickhouse-operator), which uses [this chart](https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm))
+
+The Terraform can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ops/sentry.tf#L6).
 
 ## Administration
 
