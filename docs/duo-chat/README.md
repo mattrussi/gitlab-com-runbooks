@@ -247,3 +247,19 @@ Then, they can perform these steps to determine if it is a backend (AI Gateway) 
 6. Check if there is a response there
 
 If the response does not show up on web, it is likely an AI Gateway problem. If the response does show up on web, it is likely a client-side IDE problem.
+
+## When a Duo Chat specific error code happened on self-managed GitLab
+
+When a [Duo Chat specific error code](#duo-chat-specific-error-codes) happened on self-managed GitLab,
+the following logs are helpful for further investigation:
+
+- LLM log: https://docs.gitlab.com/ee/administration/logs/#llmlog
+  - To get the full details, `expanded_ai_logging` feature flag needs to be enabled. Please see [the admin doc](https://docs.gitlab.com/ee/administration/feature_flags.html) for more information.
+- Sidekiq log: https://docs.gitlab.com/ee/administration/logs/#sidekiqlog
+
+Collect the log from the timestamp that the user reproduced the error code. 5-10 minutes of timerange should be enough.
+
+After we've collected the log, we do:
+
+1. Filter the llm.log by the error code (LLM log spits the error code as-is). Extract the correlation-id in the same log line.
+2. Filter the llm.log and sidekloq.log by the extracted correlation-id. This gives us the details of the process flow, which is crucial to identify where the thing went wrong.
