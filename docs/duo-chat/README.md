@@ -253,9 +253,9 @@ If the response does not show up on web, it is likely an AI Gateway problem. If 
 When a [Duo Chat specific error code](#duo-chat-specific-error-codes) happened on self-managed GitLab,
 the following logs are helpful for further investigation:
 
-- LLM log: https://docs.gitlab.com/ee/administration/logs/#llmlog
+- [LLM log](https://docs.gitlab.com/ee/administration/logs/#llmlog)
   - To get the full details, `expanded_ai_logging` feature flag needs to be enabled. Please see [the admin doc](https://docs.gitlab.com/ee/administration/feature_flags.html) for more information.
-- Sidekiq log: https://docs.gitlab.com/ee/administration/logs/#sidekiqlog
+- [Sidekiq log](https://docs.gitlab.com/ee/administration/logs/#sidekiqlog)
 
 Collect the log from the timestamp that the user reproduced the error code. 5-10 minutes of timerange should be enough.
 
