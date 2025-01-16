@@ -14,6 +14,8 @@ Because there should always be an inactive set of runner instances, there should
 
 See [Linux Patching Overview](../linux-os-patching.md#linux-patching-overview) for generic processes applied to all Linux systems.
 
+See the `Additional Automated Tooling` section below for how to execute the runner specific patching process on a given shard.
+
 We will take advantage of the Runner Manager's blue/green deployment to apply patches to the currently inactive color, make them active, then apply patches to the color that was removed from active service.
 
 - Identify the currently inactive color
@@ -32,6 +34,10 @@ Updating these Chef attributes will change the deployed image used by the epheme
 
 ## Additional Automation Tooling
 
-No targeted automation exists currently.
+There is a Slack command that can be executed from the `#production` Slack channel to initiate patching of the individual runner shards. To use this:
 
-The current deployment process does automatically swap the active color on each deployment, this could likely be extended to include system reboots on the instances before making them active to achieve automation here.
+1. Identify the shard and inactive color you want to patch.
+1. In the `#production` Slack channel:
+  1. Issue command: `/runner run system-patch-dry-run <shard> <color>`
+  1. Verify the upgraded package lists don't contain anything unexpected.
+  1. Issue command: `/runner run system-patch <shard> <color>`
