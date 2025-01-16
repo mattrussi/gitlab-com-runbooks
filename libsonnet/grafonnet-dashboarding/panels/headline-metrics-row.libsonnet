@@ -77,21 +77,21 @@ local metricsRow(
     ]
   else [];
 
-  local opsRatePanels = if showOpsRate then [
-    [
-      opsRatePanel(
-        '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
-        aggregationSet=aggregationSet,
-        selectorHash=selectorHashWithExtras,
-        stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
-        legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
-        expectMultipleSeries=!expectMultipleSeries,
-        includePredictions=!expectMultipleSeries && includeOpsPredictions,
-        includeLastWeek=!expectMultipleSeries && includeLastWeek,
-        compact=compact,
-      ),
-    ],
-  ] else [];
+  local opsRatePanels = [];  // if showOpsRate then [
+  //   [
+  //     opsRatePanel(
+  //       '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
+  //       aggregationSet=aggregationSet,
+  //       selectorHash=selectorHashWithExtras,
+  //       stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
+  //       legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
+  //       expectMultipleSeries=!expectMultipleSeries,
+  //       includePredictions=!expectMultipleSeries && includeOpsPredictions,
+  //       includeLastWeek=!expectMultipleSeries && includeLastWeek,
+  //       compact=compact,
+  //     ),
+  //   ],
+  // ] else [];
 
 
   apdexPanels + errorRatioPanels + opsRatePanels;
@@ -139,4 +139,4 @@ function(
   if rowTitle != null then
     layout.titleRowWithPanels(rowTitle, columns)
   else
-    layout.grid(columns, cols=columns.size)
+    layout.grid(columns, cols=std.length(columns))
