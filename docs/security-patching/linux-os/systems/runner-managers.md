@@ -38,6 +38,6 @@ There is a Slack command that can be executed from the `#production` Slack chann
 
 1. Identify the shard and inactive color you want to patch.
 1. In the `#production` Slack channel:
-  1. Issue command: `/runner run system-patch-dry-run <shard> <color>`
-  1. Verify the upgraded package lists don't contain anything unexpected.
-  1. Issue command: `/runner run system-patch <shard> <color>`
+    1. Issue command: `/runner run system-patch-dry-run <shard> <color>`
+    1. Verify the upgraded package lists don't contain anything unexpected.
+    1. Issue command: `/runner run system-patch <shard> <color>`
