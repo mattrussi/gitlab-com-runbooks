@@ -111,11 +111,5 @@
     "project": "gitlab-release",
     "region": "us-east1",
     "ssh_proxy": "bastion-01-inf-release.c.gitlab-release.internal"
-  },
-  "ci-runners": {
-    "name": "runners-gke",
-    "project": "gitlab-ci-155816",
-    "region": "us-east1",
-    "ssh_proxy": "bastion-01-inf-ci.c.gitlab-ci-155816.internal"
   }
 }
