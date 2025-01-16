@@ -22,13 +22,8 @@ This page explains how to investigate Duo Chat issues on production.
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
 - GitLab-Sidekiq:
-<<<<<<< HEAD
-  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/CaUYv)
-  - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
-=======
   - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/K54dN)
   - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/5pTeS)
->>>>>>> b4550d171 (Update our internal runbooks to include a section about are new shard)
   - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
   - [Duo Chat specific error codes](https://log.gprd.gitlab.net/app/r/s/eeO5a)
 - Redis:
@@ -93,15 +88,15 @@ That probably indicates a problem with Sidekiq where the job is not being kicked
 
 ## AI Abstraction Layer Sidekiq Traffic
 
-All Duo Chat traffic goes through a `ai-abstraction-layer` Sidekiq provide a centralize unit of sidekiq requests away from the larger Gitlab.com queue. The objective was of this was to isolate our traffic from larger Sidekiq issues to make sure we are more aware/less impacted from on-going incidents.
+All Duo Chat request go through an isolated `urgent-ai-abstraction-layer` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs. 
 
 To find only Duo traffic, you can click on the the `pubsub-sidekiq-inf-*` Elastic Search.
 
-- Filter the logs by selecting `json.shard.keyword: "ai-abstraction-layer"` to limit logs coming from our respective Sidekiq containers.
+- Filter the logs by selecting `json.shard.keyword: "urgent-ai-abstraction-layer"` to limit logs coming from our respective Sidekiq containers.
 
 **Important Feature Category information**:
-Sidekiq feature category: `ai-abstraction-layer`
-GKE Deployment: `gkeDeployment: 'gitlab-sidekiq-ai-abstraction-layer-v2'`
+Sidekiq feature category: `urgent-ai-abstraction-layer`
+GKE Deployment: `gkeDeployment: 'gitlab-sidekiq-urgent-ai-abstraction-layer-v2'`
 Queue Urgency: `throttled`
 
 See this [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18630) for more information.
