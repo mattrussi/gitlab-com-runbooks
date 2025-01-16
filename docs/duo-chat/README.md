@@ -88,7 +88,7 @@ That probably indicates a problem with Sidekiq where the job is not being kicked
 
 ## AI Abstraction Layer Sidekiq Traffic
 
-All Duo Chat request go through an isolated `urgent-ai-abstraction-layer` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs. 
+All Duo Chat request go through an isolated `urgent-ai-abstraction-layer` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs.
 
 To find only Duo traffic, you can click on the the `pubsub-sidekiq-inf-*` Elastic Search.
 
