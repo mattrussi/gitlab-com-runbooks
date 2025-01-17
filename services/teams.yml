@@ -616,6 +616,13 @@ teams:
 # Unlisted
 
 - name: developer_tooling
+  product_stage_group: developer_tooling
   url: https://about.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/
   slack_channel: g_developer_tooling
   slack_alerts_channel: g_developer_tooling
+
+- name: development_analytics
+  product_stage_group: development_analytics
+  url: https://about.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/development-analytics/
+  slack_channel: g_development_analytics
+  slack_alerts_channel: g_development_analytics
