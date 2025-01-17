@@ -261,5 +261,5 @@ Collect the log from the timestamp that the user reproduced the error code. 5-10
 
 After we've collected the log, we do:
 
-1. Filter the llm.log by the error code (LLM log spits the error code as-is). Extract the correlation-id in the same log line.
+1. Filter the llm.log by the error code (LLM log outputs the error code as-is). Extract the correlation-id in the same log line.
 2. Filter the llm.log and sidekloq.log by the extracted correlation-id. This gives us the details of the process flow, which is crucial to identify where the thing went wrong.
