@@ -9,11 +9,11 @@ test.suite({
   testLookupByUntouchedGroup: {
     actual: mappingWithOverride.observability,
     expectContains: {
-      // stage: 'platforms',
+      stage: 'production_engineering',
       feature_categories: [
-        'capacity_planning',
         'error_budgets',
-        'infrastructure_cost_data',
+        'infra_cost_data',
+        'capacity_planning',
         'scalability',
       ],
     },

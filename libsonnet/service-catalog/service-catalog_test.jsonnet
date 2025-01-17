@@ -77,7 +77,7 @@ test.suite({
       ignored_components: [],
       issue_tracker: null,
       name: 'observability',
-      product_stage_group: null,
+      product_stage_group: 'observability',
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'g_infra_observability_alerts',
       manager: 'lmcandrew',
