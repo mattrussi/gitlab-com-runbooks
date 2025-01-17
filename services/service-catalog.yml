@@ -23,7 +23,7 @@ services:
     tier: sv
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -113,9 +113,9 @@ services:
     friendly_name: Distribution Build Tooling
     tier: inf
     teams:
-      - distribution_build
+      - build
     label: Build-Tooling
-    owner: distribution_build
+    owner: build
     technical:
       project:
         - https://gitlab.com/gitlab-org/omnibus-gitlab
@@ -477,7 +477,7 @@ services:
     friendly_name: NGINX
     tier: sv
     teams:
-      - distribution_deploy
+      - deploy
     label: NGINX
     owner: reliability_unowned
     technical:
@@ -562,7 +562,7 @@ services:
     friendly_name: GitLab.com Web
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -659,7 +659,7 @@ services:
     friendly_name: Git Access
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -837,7 +837,7 @@ services:
     friendly_name: Mailroom Incoming Mail Service
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -1933,7 +1933,7 @@ services:
     friendly_name: Sidekiq Background Jobs
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -2490,7 +2490,7 @@ services:
     tier: sv
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - manage
       - plan
@@ -2631,7 +2631,7 @@ services:
     label: omnibus
     owner: reliability_unowned
     teams:
-      - distribution_deploy
+      - deploy
     technical:
       project:
         - https://gitlab.com/gitlab-org/omnibus-gitlab

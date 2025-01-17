@@ -333,6 +333,15 @@ groups:
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
+- name: 'Stage group Ignored components: gitlab_delivery - GitLab Release'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: gitlab_delivery
+      stage_group: release
+    expr: "1"
 - name: 'Stage group Ignored components: create - Remote Development'
   interval: 1m
   rules:

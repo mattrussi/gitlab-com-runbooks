@@ -26,24 +26,6 @@ teams:
   # ignored_components:
   # - graphql_query
 
-- name: distribution_build
-  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-build-team
-  slack_channel: g_distribution
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-  product_stage_group: distribution_build
-  ignored_components:
-  - graphql_query
-
-- name: distribution_deploy
-  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-deploy-team
-  slack_channel: g_distribution
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-  product_stage_group: distribution_deploy
-  ignored_components:
-  - graphql_query
-
 - name: geo
   url: https://about.gitlab.com/handbook/engineering/dev-backend/geo/
   slack_channel: g_geo
@@ -118,13 +100,6 @@ teams:
   slack_channel: data-engineering
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
-
-- name: delivery
-  slack_alerts_channel: g_delivery_alerts
-  send_slo_alerts_to_team_slack_channel: true
-  product_stage_group: delivery
-  ignored_components:
-  - graphql_query
 
 - name: production-engineering:runway
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
@@ -588,6 +563,54 @@ teams:
 # ClickHouse (virtual)
 - name: clickhouse
   slack_alerts_channel: f_clickhouse_infra_alerts
+
+# Delivery
+
+- name: release
+  slack_alerts_channel: g_delivery_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  product_stage_group: release
+  ignored_components:
+  - graphql_query
+
+- name: build
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-build-team
+  slack_channel: g_distribution
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  product_stage_group: build
+  ignored_components:
+  - graphql_query
+
+- name: deploy
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-deploy-team
+  slack_channel: g_distribution
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  product_stage_group: deploy
+  ignored_components:
+  - graphql_query
+
+- name: self_managed
+  slack_alerts_channel: g_delivery_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  product_stage_group: self_managed
+  ignored_components:
+  - graphql_query
+
+- name: framework
+  product_stage_group: framework
+  slack_alerts_channel: g_software_delivery-framework
+  send_slo_alerts_to_team_slack_channel: true
+  ignored_components:
+  - graphql_query
+
+# Dedicated
+
+- name: switchboard
+  product_stage_group: switchboard
+  ignored_components:
+  - graphql_query
 
 # Unlisted
 
