@@ -77,7 +77,7 @@ metricsCatalog.serviceDefinition({
 
   local sliCommon = {
     userImpacting: true,
-    team: 'production-engineering:foundations',
+    team: 'foundations',
     severity: 's3',  // don't page the EOC yet
   },
 

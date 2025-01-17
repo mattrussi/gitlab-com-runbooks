@@ -37,7 +37,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -89,7 +89,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -138,7 +138,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -187,7 +187,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -236,7 +236,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -274,7 +274,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="gitlab_sshd",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -317,7 +317,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -373,7 +373,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -424,7 +424,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -475,7 +475,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -524,7 +524,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -562,7 +562,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="goserver",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -594,7 +594,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -639,7 +639,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -688,7 +688,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -737,7 +737,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -786,7 +786,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -824,7 +824,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="puma",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -863,7 +863,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -915,7 +915,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -964,7 +964,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="rails_sql",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -1002,7 +1002,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="rails_sql",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -1041,7 +1041,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1093,7 +1093,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1142,7 +1142,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1191,7 +1191,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1240,7 +1240,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -1278,7 +1278,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="registry_server",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -1312,7 +1312,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1359,7 +1359,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1410,7 +1410,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1461,7 +1461,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1512,7 +1512,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -1552,7 +1552,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="sidekiq_execution",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -1586,7 +1586,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1633,7 +1633,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1684,7 +1684,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -1724,7 +1724,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="sidekiq_queueing",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h
@@ -1763,7 +1763,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1815,7 +1815,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1864,7 +1864,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1913,7 +1913,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1962,7 +1962,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} == 0
@@ -2000,7 +2000,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
-      team: production-engineering:foundations
+      team: foundations
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="workhorse",env="ops",monitor="global",stage="main",type="ops-gitlab-net"} offset 1h

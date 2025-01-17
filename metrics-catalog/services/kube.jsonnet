@@ -40,7 +40,7 @@ metricsCatalog.serviceDefinition({
     apiserver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'production-engineering:foundations',
+      team: 'foundations',
       description: |||
         The Kubernetes API server validates and configures data for the api objects which
         include pods, services, and others. The API Server services REST operations

@@ -71,12 +71,12 @@ test.suite({
     },
   },
   testGetTeam: {
-    actual: serviceCatalog.getTeam('production-engineering:observability'),
+    actual: serviceCatalog.getTeam('observability'),
     expect: {
       alerts: ['thanos', 'ops', 'gstg'],
       ignored_components: [],
       issue_tracker: null,
-      name: 'production-engineering:observability',
+      name: 'observability',
       product_stage_group: null,
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'g_infra_observability_alerts',
@@ -90,12 +90,12 @@ test.suite({
     // a team
     actual: std.set(
       std.filterMap(
-        function(team) team.name == 'package_registry' || team.name == 'production-engineering:observability',
+        function(team) team.name == 'package_registry' || team.name == 'observability',
         function(team) team.name,
         serviceCatalog.getTeams()
       )
     ),
-    expect: std.set(['package_registry', 'production-engineering:observability']),
+    expect: std.set(['package_registry', 'observability']),
   },
   testLookupExistingTeamForStageGroup: {
     actual: serviceCatalog.lookupTeamForStageGroup('authentication'),

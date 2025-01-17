@@ -101,26 +101,6 @@ teams:
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
 
-- name: production-engineering:runway
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
-  manager: devin
-  label: team::Runway
-  slack_alerts_channel: g_runway
-
-- name: runway
-  slack_alerts_channel: f_runway_alerts
-
-- name: production-engineering:observability
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
-  manager: lmcandrew
-  label: team::Observability
-  slack_alerts_channel: g_infra_observability_alerts
-  send_slo_alerts_to_team_slack_channel: true
-  alerts:
-  - thanos
-  - ops
-  - gstg
-
 # Workhorse is a virtual team
 - name: workhorse
   slack_alerts_channel: workhorse
@@ -493,15 +473,6 @@ teams:
   alerts:
   - ops
 
-- name: production-engineering:foundations
-  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/
-  manager: sabrams
-  label: team::Foundations
-  slack_alerts_channel: g_foundations_alerts
-  send_slo_alerts_to_team_slack_channel: true
-  alerts:
-  - ops
-
 - name: reliability_unowned
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/
   label: team::Unowned
@@ -609,6 +580,38 @@ teams:
 - name: environment_automation
   product_stage_group: environment_automation
   slack_channel: f_gitlab_dedicated
+
+# Production Engineering
+
+- name: runway
+  product_stage_group: runway
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
+  manager: devin
+  label: team::Runway
+  slack_alerts_channel: f_runway_alerts
+
+- name: observability
+  product_stage_group: observability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
+  manager: lmcandrew
+  label: team::Observability
+  slack_alerts_channel: g_infra_observability_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - thanos
+  - ops
+  - gstg
+
+- name: foundations
+  product_stage_group: foundations
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/
+  manager: sabrams
+  label: team::Foundations
+  slack_alerts_channel: g_foundations_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - ops
+
 
 # Unlisted
 
