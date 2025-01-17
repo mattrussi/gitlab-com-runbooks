@@ -444,7 +444,7 @@ teams:
   slack_error_budget_channel: g_srm_security_policies
   send_error_budget_weekly_to_slack: true
 
-- name: ops
+- name: doe-ops
   url: https://about.gitlab.com/handbook/engineering/development/ops
   slack_channel: doe-ops
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
@@ -612,6 +612,10 @@ teams:
   alerts:
   - ops
 
+- name: ops
+  product_stage_group: ops
+  slack_channel: g_production-engineering_ops
+  manager: kkyrala
 
 # Unlisted
 
