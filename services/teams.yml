@@ -285,11 +285,6 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: dedicated
-  product_stage_group: dedicated
-  ignored_components:
-  - graphql_query
-
 - name: import_and_integrate
   product_stage_group: import_and_integrate
   ignored_components:
@@ -609,8 +604,11 @@ teams:
 
 - name: switchboard
   product_stage_group: switchboard
-  ignored_components:
-  - graphql_query
+  slack_channel: g_dedicated_switchboard
+
+- name: environment_automation
+  product_stage_group: environment_automation
+  slack_channel: f_gitlab_dedicated
 
 # Unlisted
 

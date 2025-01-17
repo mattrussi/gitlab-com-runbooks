@@ -2533,9 +2533,9 @@ services:
     friendly_name: Switchboard
     tier: sv
     teams:
-      - dedicated
+      - switchboard
     label: Switchboard
-    owner: dedicated
+    owner: switchboard
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/switchboard
