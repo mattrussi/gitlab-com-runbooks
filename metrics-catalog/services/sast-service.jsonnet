@@ -9,8 +9,6 @@ metricsCatalog.serviceDefinition(
     team='static_analysis',
     regional=true,
     featureCategory='static_application_security_testing',
-    tags=['golang'],
-    userImpacting=false,
-    trafficCessationAlertConfig=false,
+    tags=['golang']
   )
 )
