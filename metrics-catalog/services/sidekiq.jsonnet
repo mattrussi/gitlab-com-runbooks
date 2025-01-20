@@ -47,6 +47,9 @@ metricsCatalog.serviceDefinition({
           'urgent-authorized-projects': {
             apdexScore: 0.94,
           },
+          quarantine: {
+            apdexScore: 0.97,  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19137#note_2304794410
+          },
         },
       },
     },
