@@ -49,6 +49,8 @@ variables:
 
 .ruby-patterns: &ruby-patterns
   - "**/*.rb"
+  - "Gemfile"
+  - "Gemfile.lock"
 
 .md-patterns: &md-patterns
   - "**/*.md"
