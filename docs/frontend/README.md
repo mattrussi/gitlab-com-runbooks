@@ -29,11 +29,9 @@
 * [Auditing Metrics](../mimir/auditing-metrics.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
-* [Thanos Query and Stores](../monitoring/thanos-query.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
-* [Thanos Architecture Overview](../thanos/architecture.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
 <!-- END_MARKER -->
