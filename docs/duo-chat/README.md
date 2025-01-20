@@ -277,7 +277,7 @@ Duo Chat has the following rate limits:
 When users hit rate limits:
 
 1. Check current rate limit usage:
-   
+
 ```ruby
   # In Rails console
   user = User.find_by_username('username')
@@ -292,6 +292,7 @@ When users hit rate limits:
 ```
 
 3. For persistent issues, consider:
-  - Reviewing usage patterns to identify potential abuse
-  - Adjusting the global rate limit via application settings if needed
-  - Adding user to allowlist if legitimate high usage case
+
+- Reviewing usage patterns to identify potential abuse
+- Adjusting the global rate limit via application settings if needed
+- Adding user to allowlist if legitimate high usage case
