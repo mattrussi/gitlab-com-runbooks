@@ -446,16 +446,6 @@ local routingTree = Route(
     )
     for team in teamsWithAlertingSlackChannels()
   ] + [
-    // Route anomaly detection alerts to #g_delivery_alerts channel
-    Route(
-      receiver=receiverNameForTeamSlackChannel('delivery'),
-      continue=true,
-      matchers={
-        env: 'gprd',
-        type: { oneOf: ['api', 'git', 'web', 'sidekiq', 'kas', 'gitaly', 'internal-api', 'ai_assisted', 'gitlab-shell', 'websockets', 'pages'] },
-        alert_trigger: { re: '.*_anomaly' },
-      }
-    ),
     // Route SLO alerts for staging to `feed_alerts_staging`
     Route(
       receiver='feed_alerts_staging',
