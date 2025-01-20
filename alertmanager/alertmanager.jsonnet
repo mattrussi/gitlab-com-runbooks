@@ -446,6 +446,14 @@ local routingTree = Route(
     )
     for team in teamsWithAlertingSlackChannels()
   ] + [
+    // Route release management related alerts to #g_delivery_alerts channel
+    Route(
+      receiver=receiverNameForTeamSlackChannel('delivery'),
+      continue=true,
+      matchers={
+        alert_trigger: { re: '.*_release_management' },
+      }
+    ),
     // Route SLO alerts for staging to `feed_alerts_staging`
     Route(
       receiver='feed_alerts_staging',
