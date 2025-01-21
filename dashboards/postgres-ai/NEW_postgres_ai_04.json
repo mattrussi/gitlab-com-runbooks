@@ -23,7 +23,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.3.1"
+      "version": "11.4.0"
     },
     {
       "type": "datasource",
@@ -142,7 +142,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.3.1",
+      "pluginVersion": "11.4.0",
       "targets": [
         {
           "datasource": {
@@ -355,7 +355,13 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "Activity"
+                  "IO",
+                  "IPC",
+                  "LWLock",
+                  "Lock",
+                  "Timeout",
+                  "CPU or Uncategorised wait event",
+                  "CPU count"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -375,7 +381,7 @@
         ]
       },
       "gridPos": {
-        "h": 18,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 3
@@ -389,7 +395,7 @@
             "mean"
           ],
           "displayMode": "table",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -397,7 +403,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.3.1",
+      "pluginVersion": "11.4.0",
       "targets": [
         {
           "datasource": {
@@ -439,7 +445,7 @@
           "refId": "C"
         }
       ],
-      "title": "Active session history (ASH)",
+      "title": "Active session history (ASH). Unfiltered ",
       "type": "timeseries"
     },
     {
@@ -622,9 +628,9 @@
         "h": 18,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 11
       },
-      "id": 70,
+      "id": 71,
       "options": {
         "legend": {
           "calcs": [
@@ -634,14 +640,16 @@
           ],
           "displayMode": "table",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "multi",
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.3.1",
+      "pluginVersion": "11.4.0",
       "targets": [
         {
           "datasource": {
@@ -662,7 +670,7 @@
             "uid": "${DS_MIMIR_- GITLAB GPRD}"
           },
           "editorMode": "code",
-          "expr": "sum by (wait_type,wait_event) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$copy_of_wait_type\"})/600",
+          "expr": "sum by (wait_type,wait_event) (label_replace(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\"},\"wait_type\",\"CPU*\",\"wait_type\",\"\"))/600",
           "hide": false,
           "instant": false,
           "legendFormat": "{{wait_type}} - {{wait_event}}",
@@ -683,7 +691,253 @@
           "refId": "C"
         }
       ],
-      "title": "Active session history (ASH)",
+      "title": "ASH. Filter by wait type: $wait_type",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_MIMIR_- GITLAB GPRD}"
+      },
+      "description": "Graph based on pg_wait_sampling_profile view of https://github.com/postgrespro/pg_wait_sampling extension.\n\nOn vertical Axis is number of backends with specific wait event type  \n\n- Client and Activity events are not shown by default, but can be done visible by clicking on them in the legend list.\n- CPU or Uncategorised wait event means backend either is being executed on CPU or waiting for CPU or some other wait that is not known yet",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "sessions"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU or Uncategorised wait event"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IO"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Client"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Activity"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "LWLock"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lock"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU count"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "points"
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 72,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "min",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (queryid) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid!=\"0\"})/600",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{queryid}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (backend_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid=\"0\"})/600",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Postgres process - {{backend_type}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$prometheus"
+          },
+          "editorMode": "code",
+          "expr": "count without(cpu, mode) (node_cpu_seconds_total{fqdn=\"$fqdn\",mode=\"idle\"})",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "CPU count",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "ASH by queryid. Filter by wait type: $wait_type, wait event: $wait_event ",
       "type": "timeseries"
     }
   ],
@@ -766,57 +1020,23 @@
         "type": "query"
       },
       {
-        "allValue": "CPU",
-        "current": {},
-        "definition": "label_values(pg_wait_sampling_count{fqdn=\"$fqdn\"},wait_type)",
-        "description": "wait types of wait events ",
-        "includeAll": true,
-        "label": "wait type",
-        "multi": true,
-        "name": "wait_type",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(pg_wait_sampling_count{fqdn=\"$fqdn\"},wait_type)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "type": "query"
-      },
-      {
         "current": {
-          "text": "",
-          "value": ""
+          "text": "IPC",
+          "value": "IPC"
         },
         "includeAll": false,
         "label": "wait type",
-        "name": "copy_of_wait_type",
+        "name": "wait_type",
         "options": [
           {
             "selected": false,
-            "text": "Activity",
-            "value": "Activity"
+            "text": "CPU",
+            "value": ""
           },
           {
             "selected": false,
-            "text": "BufferPin",
-            "value": "BufferPin"
-          },
-          {
-            "selected": false,
-            "text": "Client",
-            "value": "Client"
-          },
-          {
-            "selected": false,
-            "text": "Extension",
-            "value": "Extension"
-          },
-          {
-            "selected": false,
-            "text": "InjectionPoint",
-            "value": "InjectionPoint"
+            "text": "LWLock",
+            "value": "LWLock"
           },
           {
             "selected": false,
@@ -824,7 +1044,7 @@
             "value": "IO"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "IPC",
             "value": "IPC"
           },
@@ -835,8 +1055,8 @@
           },
           {
             "selected": false,
-            "text": "LWLock",
-            "value": "LWLock"
+            "text": "BufferPin",
+            "value": "BufferPin"
           },
           {
             "selected": false,
@@ -844,13 +1064,46 @@
             "value": "Timeout"
           },
           {
-            "selected": true,
-            "text": "CPU",
-            "value": ""
+            "selected": false,
+            "text": "Extension",
+            "value": "Extension"
+          },
+          {
+            "selected": false,
+            "text": "Client",
+            "value": "Client"
+          },
+          {
+            "selected": false,
+            "text": "InjectionPoint",
+            "value": "InjectionPoint"
+          },
+          {
+            "selected": false,
+            "text": "Activity",
+            "value": "Activity"
           }
         ],
-        "query": "Activity : Activity, BufferPin : BufferPin, Client : Client, Extension : Extension, InjectionPoint : InjectionPoint, IO : IO, IPC : IPC, Lock : Lock, LWLock : LWLock, Timeout : Timeout, CPU :  ,",
+        "query": "CPU :  , LWLock : LWLock, IO : IO, IPC : IPC, Lock : Lock, BufferPin : BufferPin, Timeout : Timeout, Extension : Extension, Client : Client, InjectionPoint : InjectionPoint, Activity : Activity",
         "type": "custom"
+      },
+      {
+        "current": {},
+        "definition": "label_values(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=\"$wait_type\"},wait_event)",
+        "description": "wait_event",
+        "includeAll": true,
+        "label": "wait_event",
+        "multi": true,
+        "name": "wait_event",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=\"$wait_type\"},wait_event)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
       },
       {
         "baseFilters": [],
@@ -881,6 +1134,6 @@
   "timezone": "utc",
   "title": "[postgres.ai][04] Wait sampling dashboard",
   "uid": "be87sc7iz1lvkf",
-  "version": 38,
+  "version": 59,
   "weekStart": ""
 }
