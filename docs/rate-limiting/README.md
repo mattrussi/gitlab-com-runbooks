@@ -21,7 +21,7 @@ To permit this we have lists of IP addresses, termed `allowlist` that are permit
 
 Trusted IPs from customers/partners can be added to the allowlists, however we'd prefer to whittle this list _down_,
 not add to it. The [Rate Limit bypass policy](https://handbook.gitlab.com/handbook/engineering/infrastructure/rate-limiting/bypass-policy/)
-must be followed when considering adding to these lists.
+must be followed when considering adding to this list.
 
 - **Cloudflare**
   - Custom rule bypass: [example](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf#L156) (confidential)
@@ -74,10 +74,12 @@ To add a new entry to the allowlist:
 
 - Create a new variable containing the customer's IP addresses in [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/allowlists.tf)
   - Put a link to the rate limiting request issue in the comments so that we can easily attribute the IPs later.
-- Add a new custom rule using the variable in [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf)
-  - The custom rule will tell WAF to skip all rate limiting rules for the listed IPs, bypassing them.
-- Add a new transform rule using the variable in [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-transform-rules.tf)
-  - The transform rule will tell Cloudflare to apply the `X-GitLab-RateLimit-Bypass: 1` header for all IPs in the allowlist.
+- **Bypass Cloudflare Rate Limits**
+  - Add a new custom rule using the variable in [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf)
+  - The custom rule will tell Cloudflare WAF to skip all rate limiting rules for the listed IPs, bypassing them.
+- **Bypass RackAttack Rate Limits** (configured in Cloudflare)
+  - Add a new transform rule using the variable in [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-transform-rules.tf)
+  - The transform rule will tell Cloudflare to apply the `X-GitLab-RateLimit-Bypass: 1` header for all IPs in the allowlist, bypassing the RackAttack rate limits.
 
 #### Rails (RackAttack)
 
