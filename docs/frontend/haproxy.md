@@ -58,7 +58,7 @@ h[CI Runner] --> d
 - `https`: port 443
   - sends to the `429_slow_down` backend if the client is rate-limited
   - sends to the `assets_proxy` backend if the request matches `/assets/`
-  - sends to the `api` rate limited backend if the request matches `/api` (skips the rate limit if your ip is on a statically configured whitelist)
+  - sends to the `api` backend if the request matches `/api`
   - sends to the `https_git` backend if the request matches a regex that tries to determine if it looks like a git path
   - sends to the `registry` backend if the request is registry.gitlab.com
   - sends to the `websocket` backend if it looks like a websocket request
