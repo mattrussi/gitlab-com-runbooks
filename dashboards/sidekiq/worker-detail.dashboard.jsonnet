@@ -461,17 +461,17 @@ basic.dashboard(
   layout.rowGrid('Skipped Jobs', [
     basic.timeseries(
       stableId='jobs-skipped',
-      title='Jobs Skipped',
+      title='Rate of Jobs Skipped',
       description='Jobs skipped (dropped/deferred) intentionally via feature flag `drop_sidekiq_jobs_<worker_name>` or `run_sidekiq_jobs_<worker_name>`',
       query=|||
-        sum by (environment, worker, action)  (
+        sum by (environment, worker, action, reason)  (
           rate(
             sidekiq_jobs_skipped_total{environment="$environment", worker=~"$worker"}[$__interval]
             )
           )
           > 0
       |||,
-      legendFormat='{{ worker }} - {{ action }}',
+      legendFormat='{{ worker }} - {{ action }} by {{ reason }}',
     ),
   ], startRow=801)
 )

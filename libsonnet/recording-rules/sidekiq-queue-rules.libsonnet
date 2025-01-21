@@ -141,14 +141,16 @@ local sidekiqAlerts(registry, extraSelector) =
     {
       alert: 'SidekiqJobsSkippedTooLong',
       expr: |||
-        sum by (env, worker, action)  (
+        sum by (env, worker, action, reason)  (
           rate(
             sidekiq_jobs_skipped_total{%(selector)s}[1h]
             )
           )
           > 0
       ||| % {
-        selector: selectors.serializeHash(extraSelector),
+        selector: selectors.serializeHash(extraSelector {
+          reason: 'feature_flag',
+        }),
       },
       'for': '3h',
       labels: {
@@ -164,6 +166,46 @@ local sidekiqAlerts(registry, extraSelector) =
           Ignore if this is still intentionally left.
 
           Run `/chatops run feature list --match run_sidekiq_jobs` and `/chatops run feature list --match drop_sidekiq_jobs` to list currently used feature flags.
+        |||,
+        grafana_dashboard_id: 'sidekiq-worker-detail',
+        grafana_panel_id: stableIds.hashStableId('jobs-skipped'),
+        grafana_min_zoom_hours: '6',
+        grafana_variables: 'environment,worker',
+      },
+    },
+    {
+      alert: 'SidekiqJobsDeferredByDBHealthCheck',
+      expr: |||
+        sum by (env, worker, feature_category)  (
+            rate(
+                sidekiq_jobs_skipped_total{%(selectorNumerator)s}[1h]
+            )
+        )
+        /
+        sum by (env, worker, feature_category) (
+            application_sli_aggregation:sidekiq_execution:ops:rate_1h{%(selectorDenominator)s}
+        )
+        > 0.1
+      ||| % {
+        selectorNumerator: selectors.serializeHash(extraSelector {
+          action: 'deferred',
+          reason: 'database_health_check',
+        }),
+        selectorDenominator: selectors.serializeHash(extraSelector),
+      },
+      'for': '2h',
+      labels: {
+        severity: 's4',
+        alert_type: 'cause',
+      },
+      annotations: {
+        title: 'Many Sidekiq jobs from `{{ $labels.worker }}` have been deferred by DB health check',
+        description: |||
+          {{ $value | humanizePercentage }} of Sidekiq jobs from `{{ $labels.worker }}` are being deferred via DB Health Check.
+
+          Deferred jobs follow the same [indicators](https://docs.gitlab.com/ee/development/database/batched_background_migrations.html#throttling-batched-migrations) to throttle batched background migrations.
+
+          When too many jobs are being deferred continuously, there could be a huge backlog of jobs impacting jobs from other worker classes.
         |||,
         grafana_dashboard_id: 'sidekiq-worker-detail',
         grafana_panel_id: stableIds.hashStableId('jobs-skipped'),
