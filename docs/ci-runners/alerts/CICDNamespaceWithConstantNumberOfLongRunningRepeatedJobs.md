@@ -123,27 +123,24 @@ Normal operating conditions:
 - Increasing queue depths
 - Resource exhaustion indicators
 
-### Job Pattern Detection
+### Detect repeated identical jobs
 
-    ```promql
-    # Detect repeated identical jobs
-    sum(
+ ```
+  sum(
         increase(ci_runner_jobs_total{namespace_id="$namespace"}[1h])
     ) by (job_name) > 50
-    ```
+ ```
 
-## Resource Impact Analysis
+### Monitor runner resource consumption
 
-# Monitor runner resource consumption
-
-    ```promql
+ ```
     sum(
-        rate(ci_runner_duration_seconds_sum{namespace_id="$namespace"}[5m])
-    ) by (runner_type) /
-    sum(
-        rate(ci_runner_duration_seconds_count{namespace_id="$namespace"}[5m])
-    ) by (runner_type)
-    ```
+            rate(ci_runner_duration_seconds_sum{namespace_id="$namespace"}[5m])
+        ) by (runner_type) /
+        sum(
+            rate(ci_runner_duration_seconds_count{namespace_id="$namespace"}[5m])
+        ) by (runner_type)
+ ```
 
 ## Alert Behavior
 
@@ -213,7 +210,7 @@ Normal operating conditions:
 
 #### Cleanup Script for Pending Jobs
 
-    ```bash
+```bash
     PRIVATE_TOKEN=XXX
     GITLAB_URL=gitlab.com
     PROJECT_FULL_NAME=[user|group]%2f[project name]
@@ -230,7 +227,7 @@ Normal operating conditions:
     # ... rest of cleanup script
 
     done
-    ```
+ ```
 
 ### Common Resolution Steps
 
@@ -280,7 +277,6 @@ Normal operating conditions:
 ## Definitions
 
 - **Alert Definition**: [CI/CD Alert Definitions](../alerts/definitions.md)
-- **Playbook Location**: \`/docs/ci-cd/alerts/CICDNamespaceWithConstantNumberOfLongRunningRepeatedJobs.md\`
 - **Tuning Parameters**:
   - Job duration thresholds
   - Repetition detection settings
