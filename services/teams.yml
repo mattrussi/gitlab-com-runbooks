@@ -573,6 +573,10 @@ teams:
   ignored_components:
   - graphql_query
 
+# Virtual team of release managers
+- name: release-management
+  slack_alerts_channel: f_upcoming_release
+
 # Dedicated
 
 - name: switchboard
