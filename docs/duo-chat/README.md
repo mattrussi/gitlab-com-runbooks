@@ -272,7 +272,7 @@ Duo Chat has the following rate limits:
   - This limit applies to GraphQL aiAction mutations
   - When exceeded, returns error code A1001 with message "This endpoint has been requested too many times. Try again later"
   - Configured via `application_settings.ai_action_api_rate_limit`
-  - Can be monitored in [AI Gateway error rates dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/5f334d60-cfd7-11ee-bc6b-0b206b291ea1)
+  - Can be monitored in [GitLab Rails error rates dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/5f334d60-cfd7-11ee-bc6b-0b206b291ea1)
 
 When users hit rate limits:
 
