@@ -87,8 +87,7 @@ If you find requests for a user there but do not find any results for them using
 That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up. See [Duo Chat does not respond or responds very slowly](#duo-chat-does-not-respond-or-responds-very-slowly) below.
 
 ## AI Abstraction Layer Sidekiq Traffic
-
-All Duo Chat request go through an isolated `urgent-ai-abstraction-layer` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs.
+All Duo requests— duo chat and experimental features — go through an isolated `urgent-ai-abstraction-layer\` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs.
 
 To find only Duo traffic, you can click on the the `pubsub-sidekiq-inf-*` Elastic Search.
 
