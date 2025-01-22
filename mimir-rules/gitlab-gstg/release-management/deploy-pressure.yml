@@ -11,7 +11,7 @@ groups:
           team: delivery
           alert_trigger: deploy_pressure_release_management
         annotations:
-          grafana_datasource_id: mimir-gitlab-gprd
+          grafana_datasource_id: mimir-gitlab-ops
           title: "The number of commits to be deployed is high"
           description: "There are over 15 commits not yet deployed to env {{ $labels.role }} in the last 30 minutes."
           grafana_dashboard_id: delivery-release_management/delivery3a-release-management
