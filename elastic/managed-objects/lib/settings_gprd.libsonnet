@@ -36,9 +36,9 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
             info: '30s',
             debug: '-1',
             trace: '-1',
-          }
-        }
-      }
+          },
+        },
+      },
     },
     refresh_interval: '10s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
@@ -90,6 +90,7 @@ else if std.member(HIGH_THROUGHPUT, index) then {
 }
 else if std.member(MEDIUM_THROUGHPUT, index) then {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-medium-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],
@@ -129,6 +130,7 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
   // number_of_replicas: 1,
 } else {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-default-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],
