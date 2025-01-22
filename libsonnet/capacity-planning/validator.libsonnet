@@ -20,6 +20,8 @@ local isSaturationDimension(dimensions) =
   std.isArray(dimensions) && std.all(std.map(isDimensionObject, dimensions));
 
 local dimensionValidator = validator.validator(isSaturationDimension, 'expected an array[object[optional(label): string, selector: string]]');
+local seasonalityValidator = validator.setMember(['auto', true, false]);
+
 
 {
   capacityPlanning: {
@@ -29,5 +31,8 @@ local dimensionValidator = validator.validator(isSaturationDimension, 'expected 
     changepoints_count: validator.optional(positiveNumber),
     saturation_dimensions: validator.optional(dimensionValidator),
     saturation_dimensions_keep_aggregate: validator.optional(validator.boolean),
+    yearly_seasonality: validator.optional(seasonalityValidator),
+    weekly_seasonality: validator.optional(seasonalityValidator),
+    daily_seasonality: validator.optional(seasonalityValidator),
   },
 }

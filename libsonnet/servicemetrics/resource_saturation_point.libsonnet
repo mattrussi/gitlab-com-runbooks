@@ -70,8 +70,9 @@ local nestedDefaults = {
   capacityPlanning+: {
     strategy: 'quantile95_1h',
     forecast_days: 90,
-    historical_days: 400,
+    historical_days: 731,
     changepoints_count: 25,
+    yearly_seasonality: 'auto',
   },
   alerting: {
     enabled: true,
