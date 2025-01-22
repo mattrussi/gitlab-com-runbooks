@@ -50,9 +50,9 @@ Requests from IPs with a bypass configured will have the `X-GitLab-RateLimit-Byp
 interprets to mean these requests bypass the rate limits. Ideally we will remove this eventually, once the bypass list
 is smaller (or gone), or we've ensured that our known users are below the new limits.
 
-There are a few other special cases that also set `X-GitLab-RateLimit-Bypass` - these are primarily internal infrastructure addresses such as runner managers, or 3rd party vendors who have integrations with us.
+There are a few other special cases that also set `X-GitLab-RateLimit-Bypass` - these include certain paths, internal infrastructure addresses such as runner managers, or 3rd party vendors who have integrations with us.
 
-All current bypasses are implemented [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf).
+All current bypasses for customers are implemented [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf).
 
 ### Tracking Bypasses
 
