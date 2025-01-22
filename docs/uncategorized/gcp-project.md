@@ -15,7 +15,7 @@ environment.  This includes what is necessary in terraform and GCP prior to
 starting up your first instance in that project.  Details of what is created
 inside of that project will not be discussed as that is implementation specific.
 
-1. Follow the documentation here: <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/#creating-a-new-environment>
+1. Follow the documentation here: <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/HOWTO.md#create-an-environment>
     * This will build out the framework for the project and it's requirements
 1. Create two service accounts in GCP:
     * `terraform`
