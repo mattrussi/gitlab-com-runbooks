@@ -7,16 +7,14 @@ test.suite({
     expect: null,
   },
   testLookupByUntouchedGroup: {
-    actual: mappingWithOverride.scalability,
+    actual: mappingWithOverride.observability,
     expectContains: {
-      stage: 'platforms',
+      stage: 'production_engineering',
       feature_categories: [
-        'scalability',
         'error_budgets',
-        'infrastructure_cost_data',
+        'infra_cost_data',
         'capacity_planning',
-        'redis',
-        'rate_limiting',
+        'scalability',
       ],
     },
   },
