@@ -86,22 +86,6 @@ local annotations = [
   ),
 ];
 
-local railsVersion(environment) =
-  prometheus.target(
-    |||
-      label_replace(
-        topk(1, count(
-          gitlab_version_info{environment="%(env)s", stage="%(stage)s", component="gitlab-rails", type!~"^redis.*"}
-        ) by (version)),
-        "version", "$1",
-        "version", "^([A-Fa-f0-9]{11}).*$"
-      )
-    ||| % { env: environment.role, stage: environment.stage },
-    instant=true,
-    format='table',
-    legendFormat='{{version}}',
-  );
-
 local packageVersion(environment) =
   prometheus.target(
     |||
@@ -216,22 +200,7 @@ basic.dashboard(
 )
 .addPanels(
   layout.splitColumnGrid([
-    // Column 1: rails versions
-    [
-      statPanel.new(
-        '%s %s' % [environment.icon, environment.id],
-        description='Rails revision on %s.' % [environment.name],
-        reducerFunction='lastNotNull',
-        fields='/^version$/',
-        colorMode='none',
-        graphMode='none',
-        textMode='value',
-        unit='String',
-      )
-      .addTarget(railsVersion(environment))
-      for environment in environments
-    ],
-    // Column 2: package versions
+    // Column 1: package versions
     [
       statPanel.new(
         '%s %s' % [environment.icon, environment.id],
@@ -245,6 +214,29 @@ basic.dashboard(
       )
       .addTarget(packageVersion(environment))
       for environment in environments
+    ],
+    // Column 2: auto-deploy pressure
+    [
+      // Auto-build pressure
+      deliveryStatPanel(
+        'Auto-build pressure',
+        description='The number of commits in `master` not yet included in a package.',
+        query='max(delivery_auto_build_pressure{project_name=~"omnibus-gitlab-ee|cng-ee|gitlab-ee|gitaly|gitlab_kas"}) by (project_name)',
+        legendFormat='{{project_name}}',
+        thresholds=[
+          { color: colorScheme.normalRangeColor, value: null },
+          { color: colorScheme.warningColor, value: 50 },
+          { color: colorScheme.errorColor, value: 100 },
+          { color: colorScheme.criticalColor, value: 150 },
+        ],
+        links=[
+          {
+            targetBlank: true,
+            title: 'Latest commits',
+            url: 'https://gitlab.com/gitlab-org/gitlab/commits/master',
+          },
+        ],
+      ),
     ],
     // Column 3: auto-deploy pressure
     [
@@ -346,5 +338,20 @@ basic.dashboard(
       environments
     )
   )
+)
+.addPanel(
+  graphPanel.new(
+    'Auto-build pressure',
+    decimals=0,
+    labelY1='Commits',
+    legend_show=false,
+    min=0,
+  )
+  .addTarget(
+    prometheus.target(
+      'max(delivery_auto_build_pressure{job="delivery-metrics"}) by (project_name)',
+      legendFormat='{{project_name}}',
+    )
+  ), gridPos={ x: 50, y: 2000, w: 12, h: 10 }
 )
 .trailer()
