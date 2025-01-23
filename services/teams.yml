@@ -282,6 +282,8 @@ teams:
   slack_alerts_channel: cloud-connector-events
   ignored_components:
   - graphql_query
+  alerts:
+  - ops
 
 - name: mlops
   product_stage_group: mlops
