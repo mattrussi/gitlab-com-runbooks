@@ -72,15 +72,24 @@ We suspect that this is impacting only Macbook / macOS users.
 
 If you are using [a Linux laptop](https://handbook.gitlab.com/handbook/tools-and-tips/linux/) with
 either the GNOME Display Manager (GDM) as the login manager or GNOME as the desktop environment,
-then further steps are _recommended_ to improve the setup.
+then further steps might be required when one of the following issues is seen:
+
+1. A password field is not displayed on the login screen, when you boot with your YubiKey plugged in
+2. The output of `journalctl --user -u yubikey-agent.service` shows that `yubikey-agent` is unable
+   to fetch SSH keys immediately after logging in, with the error `smart card cannot be accessed
+   because of other connections outstanding`.
 
 #### Disable smart card authentication within GDM
 
-We are using the `pcscd` daemon, which was originally used for smartcard-based login. GDM will
-automatically prefer smart card authentication over password-based authentication, if the laptop has
-`pcscd` running and is booted with the YubiKey plugged in.
+After booting with your YubiKey plugged in, if you see a GDM screen which asks you to enter your
+username, and no password field is displayed, this usually means that Smartcard authentication has
+been enabled. (One workaround for this problem is to boot without your YubiKey plugged in.)
 
-In order to disable smart card authentication, we can update the settings usign this command:
+Smartcard authentication is enabled because the `pcscd` daemon is used for communication with the
+YubiKey by `yubikey-agent`; this daemon was originally used for smartcard-based login. GDM will
+automatically prefer smart card authentication over password-based authentication when `pcscd` is
+running and a YubiKey is plugged in. In order to disable smart card authentication, we can update
+the settings using this command:
 
 ``` shell
 sudo -u gdm dbus-launch --exit-with-session env DCONF_PROFILE=gdm gsettings set org.gnome.login-screen enable-smartcard-authentication false
@@ -94,12 +103,9 @@ sudo -u gdm env DCONF_PROFILE=gdm gsettings get org.gnome.login-screen enable-sm
 
 #### Disable `gsd_smartcard` from running on start-up
 
-GNOME Settings Daemon (GSD) is one of the components of the GNOME Desktop environment which runs when a
-GNOME session is started. GSD has several plugins, and one of the plugins is
-`org.gnome.SettingsDaemon.Smartcard`. This plugin runs the program `gsd_smartcard` which opens a
-connection to the YubiKey.
-
-This prevents `yubikey-agent` from connecting to the YubiKey. The following error an be seen in the journal:
+Immediately after logging in, if you see the following error from `ssh-add` and a similar log from
+`yubikey-agent`, then it is highly likely that one of GNOME's plugins has opened a connection to
+your YubiKey and is preventing `yubikey-agent` from connecting to the YubiKey.
 
 ``` shell
 $ ssh-add -L
@@ -109,8 +115,12 @@ $ journalctl --user -u yubikey-agent.service | rg -i other | tail -1
 Jan 14 14:51:30 work-dell-1 yubikey-agent[21389]: 2025/01/14 14:51:30 agent 11: could not reach YubiKey: connecting to smart card: the smart card cannot be accessed because of other connections outstanding
 ```
 
+GNOME Settings Daemon (GSD) is one of the components of the GNOME Desktop environment.  GSD has
+several plugins, and one of the plugins is `org.gnome.SettingsDaemon.Smartcard`. This plugin runs
+the program `gsd_smartcard` which opens a connection to the YubiKey.
+
 To see whether `gsd_smartcard` is the root cause of this error, you can use `lsof` and see the users
-of the PCSCD socket as described
+of the `pcscd` socket as described
 [here](https://github.com/FiloSottile/yubikey-agent/issues/111#issuecomment-2478402886):
 
 ``` shell
@@ -121,8 +131,7 @@ gsd-smart 3449 siddharth    8u  unix 0xffff8a5bccf4a400      0t0 16052 type=STRE
 gsd-smart 3449 siddharth    9u  unix 0xffff8a5bf9711c00      0t0 18246 type=STREAM ->INO=13132 2220,pcscd,15u
 ```
 
-You can stop the `gsd_smartcard` process from running on start-up by masking the related Systemd
-unit:[^2]
+You can stop the `gsd_smartcard` process from running on start-up by masking its Systemd unit:[^2]
 
 ``` shell
 $ systemctl --user mask org.gnome.SettingsDaemon.Smartcard.target
