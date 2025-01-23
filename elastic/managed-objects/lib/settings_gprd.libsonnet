@@ -4,6 +4,7 @@ local MEDIUM_THROUGHPUT = ['gke-audit', 'pages', 'fluentd', 'postgres', 'runner'
 
 local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-high-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],
@@ -47,6 +48,7 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
 }
 else if std.member(HIGH_THROUGHPUT, index) then {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-high-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],
