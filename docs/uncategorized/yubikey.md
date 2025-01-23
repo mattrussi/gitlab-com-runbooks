@@ -143,9 +143,7 @@ Created symlink /home/siddharth/.config/systemd/user/org.gnome.SettingsDaemon.Sm
 If you have multiple YubiKeys connected to your machine, there is no way to select a single YubiKey
 to be used within `yubikey-agent`. [The current
 logic](https://github.com/FiloSottile/yubikey-agent/blob/2e5376c5ec006250c12c1b6de65fa91de9afe687/main.go#L195-L196)
-uses the first YubiKey which can be opened.
-
----
+inside `yubikey-agent` uses the first YubiKey which can be opened.
 
 [^1]: "The applications are all separate from each other, with separate storage for keys and
     credentials." -- [Protocols and Applications -- YubiKey Technical
