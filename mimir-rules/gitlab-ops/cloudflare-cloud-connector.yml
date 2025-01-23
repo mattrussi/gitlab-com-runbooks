@@ -1,0 +1,18 @@
+groups:
+- name: cloudflare-cloud-connector.rules
+  rules:
+  - alert: CloudflareCloudConnectorRateLimitExhaustion
+    expr: |
+      sum by (zone) (
+        rate(cloudflare_zone_firewall_events_count{action="block",source="ratelimit",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com", env="ops"}[5m])
+      ) > 0
+    for: 5m
+    labels:
+      severity: s4
+      alert_type: cause
+      team: cloud_connector
+    annotations:
+      grafana_datasource_id: mimir-gitlab-ops
+      description: One or more clients consuming features delivered through Cloud Connector was blocked by our rate limit rules in Cloudflare for 5 minutes or more. This could be OK but should be investigated for false positives.
+      runbook: docs/cloud_connector/alerts/CloudflareCloudConnectorRateLimitExhaustion.md
+      title: Clients are being rate limited on {{ $labels.zone }}
