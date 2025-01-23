@@ -1014,10 +1014,10 @@ basic.dashboard(
     layout.grid([
       basic.timeseries(
         title='Worker Runs',
-        description='The cumulative count of all batched migration worker runs.',
+        description='The per-second rate of all batched migration worker runs.',
         query=|||
           sum (
-            increase(registry_bbm_runs_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+            rate(registry_bbm_runs_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__rate_interval])
           )
         |||,
         legend_show=false,
