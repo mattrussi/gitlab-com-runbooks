@@ -171,8 +171,8 @@
       {
         "allValue": ".*",
         "current": {
-          "text": "cert-manager",
-          "value": "cert-manager"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "ceaim6u8zxlvkc",
         "definition": "",
