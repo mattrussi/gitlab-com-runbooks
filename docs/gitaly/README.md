@@ -64,6 +64,7 @@
 * [Restore Gitaly data on `ops.gitlab.net`](../ops-gitlab-net/gitaly-restore.md)
 * [Pingdom](../pingdom/pingdom.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [High build pressure](../release-management/build_pressure.md)
 * [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sharding.md](../sidekiq/sharding.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)

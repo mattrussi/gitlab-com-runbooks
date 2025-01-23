@@ -15,4 +15,5 @@ groups:
           title: "The number of commits to be deployed is high"
           description: "There are over 15 commits not yet deployed to env {{ $labels.role }} in the last 30 minutes."
           grafana_dashboard_id: delivery-release_management/delivery3a-release-management
+          grafana_dashboard_link: https://dashboards.gitlab.net/d/delivery-release_management/delivery3a-release-management
           runbook: docs/release-management/deploy_pressure.md
