@@ -6,5 +6,5 @@
 //
 // Blank values will be ignored.
 {
-  secure_artifacts: 'artifact_security',
+  infrastructure_cost_data: 'infra_cost_data',
 }

@@ -64,6 +64,15 @@ groups:
       product_stage: software_supply_chain_security
       stage_group: authorization
     expr: "1"
+- name: 'Stage group Ignored components: gitlab_delivery - GitLab Build'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: gitlab_delivery
+      stage_group: build
+    expr: "1"
 - name: 'Stage group Ignored components: systems - Cloud Connector'
   interval: 1m
   rules:
@@ -143,41 +152,14 @@ groups:
       product_stage: modelops
       stage_group: dataops
     expr: "1"
-- name: 'Stage group Ignored components: platforms - GitLab Dedicated'
+- name: 'Stage group Ignored components: gitlab_delivery - GitLab Deploy'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: platforms
-      stage_group: dedicated
-    expr: "1"
-- name: 'Stage group Ignored components: platforms - Delivery'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: platforms
-      stage_group: delivery
-    expr: "1"
-- name: 'Stage group Ignored components: systems - Distribution::Build'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: systems
-      stage_group: distribution_build
-    expr: "1"
-- name: 'Stage group Ignored components: systems - Distribution::Deploy'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: systems
-      stage_group: distribution_deploy
+      product_stage: gitlab_delivery
+      stage_group: deploy
     expr: "1"
 - name: 'Stage group Ignored components: ai-powered - Duo Chat'
   interval: 1m
@@ -205,6 +187,15 @@ groups:
       component: graphql_query
       product_stage: application_security_testing
       stage_group: dynamic_analysis
+    expr: "1"
+- name: 'Stage group Ignored components: gitlab_delivery - Framework'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: gitlab_delivery
+      stage_group: framework
     expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Fulfillment Platform'
   interval: 1m
@@ -369,6 +360,15 @@ groups:
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
+- name: 'Stage group Ignored components: gitlab_delivery - GitLab Release'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: gitlab_delivery
+      stage_group: release
+    expr: "1"
 - name: 'Stage group Ignored components: create - Remote Development'
   interval: 1m
   rules:
@@ -387,7 +387,7 @@ groups:
       product_stage: verify
       stage_group: runner
     expr: "1"
-- name: 'Stage group Ignored components: security_risk_management - Threat Insights'
+- name: 'Stage group Ignored components: security_risk_management - Security Insights'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
@@ -395,6 +395,15 @@ groups:
       component: graphql_query
       product_stage: security_risk_management
       stage_group: security_insights
+    expr: "1"
+- name: 'Stage group Ignored components: gitlab_delivery - Self Managed'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: gitlab_delivery
+      stage_group: self_managed
     expr: "1"
 - name: 'Stage group Ignored components: create - Source Code'
   interval: 1m

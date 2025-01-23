@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards.dashboard('security_platform_management')
+stageGroupDashboards.dashboard('self_managed')
 .stageGroupDashboardTrailer()

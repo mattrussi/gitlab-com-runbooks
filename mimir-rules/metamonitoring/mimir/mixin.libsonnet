@@ -5,7 +5,7 @@ mimir {
     product: 'Mimir',
 
     additionalAlertLabels: {
-      team: 'scalability:observability',
+      team: 'observability',
       env: 'ops',
     },
 
