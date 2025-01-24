@@ -47,7 +47,7 @@ For each of the environments in Amp:
 
 1. Ensure that the `cloudflare_api_token` and `cloudflare_account_id` variables are set within each environment's `TF_SECRETS_VAR_FILE` CI/CD variable.
 
-1. Set the `cloudflare_enabled` flag to true in `common.hcl` for each environment. 
+1. Set the `cloudflare_enabled` flag to true in `common.hcl` for each environment.
    - [`cellsdev`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsdev/common.hcl)
    - [`cellsprod`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsprod/common.hcl))
 1. Once that is merged, check the zone has created successfully in Cloudflare. It will match the `root_domain_name` in the `common.hcl` settings.

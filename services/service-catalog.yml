@@ -23,7 +23,7 @@ services:
     tier: sv
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -68,7 +68,7 @@ services:
     tier: inf
     friendly_name: Atlantis
     label: atlantis
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
       documents:
@@ -90,7 +90,7 @@ services:
     tier: inf
     friendly_name: Blackbox Exporters
     label: Blackbox
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab-exporters
@@ -113,9 +113,9 @@ services:
     friendly_name: Distribution Build Tooling
     tier: inf
     teams:
-      - distribution_build
+      - build
     label: Build-Tooling
-    owner: distribution_build
+    owner: build
     technical:
       project:
         - https://gitlab.com/gitlab-org/omnibus-gitlab
@@ -164,7 +164,7 @@ services:
     tier: inf
     friendly_name: ClickHouse Cloud
     label: Service::ClickHouseCloud
-    owner: ops
+    owner: doe-ops
     teams:
       - clickhouse
     technical:
@@ -192,7 +192,7 @@ services:
     tier: sv
     friendly_name: Console Access
     label: Console
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab_users
@@ -217,7 +217,7 @@ services:
     tier: inf
     friendly_name: Consul
     label: Consul
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://github.com/hashicorp/consul
@@ -411,7 +411,7 @@ services:
     tier: inf
     friendly_name: Kubernetes
     label: Kube
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://gitlab.com/gitlab-com/gitlab-com-infrastructure
@@ -439,7 +439,7 @@ services:
     tier: inf
     friendly_name: Logging
     label: Logging
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
       documents:
@@ -477,7 +477,7 @@ services:
     friendly_name: NGINX
     tier: sv
     teams:
-      - distribution_deploy
+      - deploy
     label: NGINX
     owner: reliability_unowned
     technical:
@@ -562,7 +562,7 @@ services:
     friendly_name: GitLab.com Web
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -608,7 +608,7 @@ services:
     tier: lb
     friendly_name: HAProxy (Frontend)
     label: HAProxy
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab-haproxy
@@ -659,7 +659,7 @@ services:
     friendly_name: Git Access
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -773,7 +773,7 @@ services:
     tier: inf
     friendly_name: InfluxDB (deprecated)
     label: Influxdb
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://github.com/influxdata/influxdb
@@ -837,7 +837,7 @@ services:
     friendly_name: Mailroom Incoming Mail Service
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -1145,7 +1145,7 @@ services:
     tier: inf
     friendly_name: Pingdom
     label: Pingdom
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://www.pingdom.com/
@@ -1272,7 +1272,7 @@ services:
     tier: inf
     friendly_name: Monitoring
     label: Prometheus
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
@@ -1301,7 +1301,7 @@ services:
     tier: inf
     friendly_name: thanos
     label: Thanos
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
@@ -1386,7 +1386,7 @@ services:
     tier: db
     friendly_name: Example Runway-managed Redis
     label: RunwayRedisExample
-    owner: production-engineering:runway
+    owner: runway
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1858,7 +1858,7 @@ services:
     tier: inf
     friendly_name: Runway Platform
     label: Runway
-    owner: production-engineering:runway
+    owner: runway
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/platform/runway
@@ -1883,7 +1883,7 @@ services:
     tier: inf
     friendly_name: NAT
     label: NAT
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
       documents:
@@ -1906,7 +1906,7 @@ services:
     tier: inf
     friendly_name: Monitoring
     label: Sentry
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://github.com/getsentry/sentry
@@ -1933,7 +1933,7 @@ services:
     friendly_name: Sidekiq Background Jobs
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - gitaly
       - manage
@@ -2056,7 +2056,7 @@ services:
     tier: inf
     friendly_name: Pubsub for Logging
     label: PubSub
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://cloud.google.com/pubsub/docs/overview
@@ -2119,7 +2119,7 @@ services:
     tier: inf
     friendly_name: Stackdriver Metrics
     label: Stackdriver
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
       documents:
@@ -2141,7 +2141,7 @@ services:
     tier: lb
     friendly_name: Cloudflare Web Application Firewall
     label: cloudflare
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
       documents:
@@ -2165,7 +2165,7 @@ services:
     tier: inf
     friendly_name: Hashicorp Vault for Infrastructure
     label: Vault
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
       documents:
@@ -2214,7 +2214,7 @@ services:
     tier: inf
     friendly_name: Jaeger
     label: Jaeger
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
         - https://www.jaegertracing.io/
@@ -2391,7 +2391,7 @@ services:
     tier: sv
     friendly_name: ExternalDNS
     label: ExternalDNS
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://github.com/kubernetes-sigs/external-dns
@@ -2490,7 +2490,7 @@ services:
     tier: sv
     teams:
       - create
-      - distribution_deploy
+      - deploy
       - geo
       - manage
       - plan
@@ -2533,9 +2533,9 @@ services:
     friendly_name: Switchboard
     tier: sv
     teams:
-      - dedicated
+      - switchboard
     label: Switchboard
-    owner: dedicated
+    owner: switchboard
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/switchboard
@@ -2549,7 +2549,7 @@ services:
     tier: sv
     friendly_name: ops.gitlab.net
     label: OpsGitlabNet
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/gitlab
@@ -2573,7 +2573,7 @@ services:
     tier: inf
     friendly_name: Istio
     label: Istio
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
         - https://github.com/istio/istio
@@ -2631,7 +2631,7 @@ services:
     label: omnibus
     owner: reliability_unowned
     teams:
-      - distribution_deploy
+      - deploy
     technical:
       project:
         - https://gitlab.com/gitlab-org/omnibus-gitlab
@@ -2656,7 +2656,7 @@ services:
     tier: inf
     friendly_name: Google Cloud Memorystore
     label: GoogleCloudMemorystore
-    owner: reliability_foundations
+    owner: foundations
     technical:
       project:
       documents:
@@ -2679,7 +2679,7 @@ services:
     tier: inf
     friendly_name: Grafana Loki
     label: Loki
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
       documents:
@@ -2702,7 +2702,7 @@ services:
     tier: inf
     friendly_name: Grafana Mimir
     label: Mimir
-    owner: scalability:observability
+    owner: observability
     technical:
       project:
       documents:

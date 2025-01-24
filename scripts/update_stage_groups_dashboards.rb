@@ -39,7 +39,7 @@ class UpdateStageGroupsDashboard
     group_info = parse_jsonnet(@mapping_path)
     raise "#{@mapping_path} is invalid" unless group_info.is_a?(Hash)
 
-    dashboards = group_info.keys.map(&:strip)
+    dashboards = group_info.select(&method(:has_feature_categories?)).keys.map(&:strip)
     sync_dashboards(@dashboards_dir, dashboards)
   end
 
@@ -55,6 +55,10 @@ class UpdateStageGroupsDashboard
 
   def render_template(group)
     self.class.render_template(group)
+  end
+
+  def has_feature_categories?(_stage_group_key, stage_group)
+    stage_group&.fetch('feature_categories', [])&.any?
   end
 end
 

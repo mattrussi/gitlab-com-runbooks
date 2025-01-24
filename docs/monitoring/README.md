@@ -67,6 +67,7 @@
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
+* [High build pressure](../release-management/build_pressure.md)
 * [High deploy pressure](../release-management/deploy_pressure.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
