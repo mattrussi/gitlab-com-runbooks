@@ -73,6 +73,7 @@
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
+* [High build pressure](../release-management/build_pressure.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Connecting To a Database via Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
