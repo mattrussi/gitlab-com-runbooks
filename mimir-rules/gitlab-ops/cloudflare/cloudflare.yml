@@ -16,7 +16,7 @@ groups:
       - alert: CloudflareCloudConnectorRateLimitExhaustion
         for: 5m
         expr: |
-          sum by (zone) (
+          sum by (zone, env) (
             rate(cloudflare_zone_firewall_events_count{zone=~"cloud.gitlab.com|cloud.staging.gitlab.com", source="ratelimit", action="block"}[5m])
           ) > 0
         labels:
