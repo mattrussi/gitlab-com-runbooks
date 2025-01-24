@@ -13,9 +13,9 @@ This section of documentation is targeted at SREs working in the production envi
 
 ## How-Tos
 
-In cases of rate limiting, it's possible you will want to either block an IP or User sending high volumes of traffic.
+Even with rate limiting in place, it's possible you need to explicitly block an IP or User sending exceptionally high volumes of traffic.
 
-Alternatively, a bypass request may have been approved and you are trying to add an IP or User to the allow list.
+Alternatively, customers may request a bypass and if this is approved, you will need to follow steps in this doc to temporarily implement an approved bypass.
 
 ### Block an IP or Path
 
