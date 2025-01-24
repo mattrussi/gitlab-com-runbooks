@@ -46,8 +46,6 @@ env_secret_values = {
 For each of the environments in AMP:
 
 1. Ensure that the `cloudflare_api_token` and `cloudflare_account_id` variables are set within each environment's `TF_SECRETS_VAR_FILE` CI/CD variable.
-    - Each environment has a corresponding TF_SECRETS_VAR_FILE secret.
-    - These new variables will need to be manually set in the corresponding file
 
 1. Set the `cloudflare_enabled` flag to true in `common.hcl` for each environment. 
    - [`cellsdev`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsdev/common.hcl)
