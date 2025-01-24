@@ -45,7 +45,7 @@ env_secret_values = {
 
 For each of the environments in AMP:
 
-1. Ensure that the cloudflare_api_token and cloudflare_account_id CI variable are set
+1. Ensure that the `cloudflare_api_token` and `cloudflare_account_id` variables are set within each environment's `TF_SECRETS_VAR_FILE` CI/CD variable.
     - Each environment has a corresponding TF_SECRETS_VAR_FILE secret.
     - These new variables will need to be manually set in the corresponding file
 
