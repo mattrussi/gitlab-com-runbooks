@@ -8,7 +8,7 @@ groups:
         labels:
           severity: s3
           alert_type: symptom
-          team: delivery
+          team: release
           alert_trigger: build_pressure_release_management
         annotations:
           grafana_datasource_id: mimir-gitlab-ops
