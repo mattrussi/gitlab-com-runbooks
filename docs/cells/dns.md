@@ -49,7 +49,9 @@ For each of the environments in AMP:
     - Each environment has a corresponding TF_SECRETS_VAR_FILE secret.
     - These new variables will need to be manually set in the corresponding file
 
-1. Set the cloudflare_enabled flag to true in the common.hcl settings
+1. Set the `cloudflare_enabled` flag to true in `common.hcl` for each environment. 
+   - [`cellsdev`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsdev/common.hcl)
+   - [`cellsprod`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsprod/common.hcl))
 1. Once that is merged, check the zone has created successfully in Cloudflare. It will match the `root_domain_name` in the `common.hcl` settings.
 
 ### Cell Tenant Domain Zones Setup
