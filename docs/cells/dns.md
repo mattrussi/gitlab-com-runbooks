@@ -49,12 +49,26 @@ For each of the environments in Amp:
 
 1. Set the `cloudflare_enabled` flag to true in `common.hcl` for each environment.
    - [`cellsdev`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsdev/common.hcl)
-   - [`cellsprod`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsprod/common.hcl))
+   - [`cellsprod`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsprod/common.hcl)
 1. Once that is merged, check the zone has created successfully in Cloudflare. It will match the `root_domain_name` in the `common.hcl` settings.
 
-### Cell Tenant Domain Zones Setup
+### Cells Tenant Domain Zones Setup
 
-Cell Tenant Domain Zones are created by Instrumentor and delegated from the Parent Domain Zone for the corresponding Cell environment.
+Cells Tenant Domain Zones are created by Instrumentor and delegated from the Parent Domain Zone for the corresponding Cell environment.
+
+In order to enable Cloudflare DNS for a Cells Tenant, we need to modify their tenant model in Tissue with the following settings:
+
+```
+"cloudflare_waf": {
+    "enabled": true,
+    "migration_stage": "DELEGATE_TENANT_DNS"
+  }
+```
+
+Cells Environments in Tissue:
+
+- cellsdev[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsdev]
+- cellsprod[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsprod/]
 
 ### Domain Registration
 
