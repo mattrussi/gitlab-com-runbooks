@@ -58,4 +58,6 @@ Cell Tenant Domain Zones are created by Instrumentor and delegated from the Pare
 
 ### Domain Registration
 
-gitlab-cells.dev domain is registered in [Gandi](https://admin.gandi.net/domain/4ec14596-4d5a-11e8-9fb1-00163ee24379/gitlab-cells.dev/nameservers)
+The `gitlab-cells.dev` domain for the `cellsdev` environment is registered in [Gandi](https://admin.gandi.net/domain/4ec14596-4d5a-11e8-9fb1-00163ee24379/gitlab-cells.dev/nameservers).
+
+The `cells.gitlab.com` domain for the `cellsprod` environment is a subdomain of `gitlab.com` and is thus registered in Cloudflare. However it is delegated to the AWS account for the `cellsprod` Amp instance (`058264099888`).
