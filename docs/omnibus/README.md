@@ -41,6 +41,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry CDN](../registry/cdn.md)
+* [High build pressure](../release-management/build_pressure.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Managing Chef](../uncategorized/manage-chef.md)
