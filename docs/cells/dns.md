@@ -4,9 +4,9 @@
 
 ## Summary
 
-Cells uses Cloudflare as DNS Provider. Cells DNS setup is based on the implementation for [Gitlab Dedicated Tenants](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/blob/main/architecture/blueprints/cloudflare_waf.md#1-gitlab-dedicated-dns-setup). We leverage the [Cloudflare DNS Subdomain Setup](https://developers.cloudflare.com/dns/zone-setups/subdomain-setup/) which allows us manage Cloudflare settings individually for each cell subdomain
+Cells uses Cloudflare as DNS Provider. Cells DNS setup is based on the implementation for [Gitlab Dedicated Tenants](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/blob/main/architecture/blueprints/cloudflare_waf.md#1-gitlab-dedicated-dns-setup). We leverage the [Cloudflare DNS Subdomain Setup](https://developers.cloudflare.com/dns/zone-setups/subdomain-setup/) which allows us manage Cloudflare settings individually for each cell subdomain.
 
-Cloudflare Parent Domain zones are created and managed in AMP. Tenant Subdomain zones and their corresponding DNS records are created and managed by Instrumentor. We create a Cloudflare subdomain zone for each tenant. The Parent Domain Zone will contain NS records for each subdomain zone for DNS delegation. All DNS for Gitlab Cells tenants is managed by Cloudflare regardless of the cloud provider where the tenant is hosted at.
+Cloudflare Parent Domain zones are created and managed in [Amp](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp). Tenant Subdomain zones and their corresponding DNS records are created and managed by [Instrumentor](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor). We create a Cloudflare subdomain zone for each tenant. The Parent Domain Zone will contain NS records for each subdomain zone for DNS delegation. All DNS for GitLab Cells tenants is managed by Cloudflare regardless of the cloud provider where the tenant is hosted at.
 
 ```mermaid
 flowchart TD
@@ -26,10 +26,10 @@ flowchart TD
 
 Parent Domains for each Cell Environment:
 
-- celldev: gitlab-cells.dev
-- cellprod: cells.gitlab.com
+- cellsdev: gitlab-cells.dev
+- cellsprod: cells.gitlab.com
 
-AMP creates and manages the Parent Domain Zones in Cloudflare. To enable Cloudflare support for an AMP environment we need modify it's corresponding Gitlab CI/CD `TF_SECRETS_VAR_FILE` variable and add the following settings to the `env_secret_values` section":
+Amp creates and manages the Parent Domain Zones in Cloudflare. To enable Cloudflare support for an Amp environment we need modify its corresponding Gitlab CI/CD `TF_SECRETS_VAR_FILE` variable [here](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/settings/ci_cd#js-cicd-variables-settings) and add the following settings to the `env_secret_values` section":
 
 ```
 env_secret_values = {
@@ -43,7 +43,7 @@ env_secret_values = {
 
 #### Steps to follow
 
-For each of the environments in AMP:
+For each of the environments in Amp:
 
 1. Ensure that the `cloudflare_api_token` and `cloudflare_account_id` variables are set within each environment's `TF_SECRETS_VAR_FILE` CI/CD variable.
 
