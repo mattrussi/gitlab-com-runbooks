@@ -50,7 +50,7 @@ For each of the environments in AMP:
     - These new variables will need to be manually set in the corresponding file
 
 1. Set the cloudflare_enabled flag to true in the common.hcl settings
-1. Once that is merged, check the zone has created successfully in Cloudflare. It will match the root_domain_name in the common.hcl settings.
+1. Once that is merged, check the zone has created successfully in Cloudflare. It will match the `root_domain_name` in the `common.hcl` settings.
 
 ### Cell Tenant Domain Zones Setup
 
