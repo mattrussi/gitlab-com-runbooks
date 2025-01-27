@@ -276,6 +276,8 @@ gitlab-redis-cluster-<INSTANCE_TYPE>-rails-credential-v1:
       secretKey: password
 ```
 
+Note that when rotating secrets (eg having v1 in `gstg` and v2 in `gprd`), follow a safe and controlled rollout as described [here](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/vault/usage.md?ref_type=heads#rotating-kubernetes-secrets).
+
 b. Update Gitlab Rails `.Values.global.redis` accordingly.
 
 Either add a new key to `.Values.global.redis.<RAILS_INSTANCE_NAME>` or `.Values.global.redis.redisYmlOverride.<RAILS_INSTANCE_NAME>`. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/2753).
