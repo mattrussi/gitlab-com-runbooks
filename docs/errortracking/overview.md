@@ -9,7 +9,7 @@
 Customers take advantage of the [Error Tracking](https://about.gitlab.com/handbook/engineering/development/ops/monitor/observability/#clickhouse-datastore) feature by configuring their application using the sentry-sdk to send error tracking data to GitLab.com opstrace instance.
 
 At this time the service is in the [Beta feature stage](https://docs.gitlab.com/ee/policy/alpha-beta-support.html#beta-features), and is not recommended for production use.
-All failures related to this service should be directed to the [Monitor:Observability](https://about.gitlab.com/handbook/engineering/development/ops/monitor/observability/#monitorobservability) group, `#g_observability` in Slack.
+All failures related to this service should be directed to the [Monitor:Platform Insights Group](https://handbook.gitlab.com/handbook/engineering/development/analytics/monitor/platform-insights/), `#g_monitor_platform_insights` in Slack.
 
 Opstrace maintains their own [runbooks](https://gitlab.com/gitlab-org/opstrace/runbooks/) that have more details about the service,
 also see the [Clickhouse readiness review](https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/database/clickhouse)
