@@ -87,6 +87,8 @@ local annotations = [
   ),
 ];
 
+local buildPressureProjects = 'omnibus-gitlab-ee|cng-ee|gitlab-ee|gitaly|gitlab_kas';
+
 local packageVersion(environment) =
   prometheus.target(
     |||
@@ -284,7 +286,7 @@ basic.dashboard(
       deliveryStatPanel(
         'Auto-build pressure',
         description='The number of commits in `master` not yet included in a package.',
-        query='max(delivery_auto_build_pressure{project_name=~"omnibus-gitlab-ee|cng-ee|gitlab-ee|gitaly|gitlab_kas"}) by (project_name)',
+        query='max(delivery_auto_build_pressure{project_name=~"%(projects)s"}) by (project_name)' % { projects: buildPressureProjects },
         legendFormat='{{project_name}}',
         thresholds=[
           { color: colorScheme.normalRangeColor, value: null },
@@ -404,17 +406,38 @@ basic.dashboard(
 )
 .addPanel(
   graphPanel.new(
-    'Auto-build pressure',
+    'Auto-build pressure for auto-deploy projects',
+    description='Number of commits not included in an auto-deploy package for projects whose versions are bumped by release-tools',
     decimals=0,
     labelY1='Commits',
-    legend_show=false,
+    legend_values=true,
+    legend_current=true,
+    legend_alignAsTable=true,
     min=0,
   )
   .addTarget(
     prometheus.target(
-      'max(delivery_auto_build_pressure{job="delivery-metrics"}) by (project_name)',
-      legendFormat='{{project_name}}',
+      'sum(delivery_auto_build_pressure{project_name=~"%(projects)s"})' % { projects: buildPressureProjects },
+      legendFormat='sum',
     )
   ), gridPos={ x: 50, y: 2000, w: 12, h: 10 }
+)
+.addPanel(
+  graphPanel.new(
+    'Auto-build pressure for all projects',
+    description='Number of commits (in all projects) not included in an auto-deploy package',
+    decimals=0,
+    labelY1='Commits',
+    legend_values=true,
+    legend_current=true,
+    legend_alignAsTable=true,
+    min=0,
+  )
+  .addTarget(
+    prometheus.target(
+      'max(delivery_auto_build_pressure) by (project_name)',
+      legendFormat='{{project_name}}',
+    )
+  ), gridPos={ x: 50, y: 4000, w: 12, h: 10 }
 )
 .trailer()
