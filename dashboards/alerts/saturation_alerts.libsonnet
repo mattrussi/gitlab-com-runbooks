@@ -7,7 +7,7 @@ local basic = import 'grafana/basic.libsonnet';
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local serviceHealth = import './gitlab-dashboards/service_health.libsonnet';
 
-local selector = { env: '$environment', type: '$type', stage: '$stage' };
+local selector = { env: '$environment', type: '$type', stage: { re: '$stage|' } };
 
 {
   saturationDashboard(
