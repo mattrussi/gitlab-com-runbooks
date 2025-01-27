@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: ReleaseManagementNumberOfUnpackagedCommits
         expr: >
-          sum(delivery_auto_build_pressure{project_name=~"omnibus-gitlab-ee|cng-ee|gitlab-ee|gitaly|gitlab_kas"}) > 100
+          sum(delivery_auto_build_pressure{project_name=~"omnibus-gitlab-ee|cng-ee|gitlab-ee|gitaly|gitlab_kas"}) > 1
         for: 30m
         labels:
           severity: s3
@@ -12,8 +12,8 @@ groups:
           alert_trigger: build_pressure_release_management
         annotations:
           grafana_datasource_id: mimir-gitlab-ops
-          title: "The number of commits to be packaged is high"
-          description: "There are over 100 commits not yet included in a package for the last 30 minutes."
+          title: "[TESTING: Low threshold value] The number of commits to be packaged is high"
+          description: "There are over 1 commits not yet included in a package for the last 30 minutes."
           grafana_dashboard_id: delivery-release_management/delivery3a-release-management
           grafana_dashboard_link: https://dashboards.gitlab.net/d/delivery-release_management/delivery3a-release-management
           runbook: docs/release-management/build_pressure.md
