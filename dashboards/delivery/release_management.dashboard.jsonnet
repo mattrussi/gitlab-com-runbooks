@@ -7,6 +7,7 @@ local basic = import 'grafana/basic.libsonnet';
 local annotation = grafana.annotation;
 local graphPanel = grafana.graphPanel;
 local statPanel = grafana.statPanel;
+local textPanel = grafana.text;
 local row = grafana.row;
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 
@@ -200,6 +201,68 @@ basic.dashboard(
 )
 .addPanels(
   layout.splitColumnGrid([
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Package versions on each environment
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Build pressure
+
+          The number of commits in `master` not yet included in a package.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Deploy pressure
+
+          The number of commits in `master` not yet deployed to each environment.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Patch release pressure: S1/S2
+
+          Number of S1/S2 merge requests merged in previous releases.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Patch release pressure: Total
+
+          Number of merge requests merged in previous releases regardless of severity.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Pending post deployment migrations
+
+          The number of post deployment migrations pending execution in each environment.
+        |||
+      ),
+    ],
+  ], cellHeights=[5], startRow=1)
+)
+.addPanels(
+  layout.splitColumnGrid([
     // Column 1: package versions
     [
       statPanel.new(
@@ -302,8 +365,8 @@ basic.dashboard(
     // column 6: Post deploy migration pressure
     [
       deliveryStatPanel(
-        'Pending migrations',
-        description='The number of migrations pending execution in each environment.',
+        'Pending post deployment migrations',
+        description='The number of post deployment migrations pending execution in each environment.',
         query='ceil((sum(delivery_metrics_pending_migrations_total{env=~"gstg|gprd",stage="main"}) by (env))/2)',
         legendFormat='{{env}}',
         thresholds=[
