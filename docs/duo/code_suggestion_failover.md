@@ -13,6 +13,7 @@ This page provides instructions for switching the LLM provider in case of an out
 ---
 
 ## How to switch to backup for code generation
+
 We are using [feature flag to swtich the model and model provider](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_generation/ai_gateway_messages.rb#L37).
 
 In case an outage happens to primary model provider, we need to run this command `/chatops run feature set incident_fail_over_generation_provider true` in `#production` slack channel
@@ -45,9 +46,10 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 * select `pubsub-mlops-inf-gprod-*` as Data views from the top left
 * For code generation, search for `json.jsonPayload.message: "Returning prompt from the registry"`:
   * You should see `json.jsonPayload.prompt_id: code_suggestions/generations/base` and `json.jsonPayload.prompt_version <version>`
-    * And then you can find the template file in [this folder](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/tree/main/ai_gateway/prompts/definitions/code_suggestions/generations/base?ref_type=heads)
-    * For example, if the version is 2.0.1, then the template file is `ai-assist/ai_gateway/prompts/definitions/code_suggestions/generations/base/2.0.1.yml`
-    * And in this file we can find the current model and model provider, for example, here we are using `claude-3-5-sonnet@20241022` provided by `vertex_ai` 
+    * And then you can find the template file in [this folder](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/tree/main/ai_gateway/prompts/definitions/code_suggestions/generations/base?ref_type=heads)  
+    * For example, if the version is 2.0.1, then the template file is `ai-assist/ai_gateway/prompts/definitions/code_suggestions/generations/base/2.0.1.yml`  
+    * And in this file we can find the current model and model provider, for example, here we are using `claude-3-5-sonnet@20241022` provided by `vertex_ai`   
+
 ```
 model:
   name: claude-3-5-sonnet@20241022
