@@ -15,7 +15,7 @@ This section of documentation is targeted at SREs working in the production envi
 
 Even with rate limiting in place, it's possible you need to explicitly block an IP or User sending exceptionally high volumes of traffic.
 
-Alternatively, customers may request a bypass and if this is approved, you will need to follow steps in this doc to temporarily implement an approved bypass.
+Alternatively, customers may request a bypass and if this is approved, you will need to follow the steps in this doc to temporarily implement an approved bypass.
 
 ### Block an IP or Path
 
@@ -25,6 +25,8 @@ In case of an incident that requires immediate intervention, this can be done in
 
 - To **block** an IP using a Custom Rule, add it to [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf).
 - To **throttle** an IP using a Rate Limit rule, add it to this [file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf)
+
+Please leave the appropriate incident or issue number, and information about when the rule can be deleted, in the rule description.
 
 Work with an IMOC or peer to validate the change is reasonable and correct.
 
@@ -46,7 +48,8 @@ Detailed instructions for this can be found in the [Rate Limiting Troubleshootin
 
 ### Modifying a Rate Limit
 
-If one endpoint (or a collection of endpoints) are being unduly rate-limited, we can consider increasing the limit for them. This is the same situation as the Package Registry exceptions, where there are two options:
+If one endpoint (or a collection of endpoints) are being unduly rate-limited, we can consider increasing the limit for them.
+How you proceed will depend on the urgency of the request:
 
 **Is this urgent?**
 
@@ -60,10 +63,7 @@ If one endpoint (or a collection of endpoints) are being unduly rate-limited, we
 **Considerations**
 
 - Gather evidence using logs and metrics to determine what is going on and why the limit might need adjusted.
-- Document your findings in an issue, getting input from at least the following team members:
-  - SaaS Platforms PM - Sam Wiskow (`@swiskow`)
-  - Senior Manager of Production Engineering - Rachel Neinaber (`@rnienaber`)
-  - Manager of Production Engineering::Foundations - Steve Abrams (`@sabrams`) or Devin Sylva (`@devin`)
+- Document your findings in an issue, getting input from `@gitlab-org/production-engineering/managers`
 - Verify whether our infrastructure can handle the proposed increase.
   - Consider the Database, Gitaly, and Redis, as well as frontend compute.
 - Would setting the Bypass Header for specific requests (URL patterns or other identifiers) be sufficient?
