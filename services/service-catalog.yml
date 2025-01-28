@@ -1382,6 +1382,33 @@ services:
         grafana_folder: redis
         primary_grafana_dashboard: redis-main/redis-overview
 
+  - name: runway-db-example
+    tier: db
+    friendly_name: Example Runway-managed Postgres
+    label: RunwayPostgresExample
+    owner: runway
+    technical:
+      project:
+        - https://github.com/postgres/postgres
+      documents:
+        design:
+        architecture: https://docs.runway.gitlab.com/reference/blueprints/postgres/
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloud-sql
+        developer_guide: https://docs.gitlab.com/ee/development/database/
+        service:
+          - https://www.postgresql.org/
+          - https://cloud.google.com/sql/docs/postgres
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: gcp
+          permalink: https://cloudlogging.app.goo.gl/yUkd8JGYdPJUcNyq9
+    observability:
+      monitors:
+        primary_grafana_dashboard: runway-db-example-main/runway-db-example-overview
+
   - name: runway-redis-example
     tier: db
     friendly_name: Example Runway-managed Redis
