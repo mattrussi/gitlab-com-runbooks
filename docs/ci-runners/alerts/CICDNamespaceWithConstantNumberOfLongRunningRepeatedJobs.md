@@ -43,29 +43,6 @@ This alert indicates potential abuse or unusual usage patterns in the CI/CD syst
 
 ## Metrics
 
-### Core Metrics Monitoring
-
-#### Primary Metrics
-
-- `ci_runner_jobs_total`: Total number of CI jobs processed
-  - Labels: `namespace_id`, `runner_type`, `job_status`
-  - Used to track job execution patterns per namespace
-
-- `ci_runner_job_duration_seconds`: Duration of CI jobs
-  - Labels: `namespace_id`, `runner_type`, `job_name`
-  - Helps identify unusually long-running jobs
-  - Normal range: Most jobs complete within minutes to a few hours
-
-#### Secondary Metrics
-
-- `ci_runner_concurrent_jobs`: Number of concurrent jobs per runner
-  - Helps identify resource consumption patterns
-  - Alert triggers when consistently high over time
-
-- `ci_runner_queue_duration_seconds`: Time jobs spend in queue
-  - Indicates resource availability issues
-  - Can signal potential abuse when artificially extended
-
 ### Threshold Configuration
 
 #### Alert Triggers
@@ -89,26 +66,6 @@ Normal operating conditions:
 ### Visualization and Monitoring
 
 #### Key Dashboards
-
-1. **CI Runner Overview Dashboard**
-
-   ```promql
-   sum(rate(ci_runner_jobs_total{namespace_id="$namespace"}[5m]))
-   by (job_name, runner_type)
-   ```
-
-    - Shows job execution rates
-    - Helps identify unusual patterns
-2. **Long-Running Jobs Dashboard**
-
-   ```promql
-   ci_runner_job_duration_seconds{namespace_id="$namespace"} > 10800
-   ```
-
-   - Identifies jobs exceeding 3-hour threshold
-   - Groups by project and job type
-
-### Resource Utilization Dashboard
 
 #### Monitoring Metrics
 
@@ -210,23 +167,6 @@ Normal operating conditions:
     done
  ```
 
-### Common Resolution Steps
-
-1. **For Abuse Cases**:
-   - Block user access
-   - Disable shared runners
-   - Report to abuse team
-
-2. **For Configuration Issues**:
-   - Work with project owners
-   - Optimize CI/CD configurations
-   - Implement resource limits
-
-3. **For System Issues**:
-   - Clear stuck jobs
-   - Reset runner states
-   - Scale resources if needed
-
 ## Dependencies
 
 ### Internal Dependencies
@@ -240,20 +180,6 @@ Normal operating conditions:
 
 - Cloud provider resources
 - External runner connections
-
-## Escalation
-
-### Escalation Path
-
-1. First response: SRE team
-2. Secondary: CI/CD team
-3. If abuse confirmed: Abuse team
-
-### Communication Channels
-
-- Primary: #ci-cd
-- Secondary: #abuse
-- Emergency: #production
 
 ## Definitions
 
