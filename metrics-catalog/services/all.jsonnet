@@ -43,6 +43,7 @@
   import 'patroni-ci.jsonnet',
   import 'patroni-embedding.jsonnet',
   import 'patroni-registry.jsonnet',
+  import 'patroni-sec.jsonnet',
   import 'patroni.jsonnet',
   import 'pd-event-logger.jsonnet',
   import 'pgbouncer-ci.jsonnet',
