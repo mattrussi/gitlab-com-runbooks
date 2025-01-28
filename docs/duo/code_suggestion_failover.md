@@ -60,7 +60,8 @@ model:
     max_tokens: 2_048
     max_retries: 1
 
-```  
+```
+ 
 * For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the provider that is currently in use:
   * if you see `json.jsonPayload.model_provider: anthropic`, then we are using the failover model `claude-3-5-sonnet-20240620` provided by `anthropic`
   * if you see another value for `json.jsonPayload.model_provider`, then we are using a non-failover model
