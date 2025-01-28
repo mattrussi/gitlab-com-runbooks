@@ -47,7 +47,7 @@ groups:
       incident_project: gitlab.com/gitlab-com/gl-infra/production
     annotations:
       grafana_datasource_id: mimir-gitlab-gstg
-      description: Chef client has been disabled for a long time for type {{ $labels.type }} in env {{ $labels.env }}
+      description: Chef client has been disabled for type {{ $labels.type }} in env {{ $labels.env }}
       grafana_dashboard_id: "000000231/chef-client"
       runbook: docs/config_management/chef-troubleshooting.md
-      title: Chef client has been disabled for a long time for type {{ $labels.type }} in env {{ $labels.env }}
+      title: Chef client has been disabled for a long time
