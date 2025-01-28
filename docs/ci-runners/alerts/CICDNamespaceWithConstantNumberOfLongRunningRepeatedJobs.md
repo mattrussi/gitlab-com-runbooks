@@ -123,25 +123,6 @@ Normal operating conditions:
 - Increasing queue depths
 - Resource exhaustion indicators
 
-### Detect repeated identical jobs
-
- ```
-  sum(
-        increase(ci_runner_jobs_total{namespace_id="$namespace"}[1h])
-    ) by (job_name) > 50
- ```
-
-### Monitor runner resource consumption
-
- ```
-    sum(
-            rate(ci_runner_duration_seconds_sum{namespace_id="$namespace"}[5m])
-        ) by (runner_type) /
-        sum(
-            rate(ci_runner_duration_seconds_count{namespace_id="$namespace"}[5m])
-        ) by (runner_type)
- ```
-
 ## Alert Behavior
 
 ### Silencing Guidelines
