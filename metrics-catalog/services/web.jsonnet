@@ -55,7 +55,6 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-sessions': true,
     'redis-sidekiq': true,
     'redis-sessions': true,
-    'redis-db-load-balancing': true,
     'redis-pubsub': true,
     redis: true,
     patroni: true,

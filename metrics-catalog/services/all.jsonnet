@@ -60,7 +60,6 @@
   import 'redis-cluster-repo-cache.jsonnet',
   import 'redis-cluster-sessions.jsonnet',
   import 'redis-cluster-shared-state.jsonnet',
-  import 'redis-db-load-balancing.jsonnet',
   import 'redis-pubsub.jsonnet',
   import 'redis-registry-cache.jsonnet',
   import 'redis-sessions.jsonnet',
