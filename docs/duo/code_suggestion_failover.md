@@ -13,22 +13,9 @@ This page provides instructions for switching the LLM provider in case of an out
 ---
 
 ## How to switch to backup for code generation
+We are using [feature flag to swtich the model and model provider](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_generation/ai_gateway_messages.rb#L37).
 
-Currently the primary LLM is [claude-3-5-sonnet-20240620 provided by vertex_ai](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/ai_gateway/prompts/definitions/code_suggestions/generations/vertex.yml), and the backup LLM is [claude-3-5-sonnet-20240620 provided by anthropic](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/ai_gateway/prompts/definitions/code_suggestions/generations/base.yml).
-
-We are using environment variables to decide which LLM to use. Here is [the example .env file](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/example.env?ref_type=heads). We can see this line in the file:
-
-```
-AIGW_DEFAULT_PROMPTS='{"code_suggestions/generations": "vertex"}'
-```
-
-This setting will direct LLM request to `claude-3-5-sonnet-20240620` provided by vertex_ai.
-
-In case an outage happens to vertex_ai, we need to update it to:
-
-```
-AIGW_DEFAULT_PROMPTS='{"code_suggestions/generations": "base"}'
-```
+In case an outage happens to primary model provider, we need to run this command `/chatops run feature set incident_fail_over_generation_provider true` in #production slack channel
 
 This setting will direct LLM request to `claude-3-5-sonnet-20240620` provided by anthropic.
 
@@ -60,9 +47,23 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 
 * Go to [Kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover
 * select `pubsub-mlops-inf-gprod-*` as Data views from the top left
-* For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the provider that is currently in use:
-  * if you see `json.jsonPayload.prompt_model_class: RunnableBinding`, then we are using `claude-3-5-sonnet-20240620` provided by `vertex_ai`
-  * if you see `json.jsonPayload.prompt_model_class: ChatAnthropic`, then we are using `claude-3-5-sonnet-20240620` provided by `anthropic`
+* For code generation, search for `json.jsonPayload.message: "Returning prompt from the registry"`, and then we can find the provider that is currently in use:
+  * You should see `json.jsonPayload.prompt_id: code_suggestions/generations/base` and `json.jsonPayload.prompt_version <version>`
+    * And then you can find the template file in [this folder](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/tree/main/ai_gateway/prompts/definitions/code_suggestions/generations/base?ref_type=heads)
+    * For example, if the version is 2.0.1, then the template file is `ai-assist/ai_gateway/prompts/definitions/code_suggestions/generations/base/2.0.1.yml`
+    * And in this file we can find the model being used and the model provider, for example, here we are using `claude-3-5-sonnet@20241022` provided by `vertex_ai` 
+```
+model:
+  name: claude-3-5-sonnet@20241022
+  params:
+    model_class_provider: litellm
+    custom_llm_provider: vertex_ai
+    temperature: 0.0
+    max_tokens: 2_048
+    max_retries: 1
+
+```
+  
 * For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the provider that is currently in use:
   * if you see `json.jsonPayload.model_provider: anthropic`, then we are using the failover model `claude-3-5-sonnet-20240620` provided by `anthropic`
   * if you see another value for `json.jsonPayload.model_provider`, then we are using a non-failover model
