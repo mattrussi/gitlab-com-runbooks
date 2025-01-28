@@ -30,8 +30,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -67,8 +68,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -96,7 +98,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cluster_db_load_balancing",type!="ops-gitlab-net"}[5m])
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/redis-cluster-database-lb/README.md
@@ -105,8 +107,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -147,7 +150,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cluster_db_load_balancing",type!="ops-gitlab-net"}[5m])
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/redis-cluster-database-lb/README.md
@@ -156,8 +159,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -196,7 +200,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cluster_db_load_balancing",type!="ops-gitlab-net"}[5m])
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/redis-cluster-database-lb/README.md
     labels:
@@ -204,8 +208,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -244,7 +249,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cluster_db_load_balancing",type!="ops-gitlab-net"}[5m])
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/redis-cluster-database-lb/README.md
     labels:
@@ -252,8 +257,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -292,7 +298,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cluster_db_load_balancing",type!="ops-gitlab-net"}[5m])
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/redis-cluster-database-lb/README.md
     labels:
@@ -300,8 +306,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -329,7 +336,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cluster_db_load_balancing",type!="ops-gitlab-net"}[5m])
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/redis-cluster-database-lb/README.md
     labels:
@@ -337,8 +344,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -372,8 +380,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -409,8 +418,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
