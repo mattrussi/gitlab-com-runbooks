@@ -11,6 +11,67 @@ If you are looking for information about requesting a rate limit bypass for GitL
 
 This section of documentation is targeted at SREs working in the production environment.
 
+## How-Tos
+
+Even with rate limiting in place, it's possible you need to explicitly block an IP or User sending exceptionally high volumes of traffic.
+
+Alternatively, customers may request a bypass and if this is approved, you will need to follow the steps in this doc to temporarily implement an approved bypass.
+
+### Block an IP or Path
+
+This can be done using Cloudflare WAF for HTTP traffic.
+
+In case of an incident that requires immediate intervention, this can be done in the [Cloudflare dashboard](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/security/waf/custom-rules) and backported in Terraform. If a rule is not backported then it will be deleted on the next Terraform Apply.
+
+- To **block** an IP using a Custom Rule, add it to [this file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf).
+- To **throttle** an IP using a Rate Limit rule, add it to this [file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf)
+
+Please leave the appropriate incident or issue number, and information about when the rule can be deleted, in the rule description.
+
+Work with an IMOC or peer to validate the change is reasonable and correct.
+
+These will typically be temporary; anything permanent needs more careful discussion.
+
+### Block a User or Project
+
+GitLab team members with Administrator access can log in using their admin credentials, find the user's profile and block them. Follow steps for [Contacting users about GitLab incidents or changes](https://handbook.gitlab.com/handbook/support/internal-support/#contacting-users-about-gitlab-incidents-or-changes).
+
+You can also follow the steps to [block a project causing high load](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/block-high-load-project.md).
+
+### Allow an IP or User
+
+See the [Implementing Bypasses](#implementing-bypasses) section below.
+
+### What Layer is a Rate Limit Happening?
+
+Detailed instructions for this can be found in the [Rate Limiting Troubleshooting handbook page](https://handbook.gitlab.com/handbook/engineering/infrastructure/rate-limiting/troubleshooting/).
+
+### Modifying a Rate Limit
+
+If one endpoint (or a collection of endpoints) are being unduly rate-limited, we can consider increasing the limit for them.
+How you proceed will depend on the urgency of the request:
+
+**Is this urgent?**
+
+**Yes:** Implement the increased rate-limit and set the bypass header in Cloudflare where appropriate.
+
+**No:** Consider other options:
+
+- Can the limit be modified in the Application (either RackAttack or ApplicationRateLimiter)?
+- Creating a limit that takes into account user-identify (rather than just IP address) is preferable.
+
+**Considerations**
+
+- Gather evidence using logs and metrics to determine what is going on and why the limit might need adjusted.
+- Document your findings in an issue, getting input from `@gitlab-org/production-engineering/managers`
+- Verify whether our infrastructure can handle the proposed increase.
+  - Consider the Database, Gitaly, and Redis, as well as frontend compute.
+- Would setting the Bypass Header for specific requests (URL patterns or other identifiers) be sufficient?
+- If it is agreed to proceed, raise a production change issue, linked to the earlier discussion issue, to execute the
+change.
+- Ensure [GitLab.com Specific Rate Limits](https://gitlab.com/gitlab-org/gitlab/-/tree/master/doc/user/gitlab_com/#gitlabcom-specific-rate-limits) is
+updated to match the new values.
+
 ## Bypasses and Special Cases
 
 [Published rate limits](https://docs.gitlab.com/ee/user/gitlab_com/index.html#gitlabcom-specific-rate-limits) apply to
@@ -56,7 +117,7 @@ All current bypasses for customers are implemented [here](https://ops.gitlab.net
 
 ### Tracking Bypasses
 
-Link any bypasses created to <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/374> so that we can track it to completion.
+Link any bypasses created to [Customers Bypassing Rate-Limiting Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/374) so that we can track it to completion.
 
 These are _never_ permanent, they are only stepping stones to making the API better or otherwise enhancing the product to eliminate
 the excessive traffic. In practice what we have found so far is issues like webhooks payloads lacking trivial details that
@@ -117,43 +178,3 @@ you should remove the event name from the `GITLAB_THROTTLE_DRY_RUN` environment 
 which will allow the rate limit to start throttling requests.
 
 - [Metrics: RackAttack events by event name and type](https://dashboards.gitlab.net/goto/XVO2kVvNg?orgId=1)
-
-## How-Tos
-
-So you're faced with some sort of urgent issue related to rate-limiting. What are your basic options?
-
-1. If you've got a small number of URLs (perhaps just one) that need severe rate-limiting (e.g. a specific repo, MR,
-   issue etc), use CloudFlare rate-limiting:
-   <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-waf.tf>
-   - This would usually be a response to an incident, probably performance/apdex related where we just need breathing
-   room while we clean things up, or while a code fix is prepared, and we're keeping the site alive.
-   - Work with an IMOC or a peer to validate the change is reasonable and correct \* These will typically be temporary; anything permanent needs more careful discussion
-1. A user/bot is having serious difficulties because they're being rate-limited. After ensuring that
-   there's no better way to solve their problem,
-   - Decide if it needs to be a user-based bypass (preferred) implemented in Rails via the `GITLAB_THROTTLE_USER_ALLOWLIST` environment variable, or an
-     IP-address based bypass (less preferred) configured in Cloudflare.
-   - Raise a [rate-limiting issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issuable_template=request-rate-limiting)
-   - Get consensus/approval from some peers or managers that there's no other option (on the rate-limiting issue)
-   - Establish what layer is the rate-limiting happening. Search for the affected IPs in the following links:
-     - Cloudflare: <https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/analytics/traffic?client-ip~in=ip1%2Cip2>
-     - RackAttack: <https://log.gprd.gitlab.net/app/r/s/oxJCB>
-   - Refer to the [Implementing Bypasses](#implementing-bypasses) section for instructions on how to put a new bypass in.
-   - Leave the issue open, linked to <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/374> for tracking and so we
-     can try to make things better
-2. One endpoint (or related collection of endpoints) is being unduly rate-limited and we can safely increase the limit for them. This is the same situation as the Package Registry exceptions, and there are two options:
-   1. If time is of the essence, implement the increased rate-limit and set the bypass header in Cloudflare.
-   2. If time allows, prefer a custom RackAttack limit, particularly if it should take into account user-identity, not just IP address. This is more flexible long term and is then usable by self-managed deployments, but may take a bit longer to be fully implemented and deployed as it requires work on the main GitLab codebase.
-3. The values of the rate-limits are all wrong, and need to be raised
-   - Take a deep breath. This is a serious choice, and you need to be really certain. The values have been chosen
-     carefully, and perhaps adjusted carefully over time. Do Not Rush.
-   - Consider other options, such as special-case rate-limits in RackAttack, or setting the `X-GitLab-RateLimit-Bypass`
-     header to 1 in Cloudflare for _specific_ requests (URL patterns or other identifiers) to solve the immediate problem
-     without causing wider damage.
-   - Gather evidence (logs usually) of what is going on and why the limits are wrong, in a discussion issue in the
-     infrastructure tracker, and get eyes on it. Include at least the SaaS Platforms PM Sam Wiskow (`@swiskow`), senior manager of Production Engineering Rachel Nienaber (`@rnienaber`) and manager of Production Engineering Foundations Steve Abrams (`@sabrams`).
-   - Verify that the proposed increase is able to be absorbed by our existing infrastructure, or that we can scale the
-     infrastructure up sufficiently to support it. Consider database, Gitaly, and Redis, as well as front-end compute.
-   - If it is agreed to proceed, raise a production change issue, linked to the earlier discussion issue, to execute the
-     change.
-   - Ensure <https://gitlab.com/gitlab-org/gitlab/-/tree/master/doc/user/gitlab_com/#gitlabcom-specific-rate-limits> is
-     updated to match the new values
