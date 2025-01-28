@@ -15,13 +15,9 @@ This page provides instructions for switching the LLM provider in case of an out
 ## How to switch to backup for code generation
 We are using [feature flag to swtich the model and model provider](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_generation/ai_gateway_messages.rb#L37).
 
-In case an outage happens to primary model provider, we need to run this command `/chatops run feature set incident_fail_over_generation_provider true` in #production slack channel
+In case an outage happens to primary model provider, we need to run this command `/chatops run feature set incident_fail_over_generation_provider true` in `#production` slack channel
 
-This setting will direct LLM request to `claude-3-5-sonnet-20240620` provided by anthropic.
-
-In .runway folder, there are [env-staging.yml](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/.runway/env-production.yml?ref_type=heads) and [env-production.yml](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/.runway/env-staging.yml?ref_type=heads). In case of the outage, we need to create and merge the MR to update the AIGW_DEFAULT_PROMPTS, and then the runway tool will apply the .env change.
-
-After the primary LLM provider is back online, we can revert the above MR, so that we are switching back to the primary LLM provider.
+After the primary LLM provider is back online, we change back to the primary model, and run `/chatops run feature set incident_fail_over_generation_provider false` in `#production` slack channel
 
 ## How to switch to backup for code completion
 
@@ -47,11 +43,11 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 
 * Go to [Kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover
 * select `pubsub-mlops-inf-gprod-*` as Data views from the top left
-* For code generation, search for `json.jsonPayload.message: "Returning prompt from the registry"`, and then we can find the provider that is currently in use:
+* For code generation, search for `json.jsonPayload.message: "Returning prompt from the registry"`:
   * You should see `json.jsonPayload.prompt_id: code_suggestions/generations/base` and `json.jsonPayload.prompt_version <version>`
     * And then you can find the template file in [this folder](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/tree/main/ai_gateway/prompts/definitions/code_suggestions/generations/base?ref_type=heads)
     * For example, if the version is 2.0.1, then the template file is `ai-assist/ai_gateway/prompts/definitions/code_suggestions/generations/base/2.0.1.yml`
-    * And in this file we can find the model being used and the model provider, for example, here we are using `claude-3-5-sonnet@20241022` provided by `vertex_ai` 
+    * And in this file we can find the current model and model provider, for example, here we are using `claude-3-5-sonnet@20241022` provided by `vertex_ai` 
 ```
 model:
   name: claude-3-5-sonnet@20241022
