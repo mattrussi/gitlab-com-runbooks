@@ -16,7 +16,6 @@
 
 ## Troubleshooting Pointers
 
-* [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](../patroni/mapping_statements.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
