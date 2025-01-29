@@ -65,6 +65,12 @@ In order to enable Cloudflare DNS for a Cells Tenant, we need to modify their te
   }
 ```
 
+In Cells this is achieved using `ringctl` patches and the command would look something like this:
+
+```
+➜  tissue git:(main) ✗ ringctl patch create replace /cloudflare_waf/enabled "true" replace /cloudflare_waf/migration_stage "DELEGATE_TENANT_DNS" --priority 3 --related-to "$RELATED_ISSUE"
+```
+
 Cells Environments in Tissue:
 
 - cellsdev[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsdev]
