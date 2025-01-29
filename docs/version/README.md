@@ -29,6 +29,7 @@
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Chefspec](../config_management/chefspec.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
+* [../duo/code_suggestion_failover.md](../duo/code_suggestion_failover.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [Gitaly error rate is too high](../gitaly/gitaly-error-rate.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
