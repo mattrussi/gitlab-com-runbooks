@@ -31,4 +31,4 @@ groups:
             be investigated for false positives.
           runbook: docs/cloud_connector/alerts/CloudflareCloudConnectorRateLimitExhaustion.md
           grafana_datasource_id: mimir-gitlab-ops
-          grafana_dashboard_link: https://dashboards.gitlab.net/alerting/list?search=datasource:%22Mimir%20-%20Gitlab%20Ops%22%20CloudflareCloudConnectorRateLimitExhaustion
+          grafana_dashboard_link: https://dashboards.gitlab.net/alerting/Mimir%20-%20Gitlab%20Ops/CloudflareCloudConnectorRateLimitExhaustion/find
