@@ -1,12 +1,7 @@
-# Thanos General Alerts
+# Thanos
 
 **Table of Contents**
 
 [TOC]
 
-Docs: <https://thanos.io/>
-
-## ThanosBucketHighOperationFailures
-
-* Check GCP status for failures.
-* Check logs on failing node to find error messages.
+Thanos has been deprecated and is replaced by [Mimir](../mimir/README.md)

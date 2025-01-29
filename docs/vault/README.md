@@ -45,7 +45,6 @@
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Mimir Onboarding](../mimir/getting-started.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)
-* [Thanos Receive](../monitoring/thanos-receive.md)
 * [GPG Keys for Repository Metadata Signing](../packagecloud/manage-repository-metadata-signing-keys.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
