@@ -25,7 +25,7 @@ rate limits we allocate to this customer based on the number of user seats they 
 The alert fires when the `cloudflare_zone_firewall_events_count` rate exceeds a given threshold for
 a given time window.
 
-- [Grafana link](https://dashboards.gitlab.net/alerting/list?search=CloudflareCloudConnectorRateLimitExhaustion)
+- [Current alerts](https://dashboards.gitlab.net/alerting/list?search=datasource:%22Mimir%20-%20Gitlab%20Ops%22%20CloudflareCloudConnectorRateLimitExhaustion)
 - [alert definition](../../../mimir-rules/gitlab-ops/cloudflare/cloudflare.yml)
 
 ## Alert Behavior
@@ -34,7 +34,12 @@ The alert does not invoke pagers but is posted to the [#cloud-connector-events](
 
 ## Troubleshooting
 
-Cross-check in the [Cloudflare WAF events dashboard](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/security/events) who was affected by these events. If you suspect it was a paying customer, refer to [possible resolutions](#possible-resolutions) for next steps. Otherwise it can be ignored.
+Cross-check in Cloudflare who was affected by these events:
+
+- [Cloudflare: Security analytics](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/security/analytics?mitigation-service=ratelimit&time-window=30)
+- [Cloudflare: Security events](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/security/events?service=ratelimit&time-window=30)
+
+If you suspect it was a paying customer, refer to [possible resolutions](#possible-resolutions) for next steps. Otherwise it can be ignored.
 
 ## Possible resolutions
 
