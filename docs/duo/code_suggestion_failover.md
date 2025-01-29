@@ -22,7 +22,7 @@ After the primary LLM provider is back online, we can change back to the primary
 
 ## How to switch to backup for code completion
 
-Currently the primary LLM are [code-gecko002 and codestral@2405 provided by vertex_ai](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/tasks/code_completion.rb#L40), and the backup is [claude-3-5-sonnet-20240620 provided by anthropic](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_completion/anthropic.rb).
+Currently the primary LLMs are [code-gecko002 and codestral@2405 provided by vertex_ai](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/tasks/code_completion.rb#L40), and the backup is [claude-3-5-sonnet-20240620 provided by anthropic](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_completion/anthropic.rb).
 
 We are using a [feature flag](https://gitlab.com/gitlab-org/gitlab/-/issues/501503) to control whether to enable the failover solution.
 
