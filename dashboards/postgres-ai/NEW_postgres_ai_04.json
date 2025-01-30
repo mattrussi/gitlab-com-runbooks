@@ -1,49 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_MIMIR_- GITLAB - ALL ENVIRONMENTS",
-      "label": "Mimir - Gitlab - All Environments",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    },
-    {
-      "name": "DS_MIMIR_- GITLAB GPRD",
-      "label": "Mimir - Gitlab Gprd",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.4.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "state-timeline",
-      "name": "State timeline",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -69,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_MIMIR_- GITLAB - ALL ENVIRONMENTS}"
+        "uid": "$prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -147,7 +102,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB - ALL ENVIRONMENTS}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -158,6 +113,7 @@
           "refId": "A"
         }
       ],
+      "title": "",
       "transparent": true,
       "type": "state-timeline"
     },
@@ -408,7 +364,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
@@ -421,7 +377,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=\"\"})/600",
@@ -451,7 +407,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_MIMIR_- GITLAB GPRD}"
+        "uid": "$prometheus"
       },
       "description": "Graph based on pg_wait_sampling_profile view of https://github.com/postgrespro/pg_wait_sampling extension.\n\nOn vertical Axis is number of backends with specific wait event type  \n\n- Client and Activity events are not shown by default, but can be done visible by clicking on them in the legend list.\n- CPU or Uncategorised wait event means backend either is being executed on CPU or waiting for CPU or some other wait that is not known yet",
       "fieldConfig": {
@@ -654,7 +610,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
@@ -667,7 +623,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type,wait_event) (label_replace(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\"},\"wait_type\",\"CPU*\",\"wait_type\",\"\"))/600",
@@ -697,7 +653,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_MIMIR_- GITLAB GPRD}"
+        "uid": "$prometheus"
       },
       "description": "Graph based on pg_wait_sampling_profile view of https://github.com/postgrespro/pg_wait_sampling extension.\n\nOn vertical Axis is number of backends with specific wait event type  \n\n- Client and Activity events are not shown by default, but can be done visible by clicking on them in the legend list.\n- CPU or Uncategorised wait event means backend either is being executed on CPU or waiting for CPU or some other wait that is not known yet",
       "fieldConfig": {
@@ -900,7 +856,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (queryid) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid!=\"0\"})/600",
@@ -913,7 +869,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_MIMIR_- GITLAB GPRD}"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (backend_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid=\"0\"})/600",
@@ -941,6 +897,7 @@
       "type": "timeseries"
     }
   ],
+  "preload": false,
   "schemaVersion": 40,
   "tags": [
     "unmanaged",
@@ -949,7 +906,10 @@
   "templating": {
     "list": [
       {
-        "current": {},
+        "current": {
+          "text": "Mimir - Gitlab Gprd",
+          "value": "mimir-gitlab-gprd"
+        },
         "includeAll": false,
         "label": "Datasource",
         "name": "prometheus",
@@ -960,10 +920,13 @@
         "type": "datasource"
       },
       {
-        "current": {},
+        "current": {
+          "text": "gprd",
+          "value": "gprd"
+        },
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_MIMIR_- GITLAB GPRD}"
+          "uid": "${prometheus}"
         },
         "definition": "label_values(node_exporter_build_info,env)",
         "includeAll": false,
@@ -980,7 +943,10 @@
         "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "text": "patroni",
+          "value": "patroni"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${prometheus}"
@@ -1000,10 +966,13 @@
         "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "text": "patroni-main-v16-101-db-gprd.c.gitlab-production.internal",
+          "value": "patroni-main-v16-101-db-gprd.c.gitlab-production.internal"
+        },
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_MIMIR_- GITLAB - ALL ENVIRONMENTS}"
+          "uid": "$prometheus"
         },
         "definition": "label_values(node_exporter_build_info{tier=\"db\", type=\"$type\", environment=\"$environment\"},fqdn)",
         "description": "\tlabel_values(up{environment=\"$environment\",tier=\"db\",type=\"$type\"},fqdn)",
@@ -1021,8 +990,8 @@
       },
       {
         "current": {
-          "text": "IPC",
-          "value": "IPC"
+          "text": "IO",
+          "value": "IO"
         },
         "includeAll": false,
         "label": "wait type",
@@ -1039,12 +1008,12 @@
             "value": "LWLock"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "IO",
             "value": "IO"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "IPC",
             "value": "IPC"
           },
@@ -1088,7 +1057,14 @@
         "type": "custom"
       },
       {
-        "current": {},
+        "current": {
+          "text": [
+            "DataFilePrefetch"
+          ],
+          "value": [
+            "DataFilePrefetch"
+          ]
+        },
         "definition": "label_values(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=\"$wait_type\"},wait_event)",
         "description": "wait_event",
         "includeAll": true,
@@ -1132,8 +1108,7 @@
     ]
   },
   "timezone": "utc",
-  "title": "[NEW][postgres.ai][04] Postgres Wait sampling dashboard",
-  "version": 59,
+  "title": "[NEW][04] Postgres Wait sampling dashboard",
+  "version": 60,
   "weekStart": ""
 }
-
