@@ -16,10 +16,6 @@
         // if no criteria are set here, the move to warm will happen on rollover
         min_age: '2d',  // min value is 1h, if you set below that, the cluster will default to 1d
         actions: {
-          // skipping force merge for now for a performance optimisation test
-          // forcemerge: {
-          //   max_num_segments: 1,
-          // },
           allocate: {
             total_shards_per_node: 4,
           },
@@ -28,8 +24,31 @@
           },
         },
       },
+      cold: {
+        // if no criteria are set here, the move to warm will happen on rollover
+        min_age: '7d',  // min value is 1h, if you set below that, the cluster will default to 1d
+        actions: {
+          set_priority: {
+            priority: 0,
+          },
+          searchable_snapshot: {
+            snapshot_repository: 'found_snapshots',
+
+          },
+        },
+      },
+      frozen: {
+        // if no criteria are set here, the move to warm will happen on rollover
+        min_age: '8d',  // min value is 1h, if you set below that, the cluster will default to 1d
+        actions: {
+          searchable_snapshot: {
+            snapshot_repository: 'found_snapshots',
+
+          },
+        },
+      },
       delete: {
-        min_age: '7d',  //7d after rollover
+        min_age: '9d',  //7d after rollover
         actions: {
           delete: {},
         },
