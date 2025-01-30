@@ -55,7 +55,7 @@
         },
       },
       delete: {
-        min_age: '9d',  //7d after rollover
+        min_age: '11d',  //7d after rollover
         actions: {
           delete: {},
         },
