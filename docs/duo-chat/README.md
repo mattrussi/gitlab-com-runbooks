@@ -263,3 +263,36 @@ After we've collected the log, we do:
 
 1. Filter the llm.log by the error code (LLM log outputs the error code as-is). Extract the correlation-id in the same log line.
 2. Filter the llm.log and sidekloq.log by the extracted correlation-id. This gives us the details of the process flow, which is crucial to identify where the thing went wrong.
+
+## Rate Limits
+
+Duo Chat has the following rate limits:
+
+- AI Action Rate Limit: 160 calls per 8 hours per authenticated user
+  - This limit applies to GraphQL aiAction mutations
+  - When exceeded, returns error code A1001 with message "This endpoint has been requested too many times. Try again later"
+  - Configured via `application_settings.ai_action_api_rate_limit`
+  - Can be monitored in [GitLab Rails error rates dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/5f334d60-cfd7-11ee-bc6b-0b206b291ea1)
+
+When users hit rate limits:
+
+1. Check current rate limit usage:
+
+```ruby
+  # In Rails console
+  user = User.find_by_username('username')
+  Gitlab::ApplicationRateLimiter.throttled?(:ai_action, scope: [user], peek: true)
+```
+
+2. For temporary relief, rate limits can be reset:
+
+```ruby
+  # In Rails console
+  Gitlab::RateLimitHelpers.new.reset_rate_limits(:ai_action, user)
+```
+
+3. For persistent issues, consider:
+
+- Reviewing usage patterns to identify potential abuse
+- Adjusting the global rate limit via application settings if needed
+- Adding user to allowlist if legitimate high usage case
