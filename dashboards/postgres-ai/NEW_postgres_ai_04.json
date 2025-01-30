@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
+        "uid": "$prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -102,7 +102,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -364,7 +364,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
@@ -377,7 +377,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=\"\"})/600",
@@ -610,7 +610,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
@@ -623,7 +623,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type,wait_event) (label_replace(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\"},\"wait_type\",\"CPU*\",\"wait_type\",\"\"))/600",
@@ -869,7 +869,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (backend_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid=\"0\"})/600",
@@ -972,7 +972,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
+          "uid": "$prometheus"
         },
         "definition": "label_values(node_exporter_build_info{tier=\"db\", type=\"$type\", environment=\"$environment\"},fqdn)",
         "description": "\tlabel_values(up{environment=\"$environment\",tier=\"db\",type=\"$type\"},fqdn)",
