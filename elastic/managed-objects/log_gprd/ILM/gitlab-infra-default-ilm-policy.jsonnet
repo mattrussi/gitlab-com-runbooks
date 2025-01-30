@@ -7,6 +7,9 @@
             max_age: '7d',
             max_primary_shard_size: '50gb',
           },
+          forcemerge: {
+            max_num_segments: 1,
+          },
           set_priority: {
             priority: 100,
           },
