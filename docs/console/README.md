@@ -69,8 +69,6 @@
 * [Accessing a GKE Alertmanager](../monitoring/alerts_gke.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
 * [../monitoring/set_maintenance_window.md](../monitoring/set_maintenance_window.md)
-* [Thanos Compact](../monitoring/thanos-compact.md)
-* [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Restore Gitaly data on `ops.gitlab.net`](../ops-gitlab-net/gitaly-restore.md)

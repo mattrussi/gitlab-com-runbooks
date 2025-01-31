@@ -30,7 +30,6 @@
 * [Kubernetes](kubernetes.md)
 * [Auditing Metrics](../mimir/auditing-metrics.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
-* [Thanos Compact](../monitoring/thanos-compact.md)
 * [Restore Gitaly data on `ops.gitlab.net`](../ops-gitlab-net/gitaly-restore.md)
 * [../product_analytics/k8s-architecture.md](../product_analytics/k8s-architecture.md)
 * [Redis on Kubernetes](../redis/kubernetes.md)
