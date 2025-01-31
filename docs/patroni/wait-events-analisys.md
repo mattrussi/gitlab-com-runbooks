@@ -66,7 +66,7 @@ This panel shows the highest-level view of wait event analysis. Make sure you're
 
 This panel shows the highest-level view of wait event analysis. Use `wait_event_type` filter at the very top of the dashboard to filter by wait event type and see what particular wait events are playing higher role inside the spikes for particular wait event type. See [the official docs](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE) to understand the meanings of particular wait events (important: make sure you're checking out the docs for the Postgres version currently being used).
 
-### Step 3. Find query ids contributing to given wait type end event
+### Step 3. Find query IDs contributing to given wait event type end wait event
 
 This panel allows to identify the queries that are responsible for high values for specific wait events – we can do it finding the `queryid` values for those queries. To do that, make sure you use or not use filters on `wait_event_type` and `wait_event` in the top panel of the dashboard – these filters are optional and should be used to drill down in case if the nature of active session spikes is not trivial.
 
