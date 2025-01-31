@@ -7,6 +7,7 @@
 ## Two branches of SQL optimization
 
 There are two big branches of query optimization:
+
 1. "Micro" optimization: analysis and improvement of particular queries. Main tools:
     - [`EXPLAIN`](https://www.postgresql.org/docs/current/sql-explain.html)
     - [Database Lab](https://docs.gitlab.com/ee/development/database/database_lab.html) that enables using `EXPLAIN` and DDL (to verify optimization ideas) on full-sized thin database clones.
@@ -20,7 +21,7 @@ There are two big branches of query optimization:
 Key dashboards to be used:
 
 1. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_02)
-1. [Postgres single query performance analysis]((https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
+1. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
 
 Additional dashboards:
 
