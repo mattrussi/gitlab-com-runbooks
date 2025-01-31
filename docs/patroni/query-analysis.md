@@ -19,12 +19,12 @@ There are two big branches of query optimization:
 
 Key dashboards to be used:
 
-1. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/edxi03vbar9q8a/2d8e2a76-e4a8-5343-9709-18eadb0fa1a2?orgId=1)
-1. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/de1633b2zd3wge/4482c6d0-58c5-5473-8cb1-bdf2f09c7757)  // TODO: update link to a permanent one; do not forget to update these links used below in text as well!!
+1. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_02)
+1. [Postgres single query performance analysis]((https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
 
 Additional dashboards:
 
-1. [https://dashboards.gitlab.net/d/bdyzrgbqqyku8a/668258a7-646c-5d50-8d89-f5bfca8f6549?orgId=1](https://dashboards.gitlab.net/d/bdyzrgbqqyku8a/5b86bf4e-a46c-571e-b718-5a4467f71ce9) – this dashboard has many workload-related panels, for a high-level view at the whole workload, without segmentation by `queryid` // TODO: update link to a permanent one
+1. [Postgres node performance overview (high-level)](https://dashboards.gitlab.net/d/postgres-ai-node-performance-overview) – this dashboard has many workload-related panels, for a high-level view at the whole workload, without segmentation by `queryid`
 1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04] Wait events analysis dashboard. This Dashboard offers performance analisys centered around wait events, it provides same functionality as RDS Performance Insights.
 
 ## How to use dasboards
