@@ -50,7 +50,7 @@ Some relevant dashboards:
 3. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/de1633b2zd3wge/4482c6d0-58c5-5473-8cb1-bdf2f09c7757)  // TODO: update link to a permanent one
 4. [Postgres wait events analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04)
 
-SEE: Runbook ["High-level performance analysis and troubleshooting of a Postgres node"](./single-node-high-level.md).
+See also: [Runbook "High-level performance analysis and troubleshooting of a Postgres node"](./single-node-high-level.md).
 
 ## Availability
 
