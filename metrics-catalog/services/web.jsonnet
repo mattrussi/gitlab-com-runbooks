@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
+local successCounterApdex = metricsCatalog.successCounterApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
@@ -214,6 +215,44 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['endpoint_id'],
 
       toolingLinks: [],
+    },
+
+    middleware_path_traversal: {
+      severity: 's3',
+      serviceAggregation: false,
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      description: |||
+        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+
+        An alert here may indicate that the middleware is rejecting web request than usual.
+      |||,
+
+      requestRate: rateMetric(
+        counter='gitlab_sli_path_traversal_check_request_apdex_total',
+        selector={ request_rejected: 'false' },
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli_path_traversal_check_request_apdex_total',
+        selector={ request_rejected: 'true' },
+      ),
+
+      apdex: successCounterApdex(
+        successRateMetric='gitlab_sli_path_traversal_check_request_apdex_success_total',
+        operationRateMetric='gitlab_sli_path_traversal_check_request_apdex_total',
+        selector=railsSelector,
+      ),
+
+      significantLabels: ['request_rejected'],
+
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Rails',
+          index='rails',
+          matches={ 'json.meta.caller_id': 'Groups::DependencyProxyForContainersController' }
+        ),
+      ],
     },
 
     dependency_proxy: {
