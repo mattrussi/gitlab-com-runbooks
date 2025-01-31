@@ -1,4 +1,4 @@
-# Postgres wait events analisys 
+# Postgres wait events analisys
 
 **Table of Contents**
 
