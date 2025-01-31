@@ -21,7 +21,7 @@ Key dashboards to be used:
 
 Additional dashboards:
 1. [https://dashboards.gitlab.net/d/bdyzrgbqqyku8a/668258a7-646c-5d50-8d89-f5bfca8f6549?orgId=1](https://dashboards.gitlab.net/d/bdyzrgbqqyku8a/5b86bf4e-a46c-571e-b718-5a4467f71ce9) – this dashboard has many workload-related panels, for a high-level view at the whole workload, without segmentation by `queryid` // TODO: update link to a permanent one
-1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04] Wait events analysis dashboard. This Dashboard offers performance analisys centered around wait events, it provides same functionality as RDS Performance Insights.    
+1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04] Wait events analysis dashboard. This Dashboard offers performance analisys centered around wait events, it provides same functionality as RDS Performance Insights.
 
 ## How to use dasboards
 All dashboards mentioned above deal with a single node. Thus, the first step is to make sure that the proper Postgres node is chosen:
@@ -41,6 +41,7 @@ The table view is collapsed by default – click on "pg_stat_statements and pg_
 removed.
 
 There are certain important limitations, some of which are worth remembering:
+
 - it doesn't show anything about ongoing queries (can be found in `pg_stat_activity`);
 - (a big issue!) it doesn't track failed queries, which can sometimes lead to wrong conclusions (example: CPU and disk IO load are high, but 99% of our queries fail on `statement_timeout`, loading our system but not producing any useful results – in this case, pgss is blind);
 - if there are SQL comments, they are not removed, but only the first comment value is going to be present in the `query` column for each normalized query.
@@ -55,8 +56,10 @@ Let's mention some metrics that are usually most frequently used in macro optimi
 2. `total_plan_time` and `total_exec_time` – aggregated duration for planning and execution for this group (again, remember: failed queries are not tracked, including those that failed on `statement_timeout`)
 3. `rows` – how many rows returned by queries in this group
 4. `shared_blks_hit` and `shared_blks_read` – number if hit and read operations from the buffer pool. Two important notes here:
+
     - "read" here means a read from the buffer pool – it is not necessarily a physical read from disk, since data can be cached in the OS page cache. So we cannot say these reads are reads from disk.
     - The names "blocks hit" and "blocks read" might be a little bit misleading, suggesting that here we talk about data volumes – number of blocks (buffers). While aggregation here definitely make sense, we must keep in mind that the same buffers may be read or hit multiple times. So instead of "blocks have been hit" it is better to say "block hits".
+
 5. `wal_bytes` – how many bytes are written to WAL by queries in this group
 
 There are many more other interesting metrics, it is recommended to explore all of them (see [the docs](https://postgresql.org/docs/current/pgstatstatements.html)).
@@ -72,6 +75,7 @@ To read and interpret data from pgss, you need three steps:
     c. `%M` – percentage that this normalized query takes in the whole workload considering metric `M`.
 
 Step 3 here can be also applied not to particular normalized queries on a single host but bigger groups – for example:
+
 - aggregated workload for all standby nodes
 - whole workload on a node (e.g., the primary)
 - bigger segments such as all queries from specific user or to specific database
