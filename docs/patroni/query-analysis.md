@@ -5,6 +5,7 @@
 [[_TOC_]]
 
 ## Two branches of SQL optimization
+
 There are two big branches of query optimization:
 1. "Micro" optimization: analysis and improvement of particular queries. Main tools:
     - [`EXPLAIN`](https://www.postgresql.org/docs/current/sql-explain.html)
@@ -15,28 +16,35 @@ There are two big branches of query optimization:
     - wait event analysis (a.k.a. Active Session History, ASH): [pg_wait_sampling](https://github.com/postgrespro/pg_wait_sampling) ("pgws") and extended Marginalia tooling.
 
 ## Dashboards
+
 Key dashboards to be used:
+
 1. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/edxi03vbar9q8a/2d8e2a76-e4a8-5343-9709-18eadb0fa1a2?orgId=1)
 1. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/de1633b2zd3wge/4482c6d0-58c5-5473-8cb1-bdf2f09c7757)  // TODO: update link to a permanent one; do not forget to update these links used below in text as well!!
 
 Additional dashboards:
+
 1. [https://dashboards.gitlab.net/d/bdyzrgbqqyku8a/668258a7-646c-5d50-8d89-f5bfca8f6549?orgId=1](https://dashboards.gitlab.net/d/bdyzrgbqqyku8a/5b86bf4e-a46c-571e-b718-5a4467f71ce9) – this dashboard has many workload-related panels, for a high-level view at the whole workload, without segmentation by `queryid` // TODO: update link to a permanent one
 1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04] Wait events analysis dashboard. This Dashboard offers performance analisys centered around wait events, it provides same functionality as RDS Performance Insights.
 
 ## How to use dasboards
+
 All dashboards mentioned above deal with a single node. Thus, the first step is to make sure that the proper Postgres node is chosen:
+
 - choose environment: grpd (default), gstg, or another;
 - choose `type` (cluster name) – e.g., `patroni` is for gprd-main, `patroni-ci` is for gprd-ci;
 - for the "Postgres aggregated query performance analysis" dashboard, choose TopN (default is 10) - this will define how many `queryid` lines will be visualized on panels for each metric;
 - for the "Postgres single query performance analysis" dashboard, it is mandatory to specify `queryid` at the right top corner.
 
 The "Postgres aggregated query performance analysis" dashboard provides "Top-N" charts for various metrics from pgss, pgsk, and pgws, as well as table view with lots. Both forms of information representation have their own pros and cons:
+
 - each chart show only one metric, but also provides historical perspective (e.g., we can see if there was a spike and when),
 - table view delivers consolidated view on aggregated queries (queryids), it has a lot of columns (almost every metric from pgss and pgsk is covered, with derivatives described below); these columns are sortable and provide a comprehensive understanding of the workload for certain period of time, but this data lack historical perspective.
 
 The table view is collapsed by default – click on "pg_stat_statements and pg_stat_kcache views" to expand. Use these tables if you want to understand various characteristics of the workload. Don't forget that columns are sortable. For example, click on column `wal bytes %` if you, say, want what `queryid` contributed to WAL generation the most, and what was the percentage of that contribution.
 
 ## pg_stat_statements basics
+
 `pg_stat_statements` tracks all queries, aggregating them to query groups, called "normalized queries", where parameters are
 removed.
 
@@ -47,11 +55,13 @@ There are certain important limitations, some of which are worth remembering:
 - if there are SQL comments, they are not removed, but only the first comment value is going to be present in the `query` column for each normalized query.
 
 The view `pg_stat_statements` has 3 kinds of columns:
+
 1. `queryid` – an identifier of normalized query. In the latest PG version it can also be used to connect (`JOIN`) data from pgss to pgsa (`pg_stat_statements`) and Postgres logs. Surprise: `queryid` value can be negative.
 2. Descriptive columns: ID of database (`dbid`), user (`userid`), and the query itself (`query`).
 3. Metrics. Almost all of them are cumulative: `calls`, `total_time`, `rows`, etc. Non-cumulative: `stddev_plan_time`, `stddev_exec_time`, `min_exec_time`, etc. In this post, we'll focus only on cumulative ones.
 
 Let's mention some metrics that are usually most frequently used in macro optimization ([full list](https://postgresql.org/docs/current/pgstatstatements.html#PGSTATSTATEMENTS-PG-STAT-STATEMENTS)):
+
 1. `calls` – how many query calls happened for this query group (normalized query)
 2. `total_plan_time` and `total_exec_time` – aggregated duration for planning and execution for this group (again, remember: failed queries are not tracked, including those that failed on `statement_timeout`)
 3. `rows` – how many rows returned by queries in this group
@@ -65,7 +75,9 @@ Let's mention some metrics that are usually most frequently used in macro optimi
 There are many more other interesting metrics, it is recommended to explore all of them (see [the docs](https://postgresql.org/docs/current/pgstatstatements.html)).
 
 ## Dealing with cumulative metrics in pgss
+
 To read and interpret data from pgss, you need three steps:
+
 1. Take two snapshots corresponding to two points of time.
 2. Calculate the diff for each cumulative metric and for time difference for the two points in time
     - a special case is when the first point in time is the beginning of stats collection – in PG14+, there is a separate view, `pg_stat_statements_info`, that has information about when the pgss stats reset happened; in PG13 and older this info is not stored, unfortunately.
@@ -84,6 +96,7 @@ Step 3 here can be also applied not to particular normalized queries on a single
 Further we consider practical meanings of the three derivatives we discussed.
 
 ## Derivative 1. Time-based differentiation
+
 * `dM/dt`, where `M` is `calls` – the meaning is simple. It's QPS (queries per second). If we talk about particular group (normalized query), it's that all queries in this group have. `10,000` is pretty large so, probably, you need to improve the client (app) behavior to reduce it, `10` is pretty small (of course, depending on situation). If we consider this derivative for whole node, it's our "global QPS".
 
 * `dM/dt`, where `M` is `total_plan_time + total_exec_time` – this is the most interesting and key metric in query macro analysis targeted at resource consumption optimization (goal: reduce time spent by server to process queries). Interesting fact: it is measured in "seconds per second", meaning: how many seconds our server spends to process queries in this query group. *Very* rough (but illustrative) meaning: if we have `2 sec/sec` here, it means that we spend 2 seconds each second to process such queries – we definitely would like to have more than 2 vCPUs to do that. Although, this is a very rough meaning because pgss doesn't distinguish situations when query is waiting for some lock acquisition vs. performing some actual work in CPU (for that, we need to involve wait event analysis) – so there may be cases when the value here is high not having a significant effect on the CPU load.
@@ -95,6 +108,7 @@ Further we consider practical meanings of the three derivatives we discussed.
 * `dM/dt`, where `M` is `wal_bytes` – the stream of WAL bytes written. This is relatively new metric (PG13+) and can be used to understand which queries contribute to WAL writes the most – of course, the more WAL is written, the higher pressure to physical and logical replication, and to the backup systems we have. An example of highly pathological workload here is: a series of transactions like `begin; delete from ...; rollback;` deleting many rows and reverting this action – this produces a lot of WAL not performing any useful work. (Note: that despite the `ROLLBACK` here and inability of pgss to tracks failed statements, the statements here are going to be tracked because they are successful inside the transaction.)
 
 ## Derivative 2. Calls-based differentiation
+
 This set of metrics is not less important than time-based differentiation because it can provide you systematic view on characteristics of your workload and be a good tool for macro-optimization of query performance.
 
 The metrics in this set help us understand the characteristics of a query, *on average*, for each query group.
@@ -127,6 +141,7 @@ Let's consider the meanings of various derived metrics obtained in such way:
 5. `dM/dc`, where `M` is `wal_bytes` (PG13+) – average amount of WAL generated by a query in the studied pgss group measured in bytes. It is helpful for identification of query groups that contribute most to WAL generation. A "global" aggregated value for all pgss records represents the average number of bytes for all statements on the server. Having graphs for this and for "`dM/dc`, where `M` is `wal_fpi`" can be very helpful in certain situations such as checkpoint tuning: with `full_page_writes = on`, increasing the distance between checkpoints, we should observe reduction of values in this area, and it may be interesting to study different particular groups in pgss separately.
 
 ## 3rd type of derived metrics: percentage
+
 The third type of derived metrics is the percentage that a considered query group (normalized query or bigger groups such as "all statements from particular user" or "all `UPDATE` statements") takes in the whole workload with respect to metric `M`.
 
 How to calculate it: first, apply time-based differentiation to all considered groups (as discussed in [the part 1](././0005_pg_stat_statements_part_1.md)) — `dM/dt` — and then divide the value for particular group by the sum of values for all groups.
