@@ -26,7 +26,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
     |||,
     queryFormatConfig: {
       // Ignore non-autoscaled shards and throttled shards
-      ignored_sidekiq_shards: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) !shard.autoScaling || shard.urgency == 'throttled')),
+      ignored_sidekiq_shards: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) !shard.autoScaling || shard.urgency == 'throttled' || shard.gkeDeployment == 'gitlab-sidekiq-catchall-v2')),
       ignored_namespaces: 'pubsubbeat',
     },
     slos: {
