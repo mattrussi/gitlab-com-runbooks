@@ -25,7 +25,7 @@ function(
     regional: regional,
 
     provisioning: {
-      runway: false,
+      runway: true,
       vms: false,
       kubernetes: false,
     },
