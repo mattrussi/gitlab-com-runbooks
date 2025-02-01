@@ -15,7 +15,7 @@ function(
     type: type,
     tier: 'db',
     tenants: ['runway'],
-    tags: [],  // TODO: add 'cloud-sql' for capacity planning
+    tags: ['runway-managed-postgres'],
 
     monitoringThresholds: {
       apdexScore: 0.999,
