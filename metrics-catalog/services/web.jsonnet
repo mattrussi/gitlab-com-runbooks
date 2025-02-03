@@ -250,7 +250,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(
           title='Rails',
           index='rails',
-          matches={ 'json.meta.caller_id': 'Groups::DependencyProxyForContainersController' }
+          matches={ 'json.class_name.keyword': 'Gitlab::Middleware::PathTraversalCheck' }
         ),
       ],
     },
