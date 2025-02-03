@@ -392,7 +392,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_5m{env="gprd",request_rejected="false"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_5m{env="gprd",job="gitlab-rails",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_errors:rate_5m
     labels:
@@ -991,7 +991,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_30m{env="gprd",request_rejected="false"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_30m{env="gprd",job="gitlab-rails",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_errors:rate_30m
     labels:
@@ -1590,7 +1590,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_1h{env="gprd",request_rejected="false"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_1h{env="gprd",job="gitlab-rails",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_errors:rate_1h
     labels:

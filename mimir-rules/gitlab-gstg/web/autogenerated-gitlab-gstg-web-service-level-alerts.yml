@@ -2512,7 +2512,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",request_rejected="false",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -2551,7 +2551,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",request_rejected="false",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -2590,7 +2590,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",request_rejected="false",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -2631,7 +2631,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",request_rejected="false",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
