@@ -2106,9 +2106,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2152,9 +2154,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2198,9 +2202,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2246,9 +2252,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2294,9 +2302,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2344,9 +2354,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2394,9 +2406,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2446,9 +2460,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2498,9 +2514,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-main/web-overview
@@ -2535,9 +2553,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -2574,9 +2594,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -2613,9 +2635,11 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

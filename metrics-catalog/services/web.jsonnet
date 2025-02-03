@@ -223,9 +223,12 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       description: |||
-        Measures calls of the path traversal middleware as rejected web requests vs accepted web requests.
+        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
 
-        An alert here may indicate that the middleware is rejecting web request than usual.
+        An alert here may indicate that the middleware is rejecting more web request than usual.
+
+        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate
+        a symptom of a root cause external to the middleware.
       |||,
 
       requestRate: rateMetric(
