@@ -34,6 +34,9 @@
           set_priority: {
             priority: 0,
           },
+          allocate: {
+            number_of_replicas: 0,
+          },
           searchable_snapshot: {
             snapshot_repository: 'found_snapshots',
 
