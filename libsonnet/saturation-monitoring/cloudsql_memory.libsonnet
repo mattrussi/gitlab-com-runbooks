@@ -6,7 +6,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     title: 'CloudSQL Memory Utilization',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: metricsCatalog.findServicesWithTag(tag='cloud-sql'),
+    appliesTo: metricsCatalog.findServicesWithTag(tag='cloud-sql') + metricsCatalog.findServicesWithTag(tag='runway-managed-postgres'),
     description: |||
       CloudSQL Memory utilization.
 

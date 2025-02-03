@@ -6,9 +6,25 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: open_fds
+      component: cloudsql_cpu
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: open_fds
+      component: cloudsql_cpu
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
     expr: "0.9"
