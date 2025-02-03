@@ -230,7 +230,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_sli_path_traversal_check_request_apdex_total',
-        selector={ request_rejected: 'false' },
+        selector=railsSelector,
       ),
 
       errorRate: rateMetric(
