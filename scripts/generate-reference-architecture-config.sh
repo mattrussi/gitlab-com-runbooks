@@ -3,6 +3,16 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+if [[ "$(uname)" == "Darwin" ]]; then
+  if ! hash gsha256sum; then
+    echo >&2 "g$SHA256SUM not found, please install it via: brew install coreutils"
+    exit 1
+  fi
+  SHA256SUM=gsha256sum
+else
+  SHA256SUM=sha256sum
+fi
+
 function main() {
   REPO_DIR=$(
     cd "$(dirname "${BASH_SOURCE[0]}")/.."
@@ -67,7 +77,7 @@ function main() {
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
   # shellcheck disable=SC2155
-  local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
+  local args_hash="$(echo "$@" | $SHA256SUM | awk '{ print $1 }')"
   local sha256sum_file="${REPO_DIR}/.cache/$source_file.$args_hash.sha256sum"
   local cache_out_file="${REPO_DIR}/.cache/$source_file.$args_hash.out"
 
@@ -121,7 +131,7 @@ function setup_cache_directories() {
 function cache_hit() {
   local sha256sum_file="$1"
   local cache_out_file="$2"
-  [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"
+  [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && $SHA256SUM --check --status <"$sha256sum_file"
 }
 
 function restore_cache() {
@@ -171,8 +181,8 @@ function update_cache() {
     -J "${reference_architecture_src_dir}" \
     -J "${JSONNET_VENDOR_DIR}" \
     "${paths[@]}" \
-    "$source_file" | xargs sha256sum >"$sha256sum_file"
-  echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
+    "$source_file" | xargs $SHA256SUM >"$sha256sum_file"
+  echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs $SHA256SUM >>"$sha256sum_file"
 }
 
 function generate_mixins() {
