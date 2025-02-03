@@ -418,7 +418,7 @@
               type: 'long',
             },
             model_output_score: {
-              type: 'long',
+              type: 'float',
             },
             path: {
               type: 'text',
