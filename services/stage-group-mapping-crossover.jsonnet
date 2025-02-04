@@ -5,6 +5,4 @@
 // }
 //
 // Blank values will be ignored.
-{
-  infrastructure_cost_data: 'infra_cost_data',
-}
+{}
