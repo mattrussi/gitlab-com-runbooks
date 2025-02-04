@@ -5,6 +5,7 @@
 [[_TOC_]]
 
 ## Goals and methodologies
+
 This runbook outlines the steps for conducting a drill-down performance analysis, at the node level, from high-level view at the whole workload to individual queries (individual query IDs), based on wait event sampling using [pg_wait_sampling](https://github.com/postgrespro/pg_wait_sampling).
 
 The wait event centric approach is also known as:
@@ -23,15 +24,17 @@ The wait events analysis dashboard serves as a vital tool for database performan
 - think of wait events as a queue at a busy restaurant - this dashboard shows you not just how long the line is, but why people are waiting (kitchen backup, seating limitations, or staff shortages) and which orders are causing the longest delays; this practical insight can help move from reactive firefighting to proactive performance management
 - the ASH dashboard bridges the gap between observing performance problems and understanding their root causes, enabling faster and more accurate resolution of database performance issues
 
-Originally, for each backend (session), Postgres exposes wait events in columns `wait_event_type` and `wait_event` in system view `pg_stat_activity` ([docs](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE)).
+Originally, for each backend (session), Postgres exposes wait events in columns `wait_event_type` and `wait_event` in system view `pg_stat_activity` [docs](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE).
 
 These events need to be sampled for analysis. With external sampling (e.g., dashboard involved Marginalia and pg_stat_activity sampling built in https://gitlab.com/gitlab-com/runbooks/-/merge_requests/3370), the frequency of sampling is not high, cannot exceed 1/sec, thus data is not precise. With `pg_wait_sampling`, the sampling is internal, with high frequency (default: 100/second, 10ms rate), which is then exported infrequently, but has much better coverage and precision of metrics, enabling wider spectrum of performance optimization and troubleshooting works.
 
 
 ## Dashboards to be used
+
 1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04](Postgres Wait sampling dashboard)
 
 Additionally, for further steps:
+
 1. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_02)
 1. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
 
@@ -54,6 +57,7 @@ The dashboard has three panels, representing wait event analysis at three detali
 This, scrolling the ASH dashboard from top to bottom and gradually applying filters (first, by wait event type, then by individual wait event), we can perform top-down wait event analysis, moving from node-level whole workload to individual queries.
 
 Working at any level:
+
 - Review the stacked graph showing all types of wait events (`Activity`, `BufferPin`, `Client`, `IO`, `IPC`, etc.)
 - Pay special attention to the `CPU or Uncategorised wait event` types as they may indicate processing bottlenecks
 - Note that different colors represent different wait event types for easy visual correlation
