@@ -94,7 +94,11 @@ function render_multi_jsonnet() {
 if [[ $# == 0 ]]; then
   cd "${REPO_DIR}"
 
-  find ./mimir-rules-jsonnet -name '*.jsonnet' -print0 | xargs -0 -P "$(nproc)" -n 1 ./scripts/generate-jsonnet-rules.sh
+  if [[ ${GL_JSONNET_GNU_PARALLEL:-} != 'true' ]]; then
+    find ./mimir-rules-jsonnet -name '*.jsonnet' -print0 | xargs -0 -P "$(nproc)" -n 1 ./scripts/generate-jsonnet-rules.sh
+  else
+    find ./mimir-rules-jsonnet -name '*.jsonnet' -print0 | parallel -0 --joblog joblog.txt -n 1 ./scripts/generate-jsonnet-rules.sh
+  fi
 else
   for file in "$@"; do
     source_dir=$(dirname "${file}")
