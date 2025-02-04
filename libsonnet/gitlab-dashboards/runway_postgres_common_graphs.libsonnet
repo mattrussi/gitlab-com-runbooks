@@ -118,6 +118,48 @@ local selectors = import 'promql/selectors.libsonnet';
       panels=panels,
     ),
 
+  networkPanels(serviceType, startRow)::
+    local formatConfig = {
+      selector: selectors.serializeHash({
+        environment: '$environment',
+        type: serviceType,
+      }),
+    };
+
+    local panels = layout.grid([
+      basic.networkTrafficGraph(
+        title='Ingress bytes received',
+        description='The network traffic in terms of the number of ingress bytes (bytes received) to the instance.',
+        receiveQuery=|||
+          sum by (database_id) (
+            rate(
+              stackdriver_cloudsql_database_cloudsql_googleapis_com_database_network_received_bytes_count{%(selector)s}[$__rate_interval]
+            )
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{database_id}}',
+      ),
+      basic.networkTrafficGraph(
+        title='Egress bytes sent',
+        description='The network traffic in terms of the number of egress bytes (bytes sent) from the instance.',
+        sendQuery=|||
+          sum by (database_id) (
+            rate(
+              stackdriver_cloudsql_database_cloudsql_googleapis_com_database_network_sent_bytes_count{%(selector)s}[$__rate_interval]
+            )
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{database_id}}',
+      ),
+    ], cols=2, rowHeight=10, startRow=startRow + 1);
+
+    layout.titleRowWithPanels(
+      title='Network',
+      collapse=true,
+      startRow=startRow,
+      panels=panels,
+    ),
+
   // TODO: parity with key and advanced metrics: https://cloud.google.com/sql/docs/postgres/use-system-insights#default-metrics
 
   runwayPostgresDashboard(service)::
@@ -126,5 +168,6 @@ local selectors = import 'promql/selectors.libsonnet';
       includeStandardEnvironmentAnnotations=false
     )
     .addPanels(self.connectionPanels(serviceType=service, startRow=1000))
-    .addPanels(self.diskPanels(serviceType=service, startRow=2000)),
+    .addPanels(self.diskPanels(serviceType=service, startRow=2000))
+    .addPanels(self.networkPanels(serviceType=service, startRow=3000)),
 }
