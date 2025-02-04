@@ -286,7 +286,11 @@
   security_platform_management: {
     name: 'Security Platform Management',
     stage: 'security_risk_management',
-    feature_categories: [],
+    feature_categories: [
+      'security_testing_configuration',
+      'security_asset_inventories',
+      'security_testing_integrations',
+    ],
   },
   analytics_instrumentation: {
     name: 'Analytics Instrumentation',
