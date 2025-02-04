@@ -60,6 +60,64 @@ local selectors = import 'promql/selectors.libsonnet';
       panels=panels,
     ),
 
+  diskPanels(serviceType, startRow)::
+    local formatConfig = {
+      selector: selectors.serializeHash({
+        environment: '$environment',
+        type: serviceType,
+      }),
+    };
+
+    local panels = layout.grid([
+      basic.timeseries(
+        title='Disk read operations',
+        description='The Number of Reads metric indicates the number of read operations served from disk that do not come from cache.',
+        yAxisLabel='Disk read operations',
+        query=|||
+          sum by (database_id) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_read_ops_count{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ database_id }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+      basic.timeseries(
+        title='Disk write operations',
+        description='The Number of Writes metric indicates the number of write operations to disk.',
+        yAxisLabel='Disk write operations',
+        query=|||
+          sum by (database_id) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_write_ops_count{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ database_id }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+      basic.timeseries(
+        title='Disk storage by type',
+        description='The breakdown of instance disk usage by data types, including data, binlog, and tmp_data.',
+        yAxisLabel='Disk storage by type',
+        query=|||
+          sum by (database_id, data_type) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_bytes_used_by_data_type{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ data_type }}',
+        interval='30s',
+        intervalFactor=1,
+        format='bytes'
+      ),
+    ], cols=3, rowHeight=10, startRow=startRow + 1);
+
+    layout.titleRowWithPanels(
+      title='Disk',
+      collapse=true,
+      startRow=startRow,
+      panels=panels,
+    ),
+
   // TODO: parity with key and advanced metrics: https://cloud.google.com/sql/docs/postgres/use-system-insights#default-metrics
 
   runwayPostgresDashboard(service)::
@@ -67,5 +125,6 @@ local selectors = import 'promql/selectors.libsonnet';
       service,
       includeStandardEnvironmentAnnotations=false
     )
-    .addPanels(self.connectionPanels(serviceType=service, startRow=1000)),
+    .addPanels(self.connectionPanels(serviceType=service, startRow=1000))
+    .addPanels(self.diskPanels(serviceType=service, startRow=2000)),
 }
