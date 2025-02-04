@@ -26,8 +26,7 @@ The wait events analysis dashboard serves as a vital tool for database performan
 
 Originally, for each backend (session), Postgres exposes wait events in columns `wait_event_type` and `wait_event` in system view `pg_stat_activity` [docs](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE).
 
-These events need to be sampled for analysis. With external sampling (e.g., dashboard involved Marginalia and pg_stat_activity sampling built in https://gitlab.com/gitlab-com/runbooks/-/merge_requests/3370), the frequency of sampling is not high, cannot exceed 1/sec, thus data is not precise. With `pg_wait_sampling`, the sampling is internal, with high frequency (default: 100/second, 10ms rate), which is then exported infrequently, but has much better coverage and precision of metrics, enabling wider spectrum of performance optimization and troubleshooting works.
-
+These events need to be sampled for analysis. With external sampling (e.g., dashboard involved Marginalia and pg_stat_activity sampling built in [MR](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/3370), the frequency of sampling is not high, cannot exceed 1/sec, thus data is not precise. With `pg_wait_sampling`, the sampling is internal, with high frequency (default: 100/second, 10ms rate), which is then exported infrequently, but has much better coverage and precision of metrics, enabling wider spectrum of performance optimization and troubleshooting works.
 
 ## Dashboards to be used
 
