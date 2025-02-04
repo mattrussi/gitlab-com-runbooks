@@ -1141,6 +1141,37 @@ services:
         grafana_folder: RNfEDpLmz # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-ci-main/patroni-ci-overview
 
+  - name: patroni-sec
+    tier: db
+    friendly_name: Sec Postgres (Patroni)
+    label: PatroniSec
+    owner: database_operations
+    technical:
+      project:
+        - https://github.com/postgres/postgres
+      documents:
+        design:
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni-sec
+        developer_guide:
+        service:
+          - https://www.postgresql.org/docs/9.6/index.html
+        security: https://www.postgresql.org/support/security/
+      dependencies:
+        - service: consul
+      components:
+        - patroni
+      logging:
+        - name: Postgres
+          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c # TODO: Update when provisioned in gprd
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22 # TODO: Update when provisioned in gprd
+    observability:
+      monitors:
+        grafana_folder: RNfEDpLmz # TODO: Update when provisioned
+        primary_grafana_dashboard: patroni-main/patroni-overview
+
   - name: pingdom
     tier: inf
     friendly_name: Pingdom
