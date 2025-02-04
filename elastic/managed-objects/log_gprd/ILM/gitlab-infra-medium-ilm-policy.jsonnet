@@ -42,7 +42,7 @@
             number_of_replicas: 0,
           },
           searchable_snapshot: {
-            snapshot_repository: 'found_snapshots',
+            snapshot_repository: 'found-snapshots',
 
           },
         },
@@ -52,7 +52,7 @@
         min_age: '8d',  // min value is 1h, if you set below that, the cluster will default to 1d
         actions: {
           searchable_snapshot: {
-            snapshot_repository: 'found_snapshots',
+            snapshot_repository: 'found-snapshots',
 
           },
         },
