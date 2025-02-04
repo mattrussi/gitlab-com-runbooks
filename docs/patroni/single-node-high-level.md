@@ -5,11 +5,14 @@
 [[_TOC_]]
 
 ## Goals and methodologies
+
 In this runbook, we define how to analyze performance and general health of a single Postgres node to answer the questions quickly (within one minute):
+
 1. Is this Postgres node experiencing issues?
 2. If yes, then in which areas these issues are? (In other words, what areas are worth researching further?)
 
 We will be relying on these two methodologies:
+
 1. Wait event analysis a.k.a. Active Session History, or ASH (an analog to Performance Insights in AWS RDS or Query Insights in GCP CloudSQL).
 2. "Four Golden Signals" (see [Google SRE book](https://sre.google/sre-book/monitoring-distributed-systems/)): Latency, Traffic, Errors, Saturation with respect to a single Postgres node.
     - high level (TPS, query processing latency)
@@ -17,14 +20,17 @@ We will be relying on these two methodologies:
     - at Postgres component level (e.g., replication or WAL archiving lag)
 
 ## Dashboards to be used
+
 1. [Postgres node performance overview (high-level)](https://dashboards.gitlab.net/d/postgres-ai-node-performance-overview)
 
 Additionally, for further steps:
+
 1. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_02)
 1. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
 1. [Postgres wait events analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04)
 
 ## Analysis steps
+
 ### Step 1. Fastest check using just one panel – ASH
 
 Check the first panel "Active session history (ASH)", often, it help identify issues and directions for further research very quickly, just looking at a single chart (:warning: Although, do not skip all the further steps! It is worth to spend a minute for shallow but very wide analysis, not to miss important facts).
@@ -38,6 +44,7 @@ Check the first panel "Active session history (ASH)", often, it help identify is
 To review Wait events in more details and from various point of views, please use "Wait events analysis dashboard" (WIP).
 
 ### Step 2. From ASH down to Host stats
+
 Verify problem symptoms observed on the ASH panel by reviewing the Host Stats section:
 
 - CPU:
