@@ -64,6 +64,7 @@
 * [Credential rotation](postgresql-role-credential-rotation.md)
 * [PostgreSQL VACUUM](postgresql-vacuum.md)
 * [Postgresql](postgresql.md)
+* [Primary Database Node CPU Saturation Analysis](primary_db_node_cpu_saturation.md)
 * [How to provision the benchmark environment](provisioning_bench_env.md)
 * [Rails SQL Apdex alerts](rails-sql-apdex-slow.md)
 * [Rotating Rails' PostgreSQL password](rotating-rails-postgresql-password.md)
