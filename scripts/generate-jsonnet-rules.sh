@@ -18,6 +18,16 @@ else
   REALPATH=realpath
 fi
 
+if [[ "$(uname)" == "Darwin" ]]; then
+  if ! hash gsha256sum; then
+    echo >&2 "gsha256sum not found, please install it via: brew install coreutils"
+    exit 1
+  fi
+  SHA256SUM=gsha256sum
+else
+  SHA256SUM=sha256sum
+fi
+
 # Check that jsonnet-tool is installed
 "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
 
@@ -44,7 +54,7 @@ function render_multi_jsonnet() {
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
 
-    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"; then
+    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && $SHA256SUM --check --status <"$sha256sum_file"; then
       while read -r file; do
         mkdir -p "$(dirname "$file")"
         cp "${REPO_DIR}/.cache/$file" "$file"
@@ -86,8 +96,8 @@ function render_multi_jsonnet() {
       -J "${REPO_DIR}/metrics-catalog/" \
       -J "${REPO_DIR}/services/" \
       -J "${REPO_DIR}/vendor/" \
-      "$source_file" | xargs sha256sum >"$sha256sum_file"
-    echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
+      "$source_file" | xargs $SHA256SUM >"$sha256sum_file"
+    echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs $SHA256SUM >>"$sha256sum_file"
   fi
 }
 
