@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2002
+
 REPO_DIR="$(dirname "${BASH_SOURCE[0]}")/.."
+
+if [[ "$(uname)" == "Darwin" ]]; then
+  if ! hash gsha256sum; then
+    echo >&2 "gsha256sum not found, please install it via: brew install coreutils"
+    exit 1
+  fi
+  SHA256SUM=gsha256sum
+else
+  SHA256SUM=sha256sum
+fi
 
 function call_grafana_api() {
   local status_code
@@ -156,7 +168,7 @@ function jsonnet_compile() {
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
 
-    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"; then
+    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && $SHA256SUM --check --status <"$sha256sum_file"; then
       cat "$cache_out_file"
       return 0
     fi
@@ -179,8 +191,8 @@ function jsonnet_compile() {
 
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     echo "$out" >"$cache_out_file"
-    jsonnet-deps -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$source_file" | xargs sha256sum >"$sha256sum_file"
-    echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
+    jsonnet-deps -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$source_file" | xargs $SHA256SUM >"$sha256sum_file"
+    echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs $SHA256SUM >>"$sha256sum_file"
   fi
 }
 
