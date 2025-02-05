@@ -160,7 +160,88 @@ local selectors = import 'promql/selectors.libsonnet';
       panels=panels,
     ),
 
-  // TODO: parity with key and advanced metrics: https://cloud.google.com/sql/docs/postgres/use-system-insights#default-metrics
+  tuplePanels(serviceType, startRow)::
+    local formatConfig = {
+      selector: selectors.serializeHash({
+        environment: '$environment',
+        type: serviceType,
+      }),
+    };
+
+    local charts = [
+      basic.timeseries(
+        title='Rows fetched',
+        description='Rows fetched is the number of rows fetched as a result of queries in the instance.',
+        yAxisLabel='Rows fetched',
+        query=|||
+          sum by (database) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_tuples_fetched_count{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ database }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+      basic.timeseries(
+        title='Rows returned',
+        description='Rows returned is the number of rows scanned while processing the queries in the instance.',
+        yAxisLabel='Rows returned',
+        query=|||
+          sum by (database) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_tuples_returned_count{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ database }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+      basic.timeseries(
+        title='Rows written',
+        description='Rows written is the number of rows written in the instance while performing insert, update, and delete operations.',
+        yAxisLabel='Rows written',
+        query=|||
+          sum by (database) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_tuples_processed_count{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ database }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+      basic.timeseries(
+        title='Rows Processed by operation',
+        description='The number of rows processed per operation per second.',
+        yAxisLabel='Rows Processed by operation',
+        query=|||
+          sum by (database_id, operation_type) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_tuples_processed_count{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ operation_type }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+      basic.timeseries(
+        title='Rows in database by state',
+        description='The number of rows for each database state.',
+        yAxisLabel='Rows in database by state',
+        query=|||
+          sum by (database_id, tuple_state) (
+            stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_tuple_size{%(selector)s}
+          ) / 60
+        ||| % formatConfig,
+        legendFormat='{{ tuple_state }}',
+        interval='30s',
+        intervalFactor=1,
+      ),
+    ];
+
+    layout.titleRowWithPanels(
+      title='Tuples',
+      collapse=true,
+      startRow=startRow,
+      panels=layout.grid(charts, cols=3, rowHeight=10, startRow=startRow + 1),
+    ),
 
   runwayPostgresDashboard(service)::
     serviceDashboard.overview(
@@ -169,5 +250,6 @@ local selectors = import 'promql/selectors.libsonnet';
     )
     .addPanels(self.connectionPanels(serviceType=service, startRow=1000))
     .addPanels(self.diskPanels(serviceType=service, startRow=2000))
-    .addPanels(self.networkPanels(serviceType=service, startRow=3000)),
+    .addPanels(self.networkPanels(serviceType=service, startRow=3000))
+    .addPanels(self.tuplePanels(serviceType=service, startRow=4000)),
 }
