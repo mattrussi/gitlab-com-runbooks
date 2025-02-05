@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -62,7 +62,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -412,7 +412,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1328354732"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -464,7 +464,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1328354732"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -520,7 +520,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -576,7 +576,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -632,7 +632,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -677,7 +677,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -715,7 +715,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_error_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -766,7 +766,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_error_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -817,7 +817,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -857,7 +857,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -893,7 +893,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -943,7 +943,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -993,7 +993,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1043,7 +1043,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1093,7 +1093,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1143,7 +1143,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1193,7 +1193,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1243,7 +1243,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1297,7 +1297,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1351,7 +1351,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1405,7 +1405,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -1448,7 +1448,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -1482,7 +1482,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "18986092"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1528,7 +1528,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "18986092"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1578,7 +1578,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1628,7 +1628,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1678,7 +1678,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1717,7 +1717,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1753,7 +1753,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1803,7 +1803,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1830,7 +1830,10 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,component)
       (
+<<<<<<< HEAD
         sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_queueing",env="gstg",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}) >= 0.16667
+=======
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_queueing",env="gstg",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
@@ -1853,7 +1856,108 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_shard_apdex:ratio_1h{component="sidekiq_queueing",env="gstg",monitor="global",shard="quarantine",type="sidekiq"}
+          < (1 - 14.4 * 0.030000)
+        )
+        and on (env,environment,tier,type,stage,shard,component)
+        (
+          gitlab_component_shard_apdex:ratio_5m{component="sidekiq_queueing",env="gstg",monitor="global",shard="quarantine",type="sidekiq"}
+          < (1 - 14.4 * 0.030000)
+        )
+      )
+      and on(env,environment,tier,type,stage,shard,component)
+      (
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="sidekiq_queueing",env="gstg",monitor="global",shard="quarantine",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
+    for: 10m
+    annotations:
+      title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has an apdex violating SLO
+      description: |
+        The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
+
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3643825112"
+      grafana_variables: environment,stage,shard
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_shard_apdex:ratio_6h{component="sidekiq_queueing",env="gstg",monitor="global",shard="quarantine",type="sidekiq"}
+          < (1 - 6 * 0.030000)
+        )
+        and on (env,environment,tier,type,stage,shard,component)
+        (
+          gitlab_component_shard_apdex:ratio_30m{component="sidekiq_queueing",env="gstg",monitor="global",shard="quarantine",type="sidekiq"}
+          < (1 - 6 * 0.030000)
+        )
+      )
+      and on(env,environment,tier,type,stage,shard,component)
+      (
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_queueing",env="gstg",monitor="global",shard="quarantine",type="sidekiq"}) >= 0.16667
+>>>>>>> 18c9fdbe5 (chore: Update the alerts link to link to the new anchor)
+      )
+  - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
+    for: 10m
+    annotations:
+      title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has an apdex violating SLO
+      description: |
+        The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
+
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3643825112"
+      grafana_variables: environment,stage,shard
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1903,7 +2007,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1957,7 +2061,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -2000,7 +2104,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -2034,7 +2138,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2093896509"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2080,7 +2184,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2093896509"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2130,7 +2234,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2169,7 +2273,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

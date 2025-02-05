@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_FailedQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -72,7 +72,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_FailedQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -120,7 +120,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_Query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -157,7 +157,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_Query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -192,7 +192,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_FailedInsertQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -240,7 +240,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_FailedInsertQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -288,7 +288,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_InsertQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -325,7 +325,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(ClickHouseProfileEvents_InsertQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/clickhouse/README.md
+      runbook: docs/clickhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

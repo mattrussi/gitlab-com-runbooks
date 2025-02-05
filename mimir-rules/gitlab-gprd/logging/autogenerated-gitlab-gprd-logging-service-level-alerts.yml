@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -62,7 +62,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -98,7 +98,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -136,7 +136,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -172,7 +172,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -210,7 +210,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -246,7 +246,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_index_stats_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -284,7 +284,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_index_stats_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="logging"}[5m]), 0)
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -320,7 +320,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(fluentd_output_status_num_errors{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -369,7 +369,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(fluentd_output_status_num_errors{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -418,7 +418,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(fluentd_output_status_write_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -456,7 +456,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(fluentd_output_status_write_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -490,7 +490,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ops-prod-proxy"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -537,7 +537,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ops-prod-proxy"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -586,7 +586,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -624,7 +624,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -660,7 +660,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -698,7 +698,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -734,7 +734,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pubsubbeat_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -783,7 +783,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pubsubbeat_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -832,7 +832,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pubsubbeat_libbeat_output_events{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -870,7 +870,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pubsubbeat_libbeat_output_events{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/logging/README.md
+      runbook: docs/logging/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

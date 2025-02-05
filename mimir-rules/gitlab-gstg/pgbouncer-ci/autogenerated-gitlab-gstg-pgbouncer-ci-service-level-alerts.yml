@@ -28,7 +28,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="pgbouncer-ci"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/pgbouncer-ci/README.md
+      runbook: docs/pgbouncer-ci/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -70,7 +70,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="pgbouncer-ci"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/pgbouncer-ci/README.md
+      runbook: docs/pgbouncer-ci/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

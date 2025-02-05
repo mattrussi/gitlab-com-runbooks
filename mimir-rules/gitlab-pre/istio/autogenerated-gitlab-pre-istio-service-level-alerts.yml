@@ -25,7 +25,7 @@ groups:
             rate(pilot_proxy_convergence_time_bucket{app="istiod",environment="{{ $labels.environment }}",job="pilot",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/istio/README.md
+      runbook: docs/istio/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -75,7 +75,7 @@ groups:
             rate(pilot_proxy_convergence_time_bucket{app="istiod",environment="{{ $labels.environment }}",job="pilot",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/istio/README.md
+      runbook: docs/istio/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -122,7 +122,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sidecar_injection_failure_total{environment="{{ $labels.environment }}",job="pilot",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/istio/README.md
+      runbook: docs/istio/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -169,7 +169,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sidecar_injection_failure_total{environment="{{ $labels.environment }}",job="pilot",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/istio/README.md
+      runbook: docs/istio/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation

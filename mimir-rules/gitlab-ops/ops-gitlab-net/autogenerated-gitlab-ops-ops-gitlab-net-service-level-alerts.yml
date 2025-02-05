@@ -27,7 +27,7 @@ groups:
             rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-shell",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -79,7 +79,7 @@ groups:
             rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-shell",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -128,7 +128,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{environment="{{ $labels.environment }}",job="gitlab-shell",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -177,7 +177,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{environment="{{ $labels.environment }}",job="gitlab-shell",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -226,7 +226,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli:shell_sshd_sessions:total{environment="{{ $labels.environment }}",job="gitlab-shell",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -264,7 +264,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli:shell_sshd_sessions:total{environment="{{ $labels.environment }}",job="gitlab-shell",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -307,7 +307,7 @@ groups:
             rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -363,7 +363,7 @@ groups:
             rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -414,7 +414,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -465,7 +465,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -514,7 +514,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -552,7 +552,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -584,7 +584,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
       grafana_variables: environment,stage
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -629,7 +629,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
       grafana_variables: environment,stage
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -678,7 +678,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -727,7 +727,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -776,7 +776,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -814,7 +814,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -853,7 +853,7 @@ groups:
             rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -905,7 +905,7 @@ groups:
             rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -954,7 +954,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",le="+Inf",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -992,7 +992,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",le="+Inf",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1031,7 +1031,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-registry",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1083,7 +1083,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-registry",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1132,7 +1132,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",job="gitlab-registry",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1181,7 +1181,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",job="gitlab-registry",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1230,7 +1230,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-registry",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1268,7 +1268,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-registry",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1302,7 +1302,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1349,7 +1349,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1400,7 +1400,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1451,7 +1451,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1502,7 +1502,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1542,7 +1542,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1576,7 +1576,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1623,7 +1623,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1674,7 +1674,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1714,7 +1714,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1753,7 +1753,7 @@ groups:
             rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1805,7 +1805,7 @@ groups:
             rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1854,7 +1854,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1903,7 +1903,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1952,7 +1952,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-workhorse",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1990,7 +1990,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-workhorse",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
-      runbook: docs/ops-gitlab-net/README.md
+      runbook: docs/ops-gitlab-net/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

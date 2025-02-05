@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -62,7 +62,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -101,7 +101,7 @@ groups:
             rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="buffered_counter",type!="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -153,7 +153,7 @@ groups:
             rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="buffered_counter",type!="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -202,7 +202,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="buffered_counter",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -251,7 +251,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="buffered_counter",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -300,7 +300,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="buffered_counter",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -338,7 +338,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="buffered_counter",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -374,7 +374,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -412,7 +412,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
-      runbook: docs/redis/README.md
+      runbook: docs/redis/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

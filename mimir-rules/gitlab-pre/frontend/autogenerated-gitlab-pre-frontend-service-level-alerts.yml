@@ -22,7 +22,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend=~"canary_.*",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -69,7 +69,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend=~"canary_.*",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -116,7 +116,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend=~"canary_.*",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -152,7 +152,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend=~"canary_.*",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -186,7 +186,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -233,7 +233,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -280,7 +280,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -316,7 +316,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -350,7 +350,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend="ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -397,7 +397,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend="ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -444,7 +444,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend="ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -480,7 +480,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend="ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -514,7 +514,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend="websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -561,7 +561,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_response_errors_total{backend="websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -608,7 +608,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend="websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -644,7 +644,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(haproxy_backend_http_requests_total{backend="websockets",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="frontend"}[5m])
         )
-      runbook: docs/frontend/README.md
+      runbook: docs/frontend/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

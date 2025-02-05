@@ -20,7 +20,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -65,7 +65,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -114,7 +114,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_requests_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -163,7 +163,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_requests_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -212,7 +212,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -250,7 +250,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -282,7 +282,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -327,7 +327,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -376,7 +376,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -425,7 +425,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -474,7 +474,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_sidekiq_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -512,7 +512,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_customers_dot_sidekiq_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
-      runbook: docs/customersdot/README.md
+      runbook: docs/customersdot/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
