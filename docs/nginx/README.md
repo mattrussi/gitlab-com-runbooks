@@ -26,7 +26,6 @@
 * [monitor.gitlab.net not accessible or return 5xx errors](../monitoring/monitor-gitlab-net-not-accessible.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
-* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Managing Chef](../uncategorized/manage-chef.md)
