@@ -10,7 +10,7 @@ Users that have been provisioned can access Cloudflare directly at
 ## Instructions for Access Provisioners
 
 1. Ping `@pguinoiseau` (APAC) or `@donnaalexandra` (EMEA) or `@devin`(APAC) to add the user to the `okta-cloudflare-users` [Google group](https://groups.google.com/a/gitlab.com/g/okta-cloudflare-users/members). If they are unavailable, IT can help provision this piece. You can reach out to IT using the [#it_help](https://gitlab.enterprise.slack.com/archives/CK4EQH50E) channel or tagging `@gitlab-com/gl-security/corp/helpdesk` in the issue. 
-   1. **GitLab Dedicated:** This step is not needed for Dedicated SREs as it is granted by default in their Role Base Entitlement [template](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/blob/master/.gitlab/issue_templates/role_baseline_access_request_tasks/department_core_infrastructure/role_site_reliability_engineer_dedicated_environment_automation.md?ref_type=heads)
+   1. **GitLab Dedicated:** This step is not needed for Dedicated SREs as it is granted by default in their Role Base Entitlement [template](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/blob/master/.gitlab/issue_templates/role_baseline_access_request_tasks/department_core_infrastructure/role_site_reliability_engineer_dedicated_environment_automation.md)
 1. If the team member needs to be added to the GitLab.com Cloudflare account: (usually Production Engineering or Scalability SREs)
    1. Open a merge request adding the user to <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/cloudflare/users.tf>
       1. Assign the role based on the access request or baseline entitlements (SREs receive Administrator access as baseline).
