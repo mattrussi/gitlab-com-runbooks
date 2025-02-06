@@ -261,6 +261,9 @@ metricsCatalog.serviceDefinition({
   ) + sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
+  }) + sliLibrary.get('llm_chat_first_token').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
   }),
   capacityPlanning: {
     components: [
