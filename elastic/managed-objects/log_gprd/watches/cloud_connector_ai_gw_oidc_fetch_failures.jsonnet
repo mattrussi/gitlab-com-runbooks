@@ -1,17 +1,16 @@
-local schedule_mins = 1;  // Run this watch at this frequency, in minutes
+local schedule_mins = 5;  // Run this watch at this frequency, in minutes
 local query_period = schedule_mins + 1;  // Allow for some overlap in case there is a delay with scheduling the query; redundancy is OK
 local alert_threshold = 0;
 
 local es_query = {
   search_type: 'query_then_fetch',
   indices: [
-    'pubsub-rails-inf-gprd-*',
+    'pubsub-mlops-inf-gprd-*',
   ],
   rest_total_hits_as_int: true,
   body: {
     query: {
       bool: {
-        must: [],
         filter: [
           {
             range: {
