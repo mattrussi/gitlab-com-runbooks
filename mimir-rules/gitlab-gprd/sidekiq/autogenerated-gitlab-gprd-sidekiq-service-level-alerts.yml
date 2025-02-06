@@ -88,7 +88,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -140,7 +140,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -192,7 +192,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -248,7 +248,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -304,7 +304,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -347,7 +347,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 

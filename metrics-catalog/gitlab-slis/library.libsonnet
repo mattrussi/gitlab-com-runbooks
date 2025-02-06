@@ -163,12 +163,30 @@ local list = [
       subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
       For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within
-      20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver
+      20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver
       the response to the client.
 
       The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
       These operations do not go through the API gateway yet, but will in the future.
+    |||,
+  }),
+  sliDefinition.new({
+    name: 'llm_chat_first_token',
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    significantLabels: ['feature_category', 'service_class'],
+    featureCategory: 'duo_chat',
+    description: |||
+      These signifies Time to First Token (TTFT) for Duo Chat,
+      from when chat is first received, till we send out the first token.
+
+      A success means that we send out the first token.
+
+      An error could be that the AI-provider is not responding, or is erroring.
+
+      For the apdex, we consider it fast enough if first token is sent to user within 5 seconds.
+      This includes the time it took for the Sidekiq job to get picked up.
+      This does not include the time it took to deliver the response to the client.
     |||,
   }),
   sliDefinition.new({
