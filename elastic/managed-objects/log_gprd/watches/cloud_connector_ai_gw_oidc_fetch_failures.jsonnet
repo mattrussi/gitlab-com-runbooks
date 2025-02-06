@@ -18,33 +18,21 @@ local es_query = {
             },
           },
           {
-            match_phrase: {
-              "json.jsonPayload.logger": "cloud_connector"
+            term: {
+              "json.jsonPayload.logger.keyword": "cloud_connector"
             }
           },
           {
             bool: {
               should: [
                 {
-                  bool: {
-                    filter: [
-                      {
-                        match_phrase: {
-                          "json.jsonPayload.message.keyword": "Old JWKS re-cached: some key providers failed"
-                        }
-                      }
-                    ],
+                  term: {
+                    "json.jsonPayload.message.keyword": "Old JWKS re-cached: some key providers failed"
                   }
                 },
                 {
-                  bool: {
-                    filter: [
-                      {
-                        match_phrase: {
-                          "json.jsonPayload.message.keyword": "Incomplete JWKS cached: some key providers failed, no old cache to fall back to"
-                        }
-                      }
-                    ],
+                  term: {
+                    "json.jsonPayload.message.keyword": "Incomplete JWKS cached: some key providers failed, no old cache to fall back to"
                   }
                 }
               ],
@@ -53,7 +41,7 @@ local es_query = {
           }
         ],
       },
-    },
+    }
   },
 };
 
