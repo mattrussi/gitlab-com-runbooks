@@ -31,7 +31,6 @@
 * [../certificates/gkms.md](../certificates/gkms.md)
 * [../certificates/zendesk.md](../certificates/zendesk.md)
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
-* [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
