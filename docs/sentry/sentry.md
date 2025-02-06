@@ -4,116 +4,9 @@
 
 [TOC]
 
-## Architecture
+You can find Sentry's general documentation in the Observability team's [docs-hub](https://gitlab-com.gitlab.io/gl-infra/observability/docs-hub/platform-design/sentry/overview).
 
-Below is a simplified diagram of the Sentry installation.
-
-```mermaid
-graph TD
-app["GitLab.com (Sentry SDKs)"] ==port 80==> lb{{Nginx Ingress}}
-sentry_web ==port 5432==> postgres[("Cloud SQL (Postgres)")]
-sentry_worker ==port 5433==> postgres
-sentry_worker ==port 443==> big-table
-subgraph Sentry["Ops GKE cluster"]
-    lb --> |"port 9000"| relay
-    lb --> |"port 8080"| sentry_web["Sentry (web)"]
-    relay --> |"port 9092"| kafka
-    relay --> |"port 6379"| redis[(redis)]
-    sentry_web --> |"port 1218"| snuba
-    sentry_web --> |"port 11211"| memcached[(memcached)]
-    sentry_web --> |"port 6379"| redis
-    snuba --> kafka
-    snuba --> |"port 6379"| redis
-    snuba --> |"port 8123"| clickhouse[(clickhouse)]
-    kafka --> |"port 2181"| zookeeper1[(zookeeper)]
-    sentry_worker["Sentry (worker)"] --> |"port 11211"| memcached
-    sentry_worker --> |"port 6379"| redis
-    sentry_worker --> |"port 5672"| rabbitmq
-    clickhouse --> |"port 2181"| zookeeper2[(zookeeper)]
-end
-```
-
-## Charts
-
-The Helm chart we are using to manage the Sentry deployment is located [here](https://github.com/sentry-kubernetes/charts/tree/develop/sentry). The Helm release and its required extras can be found below:
-
-* [Sentry](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/sentry)
-* [Clickhouse](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/charts/sentry-extras/templates/clickhouse.yaml) (managed via an [operator](https://github.com/Altinity/clickhouse-operator), which uses [this chart](https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm))
-* [CloudSQL Proxy](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-sql-proxy.yaml.gotmpl) (which uses [this chart](https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy))
-* [Kafka](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/sentry/sentry-kafka)
-* [External secrets](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/secrets-values.yaml.gotmpl)
-* [Nginx ingress](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-ingress.yaml.gotmpl)
-
-The Terraform can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ops/sentry.tf#L6).
-
-## Administration
-
-### Access to Sentry
-
-Access to Sentry is granted through Okta assignment - i.e. if the user is in a group that is assigned Sentry in Okta, they can access it (see [this comment](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/23666#note_1534063888) as an example). If they don't have access, they'll see a message like _User is not assigned to this application_ after attempting to login.
-
-For teams that are requesting access, it is *highly recommended* that their team Okta group is assigned to Sentry, so that any changes in membership (e.g. people leaving/joining) are automatically synced over. This means creating an [access request](https://about.gitlab.com/handbook/business-technology/end-user-services/onboarding-access-requests/access-requests/) for IT to action as we do not have admin access to Okta.
-
-For individuals who are in teams that don't need day-to-day access to Sentry, the [`okta-sentry-member-users` Google group](https://groups.google.com/a/gitlab.com/g/okta-sentry-member-users/about) can be used to grant access. This is especially useful when we want to unblock people ASAP without having to wait on IT to action an AR. Simply add the person requesting access to the group and they should be able to access Sentry within an hour.
-
-### User roles
-
-Sentry's various roles are documented [here](https://docs.sentry.io/product/accounts/membership/).
-
-All users are provisioned as `Members` of the GitLab org in Sentry by default. This allows them to view and act on issues, as well as join or leave Sentry teams.
-
-Confusingly, Sentry's org-level `Admin` role is not the one with the most permissions (that's `Owner`, and only the `ops-contact` user has this role).
-
-There is a [`okta-sentry-admin-users`](https://groups.google.com/a/gitlab.com/g/okta-sentry-admin-users/about) Google group, intended to grant the `Admin` role to its members. However, due to some strangeness with either Sentry or Okta, the updates aren't pushed to Sentry.
-
-For the purposes of supporting Sentry (e.g. adding new projects, configuring existing ones, etc.), the `Manager` role should be enough. Since we don't have a Google group for that role, you may need to use the following workaround to assign the role to someone who needs it, e.g. a new member of the Observability team.
-
-1. Go to [this page](https://new-sentry.gitlab.net/manage/). You _should_ be prompted to re-authenticate as superuser, do so.
-1. Go to the user you want to give the new role to via the [list of members](https://new-sentry.gitlab.net/settings/gitlab/members/).
-1. If the options under `Organization Role` are greyed out, force refresh the page.
-1. Select the new role and click **Save Member**.
-
-### SRE Admin Access
-
-1. Login in to [Sentry](https://new-sentry.gitlab.net) with Okta SSO using the `Okta ops-contact` entry from 1Pass. You will need to add it to Okta Verify before you proceed (see instructions below).
-1. Select `Google Authenticator` to verify, and enter the OTP from the `Okta ops-contact` entry in 1Password (no, you don't need to actually use Google Authenticator here).
-1. At this point Sentry will prompt for 2FA. Use the OTP (or a recovery code) from the `New Sentry Ops admin login` entry in 1Password.
-1. You should now be logged into Sentry as the `ops-contact+sentry@gitlab.com` user.
-
-#### Okta Verify setup
-
-If this is your first time setting up your SRE Admin Access, follow the below steps to add it to Okta Verify:
-
-1. Open the `Okta Verify` app on your machine (on Mac this should appear as an icon in the Apple menu, located in the top-left corner of your screen).
-1. Select `Use another account`, then under New account enter `gitlab.okta.com` and click Next which should redirect to your browser.
-1. Log out of your own GitLab account, and enter the `Okta ops-contact` username and password from the `Production` vault in 1Password.
-1. Select `Google Authenticator` to verify, and enter the OTP from the `Okta ops-contact` entry in 1Password (no, you don't need to actually use Google Authenticator here).
-1. Now you should have the `ops-contact` set up on your machine!
-
-### Projects and teams
-
-The `Member` role does not allow people to create new projects or teams in Sentry, so they have to be provisioned by us manually. This gives us the opportunity to gatekeep a little. Ensure that:
-
-* There isn't already an existing project for what the user is requesting
-* Only one project is created for an application, even if it has different environments (i.e. `my-awesome-app` in `pre`, `gstg` and `gprd` does **not** need 3 different projects like `my-awesome-app-pre`, `my-awesome-app-gstg`, `my-awesome-app-gprd`...)
-* The project is assigned to the appropriate team, if the user is also requesting a new Sentry team to be created
-  * Otherwise it can go into the `gitlab` Sentry team
-
-### Data
-
-Sentry stores its data in a combination of CloudSQL running Postgresql and BigTable. The event data is stored for 30 days before deleted.
-
-## Integrations
-
-The [Slack](https://docs.sentry.io/product/integrations/notification-incidents/slack/) and [GitLab](https://docs.sentry.io/product/integrations/source-code-mgmt/gitlab/) integrations have been set up. For more details see [this issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17483).
-
-### Slack
-
-The Slack integration allows alerts to be sent to channels and interacted with from within Slack. No special permissions are required to set up a new alert - a user simply needs to go to the [Alerts](https://new-sentry.gitlab.net/organizations/gitlab/alerts/rules/) page in Sentry to set up a new alerting rule and configure it to fire into a Slack channel.
-
-### GitLab
-
-The GitLab integration allows, amongst other things, for GitLab issues to be linked to Sentry events. Currently the integration is configured to use the `gitlab-com`[https://gitlab.com/gitlab-com] and [`gitlab-org`](https://gitlab.com/gitlab-org) groups which should hopefully cover 99% of use cases. Unfortunately the downside is that when creating an issue link, the integration will need to call the GitLab.com API to list _all_ subgroups and projects under those groups, and this call times out more often than not. This is a known issue with the endpoint: see [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/427965) and [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/427966). One possible workaround would be to reconfigure the integration so it only uses specific subgroups, but the downside is users will need to get in touch with us every time they want to link events to a GitLab project that isn't already covered by the integration. (This wasn't a problem in the old Sentry instance because it used the legacy GitLab integration that only did 1:1 links between Sentry and GitLab projects.)
+# Troubleshooting
 
 ## Upgrading Sentry
 
@@ -158,8 +51,6 @@ Major upgrades usually involve database migrations.
 1. Double check that:
     * The Sentry UI shows the new version number (in the footer)
     * Running `sentry --version` in a shell on the web/worker pods should also return the new version number
-
-## Troubleshooting
 
 ### Event ingestion
 
