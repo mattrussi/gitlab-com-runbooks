@@ -30,6 +30,12 @@
               source: '$.tier',
             },
             {
+              id: 'description',
+              name: 'Description',
+              type: 'String',
+              source: '$.friendly_name',
+            },
+            {
               id: 'teams',
               name: 'Teams',
               type: 'Custom["GitlabTeam"]',
