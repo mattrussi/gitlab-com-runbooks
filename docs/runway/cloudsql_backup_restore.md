@@ -1,6 +1,5 @@
 # Restore/Backup Runway-managed CloudSQL
 
-
 ## Backup
 
 All Runway-managed CloudSQL instance will have periodic backups. These backups are tested daily
