@@ -587,6 +587,13 @@ teams:
   product_stage_group: environment_automation
   slack_channel: f_gitlab_dedicated
 
+- name: pubsec_services
+  product_stage_group: pubsec_services
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/gitlab-dedicated/us-public-sector-services/
+  manager: mckgl
+  label: "team::US PubSec"
+  slack_channel: g_dedicated-us-pubsec
+
 # Production Engineering
 
 - name: runway
