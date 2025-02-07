@@ -63,6 +63,8 @@
 * [postgres_exporter](../patroni/postgres_exporter.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
+* [SQL query analysis and optimization for Postgres](../patroni/query-analysis.md)
+* [Postgres wait events analisys](../patroni/wait-events-analisys.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
