@@ -32,7 +32,7 @@ For gitlab.com, as at September 2023, we have 11 sets of Redis instances, each h
 | Role                          | Nodes                            | Clients                                  | Sentinel?       | Persistence?                                            |
 | ----------------------------- | -------------------------------- | ---------------------------------------- | --------------- | ------------------------------------------------------- |
 | Cache for `Rails.cache`       | redis-cluster-cache-XX-YY        | Puma workers, Sidekiq workers            | No              | None                                                    |
-| Cache for Chat                | redis-cluster-chat-cache-XX-YY   | Puma workers                             | No              | None                                                    |
+| Cache for Chat ([To be decommissioned](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19221))   | redis-cluster-chat-cache-XX-YY   | Puma workers                             | No              | None                                                    |
 | Cache for Feature flag        | redis-cluster-feature-flag-XX-YY | Puma workers                             | No              | None                                                    |
 | Cache for Repository data     | redis-repository-cache-XX        | Puma workers                             | Yes (localhost) | None                                                    |
 | Sidekiq job queues            | redis-sidekiq-XX                 | Puma workers, Sidekiq workers            | Yes (localhost) | RDB dump every 900 seconds                              |
@@ -282,7 +282,7 @@ Thankfully, Prometheus/Thanos has this information already, and you can find the
 There is 1 core dashboard for redis, with a variant for each cluster:
 
 * [Cache](https://dashboards.gitlab.net/d/redis-cluster-cache-main/redis-cluster-cache-overview?orgId=1)
-* [ChatCache](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache-overview?orgId=1)
+* [ChatCache](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache-overview?orgId=1) ([To be decommissioned](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19221))
 * [DbLoadBalancing](https://dashboards.gitlab.net/d/redis-db-load-balancing-main/redis-db-load-balancing-overview?orgId=1)
 * [FeatureFlag](https://dashboards.gitlab.net/d/redis-cluster-feature-flag-main/redis-cluster-feature-flag-overview?orgId=1)
 * [Persistent/shared](https://dashboards.gitlab.net/d/redis-main/redis-overview?orgId=1)
