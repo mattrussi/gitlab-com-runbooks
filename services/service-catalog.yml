@@ -2012,7 +2012,7 @@ services:
     tier: sv
     friendly_name: version.gitlab.com
     label: Version
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com
@@ -2062,7 +2062,7 @@ services:
     tier: sv
     friendly_name: design.gitlab.com
     label: Design
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com
@@ -2119,7 +2119,7 @@ services:
     tier: sv
     friendly_name: CI Runners
     label: CI Runners
-    owner: reliability_ops
+    owner: ops
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -2274,7 +2274,7 @@ services:
     tier: sv
     friendly_name: Woodhouse
     label: Woodhouse
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse
@@ -2298,7 +2298,7 @@ services:
     tier: sv
     friendly_name: Woodhouse Slack bot
     label: WoodhouseSlack
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse
