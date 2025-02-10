@@ -1,6 +1,6 @@
 # Restore/Backup Runway-managed Cloud SQL
 
-This document is meant for (1) disaster-recovery purposes or (2) change management issues with high risk of data corruption/loss (e.g. snapshot migration from an external Cloud SQL instance). 
+This document is meant for (1) disaster-recovery purposes or (2) change management issues with high risk of data corruption/loss (e.g. snapshot migration from an external Cloud SQL instance).
 
 ## Backup
 
