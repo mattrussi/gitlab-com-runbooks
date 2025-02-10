@@ -3,7 +3,7 @@
 ## Backup
 
 All Runway-managed Cloud SQL instances will have periodic backups. These backups are tested daily
-through restore and data validation jobs.
+through [restore and data validation jobs](https://docs.runway.gitlab.com/managed_services/cloudsql/#restore-validation-1).
 
 Service owners may want to manually create a backup before performing a critical data migration.
 They may do so using a change management issue and enlisting the help from SREs.
@@ -11,7 +11,7 @@ They may do so using a change management issue and enlisting the help from SREs.
 [Creating manual backup](https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up#on-demand)
 
 ```
-gcloud sql backups create --async --project PROJECT_NAME --instance=INSTANCE_NAME
+gcloud sql backups create --async --project PROJECT_NAME --instance=INSTANCE_NAME --description="<insert description here>"
 ```
 
 [Listing existing backups](https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up#viewbackups)
