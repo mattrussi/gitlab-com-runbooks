@@ -14,6 +14,9 @@
 
 * [gcp](https://cloudlogging.app.goo.gl/yUkd8JGYdPJUcNyq9)
 
+## Troubleshooting Pointers
+
+* [Cloud SQL Restore Pipeline Troubleshooting](../runway/cloudsql_restore_pipeline_troubleshooting.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
