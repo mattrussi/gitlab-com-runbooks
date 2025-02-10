@@ -194,6 +194,9 @@ metricsCatalog.serviceDefinition({
     serviceAggregation: false,
     severity: 's4',
     emittedBy: ['sidekiq'],
+  }) + sliLibrary.get('llm_chat_first_token').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
   }),
 
   capacityPlanning: {
