@@ -17,7 +17,7 @@
 ## Troubleshooting Pointers
 
 * [Disaster Recovery Gameday Schedule](../disaster-recovery/gameday-schedule.md)
-* [Restore/Backup Runway-managed CloudSQL](cloudsql_backup_restore.md)
+* [Restore/Backup Runway-managed Cloud SQL](cloudsql_backup_restore.md)
 * [Privileged Access Management](privileged_access_management.md)
 * [Breakglass](../topology-rest/breakglass.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)

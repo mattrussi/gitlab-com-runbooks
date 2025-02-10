@@ -1,8 +1,8 @@
-# Restore/Backup Runway-managed CloudSQL
+# Restore/Backup Runway-managed Cloud SQL
 
 ## Backup
 
-All Runway-managed CloudSQL instance will have periodic backups. These backups are tested daily
+All Runway-managed Cloud SQL instances will have periodic backups. These backups are tested daily
 through restore and data validation jobs.
 
 Service owners may want to manually create a backup before performing a critical data migration.
