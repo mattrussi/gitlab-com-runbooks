@@ -473,6 +473,7 @@ teams:
   product_stage_group: ops
   slack_channel: g_production-engineering_ops
   send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: g_production-engineering_ops
   alerts:
   - ops
 
