@@ -18,6 +18,7 @@ basic.dashboard(
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
+  defaultDatasource='mimir-gitlab-ops',
 )
 
 .addPanels(
