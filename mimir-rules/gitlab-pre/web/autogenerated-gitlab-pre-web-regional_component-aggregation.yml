@@ -372,7 +372,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m{env="pre",job="gitlab-rails",type="web"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m{env="pre",job="gitlab-rails",request_rejected="false",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:weight:score_5m
     labels:
@@ -382,7 +382,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_5m{env="pre",job="gitlab-rails",type="web"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_5m{env="pre",job="gitlab-rails",request_rejected="false",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -971,7 +971,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m{env="pre",job="gitlab-rails",type="web"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m{env="pre",job="gitlab-rails",request_rejected="false",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:weight:score_30m
     labels:
@@ -981,7 +981,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_30m{env="pre",job="gitlab-rails",type="web"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_30m{env="pre",job="gitlab-rails",request_rejected="false",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -1570,7 +1570,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h{env="pre",job="gitlab-rails",type="web"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h{env="pre",job="gitlab-rails",request_rejected="false",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:weight:score_1h
     labels:
@@ -1580,7 +1580,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_1h{env="pre",job="gitlab-rails",type="web"} offset 30s
+        sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_1h{env="pre",job="gitlab-rails",request_rejected="false",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:

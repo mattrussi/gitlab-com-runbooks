@@ -54,7 +54,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_path_traversal_check_request_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"web"}[5m] offset 30s)
+        rate(gitlab_sli_path_traversal_check_request_apdex_success_total{env="gstg",job=~"gitlab-rails",request_rejected=~"false",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_5m
     expr: |
@@ -140,7 +140,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_path_traversal_check_request_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"web"}[30m] offset 30s)
+        rate(gitlab_sli_path_traversal_check_request_apdex_success_total{env="gstg",job=~"gitlab-rails",request_rejected=~"false",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_30m
     expr: |
@@ -226,7 +226,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_path_traversal_check_request_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"web"}[1h] offset 30s)
+        rate(gitlab_sli_path_traversal_check_request_apdex_success_total{env="gstg",job=~"gitlab-rails",request_rejected=~"false",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_total:rate_1h
     expr: |

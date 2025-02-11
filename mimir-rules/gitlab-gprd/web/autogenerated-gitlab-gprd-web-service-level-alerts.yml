@@ -2106,11 +2106,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2154,11 +2152,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2202,11 +2198,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2252,11 +2246,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2302,11 +2294,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2354,11 +2344,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
@@ -2406,11 +2394,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2460,11 +2446,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2514,11 +2498,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-main/web-overview
@@ -2553,11 +2535,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -2594,11 +2574,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -2635,11 +2613,9 @@ groups:
       title: The middleware_path_traversal SLI of the web service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests because of suspected path traversal or the middleware execution time apdex is below 90%. We either have a larger amount of path traversal attempts than usual or we are incorrectly rejecting valid web requests. Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare. If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
