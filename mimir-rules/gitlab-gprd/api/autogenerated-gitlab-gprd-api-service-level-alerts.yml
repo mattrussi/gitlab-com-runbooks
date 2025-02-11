@@ -1334,7 +1334,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "772575558"
       grafana_variables: environment,stage
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1384,7 +1384,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "772575558"
       grafana_variables: environment,stage
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1436,7 +1436,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "772575558"
       grafana_variables: environment,stage
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1488,7 +1488,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "772575558"
       grafana_variables: environment,stage
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1542,7 +1542,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_chat_first_token_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1596,7 +1596,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_chat_first_token_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1652,7 +1652,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_llm_chat_first_token_error_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1708,7 +1708,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_llm_chat_first_token_error_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1762,7 +1762,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_chat_first_token_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1805,7 +1805,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_chat_first_token_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1848,7 +1848,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_llm_chat_first_token_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1893,7 +1893,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_llm_chat_first_token_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/api/README.md
+      runbook: docs/api/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
