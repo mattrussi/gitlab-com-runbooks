@@ -159,14 +159,28 @@ There is also another secret engine named `cubbyhole`, this is a temporary secre
 
 #### Structure
 
-CI secrets are available under the following paths:
+For basic CI pipelines, store secrets in the following path:
+
+```
+ci/<gitlab-instance>/<project-full-path>/shared/...
+```
+
+This applies to
+
+* pipelines without any environments defined, or
+* secrets shared across all environments in a pipeline.
+
+More elaborate cases include the use of environments and protected branches/environments in CI.
+Use the following paths to separate secrets accordingly:
 
 * `ci/<gitlab-instance>/<project-full-path>/<environment>/...`: to be used for secrets scoped to an environment (when the `environment` attribute is set for a CI job), which are only accessible for this particular environment and none other;
-* `ci/<gitlab-instance>/<project-full-path>/shared/...`: to be used for secrets shared for all environments or when no environments are defined in the pipeline;
 * `ci/<gitlab-instance>/<project-full-path>/protected/<environment>/...`: to be used for protected secrets scoped to an environment, this path is only readable from CI jobs running for protected branches/environments;
 * `ci/<gitlab-instance>/<project-full-path>/protected/shared/...`: to be used for protected secrets shared for all environments or when no environments are defined in the pipeline, this path is only readable from CI jobs running for protected branches/environments.
-* `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
+
+Secrets can also be written to Vault from a CI pipeline:
+
 * `ci/<gitlab-instance>/<project-full-path>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches.
+* `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
 
 Project access tokens generated and managed via [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt) are stored under `ci/access_tokens/<gitlab-instance>/<project-full-path>/`
 
