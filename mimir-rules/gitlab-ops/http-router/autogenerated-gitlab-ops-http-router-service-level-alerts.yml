@@ -28,7 +28,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_worker_errors_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/http-router/README.md
+      runbook: docs/http-router/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -81,7 +81,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_worker_errors_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/http-router/README.md
+      runbook: docs/http-router/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -134,7 +134,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_worker_requests_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/http-router/README.md
+      runbook: docs/http-router/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -176,7 +176,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_worker_requests_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/http-router/README.md
+      runbook: docs/http-router/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

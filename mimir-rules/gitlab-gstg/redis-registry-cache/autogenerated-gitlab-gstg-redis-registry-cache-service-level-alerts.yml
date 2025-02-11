@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-registry-cache"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -62,7 +62,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-registry-cache"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -101,7 +101,7 @@ groups:
             rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -152,7 +152,7 @@ groups:
             rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -200,7 +200,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -248,7 +248,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -296,7 +296,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -333,7 +333,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -368,7 +368,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-registry-cache"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -406,7 +406,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-registry-cache"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
-      runbook: docs/redis-registry-cache/README.md
+      runbook: docs/redis-registry-cache/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

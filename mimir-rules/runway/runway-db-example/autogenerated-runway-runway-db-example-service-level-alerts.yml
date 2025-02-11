@@ -22,7 +22,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback",type="runway-db-example"}[5m])
         )
-      runbook: docs/runway-db-example/README.md
+      runbook: docs/runway-db-example/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -68,7 +68,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback",type="runway-db-example"}[5m])
         )
-      runbook: docs/runway-db-example/README.md
+      runbook: docs/runway-db-example/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -114,7 +114,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="runway-db-example"}[5m])
         )
-      runbook: docs/runway-db-example/README.md
+      runbook: docs/runway-db-example/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -149,7 +149,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="runway-db-example"}[5m])
         )
-      runbook: docs/runway-db-example/README.md
+      runbook: docs/runway-db-example/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

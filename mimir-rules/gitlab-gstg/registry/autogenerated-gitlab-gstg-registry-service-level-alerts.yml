@@ -27,7 +27,7 @@ groups:
             rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -79,7 +79,7 @@ groups:
             rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -133,7 +133,7 @@ groups:
             rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -187,7 +187,7 @@ groups:
             rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -236,7 +236,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -274,7 +274,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -312,7 +312,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_database_queries_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -352,7 +352,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_database_queries_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -391,7 +391,7 @@ groups:
             rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -442,7 +442,7 @@ groups:
             rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -495,7 +495,7 @@ groups:
             rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -548,7 +548,7 @@ groups:
             rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -596,7 +596,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -644,7 +644,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -694,7 +694,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -744,7 +744,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -792,7 +792,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -829,7 +829,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -866,7 +866,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -905,7 +905,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_gc_runs_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -936,7 +936,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -981,7 +981,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1028,7 +1028,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1075,7 +1075,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1120,7 +1120,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1154,7 +1154,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1188,7 +1188,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1224,7 +1224,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1263,7 +1263,7 @@ groups:
             rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1315,7 +1315,7 @@ groups:
             rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1369,7 +1369,7 @@ groups:
             rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1423,7 +1423,7 @@ groups:
             rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1472,7 +1472,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1521,7 +1521,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1572,7 +1572,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1623,7 +1623,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1672,7 +1672,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1710,7 +1710,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1748,7 +1748,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1788,7 +1788,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1822,7 +1822,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1869,7 +1869,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1918,7 +1918,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1967,7 +1967,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2014,7 +2014,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2050,7 +2050,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2086,7 +2086,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2124,7 +2124,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2163,7 +2163,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2215,7 +2215,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2269,7 +2269,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2323,7 +2323,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2372,7 +2372,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2421,7 +2421,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2472,7 +2472,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2523,7 +2523,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2572,7 +2572,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2610,7 +2610,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2648,7 +2648,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2688,7 +2688,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2729,7 +2729,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2783,7 +2783,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2839,7 +2839,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2895,7 +2895,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2946,7 +2946,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2986,7 +2986,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -3027,7 +3027,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -3070,7 +3070,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -3113,7 +3113,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3169,7 +3169,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3227,7 +3227,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3285,7 +3285,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3341,7 +3341,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3397,7 +3397,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3455,7 +3455,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3513,7 +3513,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3566,7 +3566,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -3608,7 +3608,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -3651,7 +3651,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -3696,7 +3696,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -3735,7 +3735,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3787,7 +3787,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3841,7 +3841,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3895,7 +3895,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3944,7 +3944,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -3982,7 +3982,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -4020,7 +4020,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -4060,7 +4060,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -4103,7 +4103,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4159,7 +4159,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4217,7 +4217,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4275,7 +4275,7 @@ groups:
             rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4328,7 +4328,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -4370,7 +4370,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -4412,7 +4412,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -4456,7 +4456,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/registry/README.md
+      runbook: docs/registry/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation

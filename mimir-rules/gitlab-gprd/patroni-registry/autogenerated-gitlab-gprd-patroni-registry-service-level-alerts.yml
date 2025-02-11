@@ -27,7 +27,7 @@ groups:
             rate(registry_database_lb_lookup_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -78,7 +78,7 @@ groups:
             rate(registry_database_lb_lookup_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -126,7 +126,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_database_lb_lookup_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -163,7 +163,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(registry_database_lb_lookup_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -200,7 +200,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m])
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -251,7 +251,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m])
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -304,7 +304,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -346,7 +346,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -382,7 +382,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 0)
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -431,7 +431,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 0)
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -482,7 +482,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "1", "", "")
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -522,7 +522,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "1", "", "")
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -558,7 +558,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 1)
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -607,7 +607,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 1)
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -658,7 +658,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "1", "", "")
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -698,7 +698,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-registry"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "1", "", "")
         )
-      runbook: docs/patroni-registry/README.md
+      runbook: docs/patroni-registry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

@@ -27,7 +27,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2925052761"
       grafana_variables: environment,stage,shard
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -79,7 +79,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2925052761"
       grafana_variables: environment,stage,shard
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -135,7 +135,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -191,7 +191,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -247,7 +247,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -292,7 +292,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -324,7 +324,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -369,7 +369,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -414,7 +414,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -448,7 +448,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -486,7 +486,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",route="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -537,7 +537,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",route="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -588,7 +588,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",route="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -628,7 +628,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",route="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -664,7 +664,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2211350843"
       grafana_variables: environment,stage
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -712,7 +712,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2211350843"
       grafana_variables: environment,stage
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -764,7 +764,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="qa-runners",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -816,7 +816,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="qa-runners",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -868,7 +868,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="qa-runners",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -909,7 +909,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="qa-runners",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -949,7 +949,7 @@ groups:
             rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1004,7 +1004,7 @@ groups:
             rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1056,7 +1056,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_ci_queue_retrieval_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1097,7 +1097,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_ci_queue_retrieval_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1134,7 +1134,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1183,7 +1183,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1232,7 +1232,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1270,7 +1270,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",stage="{{ $labels.stage }}",type="ci-runners"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1306,7 +1306,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(job_trace_archive_failed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1355,7 +1355,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(job_trace_archive_failed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1404,7 +1404,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1442,7 +1442,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}[5m])
         )
-      runbook: docs/ci-runners/README.md
+      runbook: docs/ci-runners/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

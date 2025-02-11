@@ -30,7 +30,7 @@ groups:
             )
           )
         )
-      runbook: docs/nat/README.md
+      runbook: docs/nat/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -74,7 +74,7 @@ groups:
             )
           )
         )
-      runbook: docs/nat/README.md
+      runbook: docs/nat/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -116,7 +116,7 @@ groups:
             )
           )
         )
-      runbook: docs/nat/README.md
+      runbook: docs/nat/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -160,7 +160,7 @@ groups:
             )
           )
         )
-      runbook: docs/nat/README.md
+      runbook: docs/nat/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
