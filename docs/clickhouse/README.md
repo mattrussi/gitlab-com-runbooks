@@ -91,4 +91,10 @@ A dashboard for monitoring and alerting performance metrics has been configured 
 
 Alerting has been configured through Runbooks to alert into Slack channel `#f_clickhouse_infra_alerts`
 
+## Falling back to PostgreSQL
+
+Contribution Analytics was originally implemented using PostgreSQL, which performed poorly. ClickHouse-based implementation provides a much better performance.
+
+In case of an outage in ClickHouse cloud services, we can switch back to PostgreSQL by following the administration steps describe in [the handbook](https://docs.gitlab.com/ee/administration/analytics.html).
+
 <!-- ## Links to further Documentation -->
