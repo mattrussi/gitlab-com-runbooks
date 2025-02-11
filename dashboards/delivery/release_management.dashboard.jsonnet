@@ -40,13 +40,6 @@ local environments = [
     stage: 'cny',
     icon: '🐣',
   },
-  {
-    id: 'gstg-ref',
-    name: 'Staging Ref',
-    role: 'gstg-ref',
-    stage: 'main',
-    icon: '🚧',
-  },
 ];
 
 local annotations = [
