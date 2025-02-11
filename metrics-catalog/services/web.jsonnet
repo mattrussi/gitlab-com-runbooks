@@ -223,12 +223,14 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       description: |||
-        Measures calls of the path traversal middleware as rejected web requests vs all web requests.
+        An alert here may indicate that we're rejecting more than 0.01% of requests
+        because of suspected path traversal or the middleware execution time apdex is below 90%.
+        We either have a larger amount of path traversal attempts than usual or we are
+        incorrectly rejecting valid web requests.
+        Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
 
-        An alert here may indicate that the middleware is rejecting more web request than usual.
-
-        The apdex alert is based on the execution time threshold of `1ms`. Slower executions may indicate
-        a symptom of a root cause external to the middleware.
+        If the requests are validly being blocked, please block the requests in Cloudflare.
+        If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
       |||,
 
       requestRate: rateMetric(
@@ -244,7 +246,7 @@ metricsCatalog.serviceDefinition({
       apdex: successCounterApdex(
         successRateMetric='gitlab_sli_path_traversal_check_request_apdex_success_total',
         operationRateMetric='gitlab_sli_path_traversal_check_request_apdex_total',
-        selector=railsSelector,
+        selector=railsSelector { request_rejected: 'false' },
       ),
 
       significantLabels: ['request_rejected'],
