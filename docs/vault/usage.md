@@ -177,7 +177,7 @@ Use the following paths to separate secrets accordingly:
 * `ci/<gitlab-instance>/<project-full-path>/protected/<environment>/...`: to be used for protected secrets scoped to an environment, this path is only readable from CI jobs running for protected branches/environments;
 * `ci/<gitlab-instance>/<project-full-path>/protected/shared/...`: to be used for protected secrets shared for all environments or when no environments are defined in the pipeline, this path is only readable from CI jobs running for protected branches/environments.
 
-Secrets can also be written to Vault from a CI pipeline.
+Secrets can also be written to Vault from a CI pipeline:
 
 * `ci/<gitlab-instance>/<project-full-path>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches.
 * `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
