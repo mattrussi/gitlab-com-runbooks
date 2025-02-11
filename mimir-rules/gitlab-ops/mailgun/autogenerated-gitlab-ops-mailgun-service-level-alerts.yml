@@ -22,7 +22,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(mailgun_delivery_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/mailgun/README.md
+      runbook: docs/mailgun/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -68,7 +68,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(mailgun_delivery_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/mailgun/README.md
+      runbook: docs/mailgun/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -114,7 +114,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(mailgun_delivery_accepted_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/mailgun/README.md
+      runbook: docs/mailgun/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -149,7 +149,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(mailgun_delivery_accepted_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/mailgun/README.md
+      runbook: docs/mailgun/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

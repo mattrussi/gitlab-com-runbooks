@@ -31,7 +31,7 @@ groups:
             rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -87,7 +87,7 @@ groups:
             rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -146,7 +146,7 @@ groups:
             rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component_node
       alert_class: slo_violation
@@ -205,7 +205,7 @@ groups:
             rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component_node
       alert_class: slo_violation
@@ -256,7 +256,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -307,7 +307,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -361,7 +361,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component_node
       alert_class: slo_violation
@@ -415,7 +415,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component_node
       alert_class: slo_violation
@@ -464,7 +464,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -502,7 +502,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -541,7 +541,7 @@ groups:
         sum by (env,environment,tier,stage,shard,fqdn) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component_node
       alert_class: traffic_cessation
@@ -582,7 +582,7 @@ groups:
         sum by (env,environment,tier,stage,shard,fqdn) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
-      runbook: docs/gitaly/README.md
+      runbook: docs/gitaly/README.md#alerts
     labels:
       aggregation: component_node
       alert_class: traffic_cessation

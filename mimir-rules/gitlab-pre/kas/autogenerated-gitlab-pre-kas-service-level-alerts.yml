@@ -22,7 +22,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_expiring_hash_api_gc_deleted_keys_count_total{environment="{{ $labels.environment }}",expiring_hash_name=~"^listener_conns_",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -69,7 +69,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_expiring_hash_api_gc_deleted_keys_count_total{environment="{{ $labels.environment }}",expiring_hash_name=~"^listener_conns_",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -116,7 +116,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(accepted_connections_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -152,7 +152,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(accepted_connections_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -189,7 +189,7 @@ groups:
             rate(tunnel_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
           )
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -239,7 +239,7 @@ groups:
             rate(tunnel_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
           )
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -286,7 +286,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -333,7 +333,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -380,7 +380,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(grpc_server_handled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -416,7 +416,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(grpc_server_handled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
-      runbook: docs/kas/README.md
+      runbook: docs/kas/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
