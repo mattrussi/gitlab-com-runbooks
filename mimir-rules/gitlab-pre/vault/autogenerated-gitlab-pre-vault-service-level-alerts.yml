@@ -25,7 +25,7 @@ groups:
             rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",environment="{{ $labels.environment }}",source_workload="istio-internal-gateway",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -75,7 +75,7 @@ groups:
             rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",environment="{{ $labels.environment }}",source_workload="istio-internal-gateway",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -122,7 +122,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(istio_requests_total{destination_workload="vault",environment="{{ $labels.environment }}",response_code=~"^5.*",source_workload="istio-internal-gateway",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -169,7 +169,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(istio_requests_total{destination_workload="vault",environment="{{ $labels.environment }}",response_code=~"^5.*",source_workload="istio-internal-gateway",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -219,7 +219,7 @@ groups:
             rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",environment="{{ $labels.environment }}",source_workload="istio-gateway",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -269,7 +269,7 @@ groups:
             rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",environment="{{ $labels.environment }}",source_workload="istio-gateway",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -316,7 +316,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(istio_requests_total{destination_workload="vault",environment="{{ $labels.environment }}",response_code=~"^5.*",source_workload="istio-gateway",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -363,7 +363,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(istio_requests_total{destination_workload="vault",environment="{{ $labels.environment }}",response_code=~"^5.*",source_workload="istio-gateway",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -412,7 +412,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(vault_audit_log_request_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -461,7 +461,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(vault_audit_log_request_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -510,7 +510,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(vault_audit_log_response_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -559,7 +559,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(vault_audit_log_response_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -606,7 +606,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -653,7 +653,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m])
         )
-      runbook: docs/vault/README.md
+      runbook: docs/vault/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation

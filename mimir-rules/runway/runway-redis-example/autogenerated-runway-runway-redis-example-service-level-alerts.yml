@@ -27,7 +27,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           avg_over_time(stackdriver_redis_instance_redis_googleapis_com_commands_calls{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="runway-redis-example"}[5m]) / 60
         )
-      runbook: docs/runway-redis-example/README.md
+      runbook: docs/runway-redis-example/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -67,7 +67,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           avg_over_time(stackdriver_redis_instance_redis_googleapis_com_commands_calls{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="runway-redis-example"}[5m]) / 60
         )
-      runbook: docs/runway-redis-example/README.md
+      runbook: docs/runway-redis-example/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation

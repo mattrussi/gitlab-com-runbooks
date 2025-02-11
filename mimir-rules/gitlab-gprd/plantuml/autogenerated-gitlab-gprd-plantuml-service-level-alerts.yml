@@ -22,7 +22,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
         )
-      runbook: docs/plantuml/README.md
+      runbook: docs/plantuml/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -69,7 +69,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
         )
-      runbook: docs/plantuml/README.md
+      runbook: docs/plantuml/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -116,7 +116,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
         )
-      runbook: docs/plantuml/README.md
+      runbook: docs/plantuml/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -152,7 +152,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
         )
-      runbook: docs/plantuml/README.md
+      runbook: docs/plantuml/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

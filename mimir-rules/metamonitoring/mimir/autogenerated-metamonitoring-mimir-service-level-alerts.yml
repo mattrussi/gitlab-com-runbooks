@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_compactor_group_compactions_failures_total{environment="{{ $labels.environment }}",job="mimir/compactor",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -73,7 +73,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_compactor_group_compactions_failures_total{environment="{{ $labels.environment }}",job="mimir/compactor",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -122,7 +122,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_compactor_group_compaction_runs_started_total{environment="{{ $labels.environment }}",job="mimir/compactor",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -160,7 +160,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_compactor_group_compaction_runs_started_total{environment="{{ $labels.environment }}",job="mimir/compactor",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -199,7 +199,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/distributor",namespace="mimir",route=~"/distributor\\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -252,7 +252,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/distributor",namespace="mimir",route=~"/distributor\\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -302,7 +302,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/distributor",namespace="mimir",route=~"/distributor\\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -352,7 +352,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/distributor",namespace="mimir",route=~"/distributor\\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -402,7 +402,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/distributor",namespace="mimir",route=~"/distributor\\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -441,7 +441,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/distributor",namespace="mimir",route=~"/distributor\\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -481,7 +481,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/ingester",namespace="mimir",route="/cortex.Ingester/Push",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -534,7 +534,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/ingester",namespace="mimir",route="/cortex.Ingester/Push",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -584,7 +584,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/ingester",namespace="mimir",route="/cortex.Ingester/Push",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -634,7 +634,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/ingester",namespace="mimir",route="/cortex.Ingester/Push",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -684,7 +684,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/ingester",namespace="mimir",route="/cortex.Ingester/Push",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -723,7 +723,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/ingester",namespace="mimir",route="/cortex.Ingester/Push",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -763,7 +763,7 @@ groups:
             rate(cortex_querier_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/querier",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -815,7 +815,7 @@ groups:
             rate(cortex_querier_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/querier",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -864,7 +864,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_querier_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/querier",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -913,7 +913,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_querier_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/querier",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -962,7 +962,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_querier_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/querier",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1000,7 +1000,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_querier_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/querier",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1039,7 +1039,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/query-frontend",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1092,7 +1092,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/query-frontend",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1142,7 +1142,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-frontend",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1192,7 +1192,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-frontend",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1242,7 +1242,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-frontend",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1281,7 +1281,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-frontend",namespace="mimir",route=~"prometheus_(api|prom)_v1_.+",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1321,7 +1321,7 @@ groups:
             rate(cortex_query_scheduler_queue_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/query-scheduler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1374,7 +1374,7 @@ groups:
             rate(cortex_query_scheduler_queue_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/query-scheduler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1424,7 +1424,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_query_scheduler_queue_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-scheduler",namespace="mimir",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1474,7 +1474,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_query_scheduler_queue_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-scheduler",namespace="mimir",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1524,7 +1524,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_query_scheduler_queue_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-scheduler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1563,7 +1563,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_query_scheduler_queue_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/query-scheduler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1600,7 +1600,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job="mimir/ruler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1650,7 +1650,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job="mimir/ruler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1700,7 +1700,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_prometheus_rule_evaluations_total{environment="{{ $labels.environment }}",job="mimir/ruler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1739,7 +1739,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_prometheus_rule_evaluations_total{environment="{{ $labels.environment }}",job="mimir/ruler",namespace="mimir",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1779,7 +1779,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb\\.StoreGateway/.*",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1832,7 +1832,7 @@ groups:
             rate(cortex_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb\\.StoreGateway/.*",stage="{{ $labels.stage }}",type="mimir"}[5m])
           )
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1882,7 +1882,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb\\.StoreGateway/.*",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1932,7 +1932,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb\\.StoreGateway/.*",stage="{{ $labels.stage }}",status_code=~"^5.*",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1982,7 +1982,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb\\.StoreGateway/.*",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2021,7 +2021,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cortex_request_duration_seconds_count{environment="{{ $labels.environment }}",job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb\\.StoreGateway/.*",stage="{{ $labels.stage }}",type="mimir"}[5m])
         )
-      runbook: docs/mimir/README.md
+      runbook: docs/mimir/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

@@ -27,7 +27,7 @@ groups:
             rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
           )
         )
-      runbook: docs/tracing/README.md
+      runbook: docs/tracing/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -78,7 +78,7 @@ groups:
             rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
           )
         )
-      runbook: docs/tracing/README.md
+      runbook: docs/tracing/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -126,7 +126,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(traefik_service_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
-      runbook: docs/tracing/README.md
+      runbook: docs/tracing/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -174,7 +174,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(traefik_service_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
-      runbook: docs/tracing/README.md
+      runbook: docs/tracing/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -222,7 +222,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(traefik_service_requests_total{environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
-      runbook: docs/tracing/README.md
+      runbook: docs/tracing/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -259,7 +259,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(traefik_service_requests_total{environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
-      runbook: docs/tracing/README.md
+      runbook: docs/tracing/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

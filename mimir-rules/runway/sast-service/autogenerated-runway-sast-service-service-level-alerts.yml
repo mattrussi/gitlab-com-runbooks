@@ -27,7 +27,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m])
           )
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -79,7 +79,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m])
           )
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -133,7 +133,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m])
           )
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -187,7 +187,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m])
           )
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -236,7 +236,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -285,7 +285,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -336,7 +336,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -387,7 +387,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -436,7 +436,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -474,7 +474,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -512,7 +512,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -552,7 +552,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="sast-service"}[5m]) / 60
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -588,7 +588,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -637,7 +637,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -688,7 +688,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -739,7 +739,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -788,7 +788,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -826,7 +826,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -864,7 +864,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -904,7 +904,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="sast-service-url-map"}[5m])
         )
-      runbook: docs/sast-service/README.md
+      runbook: docs/sast-service/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation

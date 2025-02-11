@@ -22,7 +22,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1142257756"
       grafana_variables: environment,stage
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -68,7 +68,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1142257756"
       grafana_variables: environment,stage
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -118,7 +118,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_db_transaction_apdex_total{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -157,7 +157,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_db_transaction_apdex_total{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -194,7 +194,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -245,7 +245,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -298,7 +298,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -340,7 +340,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -379,7 +379,7 @@ groups:
             rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -431,7 +431,7 @@ groups:
             rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -480,7 +480,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -518,7 +518,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -557,7 +557,7 @@ groups:
             rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -609,7 +609,7 @@ groups:
             rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -658,7 +658,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -696,7 +696,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -732,7 +732,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 0)
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -781,7 +781,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 0)
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -832,7 +832,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "1", "", "")
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -872,7 +872,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "1", "", "")
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -908,7 +908,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 1)
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -957,7 +957,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 1)
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1008,7 +1008,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "1", "", "")
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1048,7 +1048,7 @@ groups:
           or
           label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "1", "", "")
         )
-      runbook: docs/patroni/README.md
+      runbook: docs/patroni/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

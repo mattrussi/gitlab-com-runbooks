@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(memcached_commands_total{environment="{{ $labels.environment }}",job="sentry-memcached-metrics",stage="{{ $labels.stage }}",status="badval"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -72,7 +72,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(memcached_commands_total{environment="{{ $labels.environment }}",job="sentry-memcached-metrics",stage="{{ $labels.stage }}",status="badval"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -120,7 +120,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(memcached_commands_total{environment="{{ $labels.environment }}",job="sentry-memcached-metrics",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -157,7 +157,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(memcached_commands_total{environment="{{ $labels.environment }}",job="sentry-memcached-metrics",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -192,7 +192,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id="gitlab-ops:sentry-63",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -240,7 +240,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id="gitlab-ops:sentry-63",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -288,7 +288,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id="gitlab-ops:sentry-63",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -325,7 +325,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id="gitlab-ops:sentry-63",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -360,7 +360,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(rabbitmq_global_messages_unroutable_returned_total{environment="{{ $labels.environment }}",job="sentry-rabbitmq",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -408,7 +408,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(rabbitmq_global_messages_unroutable_returned_total{environment="{{ $labels.environment }}",job="sentry-rabbitmq",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -456,7 +456,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(rabbitmq_global_messages_acknowledged_total{environment="{{ $labels.environment }}",job="sentry-rabbitmq",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -493,7 +493,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(rabbitmq_global_messages_acknowledged_total{environment="{{ $labels.environment }}",job="sentry-rabbitmq",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -528,7 +528,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -566,7 +566,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -602,7 +602,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -640,7 +640,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -679,7 +679,7 @@ groups:
             rate(sentry_jobs_duration{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -731,7 +731,7 @@ groups:
             rate(sentry_jobs_duration{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -780,7 +780,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sentry_events_failed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -829,7 +829,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sentry_events_failed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -878,7 +878,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sentry_events_processed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -916,7 +916,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sentry_events_processed{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -955,7 +955,7 @@ groups:
             rate(nginx_ingress_controller_request_duration_seconds_bucket{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1007,7 +1007,7 @@ groups:
             rate(nginx_ingress_controller_request_duration_seconds_bucket{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1056,7 +1056,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}",status=~"^5.*"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1105,7 +1105,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}",status=~"^5.*"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1154,7 +1154,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1192,7 +1192,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sentry/README.md
+      runbook: docs/sentry/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
