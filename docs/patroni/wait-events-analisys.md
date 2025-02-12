@@ -63,7 +63,7 @@ Working at any level:
 
 ### Step 1. Node wait evens (ASH) overview, all wait events are visible and not filtered out
 
-This panel shows the highest-level view of wait event analysis. Make sure you're looking at the Postgres cluster and the specific node you need to analyze – this can be changed in the top meny of the dashboard.
+This panel shows the highest-level view of wait event analysis. Make sure you're looking at the Postgres cluster and the specific node you need to analyze – this can be changed at the top in many of the dashboards.
 
 ### Step 2. Filter by wait event type. Events of given type are without query IDs
 
