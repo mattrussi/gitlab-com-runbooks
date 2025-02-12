@@ -102,65 +102,6 @@ This should be done from within a registry instance in K8s, using the built-in `
 
    Note that `APPLIED` is no longer empty.
 
-## Long-running migrations
-
-### Applying
-
-#### Why this is needed
-
-If a post-deployment migration is expected to take close or more than 15 seconds to execute, then we will most likely run into a statement timeout when trying to do so when following the regular process.
-
-Right now the registry can be configured with a single database server address, and that is used for PgBouncer's address. As done for Rails and the main database, when in need to disable or extend statement timeouts for long-running migrations, we need to:
-
-1. Connect directly to the PosgtreSQL primary server, not through PgBouncer;
-1. Use a single dedicated connection, not a connection pool.
-
-Right now the registry has no support for the above two requirements. These are being addressed in [gitlab-org/container-registry#889](https://gitlab.com/gitlab-org/container-registry/-/issues/889) and [gitlab-org/charts/gitlab#3926](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3926), but until then, we need to use a workaround.
-
-#### Instructions
-
-Proceed as follows to apply pending migrations, if they include long-running ones:
-
-1. Within the registry pod, make a temporary copy of the registry configuration file:
-
-   ```sh
-   cp /etc/docker/registry/config.yml /tmp/config.yaml
-   ```
-
-1. Determine the current PostgreSQL primary server, by using the following command in one of the registry database servers:
-
-   ```sh
-   ssh <patroni-registry instance for env>.c.<project>.internal sudo gitlab-patronictl list
-   ```
-
-   The `patroni-registry` server instance name can be found by running `knife node list | grep patroni-registry` in the [chef-repo](https://gitlab.com/gitlab-com/gl-infra/chef-repo) repository.
-
-   Note that there is a small chance of having a primary rotation either due to failure or maintenance. If so, applying schema migrations will fail due to permission issues and the command above should be retried to obtain the new primary address. Confirm that the rotation was not due to a production incident first.
-
-   See [this runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#cluster-information) for more details about this command.
-
-1. Modify the `database.host` (and `database.port`) attributes in the `/tmp/config.yaml` configuration file (`busybox vi /tmp/config.yaml`), so that it points to the primary server identified above. Additionally, set `database.pool.maxopen` to `1` and `database.pool.maxlifetime` to `1h`:
-
-   ```yaml
-   database:
-      #...
-      host: <hostname of primary server>
-      port: <port of primary server>
-      pool:
-         maxopen: 1 # pool size
-         maxlifetime: 1h # maximum amount of time a connection may be reused (up from 30m, for precaution)
-   ```
-
-1. Save the file.
-
-1. Apply pending migrations, providing the temporary configuration file as argument:
-
-   ```sh
-   registry database migrate up /tmp/config.yaml
-   ```
-
-1. Continue as described in [Applying post-deployment migrations](#applying-post-deployment-migrations).
-
 ### Monitoring
 
 The migrations tool used by the registry ([link](https://pkg.go.dev/github.com/rubenv/sql-migrate)) does not report when each individual migration has been applied, only when all pending are done (or one fails). As result, when applying multiple migrations, the registry CLI will output the list of all migrations to apply and wait for all to be applied (or for one to fail) before providing additional feedback (success or failure).
