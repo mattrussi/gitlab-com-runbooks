@@ -2,10 +2,12 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local baseSelector = { type: 'gitlab-static' };
+
 metricsCatalog.serviceDefinition({
   type: 'gitlab-static',
   tier: 'inf',
-  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
+  tenants: ['gitlab-ops'],
   monitoringThresholds: {},
   serviceDependencies: {},
   provisioning: {
@@ -14,6 +16,8 @@ metricsCatalog.serviceDefinition({
   },
 
   serviceIsStageless: true,
+
+  tags: ['cloudflare-worker'],
 
   serviceLevelIndicators: {
     gitlab_static_net_zone: {
@@ -30,15 +34,14 @@ metricsCatalog.serviceDefinition({
         processing the request.
       |||,
 
-      local zoneSelector = { zone: 'gitlab-static.net' },
       requestRate: rateMetric(
         counter='cloudflare_zone_requests_total',
-        selector=zoneSelector
+        selector=baseSelector,
       ),
 
       errorRate: rateMetric(
         counter='cloudflare_zone_requests_status',
-        selector=zoneSelector {
+        selector=baseSelector {
           status: { re: '5..' },
         },
       ),
@@ -55,18 +58,28 @@ metricsCatalog.serviceDefinition({
         Cloudflare Worker used by our VS Code-based Web IDE to pull assets from *.cdn.web-ide.gitlab-static.net.
       |||,
 
-      local workerSelector = { script_name: 'gitlab-web-ide-vscode-production' },
       requestRate: rateMetric(
         counter='cloudflare_worker_requests_count',
-        selector=workerSelector
+        selector=baseSelector,
       ),
 
       errorRate: rateMetric(
         counter='cloudflare_worker_errors_count',
-        selector=workerSelector
+        selector=baseSelector,
       ),
 
-      significantLabels: [],
+      significantLabels: ['script_name'],
+
+      toolingLinks: std.flattenArrays([
+        [
+          toolingLinks.cloudflareWorker.logs.live(scriptName='gitlab-web-ide-vscode-%s' % environment),
+          toolingLinks.cloudflareWorker.logs.historical(scriptName='gitlab-web-ide-vscode-%s' % environment),
+        ]
+        for environment in [
+          'production',
+          'staging',
+        ]
+      ]),
     },
   },
   skippedMaturityCriteria: {
