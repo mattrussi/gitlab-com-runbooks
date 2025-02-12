@@ -1,4 +1,4 @@
-# Postgres wait events analysis
+# Postgres wait events analysis (a.k.a. Active Session History; ASH dashboard)
 
 **Table of Contents**
 
