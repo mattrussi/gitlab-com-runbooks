@@ -60,7 +60,7 @@
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [SQL query analysis and optimization for Postgres](../patroni/query-analysis.md)
 * [High-level performance analysis and troubleshooting of a Postgres node](../patroni/single-node-high-level.md)
-* [Postgres wait events analisys](../patroni/wait-events-analisys.md)
+* [Postgres wait events analysis (a.k.a. Active Session History; ASH dashboard)](../patroni/wait-events-analisys.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
