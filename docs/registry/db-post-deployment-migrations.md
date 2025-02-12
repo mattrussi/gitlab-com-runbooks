@@ -68,8 +68,6 @@ This should be done from within a registry instance in K8s, using the built-in `
 
 1. Proceed to apply post-deployment migrations:
 
-   **Note:** If the registry team has identified (and mentioned in the change request description) that one or more of the pending migrations is expected to take more than 15 seconds to execute in a given environment (long-running), please proceed as described in [Applying long-running migrations](#instructions) instead. Continue to the next point here when done.
-
    ```sh
    registry database migrate up /etc/docker/registry/config.yml
    ```
