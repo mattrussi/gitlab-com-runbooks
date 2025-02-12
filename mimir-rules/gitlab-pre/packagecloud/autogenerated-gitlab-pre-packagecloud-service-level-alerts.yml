@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_queries{database_id=~".+:packagecloud-.+",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/packagecloud/README.md
+      runbook: docs/packagecloud/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -62,7 +62,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_queries{database_id=~".+:packagecloud-.+",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/packagecloud/README.md
+      runbook: docs/packagecloud/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -96,7 +96,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",response_code_class="500",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
         )
-      runbook: docs/packagecloud/README.md
+      runbook: docs/packagecloud/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -143,7 +143,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",response_code_class="500",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
         )
-      runbook: docs/packagecloud/README.md
+      runbook: docs/packagecloud/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -190,7 +190,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
         )
-      runbook: docs/packagecloud/README.md
+      runbook: docs/packagecloud/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -226,7 +226,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
         )
-      runbook: docs/packagecloud/README.md
+      runbook: docs/packagecloud/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

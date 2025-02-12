@@ -187,7 +187,7 @@ We use the same License for both [staging](https://staging.teleport.gitlab.net)
 and [production](https://production.teleport.gitlab.net) instances teleport.
 
 When our license is about to expire, we need to obtain a new license file and update our Teleport instances with.
-Read more about the *Enterprise License file* [here](https://goteleport.com/docs/choose-an-edition/teleport-enterprise/license/).
+Read more about the *Enterprise License file* [here](https://goteleport.com/docs/choose-an-edition/teleport-enterprise/license/) and managing it [here](https://goteleport.com/docs/admin-guides/deploy-a-cluster/license/).
 In short, you need to login to [gitlab.teleport.sh](https://gitlab.teleport.sh) as an admin and download the new license file (`license.pem`).
 You can also ask an admin user to do so and share the license file with you through a secure channel (*1Password*).
 
@@ -203,7 +203,7 @@ $ vault kv put k8s/ops-central/teleport-cluster-production/license license.pem=@
 ```
 
 Grab the latest version from the output last command and update it
-[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L14).
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl?ref_type=heads#9-15).
 
 Finally restart the Teleport Auth component.
 
@@ -214,6 +214,22 @@ $ glsh kube use-cluster ops-central
 # Restart the teleport auth pods
 $ kubectl rollout restart deployment/teleport-production-auth --namespace=teleport-cluster-production
 ```
+
+### Troubleshooting
+
+If the license hasn't updated as expected after bumping the secret version, first check that the `license` secret contains what you expect:
+
+```sh
+kubectl get secrets license -n teleport-cluster-production -o json | jq -r '.data."license.pem"' | base64 -d
+```
+
+If it doesn't, check what the `refreshInterval` of the `ExternalSecret` is:
+
+```sh
+kubectl get es license -n teleport-cluster-production -o json | jq .spec.refreshInterval
+```
+
+If `refreshInterval` is set to `0`, `external-secrets` will _never_ update the secret from Vault, so you will need to change the `refreshInterval` to something non-zero (e.g. `1h`).
 
 ## Terraform Integration
 

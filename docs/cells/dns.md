@@ -78,7 +78,7 @@ In Cells we can update the tenant model for each ring using `ringctl` patches an
 ➜  tissue git:(main) ✗ ringctl patch create replace /cloudflare_waf/enabled "true" replace /cloudflare_waf/migration_stage "DELEGATE_TENANT_DNS" --priority 3 --related-to "$RELATED_ISSUE"
 ```
 
-### Cells Environments in Tissue:
+### Cells Environments in Tissue
 
 - cellsdev[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsdev]
 - cellsprod[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsprod/]

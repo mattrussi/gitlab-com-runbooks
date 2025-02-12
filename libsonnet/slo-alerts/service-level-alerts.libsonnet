@@ -41,7 +41,7 @@ local commonAnnotations(serviceType, aggregationSet, metricName) =
   local grafanaVariables = std.filter(function(l) !std.member(ignoredGrafanaVariables, l), aggregationSet.labels);
 
   {
-    runbook: 'docs/%(serviceType)s/README.md' % formatConfig,  // We can do better than this
+    runbook: 'docs/%(serviceType)s/README.md#alerts' % formatConfig,  // We can do better than this
     grafana_dashboard_id: 'alerts-%(aggregationId)s_slo_%(metricName)s' % formatConfig,
     grafana_panel_id: stableIds.hashStableId('multiwindow-multiburnrate'),
     grafana_variables: std.join(',', grafanaVariables),

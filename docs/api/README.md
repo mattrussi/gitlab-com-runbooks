@@ -19,10 +19,10 @@
 ## Troubleshooting Pointers
 
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
+* [Cells DNS](../cells/dns.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Shared CI Runner Timeouts](../ci-runners/ci-runner-timeouts.md)
-* [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [CI runner manager report a high number of errors](../ci-runners/ci_runner_manager_errors.md)
@@ -69,8 +69,6 @@
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Push Gateway](../monitoring/pushgateway.md)
-* [Thanos Query and Stores](../monitoring/thanos-query.md)
-* [Thanos Receive](../monitoring/thanos-receive.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
@@ -100,7 +98,6 @@
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
-* [Thanos Architecture Overview](../thanos/architecture.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)

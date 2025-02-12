@@ -43,9 +43,6 @@
 * [Mixins](mixins.md)
 * [prometheus-failed-compactions.md](prometheus-failed-compactions.md)
 * [Prometheus pod crashlooping](prometheus-pod-crashlooping.md)
-* [Thanos Compact](thanos-compact.md)
-* [Deleting series over a given interval from thanos](thanos-delete-series-interval.md)
-* [Thanos Receive](thanos-receive.md)
 * [Upgrading Monitoring Components](upgrades.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
@@ -74,7 +71,6 @@
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
-* [Alert Routing Howto](../uncategorized/alert-routing.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
@@ -86,13 +82,13 @@
 ## Introduction
 
 This document describes the monitoring stack used by gitlab.com. "Monitoring
-stack" here implies "metrics stack", concering relatively low-cardinality,
+stack" here implies "metrics stack", concerning relatively low-cardinality,
 relatively cheap to store metrics that are our primary source of alerting
 criteria, and the first port of call for answering "known unknowns" about our
 production systems. Events, logs, and traces are out of scope.
 
 We assume some basic familiarity with the [Prometheus](https://prometheus.io/)
-monitoring system, and the [Thanos](https://thanos.io/) project, and encourage
+monitoring system, and the [Mimir](https://grafana.com/docs/mimir/latest/) project, and encourage
 you to learn these basics before continuing.
 
 The rest of this document aims to act as a high-level summary of how we use
@@ -107,40 +103,29 @@ implementation details.
 
 | Service | Description | Backlog |
 |---------|------------|---------|
-| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
-| ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
-| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana) |
-| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager) |
-| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
+| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
+| ~"Service::Mimir" | Anything related to [Mimir](https://grafana.com/docs/mimir/latest/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMimir) |
+| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana) |
+| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager) |
+| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
 
 Some of the issues in the backlog also belong in epics part of the
 [Observability Work Queue
-Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/628) to group
+Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1444) to group
 issues around a large project that needs to be addressed.
 
 ## Querying
 
-Prefer [dashboards](https://dashboards.gitlab.net) to [ad-hoc
-queries](https://thanos.gitlab.net), but the latter is of course available.
-Prefer Thanos queries to direct Prometheus queries in order to take advantage of
-the query cache.
+Querying is done via [grafana](https://dashboards.gitlab.net/explore).
 
 ## Dashboards
 
-Grafana dashboards on dashboards.gitlab.net are managed in 3 ways:
+Grafana dashboards on [dashboards.gitlab.net](https://dashboards.gitlab.net) are managed in 3 ways:
 
 1. By hand, editing directly using the Grafana UI
 1. Uploaded from <https://gitlab.com/gitlab-com/runbooks/tree/master/dashboards>, either:
    1. json - literally exported from grafana by hand, and added to that repo
    1. jsonnet - JSON generated using jsonnet/grafonnet; see <https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards/README.md>
-
-Grafana dashboards can utilize metrics from a specific Prometheus cluster (e.g. prometheus-app, prometheus-db, ...), but it's preferred to
-use the "Global" data source as it points to Thanos which aggregates metrics from all Prometheus instances and it has higher data retention
-than any of the regular Prometheus instances.
-
-All dashboards are downloaded/saved automatically into <https://gitlab.com/gitlab-org/grafana-dashboards>, in the dashboards directory.
-This happens from the [dashboards exports scheduled pipeline](https://gitlab.com/gitlab-org/grafana-dashboards/-/pipeline_schedules), which runs a Ruby script pulling all dashboards from Grafana and then committing any changes to the git repository.
-The repo is also mirror to <https://ops.gitlab.net/gitlab-org/grafana-dashboards>.
 
 ## Instrumentation
 
@@ -198,8 +183,7 @@ or not. Context can be added to metrics in a few places in its lifecycle:
            labels that might have already been defined - see point above.
          * There was an open issue on prometheus to change this, but I can't
            find it.
-   1. These are also applied by thanos-sidecar (more later) so _are_ exposed to
-      thanos queries, and uploaded to the long-term metrics buckets.
+   1. These are also applied to series leaving prometheus via remote-write.
    1. Information about which environment an alert originates from can be useful
       for routing alerts: e.g. PagerDuty for production, Slack for
       non-production.
@@ -218,42 +202,6 @@ Our GKE Prometheus nodes typically only monitor jobs deployed to Kubernetes, and
 as such use Kubernetes service discovery to build lists of endpoints and map
 pod/service labels to Prometheus labels.
 
-### Job partitioning
-
-We run Prometheus in redundant pairs so that we can still scrape metrics and
-send alerts when performing rolling updates, and to survive single-node failure.
-We run several Prometheus pairs, each with a different set of scrape jobs.
-
-Prometheus can be scaled by partitioning jobs across different instances of it,
-and directing queries to the relevant partition (often referred to as a shard).
-At the time of writing, our Prometheus partitioning layout is in a state of
-flux, due to the ongoing Kubernetes migrations. A given Prometheus partition is
-primarily identified by the following 3 external labels:
-
-* **env**: loosely corresponds to a Google project. E.g. gprd, gstg, ops.
-  * It can refer to a GitLab SaaS environment (gprd, gstg, pre), our
-     operational control plane ("ops"), or an ancilliary production Google
-     project like one of the CI ones.
-* **monitor**: a Prometheus shard.
-  * "app" for GitLab application metrics, "db" for database metrics, and
-     "default" for everything else.
-* **cluster**: the name of the Kubernetes cluster the Prometheus is running in.
-  * not set in GCE shards
-  * Note that at the time of writing, we have not yet sharded Prometheus
-     intra-cluster. The parts of the core GitLab application that have already
-     been migrated to Kubernetes will therefore have monitor=default. This
-     situation will likely change faster than this document: remember that the
-     metrics are the source of truth.
-
-Note that by definition, if you can see these external labels, you are looking
-at a Thanos-derived view (or an alert). If you can't see these external labels,
-you're looking at the correct Prometheus already - or you wouldn't have metrics
-to look at!
-
-Luckily, it's not quite as common as it sounds to really care where a given
-metric comes from. Dashboards and ad-hoc queries via a web console should
-usually be satisfied by Thanos, which has a global view of all shards.
-
 #### A note about GitLab CI
 
 GitLab CI jobs run in their own Google Project. This is not peered with our ops
@@ -261,8 +209,7 @@ VPC, as a layer of isolation of the arbitrary, untrusted jobs from any
 gitlab.com project, from our own infrastructure. There are Prometheus instances
 in that project that collect metrics, which have public IPs that only accept
 traffic from our gprd Prometheus instances, which federation-scrape metrics from
-it. The CI Prometheus instances are therefore not integrated with Thanos or
-Alertmanager directly.
+it. The CI Prometheus instances are therefore not integrated with Alertmanager directly.
 
 CI is undergoing somewhat of an overhaul, so this may well change fast.
 
@@ -296,28 +243,18 @@ repo's ops mirror pipeline processes the rules directory into a set of
 PrometheusRule CRDs, which are pushed to the clusters and picked up by
 Prometheus operator.
 
-### thanos-rule
+### Mimir Ruler
 
-Thanos-rule is a component that evaluates Prometheus rules using data from
-thanos-query. Metrics are therefore available from all environments and shards,
+Mimir Ruler is a component that evaluates Prometheus rules centrally from data sent from Prometheus, via remote-write, to Mimir. Metrics are therefore available from all environments and shards,
 and external labels are available.
 
-While we prefer Prometheus rules to Thanos rules, to keep our alerting path as
-short and simple as possible, we sometimes have need of thanos-rules when we
-need to aggregate rules across Prometheus instances. The most prominent current
-example of this is to produce metrics-catalog-generated metrics for our core
-application services that are deployed across several zonal GKE clusters, each
-monitored by a cluster-local Prometheus. We use thanos rule to aggregate over
-the `cluster` external label, to produce latency, traffic, and error rate
-metrics for these multi-cluster services.
-
-Rules are defined in [runbooks/thanos-rules](https://gitlab.com/gitlab-com/runbooks/-/tree/master/thanos-rules),
-which is populated from jsonnet in [runbooks/thanos-rules-jsonnet](https://gitlab.com/gitlab-com/runbooks/-/tree/master/thanos-rules-jsonnet).
+Rules are defined in [runbooks/mimir-rules](https://gitlab.com/gitlab-com/runbooks/-/tree/master/mimir-rules),
+which is populated from jsonnet in [runbooks/mimir-rules-jsonnet](https://gitlab.com/gitlab-com/runbooks/-/tree/master/mimir-rules-jsonnet).
 
 ### Alertmanager
 
 We run a single Alertmanager service. It runs in our ops cluster. All Prometheus instances
-(and thanos-rule, which can send alerts) make direct connections to each
+(and mimir ruler, which can send alerts) make direct connections to each
 Alertmanager pod. This is made possible by:
 
 * The use of "VPC-native" GKE clusters, in which pod CIDRs are GCE subnets,
@@ -330,7 +267,7 @@ Alertmanager pod. This is made possible by:
 The alertmanager routing tree is defined in
 [runbooks](https://gitlab.com/gitlab-com/runbooks/-/tree/master/alertmanager).
 
-## Scaling Prometheus (Thanos)
+## Scaling Prometheus (Mimir)
 
 In the "Job partitioning" section above we've already discussed how Prometheus'
 write/alerting path is sharded by scrape job. This gives us some problems in the
@@ -344,42 +281,13 @@ read/query path though:
 * We can't keep metrics on disk forever, this is expensive. Large indexes
   increase memory pressure on Prometheus
 
-The [Thanos project](https://thanos.io) aims to solve all of these problems:
+The [Mimir project](https://grafana.com/docs/mimir/latest/) aims to solve all of these problems:
 
 * A Unified query interface: cross-Prometheus, de-duplicated queries
 * Longer-term, cheaper metrics storage: object storage, downsampling of old
   metrics.
 
-We deploy:
-
-* thanos-sidecar
-  * colocated with each prometheus instance
-  * uploads metrics from TSDB disk to object storage buckets
-  * Answers queries from thanos-query, including external labels on metrics so
-     that they can be attributed to an environment / shard.
-* thanos-query
-  * to our ops environment
-  * Queries recent metrics from all Prometheus instances (via thanos-sidecar)
-  * Queries longer-term metrics from thanos-store.
-  * Available for ad-hoc queries at <https://thanos.gitlab.net>.
-* thanos-query frontend
-  * A service that acts like a load balancing and caching layer for thanos-query.
-  * Allows splitting queries into multiple short queries by interval which allows parallelization, prevents large queries from causing OOM, and allows for load balancing.
-  * Supports a retry mechanism when queries fail.
-  * Allows caching query results, label names, and values and reuses them on subsequent requested queries.
-* thanos-store
-  * one deployment per bucket, so one per environment / google project
-  * Provides a gateway to the metrics buckets populated by thanos-sidecar.
-  * These are deployed to each environment separately. Each environment (Google
-     project) gets its own bucket.
-* thanos-compact
-  * a singleton per bucket, so one per environment / google project
-  * a background component that builds downsampled metrics and applies
-     retention lifecycle rules.
-* thanos-rule
-  * to our ops environment
-  * already discussed in "alerting" above, although evaluates many non-alerting
-     rules too.
+You can see more about our implementation [here](../mimir/README.md)
 
 ## meta-monitoring
 
@@ -398,8 +306,6 @@ go wrong.
   shards monitor any other GKE shards ("app" when it exists), and eventually
   turn down the GCE shards by migrating GCE jobs to GKE Prometheus instances.
 * All Prometheus instances monitor the Alertmanager: <https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/alertmanager.yml>
-* We similarly monitor thanos components from Prometheus, including thanos-rule
-  to catch evaluation failures there.
 * There is likely a hole in this setup since we introduced zonal clusters: we
   might not be attuned to monitoring outages there. See
   [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12997).
@@ -438,9 +344,7 @@ defence.
 
 ## Architecture
 
-Components diagram from Thanos docs: <https://thanos.io/v0.15/thanos/quick-tutorial.md/#components>
-
-THIS IS WORK IN PROGRESS! IT IS LIKELY TO BE INACCURATE! IT WILL BE UPDATED IN THE NEAR FUTURE!
+The current architecture is best viewed in the [Mimir docs](../mimir/README.md)
 
 ![monitoring](./img/monitoring.png)
 

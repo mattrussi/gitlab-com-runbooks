@@ -65,7 +65,7 @@ if [[ -n $dry_run ]]; then
   exit 0
 else
   if command -v op; then
-    op signin
+    op signin -f
     GRAFANA_API_TOKEN=$(op read "op://Engineering/Grafana playground API token/Tokens/developer-playground-key API Key")
     export GRAFANA_API_TOKEN
   fi

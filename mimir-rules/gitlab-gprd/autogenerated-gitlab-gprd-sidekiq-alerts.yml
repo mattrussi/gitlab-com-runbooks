@@ -114,12 +114,43 @@ groups:
       severity: s4
       team: data-access:durability
     expr: |
-      sum by (env, worker, action)  (
+      sum by (env, worker, action, reason)  (
         rate(
-          sidekiq_jobs_skipped_total{env="gprd"}[1h]
+          sidekiq_jobs_skipped_total{env="gprd",reason="feature_flag"}[1h]
           )
         )
         > 0
+  - alert: SidekiqJobsDeferredByDBHealthCheck
+    for: 2h
+    annotations:
+      title: Many Sidekiq jobs from `{{ $labels.worker }}` have been deferred by DB
+        health check
+      description: |
+        {{ $value | humanizePercentage }} of Sidekiq jobs from `{{ $labels.worker }}` are being deferred via DB Health Check.
+
+        Deferred jobs follow the same [indicators](https://docs.gitlab.com/ee/development/database/batched_background_migrations.html#throttling-batched-migrations) to throttle batched background migrations.
+
+        When too many jobs are being deferred continuously, there could be a huge backlog of jobs impacting jobs from other worker classes.
+      grafana_dashboard_id: sidekiq-worker-detail
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-worker-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-worker={{ $labels.worker }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2019205131"
+      grafana_variables: environment,worker
+    labels:
+      alert_type: cause
+      severity: s4
+    expr: |
+      sum by (env, worker, feature_category)  (
+          rate(
+              sidekiq_jobs_skipped_total{action="deferred",env="gprd",reason="database_health_check"}[1h]
+          )
+      )
+      /
+      sum by (env, worker, feature_category) (
+          application_sli_aggregation:sidekiq_execution:ops:rate_1h{env="gprd"}
+      )
+      > 0.1
   - alert: SidekiqServiceWorkerExecutionApdexSLOViolation
     for: 1h
     annotations:

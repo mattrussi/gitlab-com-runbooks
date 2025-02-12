@@ -1141,6 +1141,37 @@ services:
         grafana_folder: RNfEDpLmz # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-ci-main/patroni-ci-overview
 
+  - name: patroni-sec
+    tier: db
+    friendly_name: Sec Postgres (Patroni)
+    label: PatroniSec
+    owner: database_operations
+    technical:
+      project:
+        - https://github.com/postgres/postgres
+      documents:
+        design:
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni-sec
+        developer_guide:
+        service:
+          - https://www.postgresql.org/docs/9.6/index.html
+        security: https://www.postgresql.org/support/security/
+      dependencies:
+        - service: consul
+      components:
+        - patroni
+      logging:
+        - name: Postgres
+          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c # TODO: Update when provisioned in gprd
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22 # TODO: Update when provisioned in gprd
+    observability:
+      monitors:
+        grafana_folder: RNfEDpLmz # TODO: Update when provisioned
+        primary_grafana_dashboard: patroni-main/patroni-overview
+
   - name: pingdom
     tier: inf
     friendly_name: Pingdom
@@ -1381,6 +1412,33 @@ services:
       monitors:
         grafana_folder: redis
         primary_grafana_dashboard: redis-main/redis-overview
+
+  - name: runway-db-example
+    tier: db
+    friendly_name: Example Runway-managed Postgres
+    label: RunwayPostgresExample
+    owner: runway
+    technical:
+      project:
+        - https://github.com/postgres/postgres
+      documents:
+        design:
+        architecture: https://docs.runway.gitlab.com/reference/blueprints/postgres/
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloud-sql
+        developer_guide: https://docs.gitlab.com/ee/development/database/
+        service:
+          - https://www.postgresql.org/
+          - https://cloud.google.com/sql/docs/postgres
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: gcp
+          permalink: https://cloudlogging.app.goo.gl/yUkd8JGYdPJUcNyq9
+    observability:
+      monitors:
+        primary_grafana_dashboard: runway-db-example-main/runway-db-example-overview
 
   - name: runway-redis-example
     tier: db
@@ -1788,33 +1846,6 @@ services:
       monitors:
         primary_grafana_dashboard: redis-registry-cache-main/redis-registry-cache-overview
 
-  - name: redis-db-load-balancing
-    tier: db
-    friendly_name: Redis Database Load Balancing
-    label: RedisDbLoadBalancing
-    owner: data-access:durability
-    technical:
-      project:
-        - https://github.com/redis/redis
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
-        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
-        service:
-          - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/e6a0f170-a8ce-11ed-85ed-e7557b0a598c
-    observability:
-      monitors:
-        primary_grafana_dashboard: redis-db-load-balancing-main/redis-db-load-balancing-overview
-
   - name: registry
     tier: sv
     friendly_name: Container Registry
@@ -1981,7 +2012,7 @@ services:
     tier: sv
     friendly_name: version.gitlab.com
     label: Version
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com
@@ -2031,7 +2062,7 @@ services:
     tier: sv
     friendly_name: design.gitlab.com
     label: Design
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com
@@ -2088,7 +2119,7 @@ services:
     tier: sv
     friendly_name: CI Runners
     label: CI Runners
-    owner: reliability_ops
+    owner: ops
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -2243,7 +2274,7 @@ services:
     tier: sv
     friendly_name: Woodhouse
     label: Woodhouse
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse
@@ -2267,7 +2298,7 @@ services:
     tier: sv
     friendly_name: Woodhouse Slack bot
     label: WoodhouseSlack
-    owner: reliability_ops
+    owner: ops
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse

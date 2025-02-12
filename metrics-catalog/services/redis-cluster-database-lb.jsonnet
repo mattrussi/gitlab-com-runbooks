@@ -8,7 +8,7 @@ local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-database-lb',
-    railsStorageSelector=redisHelpers.storageSelector('cluster_db_load_balancing'),  // TODO switch to db_load_balancing after application-side clean up
+    railsStorageSelector=redisHelpers.storageSelector('db_load_balancing'),
     descriptiveName='Redis DB load balancing in Redis Cluster',
     redisCluster=true
   )
@@ -20,15 +20,12 @@ metricsCatalog.serviceDefinition(
     serviceLevelIndicators+: {
       rails_redis_client+: {
         userImpacting: true,
-        severity: 's4',
       },
       primary_server+: {
         userImpacting: true,
-        severity: 's4',
       },
       secondary_servers+: {
         userImpacting: true,
-        severity: 's4',
       },
     },
   }

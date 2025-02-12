@@ -282,6 +282,8 @@ teams:
   slack_alerts_channel: cloud-connector-events
   ignored_components:
   - graphql_query
+  alerts:
+  - ops
 
 - name: mlops
   product_stage_group: mlops
@@ -464,12 +466,14 @@ teams:
 
 # Infrastructure Reliability
 
-- name: reliability_ops
+- name: ops
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/
   manager: kkyrala
   label: team::Ops
-  slack_alerts_channel: g_infra_general_alerts
+  product_stage_group: ops
+  slack_channel: g_production-engineering_ops
   send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: g_production-engineering_ops
   alerts:
   - ops
 
@@ -571,6 +575,10 @@ teams:
   ignored_components:
   - graphql_query
 
+# Virtual team of release managers
+- name: release-management
+  slack_alerts_channel: f_upcoming_release
+
 # Dedicated
 
 - name: switchboard
@@ -611,11 +619,6 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   alerts:
   - ops
-
-- name: ops
-  product_stage_group: ops
-  slack_channel: g_production-engineering_ops
-  manager: kkyrala
 
 # Unlisted
 

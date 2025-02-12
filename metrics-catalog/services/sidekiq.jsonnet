@@ -47,9 +47,6 @@ metricsCatalog.serviceDefinition({
           'urgent-authorized-projects': {
             apdexScore: 0.94,
           },
-          quarantine: {
-            apdexScore: 0.97,  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19137#note_2304794410
-          },
         },
       },
     },
@@ -197,6 +194,9 @@ metricsCatalog.serviceDefinition({
     serviceAggregation: false,
     severity: 's4',
     emittedBy: ['sidekiq'],
+  }) + sliLibrary.get('llm_chat_first_token').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
   }),
 
   capacityPlanning: {

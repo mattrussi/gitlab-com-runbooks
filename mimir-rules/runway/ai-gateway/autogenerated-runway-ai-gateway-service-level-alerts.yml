@@ -31,7 +31,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -88,7 +88,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -147,7 +147,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -206,7 +206,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -260,7 +260,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -314,7 +314,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -370,7 +370,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -426,7 +426,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -483,7 +483,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine!~"anthropic|vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -539,7 +539,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine!~"anthropic|vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -597,7 +597,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine!~"anthropic|vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -655,7 +655,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine!~"anthropic|vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -708,7 +708,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine!~"anthropic|vertex-ai",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -761,7 +761,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine!~"anthropic|vertex-ai",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -816,7 +816,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine!~"anthropic|vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -871,7 +871,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine!~"anthropic|vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -927,7 +927,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -984,7 +984,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1043,7 +1043,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1102,7 +1102,7 @@ groups:
             rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1156,7 +1156,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1210,7 +1210,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1266,7 +1266,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1322,7 +1322,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1375,7 +1375,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1427,7 +1427,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1481,7 +1481,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1535,7 +1535,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1584,7 +1584,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1633,7 +1633,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1684,7 +1684,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1735,7 +1735,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1784,7 +1784,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1822,7 +1822,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1860,7 +1860,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1900,7 +1900,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1936,7 +1936,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1985,7 +1985,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2036,7 +2036,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2087,7 +2087,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2136,7 +2136,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2174,7 +2174,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2212,7 +2212,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2252,7 +2252,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2291,7 +2291,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2342,7 +2342,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2395,7 +2395,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2448,7 +2448,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2496,7 +2496,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2544,7 +2544,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2594,7 +2594,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2644,7 +2644,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2695,7 +2695,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2747,7 +2747,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2801,7 +2801,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2855,7 +2855,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2904,7 +2904,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2953,7 +2953,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3004,7 +3004,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3055,7 +3055,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3107,7 +3107,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3159,7 +3159,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3213,7 +3213,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3267,7 +3267,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3316,7 +3316,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3365,7 +3365,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3416,7 +3416,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3467,7 +3467,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3519,7 +3519,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3571,7 +3571,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3625,7 +3625,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3679,7 +3679,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3728,7 +3728,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3777,7 +3777,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3828,7 +3828,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3879,7 +3879,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -3931,7 +3931,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -3982,7 +3982,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4035,7 +4035,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4088,7 +4088,7 @@ groups:
             rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4136,7 +4136,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4184,7 +4184,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4234,7 +4234,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4284,7 +4284,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4332,7 +4332,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4380,7 +4380,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -4430,7 +4430,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4480,7 +4480,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -4528,7 +4528,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -4565,7 +4565,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -4602,7 +4602,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -4641,7 +4641,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
         )
-      runbook: docs/ai-gateway/README.md
+      runbook: docs/ai-gateway/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation

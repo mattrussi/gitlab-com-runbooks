@@ -448,7 +448,7 @@ local routingTree = Route(
   ] + [
     // Route release management related alerts to #g_delivery_alerts channel
     Route(
-      receiver=receiverNameForTeamSlackChannel('release'),
+      receiver=receiverNameForTeamSlackChannel('release-management'),
       continue=true,
       matchers={
         alert_trigger: { re: '.*_release_management' },

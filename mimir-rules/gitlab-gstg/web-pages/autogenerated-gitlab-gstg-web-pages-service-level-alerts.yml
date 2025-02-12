@@ -20,7 +20,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -65,7 +65,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -112,7 +112,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -159,7 +159,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -204,7 +204,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -238,7 +238,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -272,7 +272,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -308,7 +308,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -340,7 +340,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2962826191"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -385,7 +385,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2962826191"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -432,7 +432,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2962826191"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -479,7 +479,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2962826191"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -524,7 +524,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2234251543"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -558,7 +558,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2234251543"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -592,7 +592,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2234251543"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -628,7 +628,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2234251543"
       grafana_variables: environment,stage
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -667,7 +667,7 @@ groups:
             rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -719,7 +719,7 @@ groups:
             rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -773,7 +773,7 @@ groups:
             rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -827,7 +827,7 @@ groups:
             rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -876,7 +876,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -925,7 +925,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -976,7 +976,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1027,7 +1027,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -1076,7 +1076,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1114,7 +1114,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1152,7 +1152,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -1192,7 +1192,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
-      runbook: docs/web-pages/README.md
+      runbook: docs/web-pages/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation

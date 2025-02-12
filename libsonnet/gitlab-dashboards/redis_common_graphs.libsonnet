@@ -520,7 +520,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
           title='Redis Cluster Redirection',
           yAxisLabel='Redirections',
           query=|||
-            sum(gitlab:redis_cluster_redirections:irate1m{environment=$"environment", type="%(serviceType)s}) by (redirection_type)
+            sum(gitlab:redis_cluster_redirections:irate1m{environment="$environment", type="%(serviceType)s"}) by (redirection_type)
           ||| % formatConfig,
           legendFormat='{{ redirection_type }}',
           intervalFactor=2,

@@ -14,7 +14,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_worker_requests_count:rate_5m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+        sli_aggregations:cloudflare_worker_requests_count:rate_5m{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -27,7 +27,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_worker_errors_count:rate_5m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+          sli_aggregations:cloudflare_worker_errors_count:rate_5m{env="ops",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -49,7 +49,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_worker_requests_count:rate_30m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+        sli_aggregations:cloudflare_worker_requests_count:rate_30m{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -62,7 +62,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_worker_errors_count:rate_30m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+          sli_aggregations:cloudflare_worker_errors_count:rate_30m{env="ops",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -84,7 +84,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_worker_requests_count:rate_1h{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+        sli_aggregations:cloudflare_worker_requests_count:rate_1h{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -97,7 +97,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_worker_errors_count:rate_1h{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+          sli_aggregations:cloudflare_worker_errors_count:rate_1h{env="ops",type="gitlab-static"} offset 30s
         )
       )
       or

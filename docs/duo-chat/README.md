@@ -22,8 +22,8 @@ This page explains how to investigate Duo Chat issues on production.
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
 - GitLab-Sidekiq:
-  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/CaUYv)
-  - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
+  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/K54dN)
+  - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/5pTeS)
   - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
   - [Duo Chat specific error codes](https://log.gprd.gitlab.net/app/r/s/eeO5a)
 - Redis:
@@ -72,6 +72,7 @@ Different deployments use different indexes. The following indexes are most help
 
 - AI Gateway logs are in the `pubsub-mlops-inf-gprd-*` index
 - GitLab Rails Sidekiq logs are in the `pubsub-sidekiq-inf-gprd*` index
+  - All LLM Sidekiq trafic is sent to a single Sidekiq shard, filtering on `json.shard.keyword: "ai-abstraction-layer"` will only return `ai-abstraction-layer` traffic.
   - When searching this index, filtering on `json.subcomponent : "llm"` ensures only LLM logs are returned
 - GitLab Rails logs are in the `pubsub-rails-inf-gprd-*` index
 
@@ -84,6 +85,21 @@ If you find requests for a user there but do not find any results for them using
 > ``json.meta.user : "username-that-received-error" and json.subcomponent : "llm"`
 
 That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up. See [Duo Chat does not respond or responds very slowly](#duo-chat-does-not-respond-or-responds-very-slowly) below.
+
+## AI Abstraction Layer Sidekiq Traffic
+
+Duo Chat requests and some Duo experimental features go through an isolated `urgent-ai-abstraction-layer` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs.
+
+To find only Duo traffic, you can click on the the `pubsub-sidekiq-inf-*` Elastic Search.
+
+- Filter the logs by selecting `json.shard.keyword: "urgent-ai-abstraction-layer"` to limit logs coming from our respective Sidekiq containers.
+
+**Important Feature Category information**:
+Sidekiq feature category: `urgent-ai-abstraction-layer`
+GKE Deployment: `gkeDeployment: 'gitlab-sidekiq-urgent-ai-abstraction-layer-v2'`
+Queue Urgency: `throttled`
+
+See this [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18630) for more information.
 
 ### Tracing requests across different services
 
@@ -263,3 +279,36 @@ After we've collected the log, we do:
 
 1. Filter the llm.log by the error code (LLM log outputs the error code as-is). Extract the correlation-id in the same log line.
 2. Filter the llm.log and sidekloq.log by the extracted correlation-id. This gives us the details of the process flow, which is crucial to identify where the thing went wrong.
+
+## Rate Limits
+
+Duo Chat has the following rate limits:
+
+- AI Action Rate Limit: 160 calls per 8 hours per authenticated user
+  - This limit applies to GraphQL aiAction mutations
+  - When exceeded, returns error code A1001 with message "This endpoint has been requested too many times. Try again later"
+  - Configured via `application_settings.ai_action_api_rate_limit`
+  - Can be monitored in [GitLab Rails error rates dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/5f334d60-cfd7-11ee-bc6b-0b206b291ea1)
+
+When users hit rate limits:
+
+1. Check current rate limit usage:
+
+```ruby
+  # In Rails console
+  user = User.find_by_username('username')
+  Gitlab::ApplicationRateLimiter.throttled?(:ai_action, scope: [user], peek: true)
+```
+
+2. For temporary relief, rate limits can be reset:
+
+```ruby
+  # In Rails console
+  Gitlab::RateLimitHelpers.new.reset_rate_limits(:ai_action, user)
+```
+
+3. For persistent issues, consider:
+
+- Reviewing usage patterns to identify potential abuse
+- Adjusting the global rate limit via application settings if needed
+- Adding user to allowlist if legitimate high usage case

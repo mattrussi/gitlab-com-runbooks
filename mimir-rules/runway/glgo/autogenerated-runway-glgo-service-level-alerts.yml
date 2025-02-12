@@ -27,7 +27,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="glgo"}[5m])
           )
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -79,7 +79,7 @@ groups:
             avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="glgo"}[5m])
           )
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -128,7 +128,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="glgo"}[5m]) / 60
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -177,7 +177,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="glgo"}[5m]) / 60
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -226,7 +226,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="glgo"}[5m]) / 60
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -264,7 +264,7 @@ groups:
         sum by (env,environment,tier,stage) (
           avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="glgo"}[5m]) / 60
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -300,7 +300,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="glgo-url-map"}[5m])
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -349,7 +349,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="glgo-url-map"}[5m])
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -398,7 +398,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="glgo-url-map"}[5m])
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -436,7 +436,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="glgo-url-map"}[5m])
         )
-      runbook: docs/glgo/README.md
+      runbook: docs/glgo/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

@@ -19,7 +19,7 @@
           type_name: 'Custom["Service"]',
           categories: ['service'],
           source: {
-            name: '$.friendly_name',
+            name: '$.name',
             external_id: '$.name',
           },
           attributes: [
@@ -28,6 +28,12 @@
               name: 'Tier',
               type: 'String',
               source: '$.tier',
+            },
+            {
+              id: 'description',
+              name: 'Description',
+              type: 'String',
+              source: '$.friendly_name',
             },
             {
               id: 'teams',

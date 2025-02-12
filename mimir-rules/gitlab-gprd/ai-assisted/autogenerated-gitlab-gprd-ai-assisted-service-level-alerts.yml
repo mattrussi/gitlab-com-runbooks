@@ -22,7 +22,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -68,7 +68,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -118,7 +118,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -168,7 +168,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -218,7 +218,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -257,7 +257,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -295,7 +295,7 @@ groups:
             rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
           )
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -346,7 +346,7 @@ groups:
             rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
           )
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -394,7 +394,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -442,7 +442,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -490,7 +490,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -527,7 +527,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
-      runbook: docs/ai-assisted/README.md
+      runbook: docs/ai-assisted/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

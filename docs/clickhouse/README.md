@@ -19,7 +19,6 @@
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
-* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
 
 ## Summary
@@ -70,7 +69,7 @@ Console URL: [https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06
 
 ### ClickHouse Cloud Backup & Restore
 
-Runbook for restoring a ClickHouse Cloud instance from a backup after failure of an instance. [[Link](clickhouse-cloud-backup-restore.md)]
+Runbook for restoring a ClickHouse Cloud instance from a backup after failure of an instance. [[Link](backup-restore.md)]
 
 <!-- ## Architecture -->
 

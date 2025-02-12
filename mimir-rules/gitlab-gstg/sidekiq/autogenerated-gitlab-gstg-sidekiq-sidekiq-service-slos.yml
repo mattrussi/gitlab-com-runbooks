@@ -44,6 +44,22 @@ groups:
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: llm_chat_first_token
+      monitor: global
+      shard: ""
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: llm_chat_first_token
+      monitor: global
+      shard: ""
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: llm_completion
       monitor: global
       tier: sv
@@ -138,14 +154,6 @@ groups:
     labels:
       component: sidekiq_queueing
       monitor: global
-      shard: quarantine
-      tier: sv
-      type: sidekiq
-    expr: "0.970000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: sidekiq_queueing
-      monitor: global
       shard: urgent-authorized-projects
       tier: sv
       type: sidekiq
@@ -187,6 +195,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: enqueued_jobs
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: llm_chat_first_token
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "no"

@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -62,7 +62,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -78,6 +78,316 @@ groups:
       gitlab_component_ops:rate_5m{component="enqueued_jobs",env="pre",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="enqueued_jobs",env="pre",monitor="global",stage="main",type="sidekiq"}
+  - alert: SidekiqServiceLlmChatFirstTokenApdexSLOViolationSingleShard
+    for: 10m
+    annotations:
+      title: The llm_chat_first_token SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has an apdex violating SLO
+      description: |
+        These signifies Time to First Token (TTFT) for Duo Chat, from when chat is first received, till we send out the first token.
+
+        A success means that we send out the first token.
+
+        An error could be that the AI-provider is not responding, or is erroring.
+
+        For the apdex, we consider it fast enough if first token is sent to user within 5 seconds. This includes the time it took for the Sidekiq job to get picked up. This does not include the time it took to deliver the response to the client.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-pre
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "772575558"
+      grafana_variables: environment,stage,shard
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_shard_apdex:ratio_1h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,shard,component)
+        (
+          gitlab_component_shard_apdex:ratio_5m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,shard,component)
+      (
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceLlmChatFirstTokenApdexSLOViolationSingleShard
+    for: 10m
+    annotations:
+      title: The llm_chat_first_token SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has an apdex violating SLO
+      description: |
+        These signifies Time to First Token (TTFT) for Duo Chat, from when chat is first received, till we send out the first token.
+
+        A success means that we send out the first token.
+
+        An error could be that the AI-provider is not responding, or is erroring.
+
+        For the apdex, we consider it fast enough if first token is sent to user within 5 seconds. This includes the time it took for the Sidekiq job to get picked up. This does not include the time it took to deliver the response to the client.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-pre
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "772575558"
+      grafana_variables: environment,stage,shard
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_shard_apdex:ratio_6h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,shard,component)
+        (
+          gitlab_component_shard_apdex:ratio_30m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,shard,component)
+      (
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}) >= 0.16667
+      )
+  - alert: SidekiqServiceLlmChatFirstTokenErrorSLOViolationSingleShard
+    for: 10m
+    annotations:
+      title: The llm_chat_first_token SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has an error rate violating SLO
+      description: |
+        These signifies Time to First Token (TTFT) for Duo Chat, from when chat is first received, till we send out the first token.
+
+        A success means that we send out the first token.
+
+        An error could be that the AI-provider is not responding, or is erroring.
+
+        For the apdex, we consider it fast enough if first token is sent to user within 5 seconds. This includes the time it took for the Sidekiq job to get picked up. This does not include the time it took to deliver the response to the client.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-pre
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2428938326"
+      grafana_variables: environment,stage,shard
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard) (
+          rate(gitlab_sli_llm_chat_first_token_error_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_shard_errors:ratio_1h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,shard,component)
+        (
+          gitlab_component_shard_errors:ratio_5m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,shard,component)
+      (
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceLlmChatFirstTokenErrorSLOViolationSingleShard
+    for: 10m
+    annotations:
+      title: The llm_chat_first_token SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has an error rate violating SLO
+      description: |
+        These signifies Time to First Token (TTFT) for Duo Chat, from when chat is first received, till we send out the first token.
+
+        A success means that we send out the first token.
+
+        An error could be that the AI-provider is not responding, or is erroring.
+
+        For the apdex, we consider it fast enough if first token is sent to user within 5 seconds. This includes the time it took for the Sidekiq job to get picked up. This does not include the time it took to deliver the response to the client.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-pre
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2428938326"
+      grafana_variables: environment,stage,shard
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard) (
+          rate(gitlab_sli_llm_chat_first_token_error_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_shard_errors:ratio_6h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,shard,component)
+        (
+          gitlab_component_shard_errors:ratio_30m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,shard,component)
+      (
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}) >= 0.16667
+      )
+  - alert: SidekiqServiceLlmChatFirstTokenTrafficCessationSingleShard
+    for: 5m
+    annotations:
+      title: The llm_chat_first_token SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has not received any traffic in the past 30m
+      description: |
+        These signifies Time to First Token (TTFT) for Duo Chat, from when chat is first received, till we send out the first token.
+
+        A success means that we send out the first token.
+
+        An error could be that the AI-provider is not responding, or is erroring.
+
+        For the apdex, we consider it fast enough if first token is sent to user within 5 seconds. This includes the time it took for the Sidekiq job to get picked up. This does not include the time it took to deliver the response to the client.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-pre
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4212181637"
+      grafana_variables: environment,stage,shard
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard) (
+          rate(gitlab_sli_llm_chat_first_token_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_shard_ops:rate_30m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"} == 0
+      and
+      gitlab_component_shard_ops:rate_30m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"} offset 1h >= 0.16666666666666666
+  - alert: SidekiqServiceLlmChatFirstTokenTrafficAbsentSingleShard
+    for: 30m
+    annotations:
+      title: The llm_chat_first_token SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has not reported any traffic in the past 30m
+      description: |
+        These signifies Time to First Token (TTFT) for Duo Chat, from when chat is first received, till we send out the first token.
+
+        A success means that we send out the first token.
+
+        An error could be that the AI-provider is not responding, or is erroring.
+
+        For the apdex, we consider it fast enough if first token is sent to user within 5 seconds. This includes the time it took for the Sidekiq job to get picked up. This does not include the time it took to deliver the response to the client.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
+      grafana_datasource_id: mimir-gitlab-pre
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4212181637"
+      grafana_variables: environment,stage,shard
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard) (
+          rate(gitlab_sli_llm_chat_first_token_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+    labels:
+      aggregation: component_shard
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_shard_ops:rate_5m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"} offset 1h
+      unless
+      gitlab_component_shard_ops:rate_5m{component="llm_chat_first_token",env="pre",monitor="global",type="sidekiq"}
   - alert: SidekiqServiceLlmCompletionApdexSLOViolation
     for: 2m
     annotations:
@@ -88,7 +398,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -102,7 +412,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1328354732"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -140,7 +450,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -154,7 +464,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1328354732"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -192,7 +502,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -210,7 +520,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -248,7 +558,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -266,7 +576,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -304,7 +614,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -322,7 +632,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -347,7 +657,7 @@ groups:
 
         A success means that we were able to present the user with a response that is delivered to a client that is subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
 
-        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
+        For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within 20 seconds. This does not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver the response to the client.
 
         The `service_class` label on the source metrics tells us which AI related features the operation is for.
 
@@ -367,7 +677,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_llm_completion_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -405,7 +715,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_error_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -456,7 +766,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_error_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -507,7 +817,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -547,7 +857,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_security_scan_total{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -583,7 +893,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -633,7 +943,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -683,7 +993,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -733,7 +1043,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -783,7 +1093,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -833,7 +1143,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -883,7 +1193,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -933,7 +1243,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -987,7 +1297,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1041,7 +1351,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1095,7 +1405,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -1138,7 +1448,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -1172,7 +1482,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "18986092"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1218,7 +1528,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "18986092"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1268,7 +1578,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1318,7 +1628,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1368,7 +1678,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1407,7 +1717,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1443,7 +1753,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1459,18 +1769,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_shard_apdex:ratio_1h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}
+          gitlab_component_shard_apdex:ratio_1h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.001000)
         )
         and on (env,environment,tier,type,stage,shard,component)
         (
-          gitlab_component_shard_apdex:ratio_5m{component="sidekiq_queueing",env="pre",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}
+          gitlab_component_shard_apdex:ratio_5m{component="sidekiq_queueing",env="pre",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,shard,component)
       (
-        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
@@ -1493,7 +1803,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1509,18 +1819,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_shard_apdex:ratio_6h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}
+          gitlab_component_shard_apdex:ratio_6h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.001000)
         )
         and on (env,environment,tier,type,stage,shard,component)
         (
-          gitlab_component_shard_apdex:ratio_30m{component="sidekiq_queueing",env="pre",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}
+          gitlab_component_shard_apdex:ratio_30m{component="sidekiq_queueing",env="pre",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,shard,component)
       (
-        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"quarantine|urgent-authorized-projects",type="sidekiq"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_queueing",env="pre",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
@@ -1543,107 +1853,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
-    labels:
-      aggregation: component_shard
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_shard_apdex:ratio_1h{component="sidekiq_queueing",env="pre",monitor="global",shard="quarantine",type="sidekiq"}
-          < (1 - 14.4 * 0.030000)
-        )
-        and on (env,environment,tier,type,stage,shard,component)
-        (
-          gitlab_component_shard_apdex:ratio_5m{component="sidekiq_queueing",env="pre",monitor="global",shard="quarantine",type="sidekiq"}
-          < (1 - 14.4 * 0.030000)
-        )
-      )
-      and on(env,environment,tier,type,stage,shard,component)
-      (
-        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",shard="quarantine",type="sidekiq"}) >= 1
-      )
-  - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
-    for: 10m
-    annotations:
-      title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
-        }}` has an apdex violating SLO
-      description: |
-        The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
-
-        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
-
-        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
-        }}
-      grafana_datasource_id: mimir-gitlab-pre
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3643825112"
-      grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
-    labels:
-      aggregation: component_shard
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_shard_apdex:ratio_6h{component="sidekiq_queueing",env="pre",monitor="global",shard="quarantine",type="sidekiq"}
-          < (1 - 6 * 0.030000)
-        )
-        and on (env,environment,tier,type,stage,shard,component)
-        (
-          gitlab_component_shard_apdex:ratio_30m{component="sidekiq_queueing",env="pre",monitor="global",shard="quarantine",type="sidekiq"}
-          < (1 - 6 * 0.030000)
-        )
-      )
-      and on(env,environment,tier,type,stage,shard,component)
-      (
-        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_queueing",env="pre",monitor="global",shard="quarantine",type="sidekiq"}) >= 0.16667
-      )
-  - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
-    for: 10m
-    annotations:
-      title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
-        }}` has an apdex violating SLO
-      description: |
-        The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
-
-        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
-
-        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
-        }}
-      grafana_datasource_id: mimir-gitlab-pre
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3643825112"
-      grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1693,7 +1903,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: slo_violation
@@ -1747,7 +1957,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -1790,7 +2000,7 @@ groups:
         sum by (env,environment,tier,stage,shard) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component_shard
       alert_class: traffic_cessation
@@ -1824,7 +2034,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2093896509"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1870,7 +2080,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2093896509"
       grafana_variables: environment,stage
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -1920,7 +2130,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -1959,7 +2169,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
-      runbook: docs/sidekiq/README.md
+      runbook: docs/sidekiq/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

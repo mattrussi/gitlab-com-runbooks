@@ -38,6 +38,14 @@ local explainer = |||
   - __Apdex__ shows the Apdex score over time
 |||;
 
+local pipeline_duration_query = |||
+  quantile(%(quantile)s,
+    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[$__range])
+      unless
+    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[1h] offset $__range)
+  )
+|||;
+
 basic.dashboard(
   'Deployment SLO',
   tags=['release'],
@@ -59,6 +67,15 @@ basic.dashboard(
   sort=3,  //numerical asc
 ))
 
+.addPanel(
+  grafana.row.new(title='Deployment SLO'),
+  gridPos={
+    x: 0,
+    y: 0,
+    w: 12,
+    h: 24,
+  }
+)
 
 .addPanels(
   layout.singleRow([
@@ -140,5 +157,59 @@ basic.dashboard(
       ),
     ], startRow=200,
   ),
+)
+
+.addPanels(
+  layout.grid([
+    grafana.row.new(title='Packager pipeline duration'),
+
+    graphPanel.new(
+      'Duration of Omnibus packager pipelines',
+      description='Time taken for 80% and 90% of Omnibus packager pipelines to complete',
+      decimals=2,
+      labelY1='Duration',
+      legend_values=true,
+      legend_current=true,
+      legend_alignAsTable=true,
+      min=0,
+      format='s',
+    )
+    .addTarget(
+      prometheus.target(
+        pipeline_duration_query % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/omnibus-gitlab' },
+        legendFormat='Omnibus P80 duration',
+      )
+    )
+    .addTarget(
+      prometheus.target(
+        pipeline_duration_query % { quantile: '0.9', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/omnibus-gitlab' },
+        legendFormat='Omnibus P90 duration',
+      )
+    ),
+
+    graphPanel.new(
+      'Duration of CNG packager pipelines',
+      description='Time taken for 80% and 90% of CNG packager pipelines to complete',
+      decimals=2,
+      labelY1='Duration',
+      legend_values=true,
+      legend_current=true,
+      legend_alignAsTable=true,
+      min=0,
+      format='s',
+    )
+    .addTarget(
+      prometheus.target(
+        pipeline_duration_query % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/charts/components/images' },
+        legendFormat='CNG P80 duration',
+      )
+    )
+    .addTarget(
+      prometheus.target(
+        pipeline_duration_query % { quantile: '0.9', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/charts/components/images' },
+        legendFormat='CNG P90 duration',
+      )
+    ),
+  ], cols=2, rowHeight=10, startRow=300)
 )
 .trailer()

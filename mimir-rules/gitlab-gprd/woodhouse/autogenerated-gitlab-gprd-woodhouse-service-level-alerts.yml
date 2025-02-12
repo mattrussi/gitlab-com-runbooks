@@ -27,7 +27,7 @@ groups:
             rate(woodhouse_async_job_duration_seconds_bucket{environment="{{ $labels.environment }}",job="woodhouse",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -79,7 +79,7 @@ groups:
             rate(woodhouse_async_job_duration_seconds_bucket{environment="{{ $labels.environment }}",job="woodhouse",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -128,7 +128,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(woodhouse_async_jobs_total{environment="{{ $labels.environment }}",job="woodhouse",stage="{{ $labels.stage }}",status="error"}[5m])
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -177,7 +177,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(woodhouse_async_jobs_total{environment="{{ $labels.environment }}",job="woodhouse",stage="{{ $labels.stage }}",status="error"}[5m])
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -229,7 +229,7 @@ groups:
             rate(woodhouse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="woodhouse",route!="/ready",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -281,7 +281,7 @@ groups:
             rate(woodhouse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="woodhouse",route!="/ready",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -330,7 +330,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(woodhouse_http_requests_errors_total{environment="{{ $labels.environment }}",job="woodhouse",route!="/ready",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -379,7 +379,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(woodhouse_http_requests_errors_total{environment="{{ $labels.environment }}",job="woodhouse",route!="/ready",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/woodhouse/README.md
+      runbook: docs/woodhouse/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
