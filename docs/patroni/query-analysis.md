@@ -28,7 +28,7 @@ Additional dashboards:
 1. [Postgres node performance overview (high-level)](https://dashboards.gitlab.net/d/postgres-ai-node-performance-overview) – this dashboard has many workload-related panels, for a high-level view at the whole workload, without segmentation by `queryid`
 1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04] Wait events analysis dashboard. This Dashboard offers performance analysis centered around wait events, it provides same functionality as RDS Performance Insights.
 
-## How to use dasboards
+## How to use dashboards
 
 All dashboards mentioned above deal with a single node. Thus, the first step is to make sure that the proper Postgres node is chosen:
 
