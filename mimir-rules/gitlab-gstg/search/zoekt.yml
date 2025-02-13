@@ -20,3 +20,25 @@ groups:
           description: >
             The zoekt `{{ $labels.container }}` container is being OOM killed and restarting. This will likely affect users performing code searches.
           title: Zoekt GKE containers are being OOM killed
+      - alert: search_zoekt_task_processing_queue_backing_up
+        expr: >
+          avg by (environment, stage) (
+            search_zoekt_task_processing_queue_size{env="gstg"}
+          ) > 10000
+        for: 15m
+        labels:
+          severity: s4
+          alert_type: symptom
+          team: global_search
+          user_impacting: "no"
+        annotations:
+          grafana_datasource_id: mimir-gitlab-gstg
+          title: "Task processing queue: Large number of tasks waiting to be indexed by Zoekt"
+          description: >
+            There are over {{ $value }} tasks on {{ $labels.environment }} in the task processing queue waiting to be indexed for the last
+            15 minutes. This could indicate that Zoekt is failing. Reach out to  #g_global_search to see what is causing this.
+          environment: "{{ $labels.environment }}"
+          grafana_dashboard_id: search-zoekt/search3a-zoekt-info
+          grafana_panel_id: "15" # stableId=panel-15
+          grafana_dashobard_link: >
+            https://dashboards.gitlab.net/d/search-zoekt/search3a-zoekt-info?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
