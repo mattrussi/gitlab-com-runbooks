@@ -24,6 +24,7 @@
 ## Troubleshooting Pointers
 
 * [Atlantis Web UI](../atlantis/webui.md)
+* [Cells DNS](../cells/dns.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)

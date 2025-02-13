@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Cells DNS](../cells/dns.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [Cloudflare Audit Log Rule Processing](cloudflare-audit-log-rule-processing.md)
 * [Cloudflare](intro.md)
