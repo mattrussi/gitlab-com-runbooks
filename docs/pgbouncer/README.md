@@ -47,7 +47,6 @@
 * [service-pgbouncer.md](service-pgbouncer.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
-* [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
