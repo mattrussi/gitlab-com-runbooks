@@ -2,7 +2,7 @@ groups:
 - name: Runway CloudSQL Restore Validation
   rules:
   - alert: NoRestorePipelineStarted
-    expr: max(time() - runway_csql_restore_start) by (resource) > 86400
+    expr: max(time() - runway_csql_restore_start) by (env, type, resource) > 86400
     labels:
       alert_type: symptom
       severity: s4
@@ -15,9 +15,9 @@ groups:
       runbook: docs/runway/cloudsql_restore_pipeline_troubleshooting.md
   - alert: RestorePipelineNotSuccessful
     expr: |
-      max(time() - runway_csql_restore_start) by (resource) > 7200
+      max(time() - runway_csql_restore_start) by (env, type, resource) > 7200
       and
-      max(runway_csql_restore_finish - runway_csql_restore_start) by (resource) < 0
+      max(runway_csql_restore_finish - runway_csql_restore_start) by (env, type, resource) < 0
     labels:
       alert_type: symptom
       severity: s4

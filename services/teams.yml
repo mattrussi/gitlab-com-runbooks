@@ -593,9 +593,10 @@ teams:
 
 - name: runway
   product_stage_group: runway
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
-  manager: devin
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/runway/
+  manager: jtoto-gtl
   label: team::Runway
+  send_slo_alerts_to_team_slack_channel: true
   slack_alerts_channel: f_runway_alerts
 
 - name: observability
