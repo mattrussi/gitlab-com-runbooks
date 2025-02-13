@@ -17,6 +17,7 @@
 
 * [Upgrade camoproxy](../camoproxy/upgrade-camoproxy.md)
 * [Cells and Auto-Deploy](../cells/auto-deploy.md)
+* [Cells DNS](../cells/dns.md)
 * [Infrastructure Development](../cells/infra-development.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gkms.md](../certificates/gkms.md)

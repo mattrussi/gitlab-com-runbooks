@@ -26,6 +26,7 @@
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [Blackbox git exporter is down](../blackbox/blackbox-git-exporter.md)
 * [Cells and Auto-Deploy](../cells/auto-deploy.md)
+* [Cells DNS](../cells/dns.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)

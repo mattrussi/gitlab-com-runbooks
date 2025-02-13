@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Cells DNS](../cells/dns.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
