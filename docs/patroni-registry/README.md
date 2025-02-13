@@ -19,7 +19,6 @@
 
 * [Interacting with Consul](../consul/interaction.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
-* [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
