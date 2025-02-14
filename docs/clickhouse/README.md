@@ -97,10 +97,10 @@ Several [analytics features](https://docs.gitlab.com/ee/user/analytics/) are imp
 
 In case of an outage in ClickHouse cloud services, the impact would include:
 
-- Slower load times for the [Contribution Analytics](https://docs.gitlab.com/ee/user/group/contribution_analytics) pages.
-- An outage in features that are implemented in ClickHouse only, for example: [AI impact analytics](https://docs.gitlab.com/ee/user/analytics/ai_impact_analytics.html) and [CI/CD analytics](https://docs.gitlab.com/ee/user/analytics/ci_cd_analytics.html).
+* Slower load times for the [Contribution Analytics](https://docs.gitlab.com/ee/user/group/contribution_analytics) pages.
+* An outage in features that are implemented in ClickHouse only, for example: [AI impact analytics](https://docs.gitlab.com/ee/user/analytics/ai_impact_analytics.html) and [CI/CD analytics](https://docs.gitlab.com/ee/user/analytics/ci_cd_analytics.html).
 
-While the option is there to switch back to PostgreSQL by [disabling ClickHouse](https://docs.gitlab.com/ee/administration/analytics.html), this could be helpful in restoring some features that are implmeneted in both PG and CH, but won't be helpful for features that depends only on CH.
+While the option is there to switch back to PostgreSQL by [disabling ClickHouse](https://docs.gitlab.com/ee/administration/analytics.html), this could be helpful in restoring some features that are implmeneted in both PG and CH, but won't be helpful for features that depend only on CH.
 
 When we disable the analytics ClickHouse integration for features that exist in PG too (Contribution Analytics), we're not creating a data split. Data is always present in PG and it's the source of truth. When ClickHouse integration is disabled, the backend falls back to querying PG. Once the integration is switched back on, background workers will ensure data during the outage is synced to ClickHouse.
 
