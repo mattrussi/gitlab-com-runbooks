@@ -316,38 +316,38 @@ local validateTags(tags) =
     ts.options.legend.withCalcs(legendCalcs) +
     ts.options.legend.withShowLegend(legend_show) +
     ts.options.legend.withPlacement(legendPlacement) +
-    ts.panelOptions.withDescription(description),
+    ts.panelOptions.withDescription(description) +
+    {
+      addSeriesOverride(override):: self {
+        local matcherId =
+          if std.startsWith(override.alias, '/') && std.endsWith(override.alias, '/') then
+            'byRegexp'
+          else
+            'name',
 
-  addSeriesOverride(override):: self {
-    local matcherId =
-      if std.startsWith(override.alias, '/') && std.endsWith(override.alias, '/') then
-        'byRegexp'
-      else
-        'name',
-
-    overrides+: ts.standardOptions.withOverrides(
-      {
-        matcher: {
-          id: matcherId,
-          options: override.alias,
-        },
-        properties: [
-          if override.color then
-            {
-              id: 'color',
-              value: {
-                fixedColor: override.color,
-                mode: 'fixed',
-              },
+        overrides+: ts.standardOptions.withOverrides(
+          {
+            matcher: {
+              id: matcherId,
+              options: override.alias,
             },
-        ],
+            properties: [
+              if std.objectHas(override, 'color') then
+                {
+                  id: 'color',
+                  value: {
+                    fixedColor: override.color,
+                    mode: 'fixed',
+                  },
+                },
+            ],
+          },
+        ),
       },
-    ),
-  },
-
-  addTarget(target):: self {
-    targets+: ts.queryOptions.withTargets(target),
-  },
+      addTarget(target):: self {
+        targets+: ts.queryOptions.withTargets(target),
+      },
+    },
 
   graphPanel(
     title,

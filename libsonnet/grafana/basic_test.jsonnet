@@ -7,12 +7,12 @@ local row = grafana.row;
 local testStableIdDashboard =
   basic.dashboard('Test', [])
   .addPanels([
-    basic.graphPanel('TEST', stableId='test-graph-panel'),
+    basic_timeseries.graphPanel('TEST', stableId='test-graph-panel'),
   ])
   .addPanel(
     row.new(title='Row', collapse=true)
     .addPanels([
-      basic.graphPanel('TEST', stableId='collapsed-panel'),
+      basic_timeseries.graphPanel('TEST', stableId='collapsed-panel'),
     ]),
     gridPos={
       x: 0,

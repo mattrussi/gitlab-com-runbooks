@@ -1,7 +1,7 @@
+local basic = import '../grafana/basic.libsonnet';
+local seriesOverrides = import '../grafana/series_overrides.libsonnet';
 local sliPromQL = import './sli_promql.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 
 local defaultOperationRateDescription = 'The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.';
 
@@ -33,6 +33,22 @@ local genericOperationRatePanel(
     max=1,
     min=0,
     show=false,
+  )
+  .addSeriesOverride(seriesOverrides.shardLevelSli);
+
+local genericOperationRateTimeSeriesPanel(
+  title,
+  description=null,
+  compact=false,
+  stableId,
+  linewidth=null,
+  legend_show=null,
+      ) =
+  basic.timeSeriesPanel(
+    title,
+    linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
+    description=if description == null then defaultOperationRateDescription else description,
+    legend_show=if legend_show == null then !compact else legend_show,
   )
   .addSeriesOverride(seriesOverrides.shardLevelSli);
 
@@ -101,6 +117,73 @@ local operationRatePanel(
 
   panelWithPredictions;
 
+local operationRateTimeSeriesPanel(
+  title,
+  aggregationSet,
+  selectorHash,
+  stableId,
+  legendFormat=null,
+  compact=false,
+  includePredictions=false,
+  includeLastWeek=true,
+  expectMultipleSeries=false,
+      ) =
+  local selectorHashWithExtras = selectorHash + aggregationSet.selector;
+
+  local panel =
+    genericOperationRateTimeSeriesPanel(
+      title,
+      compact=compact,
+      stableId=stableId,
+      linewidth=if expectMultipleSeries then 1 else 2
+    )
+    .addTarget(  // Primary metric
+      promQuery.timeSeriesTarget(
+        sliPromQL.opsRateQuery(aggregationSet, selectorHashWithExtras, range='$__interval'),
+        legendFormat=legendFormat,
+      )
+    );
+
+  local panelWithSeriesOverrides = if !expectMultipleSeries then
+    panel.addSeriesOverride(seriesOverrides.goldenMetric(legendFormat))
+  else
+    panel;
+
+  local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
+    panelWithSeriesOverrides
+    .addTarget(  // Last week
+      promQuery.timeSeriesTarget(
+        sliPromQL.opsRateQuery(aggregationSet, selectorHashWithExtras, range=null, offset='1w'),
+        legendFormat='last week',
+      )
+    )
+    .addSeriesOverride(seriesOverrides.lastWeek)
+  else
+    panelWithSeriesOverrides;
+
+  local panelWithPredictions = if !expectMultipleSeries && includePredictions then
+    panelWithLastWeek
+    .addTarget(
+      promQuery.timeSeriesTarget(
+        sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, 1),
+        legendFormat='upper normal',
+      ),
+    )
+    .addTarget(
+      promQuery.timeSeriesTarget(
+        sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, -1),
+        legendFormat='lower normal',
+      ),
+    )
+    .addSeriesOverride(seriesOverrides.upper)
+    .addSeriesOverride(seriesOverrides.lower)
+  else
+    panelWithLastWeek;
+
+  panelWithPredictions;
+
+
 {
   panel:: operationRatePanel,
+  timeSeriesPanel:: operationRateTimeSeriesPanel,
 }

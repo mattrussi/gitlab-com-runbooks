@@ -1,7 +1,7 @@
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import '../../metrics-catalog/gitlab-metrics-config.libsonnet').aggregationSets;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+local singleMetricRow = import '../key-metric-panels/single-metric-row.libsonnet';
 local utilizationRatesPanel = import 'key-metric-panels/utilization-rates-panel.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local panels = import 'key-metric-panels/time-series/panels.libsonnet';
