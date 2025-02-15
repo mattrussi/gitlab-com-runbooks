@@ -1,6 +1,6 @@
 module gitlab.com/gitlab-com/runbooks/alertmanager/templates
 
-go 1.23.6
+go 1.24.0
 
 require github.com/prometheus/alertmanager v0.28.0
 
