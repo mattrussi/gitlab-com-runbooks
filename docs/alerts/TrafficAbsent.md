@@ -49,6 +49,10 @@ Common troubleshooting steps though may differ slightly for each service:
 - A low traffic service gets no traffic for a period of time during the weekend or over holidays
 - A service gets low or no traffic during scheduled maintenance periods
 
+### False Negatives
+
+Because of the way we attempt to avoid false positives with low traffic services it is possible for a service's traffic to degrade to near zero but not reach it and then not be detected by the traffic cessation alerts. Therefore it is important to have other alerts you can fall back on in those situations, such as a service's error rate.
+
 ## Services
 
 Refer to the service catalogue for the service owners and escalation [Service Catalogue](../../services/service-catalog.yml)

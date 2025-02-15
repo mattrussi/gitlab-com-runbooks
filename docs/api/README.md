@@ -19,9 +19,10 @@
 ## Troubleshooting Pointers
 
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
+* [Cells DNS](../cells/dns.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Shared CI Runner Timeouts](../ci-runners/ci-runner-timeouts.md)
-* [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [CI runner manager report a high number of errors](../ci-runners/ci_runner_manager_errors.md)
@@ -34,7 +35,7 @@
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [../duo/triage.md](../duo/triage.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
@@ -50,6 +51,8 @@
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
+* [HostedRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard](../hosted-runners/jobs_apdex_slo_violation.md)
+* [Missing Metrics in HTTP Router Dashboard](../http-router/missing-metrics.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Helm Upgrade is Stuck](../kube/helm-upgrade-stuck.md)
@@ -66,8 +69,6 @@
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Push Gateway](../monitoring/pushgateway.md)
-* [Thanos Query and Stores](../monitoring/thanos-query.md)
-* [Thanos Receive](../monitoring/thanos-receive.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
@@ -89,6 +90,7 @@
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [High Number of Pending or Failed Outgoing Webhook Notifications](../registry/webhook-notifications.md)
+* [High deploy pressure](../release-management/deploy_pressure.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
@@ -96,7 +98,6 @@
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
-* [Thanos Architecture Overview](../thanos/architecture.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)
@@ -110,6 +111,7 @@
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
+* [Woodhouse-Slack Overview](../woodhouse-slack/overview.md)
 <!-- END_MARKER -->
 
 ## Summary

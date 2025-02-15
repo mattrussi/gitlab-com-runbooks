@@ -131,7 +131,7 @@ while [ $OFFSET -le "${LOOKBACK}" ]; do
   OFFSET_DATE=$(echo "${DATE} - (${OFFSET} * 60)" | bc)
   QUERY_DATE=$($DATE_CMD --utc --iso-8601=minutes --date "@${OFFSET_DATE}" | cut -d+ -f1 | sed 's/[-:]//g')
   QUERY_DAY=$(echo "$QUERY_DATE" | cut -dT -f1)
-  URLS="${URLS} gs://gitlab-${ENVIRONMENT}-cloudflare-logpush/${TYPE}/${QUERY_DAY}/${QUERY_DATE}*Z*"
+  URLS="${URLS} gs://gitlab-${ENVIRONMENT}-cloudflare-logpush/${TYPE}/dt=${QUERY_DAY}/${QUERY_DATE}*Z*"
   ((OFFSET = OFFSET + 1))
 done
 echo "Searching log files..." 1>&2

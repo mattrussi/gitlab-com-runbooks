@@ -24,7 +24,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
-      runbook: docs/search/README.md
+      runbook: docs/search/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -61,7 +61,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
-      runbook: docs/search/README.md
+      runbook: docs/search/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -96,7 +96,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
-      runbook: docs/search/README.md
+      runbook: docs/search/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -134,7 +134,7 @@ groups:
         sum by (env,environment,tier,stage) (
           clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
-      runbook: docs/search/README.md
+      runbook: docs/search/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -174,7 +174,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_global_search_indexing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/search/README.md
+      runbook: docs/search/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -215,7 +215,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_global_search_indexing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/search/README.md
+      runbook: docs/search/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

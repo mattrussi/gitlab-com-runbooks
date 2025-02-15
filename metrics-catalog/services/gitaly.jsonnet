@@ -12,7 +12,7 @@ local baseSelector = { type: 'gitaly', job: { oneOf: ['gitaly', 'scrapeConfig/mo
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
   // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10248
@@ -147,6 +147,17 @@ metricsCatalog.serviceDefinition({
             {
               start: '2021-01-01',
               end: '2024-03-10',
+            },
+          ],
+        },
+      },
+      {
+        name: 'go_goroutines',
+        parameters: {
+          ignore_outliers: [
+            {
+              start: '2025-01-27',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19217
+              end: '2025-02-12',  // + https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19295
             },
           ],
         },

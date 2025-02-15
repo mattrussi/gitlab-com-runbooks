@@ -9,7 +9,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     horizontallyScalable: true,
     appliesTo: std.setInter(
       std.set(metricsCatalog.findServicesWithTag(tag='golang')),
-      std.set(metricsCatalog.findVMProvisionedServices())
+      std.set(metricsCatalog.findVMProvisionedServices() + metricsCatalog.findRunwayProvisionedServices())
     ),
     description: |||
       Go goroutines utilization per node.
@@ -20,7 +20,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       it's a sign of a leak and it should be dealt with.
     |||,
     grafana_dashboard_uid: 'sat_go_goroutines',
-    resourceLabels: ['fqdn'],
+    resourceLabels: ['fqdn', 'region', 'instance'],
     queryFormatConfig: {
       maxGoroutines: 250000,
     },

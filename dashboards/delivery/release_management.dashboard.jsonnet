@@ -7,6 +7,7 @@ local basic = import 'grafana/basic.libsonnet';
 local annotation = grafana.annotation;
 local graphPanel = grafana.graphPanel;
 local statPanel = grafana.statPanel;
+local textPanel = grafana.text;
 local row = grafana.row;
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 
@@ -38,13 +39,6 @@ local environments = [
     role: 'gstg',
     stage: 'cny',
     icon: '🐣',
-  },
-  {
-    id: 'gstg-ref',
-    name: 'Staging Ref',
-    role: 'gstg-ref',
-    stage: 'main',
-    icon: '🚧',
   },
 ];
 
@@ -86,21 +80,7 @@ local annotations = [
   ),
 ];
 
-local railsVersion(environment) =
-  prometheus.target(
-    |||
-      label_replace(
-        topk(1, count(
-          gitlab_version_info{environment="%(env)s", stage="%(stage)s", component="gitlab-rails", type!~"^redis.*"}
-        ) by (version)),
-        "version", "$1",
-        "version", "^([A-Fa-f0-9]{11}).*$"
-      )
-    ||| % { env: environment.role, stage: environment.stage },
-    instant=true,
-    format='table',
-    legendFormat='{{version}}',
-  );
+local buildPressureProjects = 'omnibus-gitlab-ee|cng-ee|gitlab-ee|gitaly|gitlab_kas';
 
 local packageVersion(environment) =
   prometheus.target(
@@ -216,22 +196,69 @@ basic.dashboard(
 )
 .addPanels(
   layout.splitColumnGrid([
-    // Column 1: rails versions
     [
-      statPanel.new(
-        '%s %s' % [environment.icon, environment.id],
-        description='Rails revision on %s.' % [environment.name],
-        reducerFunction='lastNotNull',
-        fields='/^version$/',
-        colorMode='none',
-        graphMode='none',
-        textMode='value',
-        unit='String',
-      )
-      .addTarget(railsVersion(environment))
-      for environment in environments
+      textPanel.new(
+        title='',
+        content=|||
+          Package versions on each environment
+        |||
+      ),
     ],
-    // Column 2: package versions
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Build pressure
+
+          The number of commits in `master` not yet included in a package.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Deploy pressure
+
+          The number of commits in `master` not yet deployed to each environment.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Patch release pressure: S1/S2
+
+          Number of S1/S2 merge requests merged in previous releases.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Patch release pressure: Total
+
+          Number of merge requests merged in previous releases regardless of severity.
+        |||
+      ),
+    ],
+    [
+      textPanel.new(
+        title='',
+        content=|||
+          Pending post deployment migrations
+
+          The number of post deployment migrations pending execution in each environment.
+        |||
+      ),
+    ],
+  ], cellHeights=[5], startRow=1)
+)
+.addPanels(
+  layout.splitColumnGrid([
+    // Column 1: package versions
     [
       statPanel.new(
         '%s %s' % [environment.icon, environment.id],
@@ -245,6 +272,29 @@ basic.dashboard(
       )
       .addTarget(packageVersion(environment))
       for environment in environments
+    ],
+    // Column 2: auto-deploy pressure
+    [
+      // Auto-build pressure
+      deliveryStatPanel(
+        'Auto-build pressure',
+        description='The number of commits in `master` not yet included in a package.',
+        query='max(delivery_auto_build_pressure{project_name=~"%(projects)s"}) by (project_name)' % { projects: buildPressureProjects },
+        legendFormat='{{project_name}}',
+        thresholds=[
+          { color: colorScheme.normalRangeColor, value: null },
+          { color: colorScheme.warningColor, value: 50 },
+          { color: colorScheme.errorColor, value: 100 },
+          { color: colorScheme.criticalColor, value: 150 },
+        ],
+        links=[
+          {
+            targetBlank: true,
+            title: 'Latest commits',
+            url: 'https://gitlab.com/gitlab-org/gitlab/commits/master',
+          },
+        ],
+      ),
     ],
     // Column 3: auto-deploy pressure
     [
@@ -310,8 +360,8 @@ basic.dashboard(
     // column 6: Post deploy migration pressure
     [
       deliveryStatPanel(
-        'Pending migrations',
-        description='The number of migrations pending execution in each environment.',
+        'Pending post deployment migrations',
+        description='The number of post deployment migrations pending execution in each environment.',
         query='ceil((sum(delivery_metrics_pending_migrations_total{env=~"gstg|gprd",stage="main"}) by (env))/2)',
         legendFormat='{{env}}',
         thresholds=[
@@ -346,5 +396,41 @@ basic.dashboard(
       environments
     )
   )
+)
+.addPanel(
+  graphPanel.new(
+    'Auto-build pressure for auto-deploy projects',
+    description='Number of commits not included in an auto-deploy package for projects whose versions are bumped by release-tools',
+    decimals=0,
+    labelY1='Commits',
+    legend_values=true,
+    legend_current=true,
+    legend_alignAsTable=true,
+    min=0,
+  )
+  .addTarget(
+    prometheus.target(
+      'sum(delivery_auto_build_pressure{project_name=~"%(projects)s"})' % { projects: buildPressureProjects },
+      legendFormat='sum',
+    )
+  ), gridPos={ x: 50, y: 2000, w: 12, h: 10 }
+)
+.addPanel(
+  graphPanel.new(
+    'Auto-build pressure for all projects',
+    description='Number of commits (in all projects) not included in an auto-deploy package',
+    decimals=0,
+    labelY1='Commits',
+    legend_values=true,
+    legend_current=true,
+    legend_alignAsTable=true,
+    min=0,
+  )
+  .addTarget(
+    prometheus.target(
+      'max(delivery_auto_build_pressure) by (project_name)',
+      legendFormat='{{project_name}}',
+    )
+  ), gridPos={ x: 50, y: 4000, w: 12, h: 10 }
 )
 .trailer()

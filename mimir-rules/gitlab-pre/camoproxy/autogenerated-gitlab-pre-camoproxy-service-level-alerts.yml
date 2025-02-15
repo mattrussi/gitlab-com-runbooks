@@ -22,7 +22,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -69,7 +69,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -116,7 +116,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -152,7 +152,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -191,7 +191,7 @@ groups:
             rate(camo_response_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -243,7 +243,7 @@ groups:
             rate(camo_response_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -292,7 +292,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(camo_proxy_reponses_failed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -341,7 +341,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(camo_proxy_reponses_failed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -390,7 +390,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(camo_response_duration_seconds_bucket{environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -428,7 +428,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(camo_response_duration_seconds_bucket{environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/camoproxy/README.md
+      runbook: docs/camoproxy/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

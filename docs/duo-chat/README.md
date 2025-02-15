@@ -22,8 +22,8 @@ This page explains how to investigate Duo Chat issues on production.
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
 - GitLab-Sidekiq:
-  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/CaUYv)
-  - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
+  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/K54dN)
+  - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/5pTeS)
   - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
   - [Duo Chat specific error codes](https://log.gprd.gitlab.net/app/r/s/eeO5a)
 - Redis:
@@ -72,6 +72,7 @@ Different deployments use different indexes. The following indexes are most help
 
 - AI Gateway logs are in the `pubsub-mlops-inf-gprd-*` index
 - GitLab Rails Sidekiq logs are in the `pubsub-sidekiq-inf-gprd*` index
+  - All LLM Sidekiq trafic is sent to a single Sidekiq shard, filtering on `json.shard.keyword: "ai-abstraction-layer"` will only return `ai-abstraction-layer` traffic.
   - When searching this index, filtering on `json.subcomponent : "llm"` ensures only LLM logs are returned
 - GitLab Rails logs are in the `pubsub-rails-inf-gprd-*` index
 
@@ -84,6 +85,21 @@ If you find requests for a user there but do not find any results for them using
 > ``json.meta.user : "username-that-received-error" and json.subcomponent : "llm"`
 
 That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up. See [Duo Chat does not respond or responds very slowly](#duo-chat-does-not-respond-or-responds-very-slowly) below.
+
+## AI Abstraction Layer Sidekiq Traffic
+
+Duo Chat requests and some Duo experimental features go through an isolated `urgent-ai-abstraction-layer` Sidekiq shard which provides a centralize platform to handle asynchronous jobs for our external LLM inferences. As part of the AI Framework's reslience objective, we've migrated our Sidekiq traffic onto one [single shard](https://gitlab.com/gitlab-org/gitlab/-/issues/489871) to seperate LLM requests from the entire Gitlab's sidekiq jobs.
+
+To find only Duo traffic, you can click on the the `pubsub-sidekiq-inf-*` Elastic Search.
+
+- Filter the logs by selecting `json.shard.keyword: "urgent-ai-abstraction-layer"` to limit logs coming from our respective Sidekiq containers.
+
+**Important Feature Category information**:
+Sidekiq feature category: `urgent-ai-abstraction-layer`
+GKE Deployment: `gkeDeployment: 'gitlab-sidekiq-urgent-ai-abstraction-layer-v2'`
+Queue Urgency: `throttled`
+
+See this [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18630) for more information.
 
 ### Tracing requests across different services
 
@@ -101,6 +117,27 @@ Here is an example of how to find correlated logs in the AI Gateway:
 - Access the `pubsub-mlops-inf-gprd-*` index:
 - Filter for the logs with `json.jsonPayload.correlation_id : <correlation_id`
 - _optional_: Click on the expanded logs icon and select "Surrounding documents" to view logs within relative same time stamp.
+
+### How to determine global user ID for a user
+
+When troubleshooting requests from self-managed users on the AI Gateway, it may be helpful to find their global user ID to narrow down requests.
+They should run this command on their instance rails console:
+
+```ruby
+u = User.find_by_username(<USERNAME>)
+Gitlab::GlobalAnonymousId.user_id(u)
+```
+
+Then you can filter by `json.jsonPayload.gitlab_global_user_id` to see requests from that specific user.
+
+You can also attempt to figure it out if you know the `gitlab_host_name` and approximate timestamp.
+
+1. Go to [AI Gateway log (Duo Chat)](https://log.gprd.gitlab.net/app/r/s/DhMe1)
+2. Filter by the `json.jsonPayload.gitlab_host_name `
+3. Narrow down the request by the timestamp given by the customer
+4. Look at the requests in the given time period and try to determine a `gitlab_global_user_id` that fits.
+
+This process involves guesswork, so it is best to ask the customer directly.
 
 ### Extra Kibana links
 
@@ -189,43 +226,89 @@ To enable expanded AI logging, access the `#production` Slack channel and run th
 /chatops run feature set --user=$USERNAME expanded_ai_logging true
 ```
 
-After the the `expanded_ai_logging` feature flag is enabled for a user, you view the user input and LLM output for any the GitLab Duo Chat requests made by the user.
+After the the `expanded_ai_logging` feature flag is enabled for a user, you view the user input and LLM output for any the GitLab Duo Chat requests made by the user. We've [extended the support](https://gitlab.com/gitlab-org/gitlab/-/issues/485490) to AI Gateway as well,
+so you can get a process-level logging, including actual request parameters and LLM response in the AI Gateway logs.
 
 Tips:
-We only need to enable the flag while we reproduce the bug on production. After we sampled a couple of problematic requests, we can disable the flag again
+
+- To trace the request across differnt services, [use correlation-id](#tracing-requests-across-different-services).
+- We only need to enable the flag while we reproduce the bug on production. After we sampled a couple of problematic requests, we can disable the flag again
 and continue examining the logs.
 
-## Chat Agent V2 specific
+## When problem is only identified on staging
 
-We're currently switching from V1 to V2 chat agent endpoint for the [Switch to Chat Agent V2](https://gitlab.com/groups/gitlab-org/-/epics/13533) epic.
+Here are the log links for staging:
 
-- [Current status](https://gitlab.com/groups/gitlab-org/-/epics/13533)
-- [Timeline](https://gitlab.com/groups/gitlab-org/-/epics/13533)
-- [Blockers / High priority](https://gitlab.com/groups/gitlab-org/-/epics/13533)
-- [Feature flag issue](https://gitlab.com/gitlab-org/gitlab/-/issues/466910)
+- [Rails](https://nonprod-log.gitlab.net/app/r/s/JH7Kx)
+- [Sidekiq](https://nonprod-log.gitlab.net/app/r/s/924Pa)
 
-### How to disable the feature flag for a specific user
+Make sure you have access to Duo Chat on staging. If not, request access to Duo Enterprise on the `#g_provision` Slack channel (for non-production environments only).
 
+If there is a problem only on staging but not production, the `env` variables may be at fault.
+Compare the default `env` variables from [staging](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/.runway/env-staging.yml) and [production](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/.runway/env-production.yml) to see if you can spot a relevant difference.
+
+## How to identify IDE-specific problems
+
+When a customer reports a problem with Duo Chat in the IDE, it can be difficult to tell if the problem is IDE-specific or not.
+
+The first step is to have the customer test their query on the web version of Duo Chat. If they have the same problem on web, it is not IDE-specific.
+
+Then, they can perform these steps to determine if it is a backend (AI Gateway) problem, or client-side on the editor:
+
+1. Ask the question in web
+2. Observe it works
+3. Run the `/reset` command on the web version
+4. Ask the same question in the IDE plugin
+5. Go back to the web and refresh the page.
+6. Check if there is a response there
+
+If the response does not show up on web, it is likely an AI Gateway problem. If the response does show up on web, it is likely a client-side IDE problem.
+
+## When a Duo Chat specific error code happened on self-managed GitLab
+
+When a [Duo Chat specific error code](#duo-chat-specific-error-codes) happened on self-managed GitLab,
+the following logs are helpful for further investigation:
+
+- [LLM log](https://docs.gitlab.com/ee/administration/logs/#llmlog)
+  - To get the full details, `expanded_ai_logging` feature flag needs to be enabled. Please see [the admin doc](https://docs.gitlab.com/ee/administration/feature_flags.html) for more information.
+- [Sidekiq log](https://docs.gitlab.com/ee/administration/logs/#sidekiqlog)
+
+Collect the log from the timestamp that the user reproduced the error code. 5-10 minutes of timerange should be enough.
+
+After we've collected the log, we do:
+
+1. Filter the llm.log by the error code (LLM log outputs the error code as-is). Extract the correlation-id in the same log line.
+2. Filter the llm.log and sidekloq.log by the extracted correlation-id. This gives us the details of the process flow, which is crucial to identify where the thing went wrong.
+
+## Rate Limits
+
+Duo Chat has the following rate limits:
+
+- AI Action Rate Limit: 160 calls per 8 hours per authenticated user
+  - This limit applies to GraphQL aiAction mutations
+  - When exceeded, returns error code A1001 with message "This endpoint has been requested too many times. Try again later"
+  - Configured via `application_settings.ai_action_api_rate_limit`
+  - Can be monitored in [GitLab Rails error rates dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/5f334d60-cfd7-11ee-bc6b-0b206b291ea1)
+
+When users hit rate limits:
+
+1. Check current rate limit usage:
+
+```ruby
+  # In Rails console
+  user = User.find_by_username('username')
+  Gitlab::ApplicationRateLimiter.throttled?(:ai_action, scope: [user], peek: true)
 ```
-/chatops run feature set --user=<your-user-name> v2_chat_agent_integration_override true
+
+2. For temporary relief, rate limits can be reset:
+
+```ruby
+  # In Rails console
+  Gitlab::RateLimitHelpers.new.reset_rate_limits(:ai_action, user)
 ```
 
-**Important**: The flag name is **v2_chat_agent_integration_override**. It's NOT `v2_chat_agent_integration`.
+3. For persistent issues, consider:
 
-We have a flag for [Selectively disable by actor](https://docs.gitlab.com/ee/development/feature_flags/controls.html#selectively-disable-by-actor) so that we can disable the flag for a specific user while we keep enabling the flag for the rest of the users. This is to take a balance between collecting bug reports by exposing the V2 feature as long as possible and de-risking the feature operation on the critical workflow.
-
-For example, if you're in the sales division and need to demonstrate the Duo Chat for customers but the feature is not working at the moment, this feature flag can be disabled only for you. Please reach out the `@gitlab-org/ai-powered/duo-chat` team for the assistance.
-
-See [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/484753) for more information.
-
-### Use Expanded AI logging if it's possible
-
-We've [extended the support](https://gitlab.com/gitlab-org/gitlab/-/issues/485490) of `expanded_ai_logging` feature flag to AI Gateway.
-This means you can get a process-level logging, including actual request parameters and LLM response in the log.
-This is a great help to understand what's happening in AI Gateway.
-
-To do so:
-
-1. Make sure that the user provides consent for [Expanded AI logging](#expanded-ai-logging).
-1. Enable the expanded AI logging.
-1. [Tracing requests across different services](#tracing-requests-across-different-services)
+- Reviewing usage patterns to identify potential abuse
+- Adjusting the global rate limit via application settings if needed
+- Adding user to allowlist if legitimate high usage case

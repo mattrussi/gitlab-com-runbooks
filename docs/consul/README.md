@@ -18,7 +18,6 @@
 ## Troubleshooting Pointers
 
 * [Interacting with Consul](interaction.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)

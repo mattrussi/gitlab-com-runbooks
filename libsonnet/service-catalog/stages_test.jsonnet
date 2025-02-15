@@ -4,7 +4,7 @@ local test = import 'test.libsonnet';
 test.suite({
   testBlank: {
     actual: stages.findStageGroupForFeatureCategory('user_profile').name,
-    expect: 'Tenant Scale',
+    expect: 'Organizations',
   },
   testNotOwnedStageGroupForFeatureCategory: {
     actual: stages.findStageGroupForFeatureCategory('not_owned').name,
@@ -24,7 +24,7 @@ test.suite({
   },
   testStageGroupAddsTeam: {
     actual: stages.stageGroup('authentication').slack_alerts_channel,
-    expect: 'g_govern_authentication',
+    expect: 'g_sscs_authentication',
   },
   testStageGroupNotOwnedLookup: {
     actual: stages.notOwned,

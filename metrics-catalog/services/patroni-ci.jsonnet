@@ -53,6 +53,7 @@ metricsCatalog.serviceDefinition(
             changepoints: [
               '2023-04-26',  // Introduction of backup node: https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/1026#note_1404708663
               '2023-04-28',
+              '2023-11-27',  // Putting v16 nodes into service with different memory configuration https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-db-patroni-ci-v16.json?ref_type=heads#L394 https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18639
             ],
           },
         },

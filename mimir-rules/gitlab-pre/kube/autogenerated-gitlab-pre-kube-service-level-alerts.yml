@@ -26,7 +26,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(apiserver_request_total{code=~"5..",environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/kube/README.md
+      runbook: docs/kube/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -37,7 +37,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: reliability_foundations
+      team: foundations
       user_impacting: "no"
       window: 1h
     expr: |
@@ -78,7 +78,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(apiserver_request_total{code=~"5..",environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/kube/README.md
+      runbook: docs/kube/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -89,7 +89,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      team: reliability_foundations
+      team: foundations
       user_impacting: "no"
       window: 6h
     expr: |
@@ -130,7 +130,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(apiserver_request_total{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/kube/README.md
+      runbook: docs/kube/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -141,7 +141,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: reliability_foundations
+      team: foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="apiserver",env="pre",monitor="global",stage="main",type="kube"} == 0
@@ -171,7 +171,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(apiserver_request_total{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/kube/README.md
+      runbook: docs/kube/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -182,7 +182,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      team: reliability_foundations
+      team: foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="apiserver",env="pre",monitor="global",stage="main",type="kube"} offset 1h
@@ -212,7 +212,7 @@ groups:
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[5m])
           )
         )
-      runbook: docs/kube/README.md
+      runbook: docs/kube/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -265,7 +265,7 @@ groups:
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[5m])
           )
         )
-      runbook: docs/kube/README.md
+      runbook: docs/kube/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation

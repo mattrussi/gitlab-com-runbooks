@@ -68,11 +68,8 @@ basic.dashboard(
   .addTarget(
     prometheus.target(
       |||
-        clamp_min(
-          sum(increase(delivery_packages_tagging_total{pkg_type="auto_deploy"}[1d])) -
-          sum(increase(delivery_deployment_started_total{target_env="gprd"}[1d]))
-        , 0)
-      |||, legendFormat='Not promoted'
+        sum(increase(delivery_deployment_started_total{target_env="gprd"}[1d]))
+      |||, legendFormat='Promoted'
     )
   )
   .addTarget(

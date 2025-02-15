@@ -76,7 +76,9 @@ metricsCatalog.serviceDefinition({
     'redis-sidekiq': true,
     'redis-cluster-queues-meta': true,
     'redis-cluster-cache': true,
+    'redis-cluster-database-lb': true,
     'redis-cluster-repo-cache': true,
+    'redis-cluster-sessions': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
@@ -188,12 +190,20 @@ metricsCatalog.serviceDefinition({
     ],
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
     emittedBy: ['ops-gitlab-net', 'sidekiq'],
+  }) + sliLibrary.get('security_scan').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,
+    severity: 's4',
+    emittedBy: ['sidekiq'],
+  }) + sliLibrary.get('llm_chat_first_token').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
   }),
 
   capacityPlanning: {
     saturation_dimensions: [
-      { selector: selectors.serializeHash({ shard: shard }) }
-      for shard in $.shards
+      { selector: selectors.serializeHash({ shard: shard.name }) }
+      for shard in sidekiqHelpers.shards.listAll()
+      if shard.capacityPlanning
     ],
     saturation_dimensions_keep_aggregate: false,
     components: [

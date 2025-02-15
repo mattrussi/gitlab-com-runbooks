@@ -114,21 +114,6 @@ local PagerDutyReceiver(channel) = {
   ],
 };
 
-local IncidentioReceiver(channel) = {
-  name: channel.name,
-  webhook_configs: [
-    {
-      url: channel.url,
-      send_resolved: true,
-      http_config: {
-        authorization: {
-          credentials: channel.token,
-        },
-      },
-    },
-  ],
-};
-
 local webhookReceiverDefaults = {
   httpConfig: {},
 };
@@ -461,14 +446,12 @@ local routingTree = Route(
     )
     for team in teamsWithAlertingSlackChannels()
   ] + [
-    // Route anomaly detection alerts to #g_delivery_alerts channel
+    // Route release management related alerts to #g_delivery_alerts channel
     Route(
-      receiver=receiverNameForTeamSlackChannel('delivery'),
+      receiver=receiverNameForTeamSlackChannel('release-management'),
       continue=true,
       matchers={
-        env: 'gprd',
-        type: { oneOf: ['api', 'git', 'web', 'sidekiq', 'kas', 'gitaly', 'internal-api', 'ai_assisted', 'gitlab-shell', 'websockets', 'pages'] },
-        alert_trigger: { re: '.*_anomaly' },
+        alert_trigger: { re: '.*_release_management' },
       }
     ),
     // Route SLO alerts for staging to `feed_alerts_staging`
@@ -501,13 +484,6 @@ local routingTree = Route(
       receiver='nonprod_alerts_slack_channel',
       continue=true,
       matchers={ env: { re: 'gstg(-ref)?' }, type: 'gitaly', tier: 'stor', component: 'disk_space' },
-    ),
-  ]
-  + [
-    Route(
-      receiver='incidentio_gstg',
-      continue=true,
-      matchers={ env: 'gstg' },
     ),
   ]
   + [
@@ -569,7 +545,6 @@ local receivers =
     channel: team.slack_alerts_channel,
   }) for team in teamsWithAlertingSlackChannels()] +
   [WebhookReceiver(c) for c in webhookChannels] +
-  [IncidentioReceiver(c) for c in secrets.incidentioChannels] +
   [
     // receiver that does nothing with the alert, blackholing it
     {

@@ -26,7 +26,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m])
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -77,7 +77,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m])
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -130,7 +130,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -172,7 +172,7 @@ groups:
           or
           label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]), "_c", "1", "", "")
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -206,9 +206,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 0)
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -255,9 +255,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 0)
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -304,11 +304,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "0", "", "")
           or
-          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "1", "", "")
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -344,11 +344,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "0", "", "")
           or
-          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 0), "_c", "1", "", "")
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -382,9 +382,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 1)
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -431,9 +431,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 1)
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -480,11 +480,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "0", "", "")
           or
-          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "1", "", "")
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -520,11 +520,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+          label_replace(rate(pg_stat_database_xact_commit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "0", "", "")
           or
-          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+          label_replace(rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni-embedding"}[5m]) and on (fqdn) (pg_replication_is_replica == 1), "_c", "1", "", "")
         )
-      runbook: docs/patroni-embedding/README.md
+      runbook: docs/patroni-embedding/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

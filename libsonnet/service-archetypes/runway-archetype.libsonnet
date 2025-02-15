@@ -20,7 +20,8 @@ function(
   severity='s4',
   customToolingLinks=[],
   regional=false,
-  externalLoadBalancer=true
+  externalLoadBalancer=true,
+  tags=[],
 )
   local baseSelector = { type: type };
   {
@@ -28,6 +29,8 @@ function(
     tier: 'sv',
 
     tenants: ['runway'],
+
+    tags: tags,
 
     monitoringThresholds: {
       apdexScore: apdexScore,

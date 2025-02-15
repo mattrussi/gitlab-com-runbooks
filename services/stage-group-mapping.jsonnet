@@ -31,8 +31,14 @@
   ux_paper_cuts: {
     name: 'UX Paper Cuts',
     stage: 'foundations',
+    feature_categories: [],
+  },
+  global_search: {
+    name: 'Global Search',
+    stage: 'foundations',
     feature_categories: [
-
+      'global_search',
+      'code_search',
     ],
   },
   project_management: {
@@ -135,6 +141,7 @@
     feature_categories: [
       'pipeline_composition',
       'ci_variables',
+      'component_catalog',
     ],
   },
   runner: {
@@ -171,7 +178,7 @@
   },
   static_analysis: {
     name: 'Static Analysis',
-    stage: 'secure',
+    stage: 'application_security_testing',
     feature_categories: [
       'static_application_security_testing',
       'code_quality',
@@ -179,14 +186,14 @@
   },
   secret_detection: {
     name: 'Secret Detection',
-    stage: 'secure',
+    stage: 'application_security_testing',
     feature_categories: [
       'secret_detection',
     ],
   },
   dynamic_analysis: {
     name: 'Dynamic Analysis',
-    stage: 'secure',
+    stage: 'application_security_testing',
     feature_categories: [
       'dynamic_application_security_testing',
       'fuzz_testing',
@@ -196,7 +203,7 @@
   },
   composition_analysis: {
     name: 'Composition Analysis',
-    stage: 'secure',
+    stage: 'application_security_testing',
     feature_categories: [
       'software_composition_analysis',
       'container_scanning',
@@ -204,7 +211,7 @@
   },
   vulnerability_research: {
     name: 'Vulnerability Research',
-    stage: 'secure',
+    stage: 'application_security_testing',
     feature_categories: [
       'advisory_database',
     ],
@@ -224,37 +231,23 @@
   },
   authentication: {
     name: 'Authentication',
-    stage: 'govern',
+    stage: 'software_supply_chain_security',
     feature_categories: [
-      'user_management',
       'system_access',
     ],
   },
   authorization: {
     name: 'Authorization',
-    stage: 'govern',
+    stage: 'software_supply_chain_security',
     feature_categories: [
       'permissions',
-    ],
-  },
-  security_policies: {
-    name: 'Security Policies',
-    stage: 'govern',
-    feature_categories: [
-      'security_policy_management',
-    ],
-  },
-  threat_insights: {
-    name: 'Threat Insights',
-    stage: 'govern',
-    feature_categories: [
-      'vulnerability_management',
-      'dependency_management',
+      'instance_resiliency',
+      'insider_threat',
     ],
   },
   compliance: {
     name: 'Compliance',
-    stage: 'govern',
+    stage: 'software_supply_chain_security',
     feature_categories: [
       'audit_events',
       'compliance_management',
@@ -262,20 +255,41 @@
       'sscs',
     ],
   },
-  'anti-abuse': {
-    name: 'Anti-Abuse',
-    stage: 'govern',
-    feature_categories: [
-      'instance_resiliency',
-      'insider_threat',
-    ],
-  },
   pipeline_security: {
     name: 'Pipeline Security',
-    stage: 'govern',
+    stage: 'software_supply_chain_security',
     feature_categories: [
-      'secure_artifacts',
+      'artifact_security',
       'secrets_management',
+    ],
+  },
+  security_policies: {
+    name: 'Security Policies',
+    stage: 'security_risk_management',
+    feature_categories: [
+      'security_policy_management',
+    ],
+  },
+  security_insights: {
+    name: 'Security Insights',
+    stage: 'security_risk_management',
+    feature_categories: [
+      'vulnerability_management',
+      'dependency_management',
+    ],
+  },
+  security_infrastructure: {
+    name: 'Security Infrastructure',
+    stage: 'security_risk_management',
+    feature_categories: [],
+  },
+  security_platform_management: {
+    name: 'Security Platform Management',
+    stage: 'security_risk_management',
+    feature_categories: [
+      'security_testing_configuration',
+      'security_asset_inventories',
+      'security_testing_integrations',
     ],
   },
   analytics_instrumentation: {
@@ -303,6 +317,7 @@
     feature_categories: [
       'plan_provisioning',
       'add-on_provisioning',
+      'user_management',
     ],
   },
   utilization: {
@@ -351,105 +366,143 @@
       'cloud_connector',
     ],
   },
-  distribution_build: {
-    name: 'Distribution::Build',
-    stage: 'systems',
+  build: {
+    name: 'GitLab Build',
+    stage: 'gitlab_delivery',
     feature_categories: [
       'build',
     ],
   },
-  distribution_deploy: {
-    name: 'Distribution::Deploy',
-    stage: 'systems',
+  self_managed: {
+    name: 'Self Managed',
+    stage: 'gitlab_delivery',
     feature_categories: [
       'omnibus_package',
       'cloud_native_installation',
     ],
   },
-  gitaly_cluster: {
-    name: 'Gitaly::Cluster',
-    stage: 'systems',
+  release: {
+    name: 'GitLab Release',
+    stage: 'gitlab_delivery',
+    feature_categories: [
+      'delivery',
+    ],
+  },
+  deploy: {
+    name: 'GitLab Deploy',
+    stage: 'gitlab_delivery',
+    feature_categories: [],
+  },
+  framework: {
+    name: 'Framework',
+    stage: 'gitlab_delivery',
+    feature_categories: [],
+  },
+  ops: {
+    name: 'Ops',
+    stage: 'production_engineering',
+    feature_categories: [
+      'runway',
+    ],
+  },
+  runway: {
+    name: 'Runway',
+    stage: 'production_engineering',
+    feature_categories: [],
+  },
+  foundations: {
+    name: 'Foundations',
+    stage: 'production_engineering',
+    feature_categories: [
+      'rate_limiting',
+    ],
+  },
+  observability: {
+    name: 'Observability',
+    stage: 'production_engineering',
+    feature_categories: [
+      'error_budgets',
+      'infra_cost_data',
+      'capacity_planning',
+      'scalability',
+    ],
+  },
+  gitaly: {
+    name: 'Gitaly',
+    stage: 'data_access',
     feature_categories: [
       'gitaly',
     ],
   },
-  gitaly_git: {
-    name: 'Gitaly::Git',
-    stage: 'systems',
+  git: {
+    name: 'Git',
+    stage: 'data_access',
     feature_categories: [
-
+      'git',
     ],
   },
-  geo: {
-    name: 'Geo',
-    stage: 'systems',
-    feature_categories: [
-      'geo_replication',
-      'disaster_recovery',
-      'backup_restore',
-    ],
-  },
-  global_search: {
-    name: 'Global Search',
-    stage: 'data_stores',
-    feature_categories: [
-      'global_search',
-      'code_search',
-    ],
-  },
-  database: {
-    name: 'Database',
-    stage: 'data_stores',
+  database_frameworks: {
+    name: 'Database Frameworks',
+    stage: 'data_access',
     feature_categories: [
       'database',
     ],
   },
-  tenant_scale: {
-    name: 'Tenant Scale',
-    stage: 'data_stores',
+  database_operations: {
+    name: 'Database Operations',
+    stage: 'data_access',
+    feature_categories: [],
+  },
+  durability: {
+    name: 'Durability',
+    stage: 'data_access',
     feature_categories: [
-      'cell',
+      'backup_restore',
+      'redis',
+      'sidekiq',
+    ],
+  },
+  organizations: {
+    name: 'Organizations',
+    stage: 'tenant_scale',
+    feature_categories: [
       'groups_and_projects',
       'user_profile',
       'organization',
     ],
   },
-  delivery: {
-    name: 'Delivery',
-    stage: 'platforms',
+  cells_infrastructure: {
+    name: 'Cells Infrastructure',
+    stage: 'tenant_scale',
     feature_categories: [
-      'delivery',
+      'cell',
     ],
   },
-  scalability: {
-    name: 'Scalability',
-    stage: 'platforms',
+  geo: {
+    name: 'Geo',
+    stage: 'tenant_scale',
     feature_categories: [
-      'scalability',
-      'error_budgets',
-      'infrastructure_cost_data',
-      'capacity_planning',
-      'redis',
-      'rate_limiting',
+      'geo_replication',
+      'disaster_recovery',
     ],
   },
-  dedicated: {
-    name: 'GitLab Dedicated',
-    stage: 'platforms',
+  environment_automation: {
+    name: 'Environment Automation',
+    stage: 'gitlab_dedicated',
     feature_categories: [
       'dedicated',
     ],
   },
   switchboard: {
     name: 'Switchboard',
-    stage: 'platforms',
+    stage: 'gitlab_dedicated',
     feature_categories: [
       'switchboard',
     ],
   },
   pubsec_services: {
     name: 'US Public Sector Services',
-    stage: 'platforms',
+    stage: 'gitlab_dedicated',
     feature_categories: [
       'pubsec_services',
     ],
@@ -474,7 +527,6 @@
     stage: 'ai-powered',
     feature_categories: [
       'ai_abstraction_layer',
-      'duo_workflow',
     ],
   },
   duo_chat: {
@@ -482,6 +534,13 @@
     stage: 'ai-powered',
     feature_categories: [
       'duo_chat',
+    ],
+  },
+  duo_workflow: {
+    name: 'Duo Workflow',
+    stage: 'ai-powered',
+    feature_categories: [
+      'duo_workflow',
     ],
   },
   ai_model_validation: {
@@ -507,53 +566,39 @@
       'mobile_devops',
     ],
   },
-  gdk: {
-    name: 'GDK',
-    stage: 'engineering_productivity',
-    feature_categories: [
-
-    ],
-  },
   engineering_productivity: {
     name: 'Engineering Productivity',
     stage: 'engineering_productivity',
-    feature_categories: [
-
-    ],
+    feature_categories: [],
+  },
+  developer_tooling: {
+    name: 'Developer Tooling',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
+  development_analytics: {
+    name: 'Development Analytics',
+    stage: 'developer_experience',
+    feature_categories: [],
   },
   quality: {
     name: 'Quality',
     stage: 'unlisted_stage',
-    feature_categories: [
-
-    ],
+    feature_categories: [],
   },
   contributor_success: {
     name: 'Contributor Success',
     stage: 'unlisted_stage',
-    feature_categories: [
-
-    ],
+    feature_categories: [],
   },
   infrastructure: {
     name: 'Infrastructure',
     stage: 'unlisted_stage',
-    feature_categories: [
-
-    ],
+    feature_categories: [],
   },
   technical_writing: {
     name: 'Technical Writing',
     stage: 'unlisted_stage',
-    feature_categories: [
-
-    ],
-  },
-  engineering_analytics: {
-    name: 'Engineering Analytics',
-    stage: 'unlisted_stage',
-    feature_categories: [
-
-    ],
+    feature_categories: [],
   },
 }

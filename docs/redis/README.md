@@ -19,6 +19,7 @@
 
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
@@ -52,7 +53,6 @@
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
-* [Thanos Architecture Overview](../thanos/architecture.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)

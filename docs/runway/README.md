@@ -16,8 +16,13 @@
 
 ## Troubleshooting Pointers
 
+* [Disaster Recovery Gameday Schedule](../disaster-recovery/gameday-schedule.md)
+* [Restore/Backup Runway-managed Cloud SQL](cloudsql_backup_restore.md)
+* [Cloud SQL Restore Pipeline Troubleshooting](cloudsql_restore_pipeline_troubleshooting.md)
 * [Privileged Access Management](privileged_access_management.md)
+* [Breakglass](../topology-rest/breakglass.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
+* [Woodhouse-Slack Overview](../woodhouse-slack/overview.md)
 <!-- END_MARKER -->
 
 ## Summary

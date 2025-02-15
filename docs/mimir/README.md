@@ -24,6 +24,8 @@
 * [Mimir Onboarding](getting-started.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [Mixins](../monitoring/mixins.md)
+* [Thanos](../monitoring/thanos.md)
+* [Primary Database Node CPU Saturation Analysis](../patroni/primary_db_node_cpu_saturation.md)
 * [High Number of Pending or Failed Outgoing Webhook Notifications](../registry/webhook-notifications.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->

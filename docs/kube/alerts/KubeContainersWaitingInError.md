@@ -101,7 +101,7 @@ sum by (type, env, tier, stage, cluster) (kube_pod_container_status_waiting_reas
 # Escalation
 
 - It should be fairly straightforward to identify the deployment causing the problem. Once identified, it will be more clear as to where to escalate.  The Foundations or delivery team are most likley to be able to help, but it will be more clear once we know the source of the alert.
-- Slack channels where help is likely to be found: `#g_infra_foundations`
+- Slack channels where help is likely to be found: `#g_foundations`
 
 # Definitions
 

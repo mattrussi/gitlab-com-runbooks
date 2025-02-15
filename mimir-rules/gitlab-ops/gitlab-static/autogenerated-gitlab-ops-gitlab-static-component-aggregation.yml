@@ -13,7 +13,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="ops",zone="gitlab-static.net"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -25,7 +25,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="ops",status=~"5..",zone="gitlab-static.net"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="ops",status=~"5..",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -71,7 +71,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_worker_requests_count:rate_5m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+        sli_aggregations:cloudflare_worker_requests_count:rate_5m{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -83,7 +83,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_worker_errors_count:rate_5m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+          sli_aggregations:cloudflare_worker_errors_count:rate_5m{env="ops",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -132,7 +132,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="ops",zone="gitlab-static.net"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -144,7 +144,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="ops",status=~"5..",zone="gitlab-static.net"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="ops",status=~"5..",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -190,7 +190,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_worker_requests_count:rate_30m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+        sli_aggregations:cloudflare_worker_requests_count:rate_30m{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -202,7 +202,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_worker_errors_count:rate_30m{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+          sli_aggregations:cloudflare_worker_errors_count:rate_30m{env="ops",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -251,7 +251,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="ops",zone="gitlab-static.net"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -263,7 +263,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="ops",status=~"5..",zone="gitlab-static.net"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="ops",status=~"5..",type="gitlab-static"} offset 30s
         )
       )
       or
@@ -309,7 +309,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_worker_requests_count:rate_1h{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+        sli_aggregations:cloudflare_worker_requests_count:rate_1h{env="ops",type="gitlab-static"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -321,7 +321,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_worker_errors_count:rate_1h{env="ops",script_name="gitlab-web-ide-vscode-production"} offset 30s
+          sli_aggregations:cloudflare_worker_errors_count:rate_1h{env="ops",type="gitlab-static"} offset 30s
         )
       )
       or

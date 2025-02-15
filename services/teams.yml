@@ -26,24 +26,6 @@ teams:
   # ignored_components:
   # - graphql_query
 
-- name: distribution_build
-  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-build-team
-  slack_channel: g_distribution
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-  product_stage_group: distribution_build
-  ignored_components:
-  - graphql_query
-
-- name: distribution_deploy
-  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-deploy-team
-  slack_channel: g_distribution
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-  product_stage_group: distribution_deploy
-  ignored_components:
-  - graphql_query
-
 - name: geo
   url: https://about.gitlab.com/handbook/engineering/dev-backend/geo/
   slack_channel: g_geo
@@ -119,33 +101,6 @@ teams:
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
 
-- name: delivery
-  slack_alerts_channel: g_delivery_alerts
-  send_slo_alerts_to_team_slack_channel: true
-  product_stage_group: delivery
-  ignored_components:
-  - graphql_query
-
-- name: scalability:practices
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
-  manager: kwanyangu
-  label: team::Scalability-Practices
-  slack_alerts_channel: g_scalability-practices
-
-- name: runway
-  slack_alerts_channel: f_runway_alerts
-
-- name: scalability:observability
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
-  manager: lmcandrew
-  label: team::Scalability-Observability
-  slack_alerts_channel: g_infra_observability_alerts
-  send_slo_alerts_to_team_slack_channel: true
-  alerts:
-  - thanos
-  - ops
-  - gstg
-
 # Workhorse is a virtual team
 - name: workhorse
   slack_alerts_channel: workhorse
@@ -167,8 +122,8 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
 
 - name: authentication
-  slack_alerts_channel: g_govern_authentication
-  slack_error_budget_channel: g_govern_authentication
+  slack_alerts_channel: g_sscs_authentication
+  slack_error_budget_channel: g_sscs_authentication
   send_error_budget_weekly_to_slack: true
   send_slo_alerts_to_team_slack_channel: false
   product_stage_group: authentication
@@ -176,13 +131,17 @@ teams:
   - graphql_query
 
 - name: authorization
-  slack_alerts_channel: g_govern_authorization
-  slack_error_budget_channel: g_govern_authorization
+  slack_alerts_channel: g_sscs_authorization
+  slack_error_budget_channel: g_sscs_authorization
   send_error_budget_weekly_to_slack: true
   send_slo_alerts_to_team_slack_channel: false
   product_stage_group: authorization
   ignored_components:
   - graphql_query
+
+- name: authorization_spamcheck
+  slack_alerts_channel: feed_spamcheck_alerts
+  send_slo_alerts_to_team_slack_channel: true
 
 - name: global_search
   manager: changzhengliu
@@ -235,21 +194,38 @@ teams:
   slack_error_budget_channel: duo-chat-lounge
   send_error_budget_weekly_to_slack: true
 
+- name: duo_workflow
+  url: https://handbook.gitlab.com/handbook/engineering/development/data-science/ai-powered/duo-workflow/
+  manager: bastirehm
+  label: group::duo workflow
+  slack_alerts_channel: g_mlops-alerts
+  product_stage_group: duo_workflow
+  ignored_components:
+  - graphql_query
+  slack_error_budget_channel: duo-chat-lounge
+  send_error_budget_weekly_to_slack: true
+
 - name: code_review
+  url: https://handbook.gitlab.com/handbook/engineering/development/dev/create/code-review/
   product_stage_group: code_review
+  slack_channel: g_create_code-review
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: g_create_code-review
+  send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: g_create_code-review_alerts
   ignored_components:
   - graphql_query
 
 - name: compliance
   product_stage_group: compliance
-  slack_error_budget_channel: g_govern_compliance
+  slack_error_budget_channel: g_sscs_compliance
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 
 - name: composition_analysis
   product_stage_group: composition_analysis
-  slack_error_budget_channel: g_secure-composition-analysis
+  slack_error_budget_channel: g_ast-composition-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
@@ -261,9 +237,9 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: database
-  product_stage_group: database
-  slack_alerts_channel: g_database
+- name: database_frameworks
+  product_stage_group: database_frameworks
+  slack_alerts_channel: g_database_frameworks
   ignored_components:
   - graphql_query
 
@@ -274,7 +250,7 @@ teams:
 
 - name: dynamic_analysis
   product_stage_group: dynamic_analysis
-  slack_error_budget_channel: g_secure-dynamic-analysis
+  slack_error_budget_channel: g_ast-dynamic-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
@@ -286,11 +262,6 @@ teams:
 
 - name: personal_productivity
   product_stage_group: personal_productivity
-  ignored_components:
-  - graphql_query
-
-- name: dedicated
-  product_stage_group: dedicated
   ignored_components:
   - graphql_query
 
@@ -311,6 +282,8 @@ teams:
   slack_alerts_channel: cloud-connector-events
   ignored_components:
   - graphql_query
+  alerts:
+  - ops
 
 - name: mlops
   product_stage_group: mlops
@@ -380,45 +353,59 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: tenant_scale
-  product_stage_group: tenant_scale
+- name: organizations
+  product_stage_group: organizations
   ignored_components:
   - graphql_query
-  slack_alerts_channel: g_tenant-scale
+  slack_alerts_channel: g_organizations
 
 - name: source_code
+  url: https://handbook.gitlab.com/handbook/engineering/development/dev/create/source-code-be/
   product_stage_group: source_code
+  slack_channel: g_create_source-code
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: g_create_source-code
+  send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: g_create_source-code_alerts
   ignored_components:
   - graphql_query
 
 - name: static_analysis
   product_stage_group: static_analysis
-  slack_error_budget_channel: g_secure-static-analysis
+  slack_channel: g_ast-static-analysis
+  slack_alerts_channel: g_ast-static-analysis-alerts
+  slack_error_budget_channel: g_ast-static-analysis
   send_error_budget_weekly_to_slack: true
   send_slo_alerts_to_team_slack_channel: true
 
 - name: secret_detection
   product_stage_group: secret_detection
-  slack_error_budget_channel: g_secure-secret-detection
+  slack_error_budget_channel: g_ast-secret-detection
   send_error_budget_weekly_to_slack: true
-  slack_alerts_channel: g_secure-secret-detection
+  slack_alerts_channel: g_ast-secret-detection
   send_slo_alerts_to_team_slack_channel: true
 
 - name: pipeline_security
   product_stage_group: pipeline_security
-  slack_channel: g_govern_pipeline-security
-  slack_alerts_channel: g_govern_pipeline-security_alerts
-  slack_error_budget_channel: g_govern_pipeline-security_alerts
+  slack_channel: g_sscs_pipeline-security
+  slack_alerts_channel: g_sscs_pipeline-security_alerts
+  slack_error_budget_channel: g_sscs_pipeline-security_alerts
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 
-- name: threat_insights
-  product_stage_group: threat_insights
+- name: security_insights
+  product_stage_group: security_insights
   ignored_components:
   - graphql_query
-  slack_error_budget_channel: g_govern_threat_insights
+  slack_error_budget_channel: g_srm_security_insights
   send_error_budget_weekly_to_slack: true
+
+- name: security_infrastructure
+  product_stage_group: security_infrastructure
+
+- name: security_platform_management
+  product_stage_group: security_platform_management
 
 - name: ai_framework
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-framework/
@@ -456,10 +443,10 @@ teams:
 
 - name: security_policies
   product_stage_group: security_policies
-  slack_error_budget_channel: g_govern_security_policies
+  slack_error_budget_channel: g_srm_security_policies
   send_error_budget_weekly_to_slack: true
 
-- name: ops
+- name: doe-ops
   url: https://about.gitlab.com/handbook/engineering/development/ops
   slack_channel: doe-ops
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
@@ -472,24 +459,21 @@ teams:
   - s_plan
   send_error_budget_weekly_to_slack: true
 
+- name: cells_infrastructure
+  product_stage_group: cells_infrastructure
+  manager: nhxnguyen
+  slack_alerts_channel: g_cells_infrastructure
 
 # Infrastructure Reliability
 
-- name: reliability_ops
+- name: ops
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/
   manager: kkyrala
   label: team::Ops
-  slack_alerts_channel: g_infra_general_alerts
+  product_stage_group: ops
+  slack_channel: g_production-engineering_ops
   send_slo_alerts_to_team_slack_channel: true
-  alerts:
-  - ops
-
-- name: reliability_foundations
-  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/
-  manager: sabrams
-  label: team::Foundations
-  slack_alerts_channel: g_infra_foundations_alerts
-  send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: g_production-engineering_ops
   alerts:
   - ops
 
@@ -497,7 +481,8 @@ teams:
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/
   label: team::Unowned
 
-- name: reliability_database_reliability
+- name: database_operations
+  product_stage_group: database_operations
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/database-reliability.html#ownership
   manager: rmar1
   label: team::Database Reliability
@@ -506,11 +491,6 @@ teams:
 
 - name: trust_and_safety
   url: https://about.gitlab.com/handbook/security/security-operations/trustandsafety/
-
-- name: anti-abuse
-  product_stage_group: anti-abuse
-  slack_error_budget_channel: g_govern_anti-abuse
-  send_error_budget_weekly_to_slack: true
 
 - name: infrasec_team
   url: https://handbook.gitlab.com/handbook/security/product-security/infrastructure-security/
@@ -530,8 +510,127 @@ teams:
   url: https://about.gitlab.com/handbook/marketing/developer-relations/
   slack_channel: developer-relations
 
+# UX
+
+- name: technical_writing
+  url: https://handbook.gitlab.com/handbook/product/ux/technical-writing/
+  slack_channel: docs
+
 # Test and Tools Infrastructure Team
 
 - name: test_tools_infrastructure
   url: https://about.gitlab.com/handbook/marketing/developer-relations/
   slack_alerts_channel: test-tools-infrastructure-team
+
+# Data Access
+- name: data-access:durability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/durability
+  manager: jarv
+  label: team::Durability
+  slack_alerts_channel: g_durability
+  product_stage_group: durability
+
+# ClickHouse (virtual)
+- name: clickhouse
+  slack_alerts_channel: f_clickhouse_infra_alerts
+
+# Delivery
+
+- name: release
+  slack_alerts_channel: g_delivery_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  product_stage_group: release
+  ignored_components:
+  - graphql_query
+
+- name: build
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-build-team
+  slack_channel: g_distribution
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  product_stage_group: build
+  ignored_components:
+  - graphql_query
+
+- name: deploy
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-deploy-team
+  slack_channel: g_distribution
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  product_stage_group: deploy
+  ignored_components:
+  - graphql_query
+
+- name: self_managed
+  slack_alerts_channel: g_delivery_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  product_stage_group: self_managed
+  ignored_components:
+  - graphql_query
+
+- name: framework
+  product_stage_group: framework
+  slack_alerts_channel: g_software_delivery-framework
+  send_slo_alerts_to_team_slack_channel: true
+  ignored_components:
+  - graphql_query
+
+# Virtual team of release managers
+- name: release-management
+  slack_alerts_channel: f_upcoming_release
+
+# Dedicated
+
+- name: switchboard
+  product_stage_group: switchboard
+  slack_channel: g_dedicated_switchboard
+
+- name: environment_automation
+  product_stage_group: environment_automation
+  slack_channel: f_gitlab_dedicated
+
+# Production Engineering
+
+- name: runway
+  product_stage_group: runway
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/runway/
+  manager: jtoto-gtl
+  label: team::Runway
+  send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: f_runway_alerts
+
+- name: observability
+  product_stage_group: observability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
+  manager: lmcandrew
+  label: team::Observability
+  slack_alerts_channel: g_infra_observability_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - thanos
+  - ops
+  - gstg
+
+- name: foundations
+  product_stage_group: foundations
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/
+  manager: sabrams
+  label: team::Foundations
+  slack_alerts_channel: g_foundations_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - ops
+
+# Unlisted
+
+- name: developer_tooling
+  product_stage_group: developer_tooling
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/
+  slack_channel: g_developer_tooling
+  slack_alerts_channel: g_developer_tooling
+
+- name: development_analytics
+  product_stage_group: development_analytics
+  url: https://about.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/development-analytics/
+  slack_channel: g_development_analytics
+  slack_alerts_channel: g_development_analytics

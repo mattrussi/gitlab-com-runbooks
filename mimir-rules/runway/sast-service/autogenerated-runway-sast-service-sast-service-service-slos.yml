@@ -49,7 +49,7 @@ groups:
       component: runway_ingress
       global_aggregation: "yes"
       monitor: global
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sast-service
@@ -59,7 +59,7 @@ groups:
       component: runway_lb
       global_aggregation: "yes"
       monitor: global
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
       type: sast-service

@@ -91,3 +91,11 @@ An example of this analysis is [Pingdom Availability Statistics](https://docs.go
 PagerDuty to Pingdom integration is used for the Uptime checks and alert notifications.
 
 The `pingdom` integration is configured in the PagerDuty for `GitLab Production` Service with a webhook. The webhook is attached to the Uptime checks in the Pingdom. The Uptime checks are configured in the `pingdom.yml` file and updated with CI.
+
+## Pingdom Exporter
+
+We have [pingdom exporter](https://github.com/jusbrasil/pingdom-exporter/) deployed in OPS through the [helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/5f983af3e7935d772bc06fe41f554d982171e763/bases/environments/ops.yaml#L229).
+
+To limit the API requests made by the exporter we filter the checks picked up by the exporter.
+
+It only queries checks which have the `pingdom-exporter-check` tag.

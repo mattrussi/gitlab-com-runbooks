@@ -4,12 +4,11 @@
 
 [TOC]
 
-Each CloudFlare zone pushes logs to a Google Cloud Storage (GCS) bucket with
-the name of `gitlab-<environment>-cloudflare-logpush`. This operation happens
-every 5 minutes so the logs don't give an immediate overview of what's
-currently happening.
+Each Cloudflare zone pushes logs to a Google Cloud Storage (GCS) bucket with the name of `gitlab-<environment>-cloudflare-logpush`. This operation happens every 5 minutes so the logs don't give an immediate overview of what's currently happening.
 
 Starting 2022-04-14 we enabled Logpush v2. These logs will be shipped to a distinct `v2` subdirectory in that GCS bucket.
+
+They are partitioned by day with the format `v2/{http,spectrum}/dt=YYYYMMDD/` to enable the use of partitions in BigQuery to speed up queries.
 
 Logpush v2 allows us to also access logs for Firewall events, DNS and NELs. These are not configured at the moment, but can be enabled if the need arises.
 
@@ -17,27 +16,15 @@ At least READ access to GCS in the `Production` project in GCP is required to be
 
 NELs are also already available as metrics [here](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1&refresh=5m)
 
-## BigQuery (to be validated for Logpush v2)
+## BigQuery
 
-The logs for a particular day can be imported into BigQuery by using the `bq` tool:
+The logs can be queried from the external tables `http` and `spectrum` in the BigQuery dataset `cloudflare_logs_$env` via [the BigQuery Studio](https://console.cloud.google.com/bigquery?project=gitlab-production&ws=!1m4!1m3!3m2!1sgitlab-production!2scloudflare_logs_gprd). Those tables are configured with partitioning enabled on the `dt` field to speed up queries by only loading data for the particular day(s) requested:
 
-```bash
-curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/master/logpush-to-bigquery/schema-http.json | jq '. += [{"name": "RequestHeaders","type": "JSON","mode": "NULLABLE"}, {"name": "ResponseHeaders","type": "JSON","mode": "NULLABLE"}]' > schema-http.json
-bq load --project_id gitlab-production --source_format NEWLINE_DELIMITED_JSON cloudflare.logpush_20200610 'gs://gitlab-gprd-cloudflare-logpush/v2/http/20200610/*.log.gz' schema-http.json
-```
-
-This will make the logs for that particular day available for querying with SQL
-via [the BigQuery
-UI](https://console.cloud.google.com/bigquery?project=gitlab-production).
-
-By default, imported tables in the `cloudflare` dataset have a retention of 30
-days.
-
-Note that BigQuery does not deduplicate records. So if you want to import a newer set of files, it's recommended to either import only the new files selectively, or to delete the table before importing, via:
-
-```bash
-bq ls cloudflare
-bq rm cloudflare.logpush_20200610
+```sql
+# Query HTTP logs for 5xx errors between 2024-11-01 and 2024-11-08
+SELECT * FROM `cloudflare_logs_gprd.http` WHERE dt >= 20241101 AND dt < 20241108 AND EdgeResponseStatus >= 500;
+# Query Spectrum logs for connections from embargoed countries on 2024-11-12
+SELECT * FROM `cloudflare_logs_gprd.spectrum` WHERE dt = 20241112 AND upper(ClientCountry) in ("SY","KP","CU","IR") AND Event = 'disconnect';
 ```
 
 ## Processing the raw data
@@ -58,7 +45,7 @@ use
 ./cloudflare_logs.sh -e gprd -d 2020-04-14T00:00 -t http -b 30
 ```
 
-you can then `grep` on that to narrow it down. The use of `jq` on an unfiltered
+You can then `grep` on that to narrow it down. The use of `jq` on an unfiltered
 stream is not recommended, as that significantly increases processing time.
 
 Beware, that this process will take long for large timespans.
@@ -74,26 +61,6 @@ code:
 
 Note: Due to the way logs are shipped into GCS, there might be a delay of up
 to 10 minutes for logs to be available.
-
-## Spectrum logs
-
-The analytics API for Spectrum apps is very limited so querying the logs via BigQuery is the only way to do detailed analysis of non-HTTP/S traffic passing through a Spectrum app (e.g. SSH traffic).
-
-Run the following commands to create an external table:
-
-```bash
-curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/refs/heads/master/logpush-to-bigquery/schema-spectrum.json > schema-spectrum.json
-bq mkdef --source_format=NEWLINE_DELIMITED_JSON "gs://gitlab-gprd-cloudflare-logpush/v2/spectrum/*.log.gz" > tabledef
-bq mk --table --external_table_definition=tabledef cloudflare_spectrum_logs.latest schema-spectrum.json
-```
-
-Note that this will load all Spectrum logs inside the retention period into the table, as we are limited to using one wildcard pattern in the path. If you're only interested in one day, adjust the URI as necessary.
-
-To query if we've had connections from embargoed countries, you can run:
-
-```sql
-SELECT * FROM `gitlab-production.cloudflare_spectrum_logs.latest` where upper(ClientCountry) in ("SY","KP","CU","IR") and Event = 'disconnect'
-```
 
 ## Cloudflare Audit Logs
 

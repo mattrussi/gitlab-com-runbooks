@@ -170,6 +170,25 @@ It is possibly because your terminal is using an unsupported setting for `TERM`.
 TERM=xterm-256color tsh ssh rails-ro@console-ro-01-sv-gprd
 ```
 
+### `failed to add one or more keys to the agent`
+
+If you are getting the error:
+
+```bash
+ERROR: failed to add one or more keys to the agent.
+agent: failure, agent: failure
+
+```
+
+It could be the result of your `ssh-agent` configuration preventing every `tsh` command to work. See the [upstream issue](https://github.com/gravitational/teleport/issues/22326).
+To workaround the issue add `TELEPORT_ADD_KEYS_TO_AGENT=no` to your environment variables and re-run your `tsh` commands.
+
+You can either persist by adding it your `~/.bashrc` or `~/.zshrc` or add it before running evey `tsh` command, e.g.:
+
+```bash
+TELEPORT_ADD_KEYS_TO_AGENT=no tsh login --proxy=production.teleport.gitlab.net --request-roles=non-prod-rails-console-rw --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+```
+
 ### Debug
 
 If you have issues connecting, try using the `--debug` flag to display more verbose information.

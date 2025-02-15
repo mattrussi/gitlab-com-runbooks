@@ -17,6 +17,7 @@
 ## Troubleshooting Pointers
 
 * [Atlantis Web UI](webui.md)
+* [Disabling routing requests through `http-router`](../http-router/disable-http-router.md)
 * [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 <!-- END_MARKER -->
 

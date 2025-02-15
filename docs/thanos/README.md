@@ -19,9 +19,9 @@
 
 ## Troubleshooting Pointers
 
-* [Deadtuples affecting query performance](../ci-runners/CiRunnersServiceQueuingQueriesDurationApdexSLOViolation.md)
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Chef troubleshooting](../config_management/chef-troubleshooting.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
@@ -35,14 +35,7 @@
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/prometheus-is-down.md](../monitoring/prometheus-is-down.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
-* [Thanos Compact](../monitoring/thanos-compact.md)
-* [Deleting series over a given interval from thanos](../monitoring/thanos-delete-series-interval.md)
-* [Thanos Query and Stores](../monitoring/thanos-query.md)
-* [Thanos Receive](../monitoring/thanos-receive.md)
-* [Thanos Rule](../monitoring/thanos-rule.md)
-* [Thanos Store](../monitoring/thanos-store.md)
-* [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
-* [Thanos General Alerts](../monitoring/thanos.md)
+* [Thanos](../monitoring/thanos.md)
 * [Upgrading Monitoring Components](../monitoring/upgrades.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
@@ -65,37 +58,10 @@
 * [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sharding.md](../sidekiq/sharding.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
-* [Thanos Architecture Overview](architecture.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)
 * [Workhorse Image Scaler](../web/workhorse-image-scaler.md)
 <!-- END_MARKER -->
-
-## Environment Labels for Thanos
-
-Unlike all other services running GitLab.com, the Thanos service uses a unique environment label, `environment="thanos"`.
-
-This is because, while Thanos runs in pods and VMs hosted within different environments, it is _a single interconnected service_, running across all environments simultaneously. In order for it to perform correctly, it needs to interact with subcomponents running in all other environments.
-
-Breaking Thanos metrics down with an environment label is unhelpful and leads to metrics being incorrectly decomposed across services, and reducing our ability to measure the complete health of the service.
-
-Summary of Thanos Services and labels:
-
-| PromQL Job Name           | Component                         |
-|---------------------------|-----------------------------------|
-| `thanos-query`            | [Thanos Query](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) |
-| `thanos-query-frontend`   | [Thanos Query- Frontend](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) |
-| `thanos-ruler`            | [Thanos Ruler](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-rule) |
-| `thanos-{env}-compactor`  | [Thanos Compactor](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-compact) |
-| `thanos-{env}-storegateway-## `  | [Thanos Store](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-store) |
-| `thanos-receive`          | [Thanos-receiver](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-receive) |
-| `{inherited from prometheus container}` `container="thanos-sidecar"`  | [Thanos Sidecar](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-sidecar) |
-
-### Alerts for `environment="thanos"`
-
-When Thanos generates alerts, they will use the `environment="thanos"` label. This is unique to Thanos. The Thanos dashboards will automatically display metrics for this environment, and operators do not need to switch between different environments in the Grafana dashboards to investigate these alerts.
-
-In AlertManager, `environment="thanos"` are routed in the same way as `environment="gprd"` alerts.
 
 <!-- ## Summary -->
 
@@ -114,7 +80,3 @@ In AlertManager, `environment="thanos"` are routed in the same way as `environme
 <!-- ## Monitoring/Alerting -->
 
 <!-- ## Links to further Documentation -->
-
-## Further documentation
-
-Last updated (2023 March) [Readiness review](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md)

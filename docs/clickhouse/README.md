@@ -19,7 +19,6 @@
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
-* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
 
 ## Summary
@@ -70,7 +69,7 @@ Console URL: [https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06
 
 ### ClickHouse Cloud Backup & Restore
 
-Runbook for restoring a ClickHouse Cloud instance from a backup after failure of an instance. [[Link](clickhouse-cloud-backup-restore.md)]
+Runbook for restoring a ClickHouse Cloud instance from a backup after failure of an instance. [[Link](backup-restore.md)]
 
 <!-- ## Architecture -->
 
@@ -86,8 +85,10 @@ Runbook for restoring a ClickHouse Cloud instance from a backup after failure of
 
 ## Monitoring/Alerting
 
-Built in Monitoring Dashboards can be accessed via the [ClickHouse Cloud Console](https://clickhouse.cloud/services).  We are investigating how to integrate these metrics into GitLab's grafana and alerting setup.
+Built in Monitoring Dashboards can be accessed via the [ClickHouse Cloud Console](https://clickhouse.cloud/services).
 
-Dashboard for monitoring and alerting performance metrics, [here](https://dashboards.gitlab.net/d/thEkJB_Mz/clickhouse-cloud-dashboard)
+A dashboard for monitoring and alerting performance metrics has been configured in [Runbooks](https://gitlab.com/gitlab-com/runbooks/-/blob/master/dashboards/clickhouse/clickhouse_service.json), [clickhouse-cloud-services](https://dashboards.gitlab.net/d/clickhouse-clickhouse_service/clickhouse3a-clickhouse-cloud-services)
+
+Alerting has been configured through Runbooks to alert into Slack channel `#f_clickhouse_infra_alerts`
 
 <!-- ## Links to further Documentation -->

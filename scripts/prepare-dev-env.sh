@@ -51,8 +51,17 @@ if ((BASH_VERSINFO[0] < 4)); then
   exit 1
 fi
 
+# install homebrew dependencies
+if [[ "$(uname)" == "Darwin" ]]; then
+  echo "installing required packages via homebrew."
+  if ! hash gsha256sum; then
+    brew install coreutils
+  fi
+fi
+
 # install mise/asdf dependencies
 echo "installing required plugins with mise install.."
+mise plugins update
 mise install
 
 # pre-commit is optional
@@ -72,3 +81,8 @@ fi
 
 # Install jsonnet-bundler packages
 ./scripts/bundler.sh
+
+# we need `mixtool` to generate mixins from the reference architecture
+# go is installed by mise.
+echo "installing mixtool.."
+go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main

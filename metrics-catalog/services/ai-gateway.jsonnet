@@ -24,7 +24,7 @@ local serverCodeCompletionsSelector = baseSelector {
   handler: { oneOf: ['/v2/code/completions', '/v2/completions'] },
 };
 local serverCodeGenerationsSelector = baseSelector { handler: '/v2/code/generations' };
-local serverChatSelector = baseSelector { handler: { re: '/v(1|2)/chat/.*'},};
+local serverChatSelector = baseSelector { handler: { re: '/v(1|2)/chat/.*' } };
 local serverXRaySelector = baseSelector { handler: '/v1/x-ray/libraries' };
 
 metricsCatalog.serviceDefinition(
@@ -35,7 +35,7 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.98,
     errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
     featureCategory='code_suggestions',
-    // Runway is using stackdriver metrics, these metrics use many buckets in miliseconds
+    // Runway is using stackdriver metrics, these metrics use many buckets in milliseconds
     // To pick an available bucket, we need to look at the source metrics
     // https://dashboards.gitlab.net/goto/GiFs0eTIR?orgId=1
     // Pick a value that is larger than the server SLIs this encapsulates
@@ -121,6 +121,11 @@ metricsCatalog.serviceDefinition(
         description: |||
           FastAPI server for AI Gateway - code completions.
         |||,
+
+
+        monitoringThresholds+: {
+          apdexScore: 0.95,
+        },
 
         apdex: histogramApdex(
           histogram='http_request_duration_seconds_bucket',
@@ -306,7 +311,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: rateMetric(
           counter='model_inferences_total',
-          selector=baseSelector {model_engine: 'anthropic'},
+          selector=baseSelector { model_engine: 'anthropic' },
         ),
 
         significantLabels: ['model_name', 'feature_category'] + runwayLabels,
@@ -340,7 +345,7 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='inference_request_duration_seconds_bucket',
-          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'vertex-ai'},
+          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'vertex-ai' },
           satisfiedThreshold=2,
           toleratedThreshold=5,
         ),
@@ -349,7 +354,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: rateMetric(
           counter='model_inferences_total',
-          selector=baseSelector {model_engine: 'vertex-ai'},
+          selector=baseSelector { model_engine: 'vertex-ai' },
         ),
 
         significantLabels: ['model_name', 'feature_category'] + runwayLabels,
@@ -364,6 +369,50 @@ metricsCatalog.serviceDefinition(
           ),
         ],
       },
+
+      inference_other: {
+        severity: 's4',  // Currently not triggering alerts as we don't yet have a baseline
+        userImpacting: true,
+        serviceAggregation: false,
+        team: 'code_creation',
+        featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
+        trafficCessationAlertConfig: false,
+        description: |||
+          Inferences to model providers other than Vertex or Anthropic.
+
+          Apdex applies to non-streaming inferences, they are considered fast enough
+          when the request took less than 2s. Errors don't count toward apdex
+
+          A failure means an inference threw an error, for example when the model is
+          not available.
+        |||,
+
+        apdex: histogramApdex(
+          histogram='inference_request_duration_seconds_bucket',
+          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: { noneOf: ['vertex-ai', 'anthropic'] } },
+          satisfiedThreshold=30,
+        ),
+
+        errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: { noneOf: ['vertex-ai', 'anthropic'] }, 'error': 'yes' }),
+
+        requestRate: rateMetric(
+          counter='model_inferences_total',
+          selector=baseSelector { model_engine: { noneOf: ['vertex-ai', 'anthropic'] } },
+        ),
+
+        significantLabels: ['model_engine', 'model_name', 'feature_category'] + runwayLabels,
+        useConfidenceLevelForSLIAlerts: '98%',
+
+        toolingLinks: [
+          toolingLinks.kibana(
+            title='Model Inference',
+            index='mlops',
+            includeMatchersForPrometheusSelector=false,
+            filters=[matching.existsFilter('json.jsonPayload.model_engine: vertex-ai')],
+          ),
+        ],
+      },
+
       waf: {
         local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
         severity: 's4',

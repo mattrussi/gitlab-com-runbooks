@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [design.gitlab.com Runbook](design-gitlab-com.md)
 * [../disaster-recovery/gameday.md](../disaster-recovery/gameday.md)
@@ -24,6 +25,7 @@
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 

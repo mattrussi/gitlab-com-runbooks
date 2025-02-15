@@ -102,8 +102,6 @@ client = HTTP
 resp = client.get('/')
 raise "expected status 200, got #{resp.status.code}, response #{resp}" unless resp.status.success?
 
-body = JSON.parse(resp.body)
-
 req = JSON.generate({
   _source: ["json.correlation_id"],
   query: {

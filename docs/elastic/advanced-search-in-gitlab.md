@@ -248,7 +248,7 @@ Logs available in centralised logging, see [Logging](../logging/README.md)
 
 When there is high CPU usage across all the Elasticsearch data nodes, here are the suggested steps to mitigate the issue
 
-- Check Slow logs to see whether there are obvious indicators that can be used to identify the possible root cause. To view the Slow logs, login the Elastic Cloud console using account in the `Infra Service - Elasticsearch` value in 1Password. In the `monitoring-cluster` cluster, you will find the production Elasticsearch cluster with `gprd-indexing` prefix in name and staging cluster with `gstg-indexing`. The Slow logs are under each of the Elasticsearch data nodes.
+- Check Slow logs to see whether there are obvious indicators that can be used to identify the possible root cause. To view the Slow logs, login the Elastic Cloud console. In the `monitoring-cluster` cluster, you will find the production Elasticsearch cluster with `gprd-indexing` prefix in name and staging cluster with `gstg-indexing`. The Slow logs are under each of the Elasticsearch data nodes. Note: make sure you have access to the Elastic Cloud login credentials.
 - If the Slow logs can't help you fix the high CPU usage issue, you may consider restarting the Elasticsearch cluster.
   - You may want to capture the thread dumps by following [the Elastic documentation](https://www.elastic.co/guide/en/cloud-enterprise/current/ece-capture-thread-dumps.html).
   - Cancel the running tasks via [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/current/tasks.html#task-cancellation)
@@ -316,3 +316,11 @@ end
 The indexing queue should drain slowly once the records have been cleared from the queue. It is
 important to understand what caused the records to be queued for indexing. An issue must be opened
 to ensure the records do not get indexed again or the issue will reoccur.
+
+## Shard reassignment failure
+
+When shard allocation fails the [Cluster Reroute API](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-reroute.html) may be used to retry failed shard allocation. The API request may be run as a curl command or from the Elasticsearch UI DevTools Console
+
+```
+curl -XPOST "$ELASTIC_URL/_cluster/reroute?retry_failed"
+```

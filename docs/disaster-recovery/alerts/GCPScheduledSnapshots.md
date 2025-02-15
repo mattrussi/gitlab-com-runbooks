@@ -23,12 +23,12 @@ Contributing factors to scheduled snapshot execution could include:
 1. Misconfigured guest OS settings when application-consistent snapshots are enabled: When the application-consistent setting is enabled for a snapshot, it is a requirement that the guest OS google-cloud agent be installed, and configured to allow the feature. If this is not done, the snapshot will result in error.
 1. There is a problem preventing data from being collected from the Stackdriver Prometheus exporter.
 
-If snapshot failures or delays are observed, you should check [Stackdriver logs](https://cloudlogging.app.goo.gl/Jgoop8sQdcaXD6bu9) to determine the cause, and decide if any further action is necessary.
+If snapshot failures or delays are observed, you should check [Stackdriver logs](https://cloudlogging.app.goo.gl/8Rwb2zPRDxk1tRRM8) to determine the cause, and decide if any further action is necessary.
 
 ## Services
 
 - [GCP snapshots runbook](docs/disaster-recovery/gcp-snapshots.md)
-- Because snapshots are taken at the cloud infrastructure level, this alert may apply to a number of different services. You can refer to the logs in [Stackdriver](https://cloudlogging.app.goo.gl/Jgoop8sQdcaXD6bu9) to find the affected disk, which should provide a hint as to which service the failure applies to. In some cases it may be necessary to refer to the [service-catalog]() to locate the appropriate service owner to determine the impact of missing snapshots.
+- Because snapshots are taken at the cloud infrastructure level, this alert may apply to a number of different services. You can refer to the logs in [Stackdriver](https://cloudlogging.app.goo.gl/8Rwb2zPRDxk1tRRM8) to find the affected disk, which should provide a hint as to which service the failure applies to. In some cases it may be necessary to refer to the [service-catalog]() to locate the appropriate service owner to determine the impact of missing snapshots.
 
 ## Metrics
 
@@ -41,8 +41,8 @@ If snapshot failures or delays are observed, you should check [Stackdriver logs]
     - It is expected that this will return "No data" normally.
   - [GCPScheduledSnapshotsFailed](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%22qzr%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22count%20by%20%28env%29%28stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots_errors%7Benv%3D%5C%22gprd%5C%22%7D%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1)
     - It is expected that this will return "No data" normally.
-- [Stackdriver logs for successful snapshots](https://cloudlogging.app.goo.gl/QZKFCd1Sc8dmm2UM6)
-- [Stackdriver logs for snapshot errors](https://cloudlogging.app.goo.gl/Jgoop8sQdcaXD6bu9)
+- [Stackdriver logs for successful snapshots](https://cloudlogging.app.goo.gl/yT9m73Mk3HCtVmHZA)
+- [Stackdriver logs for snapshot errors](https://cloudlogging.app.goo.gl/8Rwb2zPRDxk1tRRM8)
 - [GCP Quotas](https://console.cloud.google.com/apis/api/compute.googleapis.com/quotas)
 
 ## Alert Behavior
@@ -64,7 +64,7 @@ It is unlikely that recent changes have caused this alert unless someone recentl
 ## Troubleshooting
 
 - Basic troubleshooting steps:
-  - Determine if the alert is valid by cross referencing the prometheus metrics in Grafana with the [logs in Stackdriver](https://cloudlogging.app.goo.gl/Jgoop8sQdcaXD6bu9)
+  - Determine if the alert is valid by cross referencing the prometheus metrics in Grafana with the [logs in Stackdriver](https://cloudlogging.app.goo.gl/8Rwb2zPRDxk1tRRM8)
   - If there are errors returned in the log, view the message and determine which disk it is impacting. The disk will be stored in the `protoPayload.response.targetLink` field in the log entry.
   - The message should indicate whether the error is due to quota limits being reached, a misconfigured quest OS, a transient GCP API failure, etc.
 

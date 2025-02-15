@@ -111,7 +111,7 @@ local es_query = {
         message: {
           from: 'ElasticCloud Watcher: Database::MonitorLockedTablesWorker could not lock all tables',
           to: [
-            '#g_tenant-scale'
+            '#g_cells_infrastructure'
           ],
           text: 'Database::MonitorLockedTablesWorker could not lock all tables. Logs: https://log.gprd.gitlab.net/app/r/s/508tx . Please investigate why locking the reported tables failed.',
         },
@@ -119,3 +119,4 @@ local es_query = {
     },
   },
 }
+

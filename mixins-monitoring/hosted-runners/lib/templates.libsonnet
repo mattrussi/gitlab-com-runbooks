@@ -4,17 +4,17 @@ local templates = import 'grafana/templates.libsonnet';
 local template = grafana.template;
 
 {
-  runnerManager::
-    template.new(
-      'runner',
-      '$PROMETHEUS_DS',
-      query=|||
-        label_values(gitlab_runner_version_info,job)
-      |||,
-      current='All',
-      refresh='time',
-      sort=true,
-      multi=true,
-      includeAll=false
-    ),
+    runnerManager::
+        template.new(
+            'shard',
+            '$PROMETHEUS_DS',
+            query=|||
+                label_values(gitlab_runner_version_info,shard)
+            |||,
+            current='All',
+            refresh='time',
+            sort=true,
+            multi=false,
+            includeAll=false
+        ),
 }

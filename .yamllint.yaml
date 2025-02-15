@@ -5,6 +5,7 @@ ignore: |
   vendor/
   mimir-rules/
   .copier-*.yml
+  *.mixin.yml
 
 rules:
   document-start: disable

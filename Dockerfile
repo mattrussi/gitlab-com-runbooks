@@ -5,34 +5,28 @@ ARG GL_ASDF_JB_VERSION
 ARG GL_ASDF_JSONNET_TOOL_VERSION
 ARG GL_ASDF_PROMTOOL_VERSION
 ARG GL_ASDF_RUBY_VERSION
-ARG GL_ASDF_SHELLCHECK_VERSION
-ARG GL_ASDF_SHFMT_VERSION
 ARG GL_ASDF_TERRAFORM_VERSION
 ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
 ARG GL_ASDF_GOLANG_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
-ARG MIMIRTOOL_VERSION=2.14.0
-ARG TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION=main
+ARG MIMIRTOOL_VERSION=2.15.0
 
 # Referenced container images
 FROM bitnami/kubectl:${GL_ASDF_KUBECTL_VERSION} AS kubectl
-FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
-FROM grafana/mimirtool:${MIMIRTOOL_VERSION} as mimirtool
+FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} AS yq
+FROM grafana/mimirtool:${MIMIRTOOL_VERSION} AS mimirtool
 FROM hashicorp/terraform:${GL_ASDF_TERRAFORM_VERSION} AS terraform
 FROM hashicorp/vault:${GL_ASDF_VAULT_VERSION} AS vault
-FROM koalaman/shellcheck:v${GL_ASDF_SHELLCHECK_VERSION} AS shellcheck
-FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION}-alpine as shfmt
 FROM quay.io/prometheus/alertmanager:v${GL_ASDF_AMTOOL_VERSION} AS amtool
 FROM quay.io/prometheus/prometheus:v${GL_ASDF_PROMTOOL_VERSION} AS promtool
 FROM quay.io/thanos/thanos:v${GL_ASDF_THANOS_VERSION} AS thanos
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/go-jsonnet:v${GL_ASDF_GO_JSONNET_VERSION} AS go-jsonnet
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/jb:v${GL_ASDF_JB_VERSION} AS jb
-FROM registry.gitlab.com/gitlab-com/gl-infra/observability/tenant-observability/config-manager:${TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION} as tenant-observability-config-manager
 # There is no official mixtool Docker image from the author, so we need to create one
-FROM golang:${GL_ASDF_GOLANG_VERSION}-alpine as mixtool
+FROM golang:${GL_ASDF_GOLANG_VERSION}-alpine AS mixtool
 
 RUN go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 
@@ -69,15 +63,12 @@ COPY --from=jb /usr/bin/jb /bin/jb
 COPY --from=jsonnet-tool /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /bin/kubectl
 COPY --from=promtool /bin/promtool /bin/promtool
-COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
-COPY --from=shfmt /bin/shfmt /bin/shfmt
 COPY --from=terraform /bin/terraform /bin/terraform
 COPY --from=thanos /bin/thanos /bin/thanos
 COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 COPY --from=mimirtool /bin/mimirtool /bin/mimirtool
 COPY --from=mixtool /go/bin/mixtool /bin/mixtool
-COPY --from=tenant-observability-config-manager /config-manager-app /usr/bin/tenant-observability-config-manager
 
 # Ship jsonnet dependencies as a part of this image
 RUN mkdir /jsonnet-deps

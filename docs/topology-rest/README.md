@@ -12,7 +12,8 @@
 
 ## Logging
 
-* [dev/gstg](https://cloudlogging.app.goo.gl/Ku5v9DimYBw4sGyi9)
+* [dev/gstg](https://cloudlogging.app.goo.gl/CRjH7wThDvE5dKZn8)
+* [prod](https://cloudlogging.app.goo.gl/PfFvQWMqtdZk2D217)
 
 <!-- END_MARKER -->
 
@@ -53,3 +54,7 @@ Currently, no customer data is stored in Cells or in the topology service and is
 ## Monitoring/Alerting
 
 Topology service is deployed using Runway, which [supports observability by integrating with the monitoring stack](https://docs.runway.gitlab.com/reference/observability/). You can see the metrics via the general [Runway Service Metrics dashboard](https://dashboards.gitlab.net/d/runway-service/runway3a-runway-service-metrics).
+
+## Breakglass
+
+* [Topology Service Access Procedure](./breakglass.md)

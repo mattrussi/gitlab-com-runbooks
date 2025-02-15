@@ -32,13 +32,13 @@ local sidekiqAlerts(registry, extraSelector) =
       alert: 'sidekiq_throttled_jobs_enqueued_without_dequeuing',
       expr: |||
         (
-          sum by (environment, queue, feature_category, worker) (
+          sum by (env, queue, feature_category, worker) (
             %(enqueueRate)s{%(selector)s}
           ) > 0
         )
         unless
         (
-          sum by (environment, queue, feature_category, worker) (
+          sum by (env, queue, feature_category, worker) (
             %(executionRate)s{%(selector)s}
           ) > 0
         )
@@ -75,9 +75,9 @@ local sidekiqAlerts(registry, extraSelector) =
     {
       alert: 'SidekiqQueueNoLongerBeingProcessed',
       expr: |||
-        (sum by(environment, queue) (%(enqueueRate)s{%(selector)s})> 0.001)
+        (sum by(env, queue) (%(enqueueRate)s{%(selector)s})> 0.001)
         unless
-        (sum by(environment, queue) (%(executionRate)s{%(selector)s}) > 0)
+        (sum by(env, queue) (%(executionRate)s{%(selector)s}) > 0)
       ||| % {
         selector: selectors.serializeHash(extraSelector),
         enqueueRate: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '6h'),
@@ -108,9 +108,9 @@ local sidekiqAlerts(registry, extraSelector) =
     {
       alert: 'SidekiqWorkerNoLongerBeingProcessed',
       expr: |||
-        (sum by(environment, worker) (%(enqueueRate1h)s{%(selector)s})> 0.001)
+        (sum by(env, worker) (%(enqueueRate1h)s{%(selector)s})> 0.001)
         unless
-        (sum by(environment, worker) (%(executionRate1h)s{%(selector)s})  > 0)
+        (sum by(env, worker) (%(executionRate1h)s{%(selector)s})  > 0)
       ||| % {
         selector: selectors.serializeHash(extraSelector),
         enqueueRate1h: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '1h'),
@@ -141,18 +141,20 @@ local sidekiqAlerts(registry, extraSelector) =
     {
       alert: 'SidekiqJobsSkippedTooLong',
       expr: |||
-        sum by (environment, worker, action)  (
+        sum by (env, worker, action, reason)  (
           rate(
             sidekiq_jobs_skipped_total{%(selector)s}[1h]
             )
           )
           > 0
       ||| % {
-        selector: selectors.serializeHash(extraSelector),
+        selector: selectors.serializeHash(extraSelector {
+          reason: 'feature_flag',
+        }),
       },
       'for': '3h',
       labels: {
-        team: 'scalability:practices',
+        team: 'data-access:durability',
         severity: 's4',
         alert_type: 'cause',
       },
@@ -164,6 +166,46 @@ local sidekiqAlerts(registry, extraSelector) =
           Ignore if this is still intentionally left.
 
           Run `/chatops run feature list --match run_sidekiq_jobs` and `/chatops run feature list --match drop_sidekiq_jobs` to list currently used feature flags.
+        |||,
+        grafana_dashboard_id: 'sidekiq-worker-detail',
+        grafana_panel_id: stableIds.hashStableId('jobs-skipped'),
+        grafana_min_zoom_hours: '6',
+        grafana_variables: 'environment,worker',
+      },
+    },
+    {
+      alert: 'SidekiqJobsDeferredByDBHealthCheck',
+      expr: |||
+        sum by (env, worker, feature_category)  (
+            rate(
+                sidekiq_jobs_skipped_total{%(selectorNumerator)s}[1h]
+            )
+        )
+        /
+        sum by (env, worker, feature_category) (
+            application_sli_aggregation:sidekiq_execution:ops:rate_1h{%(selectorDenominator)s}
+        )
+        > 0.1
+      ||| % {
+        selectorNumerator: selectors.serializeHash(extraSelector {
+          action: 'deferred',
+          reason: 'database_health_check',
+        }),
+        selectorDenominator: selectors.serializeHash(extraSelector),
+      },
+      'for': '2h',
+      labels: {
+        severity: 's4',
+        alert_type: 'cause',
+      },
+      annotations: {
+        title: 'Many Sidekiq jobs from `{{ $labels.worker }}` have been deferred by DB health check',
+        description: |||
+          {{ $value | humanizePercentage }} of Sidekiq jobs from `{{ $labels.worker }}` are being deferred via DB Health Check.
+
+          Deferred jobs follow the same [indicators](https://docs.gitlab.com/ee/development/database/batched_background_migrations.html#throttling-batched-migrations) to throttle batched background migrations.
+
+          When too many jobs are being deferred continuously, there could be a huge backlog of jobs impacting jobs from other worker classes.
         |||,
         grafana_dashboard_id: 'sidekiq-worker-detail',
         grafana_panel_id: stableIds.hashStableId('jobs-skipped'),

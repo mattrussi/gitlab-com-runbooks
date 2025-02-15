@@ -7,24 +7,22 @@ test.suite({
     expect: null,
   },
   testLookupByUntouchedGroup: {
-    actual: mappingWithOverride.scalability,
+    actual: mappingWithOverride.observability,
     expectContains: {
-      stage: 'platforms',
+      stage: 'production_engineering',
       feature_categories: [
-        'scalability',
         'error_budgets',
-        'infrastructure_cost_data',
+        'infra_cost_data',
         'capacity_planning',
-        'redis',
-        'rate_limiting',
+        'scalability',
       ],
     },
   },
   testLookupByMergeGroup: {
     actual: mappingWithOverride.gitaly,
     expectContains: {
-      stage: 'systems',
-      feature_categories: ['gitaly'],  // feature categories collected by source group(s)
+      stage: 'data_access',
+      feature_categories: ['gitaly', 'git'],  // feature categories collected by source group(s)
     },
   },
 })

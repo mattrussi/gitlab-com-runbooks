@@ -39,11 +39,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: elastic_single_node_disk_space
-    expr: "0.8"
+    expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: elastic_single_node_disk_space
-    expr: "0.9"
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: elastic_thread_pools

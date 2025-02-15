@@ -57,8 +57,9 @@ stageGroupDashboards.dashboard('global_search', ['api', 'sidekiq', 'web'])
   layout.rowGrid(
     'ElasticSearch queue size',
     [
-      elasticQueueSize('Overall', 'global_search_bulk_cron_queue_size'),
-      elasticQueueSize('Initial', 'global_search_bulk_cron_initial_queue_size'),
+      elasticQueueSize('Overall', 'search_advanced_bulk_cron_queue_size'),
+      elasticQueueSize('Initial', 'search_advanced_bulk_cron_initial_queue_size'),
+      elasticQueueSize('Embedding', 'search_advanced_bulk_cron_embedding_queue_size'),
     ],
     startRow=1000,
   ),

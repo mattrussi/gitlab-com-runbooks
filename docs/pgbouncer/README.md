@@ -18,7 +18,9 @@
 ## Troubleshooting Pointers
 
 * [Interacting with Consul](../consul/interaction.md)
+* [Disaster Recovery Gameday Schedule](../disaster-recovery/gameday-schedule.md)
 * [Measuring Recovery Activities](../disaster-recovery/recovery-measurements.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [../frontend/gitlab-com-is-down.md](../frontend/gitlab-com-is-down.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
@@ -47,7 +49,6 @@
 * [service-pgbouncer.md](service-pgbouncer.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
-* [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)

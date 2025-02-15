@@ -12,8 +12,8 @@ This will allow merging two or more stage groups into a single one.
 {
   gitaly: {
     name: 'Gitaly',
-    stage: 'systems',
-    merge_groups: ['gitaly_cluster', 'gitaly_git'],
+    stage: 'data_access',
+    merge_groups: ['gitaly', 'git'],
   },
   not_owned: {
     /* This is a special pseudo-stage group for the feature_category of `not_owned` and `unknown` */

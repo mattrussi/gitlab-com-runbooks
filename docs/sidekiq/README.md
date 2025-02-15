@@ -24,6 +24,7 @@
 * [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [../duo/triage.md](../duo/triage.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [`gitalyctl`](../gitaly/gitalyctl.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)

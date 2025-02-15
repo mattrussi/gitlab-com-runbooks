@@ -97,7 +97,7 @@ Remember to close out the incident when the issue is resolved.  Also, when possi
 
 # Production Incidents
 
-## [Reporting and incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident)
+## [Reporting an incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident)
 
 ## Roles
 
@@ -717,6 +717,14 @@ jsonnetfmt...........................................(no files to check)Skipped
 shellcheck...............................................................Passed
 shfmt....................................................................Passed
 ```
+
+## Debug options
+
+Some debug options can be set via environment variables to influence the Jsonnet building process:
+
+- `GL_JSONNET_CACHE_DEBUG`: We cache jsonnet outputs in the `.cache`, setting this variable to `true` prints cache misses on `$stderr`.
+- `GL_JSONNET_CACHE_SKIP`: Setting this to `true` disables the jsonnet cache.
+- `GL_JSONNET_GNU_PARALLEL`: Setting this to `true` makes `generate-jsonnet-rules` use GNU parallel instead of xargs, and produces a `joblog.txt` file. This can be useful for profiling build times.
 
 ## Contributing
 

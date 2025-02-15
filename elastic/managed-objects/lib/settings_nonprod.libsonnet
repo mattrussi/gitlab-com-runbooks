@@ -3,6 +3,7 @@ local MEDIUM_THROUGHPUT = ['gke', 'shell', 'system', 'sentry', 'vault', 'mimir']
 
 local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],
@@ -30,6 +31,7 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
 }
 else if std.member(MEDIUM_THROUGHPUT, index) then {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],
@@ -48,6 +50,7 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
   // number_of_replicas: 1,
 } else {
   index: {
+    codec: 'best_compression',
     lifecycle: {
       name: 'gitlab-infra-ilm-policy',
       rollover_alias: 'pubsub-%s-inf-%s' % [index, env],

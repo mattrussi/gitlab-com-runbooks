@@ -53,7 +53,11 @@ This will be automatically done when using the `test-dashboard.sh` script. Alter
 
 ## Modify a dashboard
 
-In order to modify a dashboard you will need to write code using [Grafonnet library](https://grafana.github.io/grafonnet-lib/) built on top of [Jsonnet](https://jsonnet.org/) syntax. In most cases you will also need to specify a PromQL query to source the data from Prometheus. You can experiment with PromQL using our [Thanos instance](https://thanos.gitlab.net/) or [Grafana playground for Prometheus](https://dashboards.gitlab.net/explore).
+In order to _modify_ a dashboard you will need to write code using [Grafonnet library](https://grafana.github.io/grafonnet-lib/) built on top of [Jsonnet](https://jsonnet.org/) syntax. In most cases you will also need to specify a PromQL query to source the data from Prometheus. You can experiment with PromQL using the [Grafana playground for Prometheus](https://dashboards.gitlab.net/explore).
+
+Snapshots can only be created for dashboards, that have already been installed into Grafana.
+For entirely new dashboards, consider merging a basic dashboard (e.g. an empty one, see [this example](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/8049)).
+Once this has been deployed, local edits can be tested as described above.
 
 ## Create a new snapshot of the modified dashboard
 

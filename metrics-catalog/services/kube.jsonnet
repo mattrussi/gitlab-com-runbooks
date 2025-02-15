@@ -20,7 +20,6 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
-  disableApdexSuccessRatePrediction: true,
   serviceDependencies: {
   },
   provisioning: {
@@ -41,7 +40,7 @@ metricsCatalog.serviceDefinition({
     apiserver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'reliability_foundations',
+      team: 'foundations',
       description: |||
         The Kubernetes API server validates and configures data for the api objects which
         include pods, services, and others. The API Server services REST operations

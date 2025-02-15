@@ -1,5 +1,5 @@
 {
   prometheusRules+:: {
-    // Nothing here for now
+    groups+: $.prometheusRulesGroups
   },
 }

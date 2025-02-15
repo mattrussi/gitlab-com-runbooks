@@ -18,9 +18,9 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     burnRatePeriod: '5m',
     query: |||
       (
-        avg_over_time(elasticsearch_thread_pool_active_count{exported_type!="snapshot", %(selector)s}[%(rangeInterval)s])
+        avg_over_time(elasticsearch_thread_pool_active_count{exported_type!~"snapshot|force_merge", %(selector)s}[%(rangeInterval)s])
         /
-        (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!="snapshot", %(selector)s}[%(rangeInterval)s]) > 0)
+        (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!~"snapshot|force_merge", %(selector)s}[%(rangeInterval)s]) > 0)
       )
     |||,
     slos: {

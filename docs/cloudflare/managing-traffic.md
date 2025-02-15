@@ -14,6 +14,8 @@ GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these
 
 ### Creating new WAF rules
 
+:warning: Note that WAF rules apply to HTTP/S traffic only. To apply blocks to other traffic (e.g. SSH), you'll need to use [IP Access Rules](https://developers.cloudflare.com/waf/tools/ip-access-rules/), which are a lot less flexible. If you need greater flexibility than what IP Access Rules offer (for example, blocking IP ranges that aren't `/16` or `/24`), consider [blocking in HAProxy](../frontend/ban-netblocks-on-haproxy.md). :warning:
+
 #### via MR to Terraform
 
 - New WAF rules to block traffic (or add a challenge to traffic) should be added to the Custom Rules [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-custom-rules.tf) via an MR to `config-mgmt`

@@ -137,9 +137,7 @@ When the decision is made to provision a new region, the following steps should 
 The Cloud Run service accounts are managed by Runway and have `aiplatform.user` role set, granting the service accounts the `aiplatform.endpoints.predict` permission. Other permissions granted by this role are unused. To set [additional roles](https://gitlab-com.gitlab.io/gl-infra/platform/runway/provisioner/inventory.schema.html#inventory_items_additional_roles), update `ai-gateway` entry in Runway [provisioner](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner/-/blob/main/inventory.json?ref_type=heads).
 This IAM membership is managed via the `gl-infra/config-mgmt` repository, using Terraform.
 
-* [Service Account Configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ai-assisted-legacy-prd/service_accounts.tf?ref_type=heads#L10)
-
-Caveat: Terraform's management of IAM memberships is not authoritative. In other words, there are IAM memberships in `unreview-poc-390200e5` that are not managed by Terraform.
+* [Service Account Configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ai-framework-prod/service_accounts.tf?ref_type=heads#L7)
 
 ## Performance
 
@@ -170,7 +168,6 @@ AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineerin
 
 Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live in the following projects:
 
-* `unreview-poc-390200e5`
 * `gitlab-ai-framework-dev`
 * `gitlab-ai-framework-stage`
 * `gitlab-ai-framework-prod`
@@ -180,17 +177,17 @@ Refer to
 for quota usage trends and projections.
 
 Many of our AI features use GCP's Vertex AI service. Vertex AI consists of various `base models` that represent logic for different types of AI models (such as code generation, or chat bots).
-Each model has its own usage quota, which can be viewed in the [GCP Console](https://console.cloud.google.com/iam-admin/quotas?referrer=search&project=unreview-poc-390200e5&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22))).
+Each model has its own usage quota, which can be viewed in the [GCP Console](https://console.cloud.google.com/iam-admin/quotas?referrer=search&project=gitlab-ai-framework-prod&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22))).
 
 To request a quota alteration:
 
-* Visit the following page in the GCP Console: [Quotas by Base Model](https://console.cloud.google.com/iam-admin/quotas?referrer=search&project=unreview-poc-390200e5&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22)))
+* Visit the following page in the GCP Console: [Quotas by Base Model](https://console.cloud.google.com/iam-admin/quotas?referrer=search&project=gitlab-ai-framework-prod&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22)))
 * Select each base model that requires an quota decrease/increase
 * Click 'EDIT QUOTAS'
 * Input the desired quota limit for each service and submit the request.
-* Existing/previous requests can be viewed [here](https://console.cloud.google.com/iam-admin/quotas/qirs?referrer=search&project=unreview-poc-390200e5&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22)))
+* Existing/previous requests can be viewed [here](https://console.cloud.google.com/iam-admin/quotas/qirs?referrer=search&project=gitlab-ai-framework-prod&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22)))
 
-If you do not have access to the GCP console, please file an access request asking for the `Quota Administrator` role on the `ai-assisted-legacy-prd` project.
+If you do not have access to the GCP console, please file an access request asking for the `Quota Administrator` role on the `gitlab-ai-framework-prod` project.
 
 <!-- ## Availability -->
 

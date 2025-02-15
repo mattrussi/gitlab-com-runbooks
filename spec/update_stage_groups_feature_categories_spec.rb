@@ -214,9 +214,7 @@ describe UpdateStageGroupsFeatureCategories do
         conversion: {
           name: 'Conversion',
           stage: 'growth',
-          feature_categories: [
-
-          ],
+          feature_categories: [],
         },
         expansion: {
           name: 'Expansion',

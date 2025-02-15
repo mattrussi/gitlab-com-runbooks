@@ -59,7 +59,7 @@
 
 # Escalation
 
-- Slack Channel: #g_infra_foundations
+- Slack Channel: #g_foundations
 
 # Definitions
 

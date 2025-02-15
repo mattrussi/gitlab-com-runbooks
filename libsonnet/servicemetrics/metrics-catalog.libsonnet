@@ -54,7 +54,10 @@ local serviceApplicableSaturationTypes(service)
     findServiceTypesWithFirst(first, function(s) s.provisioning.kubernetes),
 
   findRunwayProvisionedServices(first=null)::
-    findServiceTypesWithFirst(first, function(s) std.objectHas(s.provisioning, 'runway') && s.provisioning.runway),
+    findServiceTypesWithFirst(first, function(s) std.objectHas(s.provisioning, 'runway') && s.provisioning.runway && s.tier == 'sv'),
+
+  findRunwayProvisionedDatastores(first=null)::
+    findServiceTypesWithFirst(first, function(s) std.objectHas(s.provisioning, 'runway') && s.provisioning.runway && s.tier == 'db'),
 
   findKubeOnlyServices(first=null)::
     findServiceTypesWithFirst(first, function(s) s.provisioning.kubernetes && !s.provisioning.vms),

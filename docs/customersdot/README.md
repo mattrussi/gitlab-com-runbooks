@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [CustomersDot main troubleshoot documentation](overview.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [../duo/triage.md](../duo/triage.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)

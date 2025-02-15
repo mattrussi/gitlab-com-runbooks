@@ -36,8 +36,6 @@ metricsCatalog.serviceDefinition({
    */
   disableOpsRatePrediction: true,
 
-  disableApdexSuccessRatePrediction: true,
-
   // Thanos needs to self-monitor in Thanos
   // this should not be required for other services.
   dangerouslyThanosEvaluated: false,
@@ -191,7 +189,7 @@ metricsCatalog.serviceDefinition({
     mimir_query_frontend: {
       staticLabels: staticLabels,
       severity: 's2',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -230,7 +228,7 @@ metricsCatalog.serviceDefinition({
     mimir_query_scheduler: {
       staticLabels: staticLabels,
       severity: 's2',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -270,7 +268,7 @@ metricsCatalog.serviceDefinition({
     mimir_store_gateway: {
       staticLabels: staticLabels,
       severity: 's2',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -311,7 +309,7 @@ metricsCatalog.serviceDefinition({
     mimir_distributor: {
       staticLabels: staticLabels,
       severity: 's2',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -355,7 +353,7 @@ metricsCatalog.serviceDefinition({
     mimir_ingester: {
       staticLabels: staticLabels,
       severity: 's2',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -398,7 +396,7 @@ metricsCatalog.serviceDefinition({
     mimir_compactor: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -430,7 +428,7 @@ metricsCatalog.serviceDefinition({
     mimir_ruler: {
       staticLabels: staticLabels,
       severity: 's2',
-      team: 'scalability:observability',
+      team: 'observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||

@@ -12,8 +12,8 @@
 ## Background
 
 From time to time it may become necessary to block IP addresses or networks of IP addresses from accessing GitLab.
-We now generally use Cloudflare for that, but as of now GitLab Pages and registry are not behind Cloudflare.
-In this case we can still use the old way by managing those IP adresses in the file
+We now generally use Cloudflare for that, but as of now GitLab Pages and Registry are not behind Cloudflare. There are also situations where Cloudflare simply doesn't offer functionality we need, for example if we need to block SSH traffic from certain locales, but not an entire country.
+In this case we can still use the old way by managing those IP addresses in the file
 [deny-403-ips.lst](https://gitlab.com/gitlab-com/security-tools/front-end-security/blob/master/deny-403-ips.lst) in the
 [security-tools/front-end](https://gitlab.com/gitlab-com/security-tools/front-end-security) repository. Updates to this file
 are distributed to the HA Proxy nodes on each chef run by the [gitlab-haproxy](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy) cookbook.
@@ -36,6 +36,7 @@ Just like Santa Clause, you want to check your list twice before you sort the na
 
 - Edit and commit [deny-403-ips.lst](https://gitlab.com/gitlab-com/security-tools/front-end-security/blob/master/deny-403-ips.lst).
   - All IP addresses must have a subnet mask, even if it's a single address (/32).
+  - There are also automations (e.g. [`geoblockr`](https://gitlab.com/gitlab-com/gl-infra/geoblockr)) adding to/removing from the list, so take special note of any comments in the file.
 - Wait for changes to be mirrored to the ops.gitlab.net instance and for the next chef run to pick them up and reload haproxy on the LBs.
 
 How can we make this go faster?

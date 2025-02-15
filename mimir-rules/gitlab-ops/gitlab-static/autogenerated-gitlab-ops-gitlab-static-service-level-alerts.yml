@@ -22,9 +22,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_worker_requests_count{environment="{{ $labels.environment }}",script_name="gitlab-web-ide-vscode-production",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_worker_requests_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="gitlab-static"}[5m])
         )
-      runbook: docs/gitlab-static/README.md
+      runbook: docs/gitlab-static/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -59,9 +59,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_worker_requests_count{environment="{{ $labels.environment }}",script_name="gitlab-web-ide-vscode-production",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_worker_requests_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="gitlab-static"}[5m])
         )
-      runbook: docs/gitlab-static/README.md
+      runbook: docs/gitlab-static/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation

@@ -107,7 +107,7 @@ local percentileThresholdAlert(
     |||
       :chart_with_upwards_trend: <%(link)s|Rails Endpoint Dashboard>
     ||| % {
-      link: elasticsearchLinks.dashboards.railsEndpointDashboard('{{#url}}{{key}}{{/url}}', from='now-24', to='now'),
+      link: elasticsearchLinks.dashboards.railsEndpointDashboard('{{#url}}{{key}}{{/url}}', from='now-24h', to='now'),
     }
   else
     '';

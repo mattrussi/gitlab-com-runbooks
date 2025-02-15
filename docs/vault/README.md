@@ -24,6 +24,7 @@
 ## Troubleshooting Pointers
 
 * [Atlantis Web UI](../atlantis/webui.md)
+* [Cells DNS](../cells/dns.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
@@ -35,7 +36,6 @@
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
@@ -46,7 +46,6 @@
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Mimir Onboarding](../mimir/getting-started.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)
-* [Thanos Receive](../monitoring/thanos-receive.md)
 * [GPG Keys for Repository Metadata Signing](../packagecloud/manage-repository-metadata-signing-keys.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
