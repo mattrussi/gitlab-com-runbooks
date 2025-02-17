@@ -13,6 +13,12 @@ metricsCatalog.serviceDefinition(
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
+    serviceLevelIndicators+: {
+      rails_redis_client+: {
+        userImpacting: true,
+        trafficCessationAlertConfig: false,
+      },
+    },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-chat-cache')
 )
