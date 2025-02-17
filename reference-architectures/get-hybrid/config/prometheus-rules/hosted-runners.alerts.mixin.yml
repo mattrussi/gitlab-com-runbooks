@@ -21,7 +21,7 @@ groups:
                 sum by (shard) (
                   rate(gitlab_runner_api_request_statuses_total{job="hosted-runners-prometheus-agent",shard=~".*",status=~"5.."}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The api_requests SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an error rate violating SLO
           expr: |
             (
@@ -71,7 +71,7 @@ groups:
                 sum by (shard) (
                   rate(gitlab_runner_api_request_statuses_total{job="hosted-runners-prometheus-agent",shard=~".*",status=~"5.."}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The api_requests SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an error rate violating SLO
           expr: |
             (
@@ -121,7 +121,7 @@ groups:
                 sum by (shard) (
                   rate(gitlab_runner_api_request_statuses_total{job="hosted-runners-prometheus-agent",shard=~".*"}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The api_requests SLI of the hosted-runners service on shard `{{ $labels.shard }}` has not received any traffic in the past 30m
           expr: |
             gitlab_component_shard_ops:rate_30m{component="api_requests",type="hosted-runners"} == 0
@@ -160,7 +160,7 @@ groups:
                 sum by (shard) (
                   rate(gitlab_runner_api_request_statuses_total{job="hosted-runners-prometheus-agent",shard=~".*"}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The api_requests SLI of the hosted-runners service on shard `{{ $labels.shard }}` has not reported any traffic in the past 30m
           expr: |
             gitlab_component_shard_ops:rate_5m{component="api_requests",type="hosted-runners"} offset 1h
@@ -193,7 +193,7 @@ groups:
             grafana_min_zoom_hours: "6"
             grafana_panel_id: "2925052761"
             grafana_variables: environment,stage,shard
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The ci_runner_jobs SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an apdex violating SLO
           expr: |
             (
@@ -239,7 +239,7 @@ groups:
             grafana_min_zoom_hours: "6"
             grafana_panel_id: "2925052761"
             grafana_variables: environment,stage,shard
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The ci_runner_jobs SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an apdex violating SLO
           expr: |
             (
@@ -289,7 +289,7 @@ groups:
                 sum by (shard) (
                   rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="hosted-runners-prometheus-agent",shard=~".*"}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The ci_runner_jobs SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an error rate violating SLO
           expr: |
             (
@@ -339,7 +339,7 @@ groups:
                 sum by (shard) (
                   rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="hosted-runners-prometheus-agent",shard=~".*"}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The ci_runner_jobs SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an error rate violating SLO
           expr: |
             (
@@ -392,7 +392,7 @@ groups:
                     rate(gitlab_runner_job_queue_duration_seconds_bucket{job="hosted-runners-prometheus-agent",shard="{{ $labels.shard }}"}[5m])
                   )
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The pending_builds SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an apdex violating SLO
           expr: |
             (
@@ -444,7 +444,7 @@ groups:
                     rate(gitlab_runner_job_queue_duration_seconds_bucket{job="hosted-runners-prometheus-agent",shard="{{ $labels.shard }}"}[5m])
                   )
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The pending_builds SLI of the hosted-runners service on shard `{{ $labels.shard }}` has an apdex violating SLO
           expr: |
             (
@@ -491,7 +491,7 @@ groups:
                 sum by () (
                   rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The polling SLI of the hosted-runners service (`{{ $labels.stage }}` stage) has an error rate violating SLO
           expr: |
             (
@@ -539,7 +539,7 @@ groups:
                 sum by () (
                   rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[5m])
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The polling SLI of the hosted-runners service (`{{ $labels.stage }}` stage) has an error rate violating SLO
           expr: |
             (
@@ -590,7 +590,7 @@ groups:
                     rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{}[5m])
                   )
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The queuing_queries_duration SLI of the hosted-runners service (`{{ $labels.stage }}` stage) has an apdex violating SLO
           expr: |
             (
@@ -641,7 +641,7 @@ groups:
                     rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{}[5m])
                   )
                 )
-            runbook: docs/hosted-runners/README.md
+            runbook: docs/hosted-runners/README.md#alerts
             title: The queuing_queries_duration SLI of the hosted-runners service (`{{ $labels.stage }}` stage) has an apdex violating SLO
           expr: |
             (
