@@ -8,13 +8,13 @@ include:
   # common to all projects using this template library.
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/README.md#templatesstandardyml
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.56
+    ref: v2.57
     file: templates/standard.yml
 
   # Merge request review tasks
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/danger.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.56
+    ref: v2.57
     file: danger.yml
 
 stages:
