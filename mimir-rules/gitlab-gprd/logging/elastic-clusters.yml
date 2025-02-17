@@ -26,7 +26,7 @@ groups:
           runbook: docs/elastic/troubleshooting/README.md
           title: ILM is no longer running in the logging cluster!
       - alert: Elasticsearch production logging cluster unhealthy
-        expr: probe_success{instance="https://92c87c26b16049b0a30af16b94105528.us-central1.gcp.cloud.es.io:9243/_cluster/health",type="blackbox"} == 0
+        expr: elasticsearch_cluster_health_status{cluster="92c87c26b16049b0a30af16b94105528", color="red"} == 1
         for: 5m
         labels:
           severity: s2
