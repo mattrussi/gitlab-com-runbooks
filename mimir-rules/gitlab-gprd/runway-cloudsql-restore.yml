@@ -2,6 +2,7 @@ groups:
 - name: Runway CloudSQL Restore Validation
   rules:
   - alert: NoRestorePipelineStarted
+    for: 10m
     expr: max(time() - runway_csql_restore_start) by (env, type, resource) > 86400
     labels:
       alert_type: symptom
@@ -26,5 +27,5 @@ groups:
       grafana_datasource_id: mimir-gitlab-gprd
       title: Failing restore validation pipeline
       description: >
-        Pipeline not completed for {{ $labels.resource }} 2 hours.
+        Pipeline for {{ $labels.resource }} has not completed after 2 hours.
       runbook: docs/runway/cloudsql_restore_pipeline_troubleshooting.md
