@@ -40,12 +40,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -88,12 +88,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -208,12 +208,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -256,12 +256,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
