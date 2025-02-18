@@ -1,4 +1,5 @@
 local redisHelpers = import './lib/redis-helpers.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
@@ -28,6 +29,16 @@ metricsCatalog.serviceDefinition(
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-sidekiq')
   + {
     capacityPlanning: {
+      local shards = ['default', 'catchall_a'],
+      saturation_dimensions: [
+        { selector: selectors.serializeHash({ shard: shard }) }
+        for shard in shards
+      ] + [
+        {
+          selector: selectors.serializeHash({ shard: { noneOf: shards } }),
+          label: 'shard=rest-aggregated',
+        },
+      ],
       components: [
         {
           name: 'redis_primary_cpu',
