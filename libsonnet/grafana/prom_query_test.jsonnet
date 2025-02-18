@@ -12,6 +12,6 @@ local instant = null;
 test.suite({
   testTarget: {
     expect: promQuery.target(expr, format, intervalFactor, legendFormat, datasource, interval, instant),
-    actual: promQuery.timeSeriesTarget(expr, format, intervalFactor, legendFormat, datasource, interval, instant),
+    actual: promQuery.timeSeriesTarget('foo', format, intervalFactor, legendFormat, datasource, interval, instant),
   },
 })

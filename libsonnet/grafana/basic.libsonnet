@@ -296,6 +296,10 @@ local validateTags(tags) =
       if legend_current then 'last',
       if legend_total then 'total',
     ];
+    local legendDisplayMode = if legend_alignAsTable then
+      'table'
+    else
+      'list';
     local legendPlacement = if legend_rightSide then
       'right'
     else
@@ -312,40 +316,82 @@ local validateTags(tags) =
     ts.fieldConfig.defaults.custom.withLineWidth(linewidth) +
     ts.fieldConfig.defaults.custom.withPointSize(pointradius) +
     ts.fieldConfig.defaults.custom.withShowPoints(showPoints) +
-    ts.options.legend.withAsTable(legend_alignAsTable) +
+    ts.options.legend.withDisplayMode(legendDisplayMode) +
     ts.options.legend.withCalcs(legendCalcs) +
     ts.options.legend.withShowLegend(legend_show) +
     ts.options.legend.withPlacement(legendPlacement) +
     ts.panelOptions.withDescription(description) +
     {
+      addAxis(min=null, max=null, label=null):: self {
+        fieldConfig+: {
+          defaults+: {
+            custom+: {
+              axisSoftMin: min,
+              axisSoftMax: max,
+              axisColorMode: 'text',
+              axisLabel: label,
+              axisPlacement: 'left',
+            },
+          },
+        },
+      },
       addSeriesOverride(override):: self {
         local matcherId =
           if std.startsWith(override.alias, '/') && std.endsWith(override.alias, '/') then
             'byRegexp'
           else
-            'name',
+            'byName',
 
-        overrides+: ts.standardOptions.withOverrides(
-          {
-            matcher: {
-              id: matcherId,
-              options: override.alias,
-            },
-            properties: [
-              if std.objectHas(override, 'color') then
-                {
-                  id: 'color',
-                  value: {
-                    fixedColor: override.color,
-                    mode: 'fixed',
+        fieldConfig+: {
+          overrides+: [
+            {
+              matcher: {
+                id: matcherId,
+                options: override.alias,
+              },
+              properties: [
+                if std.objectHas(override, 'dashes') && override.dashes then
+                  {
+                    id: 'custom.lineStyle',
+                    value: {
+                      dash: [override.dashLength],
+                      fill: 'dash',
+                    },
                   },
-                },
-            ],
-          },
-        ),
+                if std.objectHas(override, 'color') then
+                  {
+                    id: 'color',
+                    value: {
+                      fixedColor: override.color,
+                      mode: 'fixed',
+                    },
+                  },
+                if std.objectHas(override, 'fillBelowTo') then
+                  {
+                    id: 'custom.fillBelowTo',
+                    value: override.fillBelowTo,
+                  },
+                if std.objectHas(override, 'fillBelowTo') then
+                  {
+                    id: 'custom.fillOpacity',
+                    value: 30,
+                  },
+                if std.objectHas(override, 'legend') then
+                  {
+                    id: 'custom.hideFrom',
+                    value: {
+                      legend: !override.legend,
+                      tooltip: false,
+                      viz: false,
+                    },
+                  },
+              ],
+            },
+          ],
+        },
       },
       addTarget(target):: self {
-        targets+: ts.queryOptions.withTargets(target),
+        targets+: [target],
       },
     },
 

@@ -50,6 +50,10 @@ local genericOperationRateTimeSeriesPanel(
     description=if description == null then defaultOperationRateDescription else description,
     legend_show=if legend_show == null then !compact else legend_show,
   )
+  .addAxis(
+    min=0,
+    label=if compact then '' else 'Operations per Second',
+  )
   .addSeriesOverride(seriesOverrides.shardLevelSli);
 
 local operationRatePanel(
