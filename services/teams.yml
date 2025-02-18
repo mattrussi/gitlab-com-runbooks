@@ -38,7 +38,7 @@ teams:
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
-  manager: andrashorvath
+  manager: jcaigitlab
   slack_alerts_channel: gitaly-alerts
   product_stage_group: gitaly
   pagerduty_service: Gitaly
