@@ -6302,7 +6302,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/-/cable\\\\z\",route!=\"^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\\\z\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6398,7 +6398,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6474,7 +6474,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6550,11 +6550,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 {{route_id}}",
+              "legendFormat": "p95 {{route}}",
               "refId": "A"
             }
           ],
@@ -6578,7 +6578,7 @@
               "yaxis": "left"
             }
           ],
-          "title": "Estimated p95 workhorse Latency - per route_id",
+          "title": "Estimated p95 workhorse Latency - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -6652,15 +6652,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"1\",route_id!=\"\"}[$__interval])\n  )\n  +\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route_id!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"1\",route!=\"\"}[$__interval])\n  )\n  +\n  sum by (route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "Apdex attribution for workhorse Latency - per route_id",
+          "title": "Apdex attribution for workhorse Latency - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -6727,15 +6727,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "workhorse Errors - per route_id",
+          "title": "workhorse Errors - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -6803,15 +6803,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "workhorse RPS - per route_id",
+          "title": "workhorse RPS - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -6879,7 +6879,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/-/cable\\\\z\",route!=\"^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\\\z\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6981,7 +6981,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"1\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n  +\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/-/cable\\\\z\",route!=\"^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\\\z\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"1\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/-/cable\\\\z\",route!=\"^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\\\z\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n  )\n  +\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/-/cable\\\\z\",route!=\"^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\\\z\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/-/cable\\\\z\",route!=\"^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\\\z\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7056,7 +7056,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7132,7 +7132,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7228,7 +7228,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7315,7 +7315,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7391,7 +7391,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7467,11 +7467,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 {{route_id}}",
+              "legendFormat": "p95 {{route}}",
               "refId": "A"
             }
           ],
@@ -7486,7 +7486,7 @@
               "yaxis": "left"
             }
           ],
-          "title": "Estimated p95 workhorse_api Latency - per route_id",
+          "title": "Estimated p95 workhorse_api Latency - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -7560,15 +7560,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "Apdex attribution for workhorse_api Latency - per route_id",
+          "title": "Apdex attribution for workhorse_api Latency - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -7635,15 +7635,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "workhorse_api Errors - per route_id",
+          "title": "workhorse_api Errors - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -7711,15 +7711,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "workhorse_api RPS - per route_id",
+          "title": "workhorse_api RPS - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -7787,7 +7787,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7880,7 +7880,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n\n    -\n    (\n      sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n\n    -\n    (\n      sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7955,7 +7955,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8031,7 +8031,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8127,7 +8127,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id=\"git_info_refs\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route=\"^/.+\\\\.git/info/refs\\\\z\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8214,7 +8214,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id=~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route=~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8290,7 +8290,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route_id=~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route=~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8366,11 +8366,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 {{route_id}}",
+              "legendFormat": "p95 {{route}}",
               "refId": "A"
             }
           ],
@@ -8385,7 +8385,7 @@
               "yaxis": "left"
             }
           ],
-          "title": "Estimated p95 workhorse_git Latency - per route_id",
+          "title": "Estimated p95 workhorse_git Latency - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -8459,15 +8459,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "Apdex attribution for workhorse_git Latency - per route_id",
+          "title": "Apdex attribution for workhorse_git Latency - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -8534,15 +8534,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id=~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route=~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "workhorse_git Errors - per route_id",
+          "title": "workhorse_git Errors - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -8610,15 +8610,15 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{route_id=~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route=~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{route_id}}",
+              "legendFormat": "{{route}}",
               "refId": "A"
             }
           ],
-          "title": "workhorse_git RPS - per route_id",
+          "title": "workhorse_git RPS - per route",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -8686,7 +8686,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route_id=\"git_info_refs\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route=\"^/.+\\\\.git/info/refs\\\\z\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8779,7 +8779,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id=\"git_info_refs\"}[$__interval])\n)\n\n    -\n    (\n      sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route_id=\"git_info_refs\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id=\"git_info_refs\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route=\"^/.+\\\\.git/info/refs\\\\z\"}[$__interval])\n)\n\n    -\n    (\n      sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route=\"^/.+\\\\.git/info/refs\\\\z\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route=\"^/.+\\\\.git/info/refs\\\\z\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8854,7 +8854,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id=~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route=~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8930,7 +8930,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route_id=~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route=~\"\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-receive-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/git-upload-pack\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/gitlab-lfs/objects/\\\\(\\\\[0-9a-f\\\\]\\\\{64\\\\}\\\\)/\\\\(\\\\[0-9\\\\]\\\\+\\\\)\\\\\\\\z|\\\\^/\\\\.\\\\+\\\\\\\\\\\\.git/info/refs\\\\\\\\z\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,

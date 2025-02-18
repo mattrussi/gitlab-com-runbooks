@@ -4166,7 +4166,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/cable\\z",route!="^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\z",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4217,7 +4217,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/cable\\z",route!="^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\z",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4266,7 +4266,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has an error rate violating
@@ -4315,7 +4315,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has an error rate violating
@@ -4364,7 +4364,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has not received any traffic
@@ -4401,7 +4401,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has not reported any traffic
@@ -4440,7 +4440,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4494,7 +4494,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4546,7 +4546,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has an error rate violating
@@ -4597,7 +4597,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has an error rate violating
@@ -4648,7 +4648,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has not received any
@@ -4687,7 +4687,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has not reported any
@@ -4726,7 +4726,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id="git_info_refs"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route="^/.+\\.git/info/refs\\z"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4780,7 +4780,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id="git_info_refs"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route="^/.+\\.git/info/refs\\z"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4832,7 +4832,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id=~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route=~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_git SLI of the webservice service has an error rate violating
@@ -4883,7 +4883,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id=~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route=~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_git SLI of the webservice service has an error rate violating
@@ -4934,7 +4934,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route_id=~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route=~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_git SLI of the webservice service has not received any
@@ -4973,7 +4973,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route_id=~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route=~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_git SLI of the webservice service has not reported any
