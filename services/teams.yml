@@ -5,6 +5,7 @@ teams:
   slack_channel: production
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
+  pagerduty_service: GitLab Production
 
 - name: create
   url: https://about.gitlab.com/handbook/engineering/development/dev/create/
@@ -40,6 +41,7 @@ teams:
   manager: andrashorvath
   slack_alerts_channel: gitaly-alerts
   product_stage_group: gitaly
+  pagerduty_service: Gitaly
   ignored_components:
   - graphql_query
 
