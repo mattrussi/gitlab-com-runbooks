@@ -96,6 +96,12 @@
               type: 'String',
               source: '$.product_stage_group',
             },
+            {
+              id: 'pagerduty_service',
+              name: 'PagerDuty Service',
+              type: 'PagerDutyService',
+              source: '$.pagerduty_service',
+            },
           ],
         },
       ],
