@@ -82,28 +82,28 @@ metricsCatalog.serviceDefinition({
       },
 
       local workhorseSelector = {
-        route_id: {
-          ne: [
-           'health',
-           'liveness',
-          ],
+        route: {
+          ne: workhorseRoutes.escapeForLiterals(|||
+            ^/-/health$
+            ^/-/(readiness|liveness)$
+          |||),
         },
       },
 
       // Routes associated with api traffic
-      local apiRoutes = ['^api.*'],
+      local apiRoutes = ['^\\\\^/api/.*'],
 
       // Routes associated with git traffic
-      local gitRouteRegexps = [
-        '^git_receive_pack$',
-        '^git_upload_pack$',
-        '^git_lfs_objects$',
-        '^git_info_refs$',
-      ],
+      local gitRouteRegexps = workhorseRoutes.escapeForRegexp(|||
+        ^/.+\.git/git-receive-pack\z
+        ^/.+\.git/git-upload-pack\z
+        ^/.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
+        ^/.+\.git/info/refs\z
+      |||),
 
-      local nonAPIWorkhorseSelector = workhorseSelector { route_id+: { nre+: apiRoutes, noneOf: gitRouteRegexps } },
-      local apiWorkhorseSelector = workhorseSelector { route_id+: { re+: apiRoutes } },
-      local gitWorkhorseSelector = { route_id: { oneOf: gitRouteRegexps } },
+      local nonAPIWorkhorseSelector = workhorseSelector { route+: { nre+: apiRoutes, noneOf: gitRouteRegexps } },
+      local apiWorkhorseSelector = workhorseSelector { route+: { re+: apiRoutes } },
+      local gitWorkhorseSelector = { route: { oneOf: gitRouteRegexps } },
 
       workhorse: {
         userImpacting: true,
@@ -119,11 +119,12 @@ metricsCatalog.serviceDefinition({
           selector=nonAPIWorkhorseSelector {
             // In addition to excluding all git and API traffic, exclude
             // these routes from apdex as they have variable durations
-            route_id+: {
-              ne+: [
-                'project_uploads',
-                'action_cable',
-              ],
+            route+: {
+              ne+: workhorseRoutes.escapeForLiterals(|||
+                ^/([^/]+/){1,}[^/]+/uploads\z
+                ^/-/cable\z
+                ^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\z
+              |||),
             },
           },
           satisfiedThreshold=1,
@@ -142,7 +143,7 @@ metricsCatalog.serviceDefinition({
           },
         ),
 
-        significantLabels: ['route_id', 'code'],
+        significantLabels: ['route', 'code'],
 
         toolingLinks: [],
       },
@@ -174,7 +175,7 @@ metricsCatalog.serviceDefinition({
           },
         ),
 
-        significantLabels: ['route_id', 'code'],
+        significantLabels: ['route', 'code'],
 
         toolingLinks: [],
       },
@@ -194,7 +195,9 @@ metricsCatalog.serviceDefinition({
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
           selector={
             // We only use the info-refs endpoint, not long-duration clone endpoints
-            route_id: ['git_info_refs'],
+            route: workhorseRoutes.escapeForLiterals(|||
+              ^/.+\.git/info/refs\z
+            |||),
           },
           satisfiedThreshold=10
         ),
@@ -211,7 +214,7 @@ metricsCatalog.serviceDefinition({
           },
         ),
 
-        significantLabels: ['route_id', 'code'],
+        significantLabels: ['route', 'code'],
 
         toolingLinks: [],
       },
