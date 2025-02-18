@@ -102,6 +102,11 @@
               type: 'PagerDutyService',
               source: '$.pagerduty_service',
             },
+            {
+              id: 'escalation_path',
+              name: 'Escalation Path',
+              type: 'EscalationPath',
+            },
           ],
         },
       ],
