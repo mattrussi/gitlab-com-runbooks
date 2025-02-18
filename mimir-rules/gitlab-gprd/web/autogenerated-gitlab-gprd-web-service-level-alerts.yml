@@ -2118,7 +2118,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "457091895"
       grafana_variables: environment,stage
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2164,7 +2164,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "457091895"
       grafana_variables: environment,stage
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2212,7 +2212,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "457091895"
       grafana_variables: environment,stage
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2260,7 +2260,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "457091895"
       grafana_variables: environment,stage
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2310,7 +2310,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",request_rejected="true",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2360,7 +2360,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",request_rejected="true",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
@@ -2412,7 +2412,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",request_rejected="true",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2464,7 +2464,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",request_rejected="true",stage="{{ $labels.stage }}"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: slo_violation
@@ -2514,7 +2514,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2553,7 +2553,7 @@ groups:
         sum by (env,environment,tier,stage) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
@@ -2592,7 +2592,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
@@ -2633,7 +2633,7 @@ groups:
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_sli_path_traversal_check_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
-      runbook: docs/web/README.md
+      runbook: docs/web/README.md#alerts
     labels:
       aggregation: regional_component
       alert_class: traffic_cessation
