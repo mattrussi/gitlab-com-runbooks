@@ -48,7 +48,7 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "ef841d571a704013b689368fe51e437810b6c935",
+      "version": "09ca0a6735fa87a36cccd2e74fb9734eb0a88ac4",
       "sum": "yxqWcq/N3E/a/XreeU6EuE6X7kYPnG0AspAQFKOjASo="
     },
     {
@@ -58,7 +58,7 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "ef841d571a704013b689368fe51e437810b6c935",
+      "version": "09ca0a6735fa87a36cccd2e74fb9734eb0a88ac4",
       "sum": "nIrKMv0zteO5Y5QpvTDH4X0FytsYLcVRX2uj09w22W8="
     },
     {
@@ -118,8 +118,8 @@
           "subdir": ""
         }
       },
-      "version": "7ad0dd16668d0da4d3372b8af52c76aed47a6590",
-      "sum": "LMlURv2Z2wI1HZ3EFuqX31CSBTUtHW1eVC+q81ksNn0="
+      "version": "41ee537687fd6c1fe7c1b2b8ebf52cc8c10956ac",
+      "sum": "z4mr1BA3AuYeF+tVFa9I0fg6WNtMZjwXQvrxZU1hKaE="
     }
   ],
   "legacyImports": false
