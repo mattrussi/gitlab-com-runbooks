@@ -1,0 +1,15 @@
+groups:
+- name: clickhouse.rules
+  rules:
+  - alert: ClickHouseFailedSelectQueries
+    expr: rate(ClickHouseProfileEvents_FailedSelectQuery[5m]) > 0
+    for: 24h
+    labels:
+      alert_type: symptom
+      severity: s3
+      team: clickhouse
+    annotations:
+      grafana_datasource_id: mimir-gitlab-gprd
+      title: ClickHouse failed select queries
+      description: >
+        ClickHouse select queries have had non-zero failures in the last 24h.
