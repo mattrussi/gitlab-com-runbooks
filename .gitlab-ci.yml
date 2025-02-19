@@ -1074,3 +1074,41 @@ pages:
       - public
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE != "schedule"'
+
+##########
+# Incident.io
+##########
+
+.incident-io:
+  extends: .id-tokens
+  image:
+    name: incidentio/catalog-importer:latest
+    entrypoint: [""]
+  secrets:
+    INCIDENT_API_KEY:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/shared/incident-io/api_token@ci
+  before_script:
+    - cd services
+
+validate-incident-io-service-catalog:
+  extends: .incident-io
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - *if-merge-request-rule
+  script:
+    - catalog-importer validate --config incident-io-importer.jsonnet
+
+sync-incident-io-service-catalog:
+  extends: .incident-io
+  stage: deploy
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - *if-main-branch-rule
+  script:
+    - catalog-importer sync --api-key $INCIDENT_API_KEY --config incident-io-importer.jsonnet
