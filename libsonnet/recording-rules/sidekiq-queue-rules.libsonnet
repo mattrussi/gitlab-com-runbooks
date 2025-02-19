@@ -179,15 +179,16 @@ local sidekiqAlerts(registry, extraSelector) =
         sum by (env, worker) (
           application_sli_aggregation:sidekiq_execution:error:rate_5m{
             worker=~"Ai::RepositoryXray::ScanDependenciesWorker"
-        }
-      ) > 0.001
+          }
+        ) > 0.001
+      |||,
       'for': '5m',
       labels: {
         severity: 's4',
         aggregation: 'sidekiq_execution',
         sli_type: 'error',
         alert_type: 'symptom',
-        team: 'code_creation'
+        team: 'code_creation',
       },
       annotations: {
         title: 'High error rate for `{{ $labels.worker }}`',
