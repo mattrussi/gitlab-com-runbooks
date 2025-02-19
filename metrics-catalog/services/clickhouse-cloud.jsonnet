@@ -33,12 +33,12 @@ metricsCatalog.serviceDefinition({
             |||,
 
             requestRate: rateMetric(
-                counter='ClickHouseProfileEvents_Query',
+                counter='ClickHouseProfileEvents_SelectQuery',
                 selector=clickhouseQuerySelector
             ),
 
             errorRate: rateMetric(
-                counter='ClickHouseProfileEvents_FailedQuery',
+                counter='ClickHouseProfileEvents_FailedSelectQuery',
                 selector=clickhouseQuerySelector,
             ),
 

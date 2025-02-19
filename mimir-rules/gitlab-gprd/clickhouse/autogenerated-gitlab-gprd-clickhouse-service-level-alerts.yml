@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_FailedQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_FailedSelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -70,7 +70,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_FailedQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_FailedSelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -118,7 +118,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_Query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_SelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -155,7 +155,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_Query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_SelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
