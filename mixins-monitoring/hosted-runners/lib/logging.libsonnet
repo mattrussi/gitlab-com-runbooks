@@ -37,6 +37,9 @@ metricsCatalog.serviceDefinition({
             featureCategory: 'not_owned',
             severity: 's1',
             serviceAggregation: false,
+            # Setting this to false as this metric may not be continuous due to runner inactivity.
+            # Most important error here for now is the number of errors.
+            trafficCessationAlertConfig: false,
             shardLevelMonitoring: true,
             description: |||
                 This log SLI represents the total number of errors encountered by Fluentd while writing
