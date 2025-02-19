@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
+local successCounterApdex = metricsCatalog.successCounterApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
@@ -214,6 +215,49 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['endpoint_id'],
 
       toolingLinks: [],
+    },
+
+    middleware_path_traversal: {
+      severity: 's3',
+      serviceAggregation: false,
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      description: |||
+        An alert here may indicate that we're rejecting more than 0.01% of requests
+        because of suspected path traversal or the middleware execution time apdex is below 90%.
+        We either have a larger amount of path traversal attempts than usual or we are
+        incorrectly rejecting valid web requests.
+        Look for the `path traversal attempt detected` messages in the logs and validate if they could be legit or not.
+
+        If the requests are validly being blocked, please block the requests in Cloudflare.
+        If the requests should not be blocked, the rejection can be disabled using `/chatops run feature set false check_path_traversal_middleware_reject_requests`.
+      |||,
+
+      requestRate: rateMetric(
+        counter='gitlab_sli_path_traversal_check_request_apdex_total',
+        selector=railsSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli_path_traversal_check_request_apdex_total',
+        selector={ request_rejected: 'true' },
+      ),
+
+      apdex: successCounterApdex(
+        successRateMetric='gitlab_sli_path_traversal_check_request_apdex_success_total',
+        operationRateMetric='gitlab_sli_path_traversal_check_request_apdex_total',
+        selector=railsSelector { request_rejected: 'false' },
+      ),
+
+      significantLabels: ['request_rejected'],
+
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Rails',
+          index='rails',
+          matches={ 'json.class_name.keyword': 'Gitlab::Middleware::PathTraversalCheck' }
+        ),
+      ],
     },
 
     dependency_proxy: {
