@@ -50,6 +50,37 @@ test.suite({
     |||,
   },
 
+  local testPromqlAllServices = availabilityPromql.new('*', testSet, extraSelector={ env: 'gprd' }),
+  testSuccessRateAllServices: {
+    actual: testPromqlAllServices.successRate,
+    expect: |||
+      (
+        sum by(env,environment,type,stage) (
+          gitlab_service_apdex:success:rate_1h{env="gprd"}
+        )
+        +
+        sum by (env,environment,type,stage)(
+          gitlab_service_ops:rate_1h{env="gprd"} - gitlab_service_errors:rate_1h{env="gprd"}
+        )
+      )
+    |||,
+  },
+
+  testOpsRateAllServices: {
+    actual: testPromqlAllServices.opsRate,
+    expect: |||
+      (
+        sum by(env,environment,type,stage) (
+          gitlab_service_ops:rate_1h{env="gprd"}
+        )
+        +
+        sum by (env,environment,type,stage) (
+          gitlab_service_apdex:weight:score_1h{env="gprd"}
+        )
+      )
+    |||,
+  },
+
   testRateRules: {
     actual: std.map(function(rule) rule.record, testPromql.rateRules),
     expect: ['gitlab:availability:ops:rate_1h', 'gitlab:availability:success:rate_1h'],
