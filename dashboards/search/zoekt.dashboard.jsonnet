@@ -178,6 +178,43 @@ basic.dashboard(
 )
 .addPanels(
   layout.rowGrid(
+    'Queues',
+    [
+      basic.multiTimeseries(
+        title='Task processing queue length',
+        description='The number of tasks waiting to be processed by Zoekt.',
+        queries=[
+          {
+            query: |||
+              quantile(0.10, search_zoekt_task_processing_queue_size{environment="$environment"})
+            |||,
+            legendFormat: 'p10',
+          },
+          {
+            query: |||
+              quantile(0.50, search_zoekt_task_processing_queue_size{environment="$environment"})
+            |||,
+            legendFormat: 'p50',
+          },
+          {
+            query: |||
+              quantile(0.90, search_zoekt_task_processing_queue_size{environment="$environment"})
+            |||,
+            legendFormat: 'p90',
+          },
+        ],
+        format='short',
+        interval='1m',
+        linewidth=1,
+        intervalFactor=3,
+        yAxisLabel='Queue Length',
+      )
+    ],
+    startRow=40,
+  )
+)
+.addPanels(
+  layout.rowGrid(
     'Additional Resources',
     [
       basic.text(
@@ -194,6 +231,6 @@ basic.dashboard(
         |||,
       ),
     ],
-    startRow=40
+    startRow=50
   )
 )
