@@ -152,8 +152,6 @@ Based on incident [#18667](https://gitlab.com/gitlab-com/gl-infra/production/-/i
 
 ### 1. Verify Shard Status
 
-
-
 - Check if the specific shard is affected
 - Common shards that have shown issues: `private`, `shared-gitlab-org`, `tamland`
 - Most issues appear in these shards due to resource constraints
@@ -176,7 +174,6 @@ knife ssh -C 10 'roles:gitlab-runner-base-gce' 'sudo cat /root/.docker/machine/c
 ```
 
 ### 4. Performance Analysis
-
 
 - Check [CI runners overview dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners3a-overview)
 - Monitor Runner saturation metrics
