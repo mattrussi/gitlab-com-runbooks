@@ -1090,6 +1090,7 @@ pages:
       vault: ${VAULT_SECRETS_PATH}/shared/incident-io/api_token@ci
   before_script:
     - cd services
+    - apk add --no-cache yq
 
 validate-incident-io-service-catalog:
   extends: .incident-io
