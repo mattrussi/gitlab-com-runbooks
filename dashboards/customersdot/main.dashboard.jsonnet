@@ -55,28 +55,5 @@ serviceDashboard.overview('customersdot')
     h: 1,
   }
 )
-.addPanel(
-  row.new(title='💳 Zuora', collapse=true).addPanels(
-    layout.grid([
-      basic.timeseries(
-        title='Client error rate',
-        description='Rate of Zuora errors',
-        query=|||
-          rate(customers_dot_zuora_error_total{%(selector)s}[$__rate_interval])
-        ||| % { selector: selectorSerialized },
-        interval='1m',
-        linewidth=1,
-        legend_show=true,
-        legendFormat='{{ error }}',
-      ),
-    ], startRow=1001)
-  ),
-  gridPos={
-    x: 0,
-    y: 1000,
-    w: 24,
-    h: 1,
-  }
-)
 .addAnnotation(commonAnnotations.deploymentsForCustomersDot)
 .overviewTrailer()
