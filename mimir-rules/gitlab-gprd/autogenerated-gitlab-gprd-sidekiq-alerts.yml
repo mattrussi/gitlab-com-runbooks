@@ -140,7 +140,8 @@ groups:
     expr: |
       sum by (env, worker) (
         application_sli_aggregation:sidekiq_execution:error:rate_5m{
-          worker=~"Ai::RepositoryXray::ScanDependenciesWorker"
+          worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
+          env="gprd"
         }
       ) > 0.001
   - alert: SidekiqJobsDeferredByDBHealthCheck

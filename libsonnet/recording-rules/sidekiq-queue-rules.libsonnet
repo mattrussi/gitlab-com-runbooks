@@ -178,10 +178,13 @@ local sidekiqAlerts(registry, extraSelector) =
       expr: |||
         sum by (env, worker) (
           application_sli_aggregation:sidekiq_execution:error:rate_5m{
-            worker=~"Ai::RepositoryXray::ScanDependenciesWorker"
+            worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
+            %(selector)s
           }
         ) > 0.001
-      |||,
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+      },
       'for': '5m',
       labels: {
         severity: 's4',
