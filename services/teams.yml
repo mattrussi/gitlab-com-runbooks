@@ -448,12 +448,6 @@ teams:
   slack_error_budget_channel: g_srm_security_policies
   send_error_budget_weekly_to_slack: true
 
-- name: doe-ops
-  url: https://about.gitlab.com/handbook/engineering/development/ops
-  slack_channel: doe-ops
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-
 - name: knowledge
   product_stage_group: knowledge
   slack_error_budget_channel:
@@ -534,7 +528,11 @@ teams:
 
 # ClickHouse (virtual)
 - name: clickhouse
+  slack_channel: f_clickhouse
   slack_alerts_channel: f_clickhouse_infra_alerts
+  url: https://gitlab.com/groups/gitlab-org/maintainers/clickhouse/-/group_members?with_inherited_permissions=exclude
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
 
 # Delivery
 
