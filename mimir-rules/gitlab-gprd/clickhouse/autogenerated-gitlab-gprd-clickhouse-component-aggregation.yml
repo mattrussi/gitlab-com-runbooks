@@ -13,7 +13,7 @@ groups:
       type: clickhouse
     expr: |
       sum by (env,environment) (
-        sli_aggregations:ClickHouseProfileEvents_Query:rate_5m{env="gprd"} offset 30s
+        sli_aggregations:ClickHouseProfileEvents_SelectQuery:rate_5m{env="gprd"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -25,7 +25,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:ClickHouseProfileEvents_FailedQuery:rate_5m{env="gprd"} offset 30s
+          sli_aggregations:ClickHouseProfileEvents_FailedSelectQuery:rate_5m{env="gprd"} offset 30s
         )
       )
       or
@@ -132,7 +132,7 @@ groups:
       type: clickhouse
     expr: |
       sum by (env,environment) (
-        sli_aggregations:ClickHouseProfileEvents_Query:rate_30m{env="gprd"} offset 30s
+        sli_aggregations:ClickHouseProfileEvents_SelectQuery:rate_30m{env="gprd"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -144,7 +144,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:ClickHouseProfileEvents_FailedQuery:rate_30m{env="gprd"} offset 30s
+          sli_aggregations:ClickHouseProfileEvents_FailedSelectQuery:rate_30m{env="gprd"} offset 30s
         )
       )
       or
@@ -251,7 +251,7 @@ groups:
       type: clickhouse
     expr: |
       sum by (env,environment) (
-        sli_aggregations:ClickHouseProfileEvents_Query:rate_1h{env="gprd"} offset 30s
+        sli_aggregations:ClickHouseProfileEvents_SelectQuery:rate_1h{env="gprd"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -263,7 +263,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:ClickHouseProfileEvents_FailedQuery:rate_1h{env="gprd"} offset 30s
+          sli_aggregations:ClickHouseProfileEvents_FailedSelectQuery:rate_1h{env="gprd"} offset 30s
         )
       )
       or
