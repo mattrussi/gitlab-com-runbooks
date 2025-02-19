@@ -3,6 +3,8 @@
 require 'redis'
 require 'yaml'
 require 'redis-clustering'
+require 'json'
+require 'active_support'
 
 def get_data(key, ktype, datastore)
   case ktype
@@ -38,11 +40,36 @@ ARGV.each do |key|
   ktype = src.type(key)
 
   puts "#{key} is a #{ktype}"
-  puts "Source data"
-  puts get_data(key, ktype, src)
-  puts "Destination data"
-  puts get_data(key, ktype, dst)
+  src_data_raw = get_data(key, ktype, src)
+  dst_data_raw = get_data(key, ktype, dst)
 
-  puts "-----------------"
-  puts ""
+  if src_data_raw.start_with?("v2:")
+    src_data = JSON.parse(src_data_raw[3..])
+    dst_data = JSON.parse(dst_data_raw[3..])
+  elsif src_data_raw.start_with?("\x04")
+    src_data = Marshal.load(src_data_raw).value
+    dst_data = Marshal.load(dst_data_raw).value
+  else
+    puts "Unsupported value #{src_data_raw}"
+    next
+  end
+
+  if src_data == dst_data
+    puts "Same value for key #{key}"
+    puts "--------------"
+    next
+  end
+
+  if src_data["updated_at"] != dst_data["updated_at"] && src_data.except("updated_at") == dst_data.except("updated_at")
+    puts "only updated_at mismatch for #{key} - src_data #{src_data['updated_at']} dst_data #{dst_data['updated_at']}"
+    puts "--------------"
+    next
+  end
+
+  puts "Different value for key #{key}"
+
+  puts "Source data #{src_data}"
+  puts "Destination data #{dst_data}"
+
+  puts "--------------"
 end
