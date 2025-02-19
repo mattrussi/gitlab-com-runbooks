@@ -6,7 +6,8 @@ local options = import 'gitlab-metrics-options.libsonnet';
 
 referenceArchitecturesGitLabConfig + {
   monitoredServices: [
-     import '../lib/service.libsonnet'
+     import '../lib/service.libsonnet',
+     import '../lib/logging.libsonnet'
   ],
 
   saturationMonitoring+: import '../lib/saturation.libsonnet',
