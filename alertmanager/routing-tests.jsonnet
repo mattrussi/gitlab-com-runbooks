@@ -81,7 +81,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'incidentio_page',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -92,7 +91,6 @@ generateTests([
       pager: 'pagerduty',
     },
     receivers: [
-      'incidentio_page',
       'production_slack_channel',
     ],
   },
@@ -122,7 +120,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'incidentio_page',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -177,8 +174,8 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
-      'incidentio_page',
       'issue:gitlab.com/gitlab-com/gl-infra/production',
+      'incidentio_page',
       'prod_pagerduty',
       'production_slack_channel',
     ],
@@ -251,7 +248,6 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
-      'incidentio_page',
       'blackhole',
     ],
   },
@@ -276,6 +272,7 @@ generateTests([
       env: 'thanos',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'production_slack_channel',
     ],
