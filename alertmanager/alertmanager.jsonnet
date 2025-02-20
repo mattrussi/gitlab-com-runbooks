@@ -85,6 +85,21 @@ local webhookChannels =
     for s in secrets.issueChannels
   ];
 
+local IncidentIOReceiver(channel) = {
+  name: channel.name,
+  webhook_configs: [
+    {
+      url: channel.url,
+      send_resolved: true,
+      http_config: {
+        authorization: {
+          credentials: channel.token,
+        },
+      },
+    },
+  ],
+};
+
 local PagerDutyReceiver(channel) = {
   name: channel.name,
   pagerduty_configs: [
@@ -355,6 +370,16 @@ local routingTree = Route(
     for issueChannel in secrets.issueChannels
     for env in ['gprd', 'ops', 'thanos']
   ] + [
+    /* incident io alerts do continue */
+    Route(
+      receiver='incidentio_page',
+      continue=true,
+      matchers={
+        pager: 'pagerduty',
+        env: { re: 'gprd|ops|thanos' },
+      }
+    ),
+  ] + [
     Route(
       receiver='prod_pagerduty',
       matchers={
@@ -545,6 +570,7 @@ local receivers =
     channel: team.slack_alerts_channel,
   }) for team in teamsWithAlertingSlackChannels()] +
   [WebhookReceiver(c) for c in webhookChannels] +
+  [IncidentIOReceiver(c) for c in secrets.incidentioChannels] +
   [
     // receiver that does nothing with the alert, blackholing it
     {

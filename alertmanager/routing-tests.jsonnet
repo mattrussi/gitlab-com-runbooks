@@ -42,6 +42,7 @@ generateTests([
     receivers: [
       'prod_pagerduty',
       'production_slack_channel',
+      'incidentio_page',
     ],
   },
   {
