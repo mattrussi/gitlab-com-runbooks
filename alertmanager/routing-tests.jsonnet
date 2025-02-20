@@ -53,6 +53,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'slack_bridge-prod',
       'production_slack_channel',
@@ -66,6 +67,7 @@ generateTests([
       env: 'thanos',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'slack_bridge-prod',
       'production_slack_channel',
@@ -79,6 +81,7 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
+      'incidentio_page',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -89,6 +92,7 @@ generateTests([
       pager: 'pagerduty',
     },
     receivers: [
+      'incidentio_page',
       'production_slack_channel',
     ],
   },
@@ -102,6 +106,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'slack_bridge-prod',
       'team_gitaly_alerts_channel',
@@ -117,6 +122,7 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
+      'incidentio_page',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -171,6 +177,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'issue:gitlab.com/gitlab-com/gl-infra/production',
       'prod_pagerduty',
       'production_slack_channel',
@@ -226,6 +233,7 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'slack_bridge-prod',  // Slackline
       'team_gitaly_alerts_channel',  // Gitaly team alerts channel
@@ -243,6 +251,7 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
+      'incidentio_page',
       'blackhole',
     ],
   },
@@ -254,6 +263,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'team_runner_alerts_channel',
       'production_slack_channel',
@@ -278,6 +288,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'team_gitlab_pages_alerts_channel',
       'production_slack_channel',
@@ -304,6 +315,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'team_runner_alerts_channel',
       'production_slack_channel',
@@ -331,6 +343,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'production_slack_channel',
     ],
@@ -458,6 +471,7 @@ generateTests([
       window: '6h',
     },
     receivers: [
+      'incidentio_page',
       'prod_pagerduty',
       'slack_bridge-prod',
       'team_pipeline_validation_alerts_channel',
