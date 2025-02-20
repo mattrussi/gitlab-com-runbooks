@@ -378,7 +378,8 @@ local routingTree = Route(
       matchers={
         pager: 'pagerduty',
         env: { re: 'gprd|ops|thanos' },
-      }
+      },
+      group_by=groupByType,
     ),
   ] + [
     Route(
