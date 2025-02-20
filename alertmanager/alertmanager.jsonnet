@@ -374,6 +374,7 @@ local routingTree = Route(
     Route(
       receiver='incidentio_page',
       continue=true,
+      repeat_interval='1m',
       matchers={
         pager: 'pagerduty',
         env: { re: 'gprd|ops|thanos' },
