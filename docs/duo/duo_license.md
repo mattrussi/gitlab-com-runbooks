@@ -39,6 +39,7 @@ This runbook provides instructions for obtaining Duo Enterprise license access i
 ### 2. License Assignment
 
 Once approved:
+
 - An admin will add you to the appropriate gitlab-org namespace
 - Verify license assignment in staging environment
 - Confirm access to Duo Enterprise features
@@ -46,6 +47,7 @@ Once approved:
 ### 3. Verification
 
 To verify your license:
+
 1. Sign into [staging.gitlab.com](https://staging.gitlab.com)
 2. Navigate to any project
 3. Open Web IDE
@@ -76,5 +78,6 @@ Common issues and solutions:
 ## Support
 
 For additional assistance:
+
 - Slack: #g_provision
 - Issue tracker: [GitLab.org](gitlab-org-link)
