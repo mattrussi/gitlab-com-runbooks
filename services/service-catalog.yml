@@ -164,7 +164,7 @@ services:
     tier: inf
     friendly_name: ClickHouse Cloud
     label: Service::ClickHouseCloud
-    owner: doe-ops
+    owner: clickhouse
     teams:
       - clickhouse
     technical:
