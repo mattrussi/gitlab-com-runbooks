@@ -7,6 +7,16 @@ groups:
     labels:
       tier: stor
       type: gitaly
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999500"
+    labels:
+      tier: stor
+      type: gitaly
+    record: slo:max:gitlab_service_errors:ratio
+  - expr: "0.999000"
+    labels:
+      tier: stor
+      type: gitaly
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.000500"
     labels:
@@ -25,6 +35,16 @@ groups:
       tier: stor
       type: gitaly
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999000"
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999000"
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: slo:max:gitlab_service_errors:ratio
   - expr: "0.999000"
     labels:
       tier: sv
@@ -51,6 +71,16 @@ groups:
     labels:
       tier: inf
       type: kube
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999500"
+    labels:
+      tier: inf
+      type: kube
+    record: slo:max:gitlab_service_errors:ratio
+  - expr: "0.999000"
+    labels:
+      tier: inf
+      type: kube
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.000500"
     labels:
@@ -69,6 +99,16 @@ groups:
       tier: inf
       type: kube
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.995000"
+    labels:
+      tier: stor
+      type: praefect
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999500"
+    labels:
+      tier: stor
+      type: praefect
+    record: slo:max:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
       tier: stor
@@ -103,6 +143,16 @@ groups:
       tier: stor
       type: praefect
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999500"
+    labels:
+      tier: db
+      type: redis
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999000"
+    labels:
+      tier: db
+      type: redis
+    record: slo:max:gitlab_service_errors:ratio
   - expr: "0.999500"
     labels:
       tier: db
@@ -149,6 +199,16 @@ groups:
       tier: db
       type: redis
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.997000"
+    labels:
+      tier: sv
+      type: registry
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999900"
+    labels:
+      tier: sv
+      type: registry
+    record: slo:max:gitlab_service_errors:ratio
   - expr: "0.997000"
     labels:
       tier: sv
@@ -247,6 +307,16 @@ groups:
     labels:
       tier: sv
       type: sidekiq
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.995000"
+    labels:
+      tier: sv
+      type: sidekiq
+    record: slo:max:gitlab_service_errors:ratio
+  - expr: "0.995000"
+    labels:
+      tier: sv
+      type: sidekiq
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.005000"
     labels:
@@ -277,6 +347,16 @@ groups:
       tier: sv
       type: sidekiq
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
+      tier: sv
+      type: webservice
+    record: slo:min:gitlab_service_apdex:ratio
+  - expr: "0.999000"
+    labels:
+      tier: sv
+      type: webservice
+    record: slo:max:gitlab_service_errors:ratio
   - expr: "0.998000"
     labels:
       tier: sv
