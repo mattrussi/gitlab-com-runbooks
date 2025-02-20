@@ -217,7 +217,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [],
     },
 
-    middleware_path_traversal: {
+    rails_middleware_path_traversal: {
       severity: 's3',
       serviceAggregation: false,
       userImpacting: true,
