@@ -114,14 +114,14 @@ groups:
     expr: "0.010000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: middleware_path_traversal
+      component: rails_middleware_path_traversal
       monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: middleware_path_traversal
+      component: rails_middleware_path_traversal
       monitor: global
       tier: sv
       type: web
@@ -240,7 +240,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: middleware_path_traversal
+      component: rails_middleware_path_traversal
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "yes"
