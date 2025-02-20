@@ -15,7 +15,7 @@ This runbook provides instructions for obtaining Duo Enterprise license access i
 ## Quick Reference
 
 - **Primary Contact:** #g_provision Slack channel
-- **Secondary Contact:** #s_fulfillment Slack channel 
+- **Secondary Contact:** #s_fulfillment Slack channel
 - **Required Access:** GitLab.org group membership
 - **License Type:** Duo Enterprise (preferred over Duo Pro)
 
