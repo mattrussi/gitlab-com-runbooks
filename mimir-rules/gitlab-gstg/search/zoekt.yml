@@ -24,7 +24,7 @@ groups:
         expr: >
           avg by (environment, stage) (
             search_zoekt_task_processing_queue_size{env="gstg"}
-          ) > 10000
+          ) > 5000
         for: 15m
         labels:
           severity: s4
