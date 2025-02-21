@@ -2,82 +2,84 @@
 <!-- markdownlint-disable MD034 -->
 # Duo Enterprise License Access Process for Staging Environment
 
-This runbook provides instructions for obtaining Duo Enterprise license access in the staging environment. It is intended for backend developers, SREs, and other engineers who need to test features within staging environments.
+This guide explains how to self-service Duo Enterprise license access in the staging environment for backend developers, SREs, and other engineers who need to test AI features.
 
 ---
-
-**Table of Contents**
-
-[TOC]
-
----
-
-## Quick Reference
-
-- **Primary Contact:** #g_provision Slack channel
-- **Secondary Contact:** #s_fulfillment Slack channel
-- **Required Access:** GitLab.org group membership
-- **License Type:** Duo Enterprise (preferred over Duo Pro)
 
 ## Prerequisites
 
-- Active GitLab.org account
-- Membership in relevant project/group
-- Justification for staging environment access
+- Active staging.gitlab.com account
+- Existing Ultimate/Premium license on staging 
+- Access to Okta for Zuora SSO
+- GitLab.org group membership
 
-## Process Steps
+## Self-Service Process 
 
-### 1. Request Access
+### Access License Management
 
-1. Join the `#g_provision` Slack channel
-2. Submit request with following information:
-   - Your GitLab username
-   - Project/team association
-   - Business justification
-   - Required license type (Duo Enterprise)
+1. Log in to [customers.staging.gitlab.com](https://customers.staging.gitlab.com) using your staging.gitlab.com credentials
+2. Locate and copy your Zuora subscription ID (format: A-ABC123...)
 
-### 2. License Assignment
+### Add Duo License Through Zuora
 
-Once approved:
+1. Access Zuora through Okta SSO
+2. Select the Central Sandbox ("Staging") environment 
+3. Use search bar (or CMD+K) to locate your subscription using the Zuora ID
+4. Click "Create order"
+5. Select "Add product" 
+6. Choose Duo Enterprise version
+   - Click the arrow next to the product
+   - Select desired renewal rate
+   - Check the box to confirm selection
+7. Click "Add product"
+8. Click "Activate"
 
-- An admin will add you to the appropriate gitlab-org namespace
-- Verify license assignment in staging environment
-- Confirm access to Duo Enterprise features
-
-### 3. Verification
-
-To verify your license:
+### Verify License Access
 
 1. Sign into [staging.gitlab.com](https://staging.gitlab.com)
 2. Navigate to any project
-3. Open Web IDE
-4. Confirm Duo Chat functionality
+3. Open Web IDE or Code Suggestions feature
+4. Confirm Duo functionality is active
 
 ## Troubleshooting
 
-Common issues and solutions:
+If you encounter issues, check the following:
 
-| Issue | Solution |
-|-------|----------|
-| No license showing | Contact #g_provision |
-| Wrong license type | Request upgrade to Enterprise |
-| Access denied | Verify group membership |
+| Symptom | Verification Steps | Resolution |
+|---------|-------------------|------------|
+| Features not available | Check subscription status in customers.staging.gitlab.com | Follow self-service steps above |
+| Need upgrade from Duo Pro | Check current license type in subscription details | Create new order for Duo Enterprise |
+| Authorization errors | Verify Okta access and permissions | Contact #g_provision |
 
-## Additional Notes
+The GitLab AI Features Health Check will surface specific errors if there are issues with:
+- License validation
+- Feature availability 
+- Access permissions
+
+## Additional Information
 
 - Licenses are managed at the namespace level
-- gitlab-org namespace on staging has custom setup
-- Automatic seat assignment is planned for future implementation
+- The gitlab-org namespace on staging has a custom setup
+- Most developers should use staging environment rather than local setup
+- Duo Enterprise is preferred over Duo Pro for complete feature testing
 
-## Related Resources
+## Related Documentation
 
-- [Duo Access Request Process](link-to-handbook)
+- [AI Features Documentation](https://docs.gitlab.com/development/ai_features/)
+- [Code Suggestions Setup Guide](https://docs.gitlab.com/development/code_suggestions/)
 - [Staging Environment Documentation](link-to-docs)
 - [License Management Guidelines](link-to-guidelines)
 
-## Support
+## Support Channels
 
-For additional assistance:
+For issues with self-service process:
 
-- Slack: #g_provision
-- Issue tracker: [GitLab.org](gitlab-org-link)
+- Primary Support: #g_provision Slack channel
+- Secondary Support: #s_fulfillment Slack channel
+- Documentation Issues: [GitLab AI Documentation](gitlab-org-link)
+
+## Notes
+
+- Keep subscription ID handy for future reference
+- Automatic seat assignment is planned for future implementation
+- Regular validation of license status is recommended
