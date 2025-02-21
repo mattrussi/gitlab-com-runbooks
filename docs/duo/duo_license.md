@@ -9,11 +9,11 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 ## Prerequisites
 
 - Active staging.gitlab.com account
-- Existing Ultimate/Premium license on staging 
+- Existing Ultimate/Premium license on staging
 - Access to Okta for Zuora SSO
 - GitLab.org group membership
 
-## Self-Service Process 
+## Self-Service Process
 
 ### Access License Management
 
@@ -23,10 +23,10 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 ### Add Duo License Through Zuora
 
 1. Access Zuora through Okta SSO
-2. Select the Central Sandbox ("Staging") environment 
+2. Select the Central Sandbox ("Staging") environment
 3. Use search bar (or CMD+K) to locate your subscription using the Zuora ID
 4. Click "Create order"
-5. Select "Add product" 
+5. Select "Add product"
 6. Choose Duo Enterprise version
    - Click the arrow next to the product
    - Select desired renewal rate
@@ -52,8 +52,9 @@ If you encounter issues, check the following:
 | Authorization errors | Verify Okta access and permissions | Contact #g_provision |
 
 The GitLab AI Features Health Check will surface specific errors if there are issues with:
+
 - License validation
-- Feature availability 
+- Feature availability
 - Access permissions
 
 ## Additional Information
