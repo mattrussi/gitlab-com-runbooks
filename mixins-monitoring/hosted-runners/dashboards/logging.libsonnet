@@ -1,9 +1,10 @@
-local mappings = import '../lib/mappings.libsonnet';
-local panels = import '../lib/panels.libsonnet';
-local fluentdPanels = import '../lib/fluentd-panels.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 local basic = import 'runbooks/libsonnet/grafana/basic.libsonnet';
 local layout = import 'runbooks/libsonnet/grafana/layout.libsonnet';
+
+local runnerPanels = import './panels/runner.libsonnet';
+local fluentdPanels = import './panels/fluentd.libsonnet';
+local replicationPanels = import './panels/replications.libsonnet';
 
 local row = grafana.row;
 
@@ -24,7 +25,7 @@ local row = grafana.row;
       ).addTemplate($._runnerManagerTemplate)
       .addTemplate($._fluentdPluginTemplate)
       .addPanels(
-        panels.headlineMetricsRow(
+        runnerPanels.headlineMetricsRow(
           rowTitle='Hosted Runner(s) Logging Overview',
           serviceType='hosted-runners-logging',
           metricsCatalogServiceInfo=$._config.gitlabMetricsConfig.monitoredServices[1],
@@ -44,5 +45,14 @@ local row = grafana.row;
         fluentdPanels.bufferTotalSize($._config.fluentdPluginSelector),
         fluentdPanels.bufferFreeSpace($._config.fluentdPluginSelector),
       ], cols=4, rowHeight=8, startRow=1001))
+      .addPanel(
+        row.new(title='Replication Metrics'),
+        gridPos={ x: 0, y: 2000, w: 24, h: 1 }
+      ).addPanels(layout.grid([
+        replicationPanels.pendingOperations($._config.replicationSelector),
+        replicationPanels.latency($._config.replicationSelector),
+        replicationPanels.bytesPending($._config.replicationSelector),
+        replicationPanels.operationsFailed($._config.replicationSelector),
+      ], cols=4, rowHeight=8, startRow=2001))
   }
 }

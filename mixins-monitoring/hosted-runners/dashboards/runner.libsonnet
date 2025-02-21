@@ -1,8 +1,9 @@
-local mappings = import '../lib/mappings.libsonnet';
-local panels = import '../lib/panels.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 local basic = import 'runbooks/libsonnet/grafana/basic.libsonnet';
 local layout = import 'runbooks/libsonnet/grafana/layout.libsonnet';
+
+local mappings = import '../lib/mappings.libsonnet';
+local runnerPanels = import './panels/runner.libsonnet';
 
 local row = grafana.row;
 
@@ -21,7 +22,7 @@ local row = grafana.row;
       )
       .addTemplate($._runnerManagerTemplate)
       .addPanels(
-        panels.headlineMetricsRow(
+        runnerPanels.headlineMetricsRow(
           serviceType='hosted-runners',
           metricsCatalogServiceInfo=$._config.gitlabMetricsConfig.monitoredServices[0],
           selectorHash={},
@@ -29,9 +30,9 @@ local row = grafana.row;
         )
       )
       .addPanels(layout.grid([
-        panels.versionsTable($._config.runnerJobSelector),
-        panels.uptimeTable($._config.runnerJobSelector),
-        panels.notes(
+        runnerPanels.versionsTable($._config.runnerJobSelector),
+        runnerPanels.uptimeTable($._config.runnerJobSelector),
+        runnerPanels.notes(
           content=|||
             This is global overview of all hosted runner.
 
@@ -44,7 +45,7 @@ local row = grafana.row;
         gridPos={ x: 0, y: 1000, w: 24, h: 1 }
       )
       .addPanels(layout.grid([
-        panels.statusPanel(
+        runnerPanels.statusPanel(
           title='Runner Manager Status',
           legendFormat='Runner Manager Status',
           query=|||
@@ -57,14 +58,14 @@ local row = grafana.row;
           ||| % $._config,
           valueMapping=mappings.onlineStatusMappings
         ),
-        panels.statPanel(
+        runnerPanels.statPanel(
           panelTitle='Total Job Executed',
           query=|||
             gitlab_runner_jobs_total{%(runnerNameSelector)s}
           ||| % $._config,
           color='green'
         ),
-        panels.statPanel(
+        runnerPanels.statPanel(
           panelTitle='Total Failed Jobs',
           query=|||
             sum by(shard) (
@@ -73,7 +74,7 @@ local row = grafana.row;
           ||| % $._config,
           color='red'
         ),
-        panels.statPanel(
+        runnerPanels.statPanel(
           panelTitle='Jobs Running',
           query=|||
             sum by(shard) (
@@ -81,7 +82,7 @@ local row = grafana.row;
             )
           ||| % $._config
         ),
-        panels.statusPanel(
+        runnerPanels.statusPanel(
           title='Job Concurrency Status',
           legendFormat='Job Concurrency Status',
           query=|||
@@ -93,7 +94,7 @@ local row = grafana.row;
           ||| % $._config,
           valueMapping=mappings.concurrentMappings
         ),
-        panels.statPanel(
+        runnerPanels.statPanel(
           panelTitle='Concurrent Job Limit',
           query=|||
             gitlab_runner_concurrent{%(runnerNameSelector)s}
@@ -102,14 +103,14 @@ local row = grafana.row;
         ),
       ], cols=6, rowHeight=5, startRow=1001))
       .addPanels(layout.grid([
-        panels.runnerCaughtErrors($._config.runnerNameSelector),
-        panels.jobsCaughtErrors($._config.runnerNameSelector),
-        panels.hostedRunnerSaturation($._config.runnerNameSelector),
+        runnerPanels.runnerCaughtErrors($._config.runnerNameSelector),
+        runnerPanels.jobsCaughtErrors($._config.runnerNameSelector),
+        runnerPanels.hostedRunnerSaturation($._config.runnerNameSelector),
       ], cols=3, rowHeight=10, startRow=1002))
       .addPanels(layout.grid([
-        panels.totalApiRequests($._config.runnerNameSelector),
-        panels.runningJobPhase($._config.runnerNameSelector),
-        panels.notes(
+        runnerPanels.totalApiRequests($._config.runnerNameSelector),
+        runnerPanels.runningJobPhase($._config.runnerNameSelector),
+        runnerPanels.notes(
           content=|||
             The Grafana Hosted Runner Manager Dashboard for dedicated environments provides a real-time view of GitLab runners' performance.
 
@@ -123,44 +124,44 @@ local row = grafana.row;
         gridPos={ x: 0, y: 2000, w: 24, h: 100 }
       )
       .addPanels(layout.grid([
-        panels.pendingJobQueueDuration($._config.runnerNameSelector),
-        panels.ciPendingBuilds(),
-        panels.jobQueuingExceeded($._config.runnerNameSelector),
+        runnerPanels.pendingJobQueueDuration($._config.runnerNameSelector),
+        runnerPanels.ciPendingBuilds(),
+        runnerPanels.jobQueuingExceeded($._config.runnerNameSelector),
       ], cols=3, rowHeight=10, startRow=2001))
       .addPanels(layout.grid([
-        panels.jobsQueuingFailureRate($._config.runnerNameSelector),
-        panels.averageDurationOfQueuing($._config.runnerNameSelector),
-        panels.differentQueuingPhase(),
+        runnerPanels.jobsQueuingFailureRate($._config.runnerNameSelector),
+        runnerPanels.averageDurationOfQueuing($._config.runnerNameSelector),
+        runnerPanels.differentQueuingPhase(),
       ], cols=3, rowHeight=10, startRow=2002))
       .addPanel(
         row.new(title='Hosted Runner Minutes'),
         gridPos={ x: 0, y: 3000, w: 24, h: 1 }
       )
       .addPanels(layout.grid([
-        panels.finishedJobMinutesIncrease($._config.runnerNameSelector),
-        panels.finishedJobDurationsHistogram($._config.runnerNameSelector),
+        runnerPanels.finishedJobMinutesIncrease($._config.runnerNameSelector),
+        runnerPanels.finishedJobDurationsHistogram($._config.runnerNameSelector),
       ], cols=2, rowHeight=10, startRow=3001))
       .addPanel(
         row.new(title='Hosted Runner Fleeting'),
         gridPos={ x: 0, y: 4000, w: 24, h: 1 }
       ).addPanels(layout.grid([
-        panels.fleetingInstancesSaturation($._config.runnerNameSelector),
-        panels.taskScalerSaturation($._config.runnerNameSelector),
-        panels.taskScalerMaxPerInstance($._config.runnerNameSelector),
+        runnerPanels.fleetingInstancesSaturation($._config.runnerNameSelector),
+        runnerPanels.taskScalerSaturation($._config.runnerNameSelector),
+        runnerPanels.taskScalerMaxPerInstance($._config.runnerNameSelector),
       ], cols=3, rowHeight=10, startRow=4001))
       .addPanels(layout.grid([
-        panels.fleetingInstanceCreationTiming($._config.runnerNameSelector),
-        panels.fleetingInstanceRunningTiming($._config.runnerNameSelector),
-        panels.provisionerDeletionTiming($._config.runnerNameSelector),
-        panels.provisionerInstanceLifeDuration($._config.runnerNameSelector),
+        runnerPanels.fleetingInstanceCreationTiming($._config.runnerNameSelector),
+        runnerPanels.fleetingInstanceRunningTiming($._config.runnerNameSelector),
+        runnerPanels.provisionerDeletionTiming($._config.runnerNameSelector),
+        runnerPanels.provisionerInstanceLifeDuration($._config.runnerNameSelector),
       ], cols=4, rowHeight=10, startRow=4002))
       .addPanel(
         row.new(title='Polling'),
         gridPos={ x: 0, y: 5000, w: 24, h: 1 }
       ).addPanels(layout.grid([
-        panels.pollingRPS(),
-        panels.pollingError(),
-        panels.notes(
+        runnerPanels.pollingRPS(),
+        runnerPanels.pollingError(),
+        runnerPanels.notes(
           content=|||
             This SLI monitors job polling operations from runners (not only hosted runners), via Workhorse's /api/v4/jobs/request route.
 

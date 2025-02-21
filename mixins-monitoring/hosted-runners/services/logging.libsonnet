@@ -1,13 +1,18 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 local rateMetric = metricsCatalog.rateMetric;
+local customRateQuery = metricsCatalog.customRateQuery;
 local errorCounterApdex = metricsCatalog.errorCounterApdex;
 local histogramApdex = metricsCatalog.histogramApdex;
 
-local baseSelector = {
+local fluentdSelector = {
     job: "hosted-runners-fluentd-agent",
     shard: { re: '.*' },
     plugin: 's3'
+};
+
+local replicationSelector = {
+    rule_id: "replication-rule-hosted-runner",
 };
 
 metricsCatalog.serviceDefinition({
@@ -48,13 +53,36 @@ metricsCatalog.serviceDefinition({
 
             requestRate: rateMetric(
                 counter='fluentd_output_status_write_count',
-                selector=baseSelector,
+                selector=fluentdSelector,
             ),
             
             errorRate: rateMetric(
                 counter='fluentd_output_status_num_errors',
-                selector=baseSelector,
+                selector=fluentdSelector,
             ),
+
+            significantLabels: [],
+        },
+
+        usage_replication: {
+            userImpacting: false,
+            featureCategory: 'not_owned',
+            severity: 's1',
+            serviceAggregation: false,
+            trafficCessationAlertConfig: false,
+            shardLevelMonitoring: false,
+            description: |||
+                This log SLI represents the total number of errors encountered by S3 replicating objects
+                to the central S3 destination.
+            |||,
+            
+            requestRate: customRateQuery(|||
+                avg_over_time(aws_s3_operations_pending_replication_sum[%(burnRate)s])
+            |||),
+
+            errorRate: customRateQuery(|||
+                avg_over_time(aws_s3_operations_failed_replication_sum[%(burnRate)s])
+            |||),
 
             significantLabels: [],
         }
