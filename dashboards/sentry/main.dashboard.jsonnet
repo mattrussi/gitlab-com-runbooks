@@ -1,4 +1,4 @@
-local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+local serviceDashboard = import '../../libsonnet/gitlab-dashboards/service_dashboard.libsonnet';
 
 local environmentSelector = {
   environment: 'ops',

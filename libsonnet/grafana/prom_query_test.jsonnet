@@ -1,4 +1,5 @@
 local promQuery = import './prom_query.libsonnet';
+local target = import './time-series/target.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local expr = 'up';
@@ -12,6 +13,6 @@ local instant = null;
 test.suite({
   testTarget: {
     expect: promQuery.target(expr, format, intervalFactor, legendFormat, datasource, interval, instant),
-    actual: promQuery.timeSeriesTarget('foo', format, intervalFactor, legendFormat, datasource, interval, instant),
+    actual: target.prometheus('foo', format, intervalFactor, legendFormat, datasource, interval, instant),
   },
 })

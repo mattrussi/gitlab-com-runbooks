@@ -1,4 +1,5 @@
 local basic = import './basic.libsonnet';
+local panel = import './time-series/panel.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
@@ -62,7 +63,7 @@ test.suite({
 
   testTimeSeriesPanel: {
     expect: basic.graphPanel(title, linewidth, fill, datasource, description, decimals, sort, legend_show, legend_values, legend_min, legend_max, legend_current, legend_total, legend_avg, legend_alignAsTable, legend_hideEmpty, legend_rightSide, thresholds, points, pointradius, stableId, lines, stack, bars),
-    actual: basic.timeSeriesPanel(title, linewidth, description, datasource, legend_show, legend_min, legend_max, legend_current, legend_total, legend_avg, legend_alignAsTable, legend_rightSide, points, pointradius, lines)(title, linewidth, fill, datasource, description, decimals, sort, legend_show, legend_values, legend_min, legend_max, legend_current, legend_total, legend_avg, legend_alignAsTable, legend_hideEmpty, legend_rightSide, thresholds, points, pointradius, stableId, lines, stack, bars).addTarget(
+    actual: panel.basic(title, linewidth, description, datasource, legend_show, legend_min, legend_max, legend_current, legend_total, legend_avg, legend_alignAsTable, legend_rightSide, points, pointradius, lines)(title, linewidth, fill, datasource, description, decimals, sort, legend_show, legend_values, legend_min, legend_max, legend_current, legend_total, legend_avg, legend_alignAsTable, legend_hideEmpty, legend_rightSide, thresholds, points, pointradius, stableId, lines, stack, bars).addTarget(
       promQuery.timeSeriesTarget(
         sliPromQL.opsRate.serviceOpsRatePrediction({}, 1),
         legendFormat='upper normal',

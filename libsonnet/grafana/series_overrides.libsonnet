@@ -11,10 +11,8 @@ local capacityComponentColors = {
 };
 
 // lines: are not used and should be removed.
-// linewidth: is not used and should be removed.
 // zindex: is not used and should be removed.
 // spaceLength: is not used and should be removed.
-// nullPointMode: is not used and should be removed.
 
 {
   upper:: {

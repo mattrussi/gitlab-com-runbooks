@@ -1,5 +1,7 @@
 local basic = import '../grafana/basic.libsonnet';
 local seriesOverrides = import '../grafana/series_overrides.libsonnet';
+local panel = import '../grafana/time-series/panel.libsonnet';
+local target = import '../grafana/time-series/target.libsonnet';
 local sliPromQL = import './sli_promql.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 
@@ -44,13 +46,13 @@ local genericOperationRateTimeSeriesPanel(
   linewidth=null,
   legend_show=null,
       ) =
-  basic.timeSeriesPanel(
+  panel.basic(
     title,
     linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
     description=if description == null then defaultOperationRateDescription else description,
     legend_show=if legend_show == null then !compact else legend_show,
   )
-  .addAxis(
+  .addYaxis(
     min=0,
     label=if compact then '' else 'Operations per Second',
   )
@@ -142,7 +144,7 @@ local operationRateTimeSeriesPanel(
       linewidth=if expectMultipleSeries then 1 else 2
     )
     .addTarget(  // Primary metric
-      promQuery.timeSeriesTarget(
+      target.prometheus(
         sliPromQL.opsRateQuery(aggregationSet, selectorHashWithExtras, range='$__interval'),
         legendFormat=legendFormat,
       )
@@ -156,7 +158,7 @@ local operationRateTimeSeriesPanel(
   local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithSeriesOverrides
     .addTarget(  // Last week
-      promQuery.timeSeriesTarget(
+      target.prometheus(
         sliPromQL.opsRateQuery(aggregationSet, selectorHashWithExtras, range=null, offset='1w'),
         legendFormat='last week',
       )
@@ -168,13 +170,13 @@ local operationRateTimeSeriesPanel(
   local panelWithPredictions = if !expectMultipleSeries && includePredictions then
     panelWithLastWeek
     .addTarget(
-      promQuery.timeSeriesTarget(
+      target.prometheus(
         sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, 1),
         legendFormat='upper normal',
       ),
     )
     .addTarget(
-      promQuery.timeSeriesTarget(
+      target.prometheus(
         sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, -1),
         legendFormat='lower normal',
       ),
