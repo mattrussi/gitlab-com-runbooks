@@ -372,11 +372,10 @@ local routingTree = Route(
   ] + [
     /* incident io alerts do continue */
     Route(
-      receiver='incidentio_page',
+      receiver='incidentio',
       continue=true,
       repeat_interval='1m',
       matchers={
-        pager: 'pagerduty',
         env: { re: 'gprd|ops|thanos' },
       },
       group_by=groupByType,
