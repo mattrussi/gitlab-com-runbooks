@@ -38,8 +38,8 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "09ca0a6735fa87a36cccd2e74fb9734eb0a88ac4",
-      "sum": "yxqWcq/N3E/a/XreeU6EuE6X7kYPnG0AspAQFKOjASo="
+      "version": "362e410def34e9ea5a690f38d37b59b45557daa8",
+      "sum": "G7B6E5sqWirDbMWRhifbLRfGgRFbIh9WCYa6X3kMh6g="
     },
     {
       "source": {
@@ -48,8 +48,18 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "09ca0a6735fa87a36cccd2e74fb9734eb0a88ac4",
-      "sum": "nIrKMv0zteO5Y5QpvTDH4X0FytsYLcVRX2uj09w22W8="
+      "version": "362e410def34e9ea5a690f38d37b59b45557daa8",
+      "sum": "9+jHj496XdAK2ambWhycnKBgISuRb5XRMWKUBeZYCEw="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "mixin-utils"
+        }
+      },
+      "version": "362e410def34e9ea5a690f38d37b59b45557daa8",
+      "sum": "SRElwa/XrKAN8aZA9zvdRUx8iebl2It7KNQ7VFvMcBA="
     },
     {
       "source": {
@@ -88,7 +98,7 @@
           "subdir": "mixin"
         }
       },
-      "version": "346d18bb0f8011c63d7106de494cf3b9253161a1",
+      "version": "f230915c1c132f30cbd0318150314ce9adb95576",
       "sum": "ieCD4eMgGbOlrI8GmckGPHBGQDcLasE1rULYq56W/bs="
     },
     {
