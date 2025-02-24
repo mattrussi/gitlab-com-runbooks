@@ -9,7 +9,7 @@ For a user to login to the `db-lab` hosts, a user's ssh key needs to be in the c
 ```json
 "groups": [
     "db-lab"
-  ]
+]
 ```
 
 If the user's ssh key is not present in the data bags this [runbook](https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo/-/blob/master/doc/user-administration.md#add-the-ssh-key-to-the-chef-repo) explains how to add ssh keys to the chef-repo.
