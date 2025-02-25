@@ -23,6 +23,7 @@
           },
           allocate: {
             number_of_replicas: 0,
+            total_shards_per_node: 3,
           },
           searchable_snapshot: {
             force_merge_index: true,
