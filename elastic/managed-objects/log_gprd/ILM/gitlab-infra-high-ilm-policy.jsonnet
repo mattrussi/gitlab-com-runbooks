@@ -42,7 +42,7 @@
         },
       },
       delete: {
-        min_age: '7d',  //11d after rollover
+        min_age: '7d', 
         actions: {
           delete: {},
         },
