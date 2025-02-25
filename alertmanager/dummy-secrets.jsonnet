@@ -41,6 +41,6 @@
   ],
   // IncidentIO configs.
   incidentioChannels: [
-    { name: 'incidentio_page', url: 'https://api.incident.io/v2/alert_events/alertmanager/urlkey', token: 'secret' },
+    { name: 'incidentio', url: 'https://api.incident.io/v2/alert_events/alertmanager/urlkey', token: 'secret' },
   ],
 }
