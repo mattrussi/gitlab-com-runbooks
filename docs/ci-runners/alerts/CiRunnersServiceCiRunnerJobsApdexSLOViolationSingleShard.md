@@ -98,7 +98,7 @@ Normal state:
 Alert state:
 
 - Queue duration p95 > 10 minutes
-- Pending jobs > 3000
+- Pending jobs > 7000
 - Machine creation success < 80%
 - Apdex score < 0.82
 
@@ -130,7 +130,7 @@ Default severity is `~severity::3` but should be upgraded to `~severity::2` if:
 
 Severity 4 when:
 
-- Single internal shard affected
+- Single internal shard affected (e.g. `private` or `gitlab-org` shard)
 - No customer impact
 - Recovers within 15 minutes
 
@@ -152,8 +152,8 @@ Based on incident [#18667](https://gitlab.com/gitlab-com/gl-infra/production/-/i
 
 ### 1. Verify Shard Status
 
-- Check if the specific shard is affected
-- Common shards that have shown issues: `private`, `shared-gitlab-org`, `tamland`
+- Check if a specific shard is affected, for example, by using the `json.shard` filter in Kibana.
+- Common shards that have shown issues: `private`, `gitlab-org`, `tamland`
 - Most issues appear in these shards due to resource constraints
 
 ### 2. Check Runner Manager Logs
