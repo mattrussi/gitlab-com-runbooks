@@ -15,16 +15,29 @@
           },
         },
       },
-      warm: {
-        // if no criteria are set here, the move to warm will happen on rollover
-        min_age: '2d',  // min value is 1h, if you set below that, the cluster will default to 1d
+      cold: {
+        min_age: '36h',  // min value is 1h, if you set below that, the cluster will default to 1d
         actions: {
-          // skipping force merge for now for a performance optimisation test
-          // forcemerge: {
-          //   max_num_segments: 1,
-          // },
           set_priority: {
             priority: 50,
+          },
+          allocate: {
+            number_of_replicas: 0,
+          },
+          searchable_snapshot: {
+            force_merge_index: true,
+            snapshot_repository: 'found-snapshots',
+
+          },
+        },
+      },
+      frozen: {
+        min_age: '4d',  // min value is 1h, if you set below that, the cluster will default to 1d
+        actions: {
+          searchable_snapshot: {
+            force_merge_index: true,
+            snapshot_repository: 'found-snapshots',
+
           },
         },
       },
