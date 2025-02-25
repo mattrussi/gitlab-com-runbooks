@@ -8,7 +8,7 @@ This document describes the relationship between Cells and AMP (a component of G
 
 ## AMP Architecture
 
-### Purpose and Function`ality
+### Purpose and Functionality
 
 [AMP](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/) (part of `dedicated tooling`) provides a control plane for managing `Dedicated Tenants`. Each Cell is implemented as a `Dedicated Tenant` within this architecture.
 
@@ -60,7 +60,7 @@ All AMP environments, including the Cells environments, are bootstrapped via Git
 
 ### Terraform State
 
-Each environment maintains its own Terraform state stored in GitLab Terraform State storage. This ensures proper separation between environments and prevents cross-environment changes.
+Each environment maintains its own Terraform state stored in GitLab Terraform State storage. The state files are managed at [https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/terraform](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/terraform). This ensures proper separation between environments and prevents cross-environment changes.
 
 ### Secret Variables
 
@@ -90,6 +90,8 @@ For an example of cluster scaling, see [this merge request](https://gitlab.com/g
 ### Access Management
 
 Access to the Cells environments is managed through [PAM entitlements](https://cloud.google.com/iam/docs/pam-overview), which allow for controlled escalation of privileges to the `cellsdev` or `cellsprod` GCP organizations.
+
+> **Note:** Team members must be connected to NordLayer VPN to access the AMP Kubernetes clusters. For setup and usage instructions, refer to the [NordLayer guide](https://internal.gitlab.com/handbook/it/it-self-service/it-guides/nordlayer/).
 
 ### Breakglass Procedures
 
