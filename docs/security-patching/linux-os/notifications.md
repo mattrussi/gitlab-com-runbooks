@@ -22,4 +22,3 @@ The general steps to follow when adding a service are:
   - When setting `label`, this refers to the `Service::` label that was created, omitting the label namespace.
   - When jobs execute, service-config.yml is downloaded directly from the main branch of the repository. This means that we do not need to rebuild the container image and cut a new release for service additions or modifications.
 - Add the name of the new service to the job matrix list in `.gitlab-ci.yaml`.
-
