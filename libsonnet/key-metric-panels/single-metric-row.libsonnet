@@ -1,3 +1,4 @@
+local apdexPanel = import './apdex-panel.libsonnet';
 local errorRatioPanel = import './error-ratio-panel.libsonnet';
 local operationRatePanel = import './operation-rate-panel.libsonnet';
 local statusDescription = import './status_description.libsonnet';

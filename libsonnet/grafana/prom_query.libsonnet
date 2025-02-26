@@ -18,4 +18,5 @@ local prometheus = grafana.prometheus;
     interval=interval,
     instant=instant,
   ),
+
 }
