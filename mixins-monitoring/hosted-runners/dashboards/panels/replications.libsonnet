@@ -1,7 +1,7 @@
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 
-local barPanel(title, legendFormat, format, query ) = 
+local barPanel(title, legendFormat, format, query ) =
     basic.timeseries(
         title=title,
         legendFormat=legendFormat,

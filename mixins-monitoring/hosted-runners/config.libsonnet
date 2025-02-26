@@ -27,7 +27,7 @@ local templates = import 'lib/templates.libsonnet';
     runnerJobSelector: 'job="hosted-runners-prometheus-agent"',
 
     fluentdPluginSelector: 'shard=~"$shard", plugin=~"$plugin"',
-    
+
     replicationSelector: 'rule_id="replication-rule-hosted-runner"',
 
     minimumSamplesForMonitoring: 50,

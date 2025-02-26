@@ -37,7 +37,7 @@ metricsCatalog.serviceDefinition({
     },
 
     serviceLevelIndicators:{
-        usage_logs: { 
+        usage_logs: {
             userImpacting: false,
             featureCategory: 'not_owned',
             severity: 's1',
@@ -55,7 +55,7 @@ metricsCatalog.serviceDefinition({
                 counter='fluentd_output_status_write_count',
                 selector=fluentdSelector,
             ),
-            
+
             errorRate: rateMetric(
                 counter='fluentd_output_status_num_errors',
                 selector=fluentdSelector,
@@ -75,7 +75,7 @@ metricsCatalog.serviceDefinition({
                 This log SLI represents the total number of errors encountered by S3 replicating objects
                 to the central S3 destination.
             |||,
-            
+
             requestRate: customRateQuery(|||
                 avg_over_time(aws_s3_operations_pending_replication_sum[%(burnRate)s])
             |||),
