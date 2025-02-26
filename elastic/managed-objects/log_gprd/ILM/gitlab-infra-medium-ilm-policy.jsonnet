@@ -7,11 +7,16 @@
             max_age: '7d',
             max_primary_shard_size: '50gb',
           },
-          forcemerge: {
-            max_num_segments: 1,
-          },
           set_priority: {
             priority: 100,
+          },
+        },
+      },
+      warm: {
+        min_age: '35h',
+        actions: {
+          allocate: {
+            total_shards_per_node: 3,
           },
         },
       },
@@ -23,7 +28,6 @@
           },
           allocate: {
             number_of_replicas: 0,
-            total_shards_per_node: 3,
           },
           searchable_snapshot: {
             force_merge_index: true,
