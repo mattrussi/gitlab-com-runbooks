@@ -30,6 +30,8 @@
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [HostedRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard](../hosted-runners/jobs_apdex_slo_violation.md)
+* [Troubleshooting HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard](../hosted-runners/logging_service_usage_logs_error.md)
+* [Troubleshooting HostedRunnersLoggingServiceUsageReplicationErrorSLOViolation](../hosted-runners/usage_replication_error.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)

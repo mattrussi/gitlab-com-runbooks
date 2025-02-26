@@ -692,7 +692,7 @@ groups:
                 sum by (shard) (
                   rate(fluentd_output_status_num_errors{job="hosted-runners-fluentd-agent",plugin="s3",shard=~".*"}[5m])
                 )
-            runbook: docs/hosted-runners-logging/README.md
+            runbook: docs/hosted-runners-logging/README.md#alerts
             title: The usage_logs SLI of the hosted-runners-logging service on shard `{{ $labels.shard }}` has an error rate violating SLO
           expr: |
             (
@@ -740,7 +740,7 @@ groups:
                 sum by (shard) (
                   rate(fluentd_output_status_num_errors{job="hosted-runners-fluentd-agent",plugin="s3",shard=~".*"}[5m])
                 )
-            runbook: docs/hosted-runners-logging/README.md
+            runbook: docs/hosted-runners-logging/README.md#alerts
             title: The usage_logs SLI of the hosted-runners-logging service on shard `{{ $labels.shard }}` has an error rate violating SLO
           expr: |
             (
@@ -786,7 +786,7 @@ groups:
                 sum by () (
                   avg_over_time(aws_s3_operations_failed_replication_sum[5m])
                 )
-            runbook: docs/hosted-runners-logging/README.md
+            runbook: docs/hosted-runners-logging/README.md#alerts
             title: The usage_replication SLI of the hosted-runners-logging service (`{{ $labels.stage }}` stage) has an error rate violating SLO
           expr: |
             (
@@ -832,7 +832,7 @@ groups:
                 sum by () (
                   avg_over_time(aws_s3_operations_failed_replication_sum[5m])
                 )
-            runbook: docs/hosted-runners-logging/README.md
+            runbook: docs/hosted-runners-logging/README.md#alerts
             title: The usage_replication SLI of the hosted-runners-logging service (`{{ $labels.stage }}` stage) has an error rate violating SLO
           expr: |
             (
