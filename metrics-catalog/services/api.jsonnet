@@ -258,6 +258,25 @@ metricsCatalog.serviceDefinition({
       },
       dependsOn: dependOnPatroni.sqlComponents,
     }
+  }) + sliLibrary.get('glql_query').generateServiceLevelIndicator(
+    // glql:unknown signifies that the glql query came from outside the GitLab codebase,
+    // eg, from an API user, or the iGraphQL Explorer. We have no control over these queries and
+    // they could fail for a variety of reasons, including invalid queries, misformed graphql etc.
+    // They should not be included in the SLI.
+    // Invalid queries from the GitLab codebase should be included in the SLI, however.
+    railsSelector { endpoint_id: { ne: 'glql:unknown' } }, {
+      useConfidenceLevelForSLIAlerts: '98%',
+      serviceAggregation: false,
+      toolingLinks: [
+        toolingLinks.kibana(title='Rails', index='rails_glql'),
+      ],
+      monitoringThresholds+: {
+        // lowered from 0.9995 until https://gitlab.com/gitlab-org/gitlab/-/issues/469590
+        // is resolved.
+        errorRatio: 0.999,
+      },
+      dependsOn: dependOnPatroni.sqlComponents,
+    }
   ) + sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
