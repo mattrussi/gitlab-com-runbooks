@@ -211,7 +211,6 @@ function generate_mixins() {
   echo "$mixins_out"
 }
 
-
 function usage() {
   cat >&2 <<-EOD
 $0 [--generate-mixins] source_dir output_dir [overrides_dir]

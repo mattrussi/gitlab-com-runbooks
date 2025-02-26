@@ -6,27 +6,27 @@ When the `HostedRunnersLoggingServiceUsageReplicationErrorSLOViolation` alert is
 
 The primary reasons for replication failure are:
 
-1.  **Permission issues** – The required IAM roles or policies may be misconfigured.
-2.  **Underlying network issues** – Connectivity problems between AWS services could prevent replication.
+1. **Permission issues** – The required IAM roles or policies may be misconfigured.
+2. **Underlying network issues** – Connectivity problems between AWS services could prevent replication.
 
 ## Steps to Investigate
 
-1.  Check the status of the last objects in the S3 bucket to determine when replication stopped.
-2.  Verify the replication configuration in AWS S3 to identify potential permission or network issues.
+1. Check the status of the last objects in the S3 bucket to determine when replication stopped.
+2. Verify the replication configuration in AWS S3 to identify potential permission or network issues.
 
 ## Resolution Steps
 
 AWS does not automatically retry replication for pending objects once a failure occurs. You must manually replicate the objects by following these steps:
 
-1.  **Break the glass** to access the tenant infrastructure.
-2.  **Navigate to the S3 bucket**.
-3.  **Go to Batch Operations** and create a new job.
-4.  **Under Manifest**, select `Create manifest using S3 Replication configuration` to identify unreplicated objects.
-5.  **Replication configuration source bucket** should be in the same account, and choose the bucket name with format `{customer_name}-hosted-runner-usage`.
-6.  **Leave the filter as it is**.
-7.  **For the replication status**, choose `failed`.
-8.  **Check the Save Batch Operations manifest**.
-9.  **The location for batch manifest** should be `{customer_name}-hosted-runner-usage-report` and leave the rest as it is.
+1. **Break the glass** to access the tenant infrastructure.
+2. **Navigate to the S3 bucket**.
+3. **Go to Batch Operations** and create a new job.
+4. **Under Manifest**, select `Create manifest using S3 Replication configuration` to identify unreplicated objects.
+5. **Replication configuration source bucket** should be in the same account, and choose the bucket name with format `{customer_name}-hosted-runner-usage`.
+6. **Leave the filter as it is**.
+7. **For the replication status**, choose `failed`.
+8. **Check the Save Batch Operations manifest**.
+9. **The location for batch manifest** should be `{customer_name}-hosted-runner-usage-report` and leave the rest as it is.
 10. Click **Next**.
 
 11. **For Operation type**, choose `Replicate`.
