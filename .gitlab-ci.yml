@@ -8,13 +8,13 @@ include:
   # common to all projects using this template library.
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/README.md#templatesstandardyml
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.61
+    ref: v2.56
     file: templates/standard.yml
 
   # Merge request review tasks
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/danger.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.61
+    ref: v2.56
     file: danger.yml
 
 stages:
@@ -162,11 +162,11 @@ notify-mirror-source:
 ################
 
 .docker-image:
-  image: docker:28.0.0
+  image: docker:27.5.1
   tags:
     - gitlab-org-docker
   services:
-    - docker:28.0.0-dind
+    - docker:27.5.1-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
@@ -279,7 +279,6 @@ ensure-generated-content-up-to-date:
     - !reference [.default-job-rules, rules]
     - *if-merge-request-rule
   script:
-    - rm -rf ./.cache
     - make jsonnet-bundle ensure-generated-content-up-to-date
 
 test-jsonnet:
@@ -1075,42 +1074,3 @@ pages:
       - public
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE != "schedule"'
-
-##########
-# Incident.io
-##########
-
-.incident-io:
-  extends: .id-tokens
-  image:
-    name: incidentio/catalog-importer:latest
-    entrypoint: [""]
-  secrets:
-    INCIDENT_API_KEY:
-      file: false
-      vault: ${VAULT_SECRETS_PATH}/shared/incident-io/api_token@ci
-  before_script:
-    - cd services
-    - apk add --no-cache yq
-
-validate-incident-io-service-catalog:
-  extends: .incident-io
-  stage: validate
-  needs: []
-  rules:
-    - !reference [.default-job-rules, rules]
-    - *avoid-merge-train-rule
-    - *if-merge-request-rule
-  script:
-    - catalog-importer validate --config incident-io-importer.jsonnet
-
-sync-incident-io-service-catalog:
-  extends: .incident-io
-  stage: deploy
-  needs: []
-  rules:
-    - !reference [.default-job-rules, rules]
-    - *avoid-merge-train-rule
-    - *if-main-branch-rule
-  script:
-    - catalog-importer sync --api-key $INCIDENT_API_KEY --config incident-io-importer.jsonnet
