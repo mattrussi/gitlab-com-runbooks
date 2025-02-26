@@ -1,4 +1,4 @@
-# Troubleshooting Guide: HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard
+# Troubleshooting HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard
 
 This document outlines the steps to troubleshoot issues related to the alert `HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard`, which indicates that the Fluentd S3 plugin is unable to forward logs to the tenant S3 bucket.
 
