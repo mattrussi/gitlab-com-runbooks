@@ -34,6 +34,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -82,6 +83,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -130,6 +132,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="reads",env="gprd",monitor="global",stage="main",type="clickhouse"} == 0
@@ -167,6 +170,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="reads",env="gprd",monitor="global",stage="main",type="clickhouse"} offset 1h
@@ -202,6 +206,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -250,6 +255,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -298,6 +304,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="writes",env="gprd",monitor="global",stage="main",type="clickhouse"} == 0
@@ -335,6 +342,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="writes",env="gprd",monitor="global",stage="main",type="clickhouse"} offset 1h
