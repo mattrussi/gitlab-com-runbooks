@@ -8,7 +8,7 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 
 ## Prerequisites
 
-- Active staging.gitlab.com account
+- Active staging.gitlab.com account, if you do not have one go to https://staging.gitlab.com/help to sign in with your GitLab email account
 - Existing Ultimate/Premium license on staging
 - Access to Okta for Zuora SSO
 - GitLab.org group membership
@@ -39,7 +39,7 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 1. Sign into [staging.gitlab.com](https://staging.gitlab.com)
 2. Navigate to any project
 3. Open Web IDE or Code Suggestions feature
-4. Confirm Duo functionality is active
+4. [Confirm Duo functionality is active](https://docs.gitlab.com/user/gitlab_duo/setup/#run-a-health-check-for-gitlab-duo)
 
 ## Troubleshooting
 
@@ -68,8 +68,7 @@ The GitLab AI Features Health Check will surface specific errors if there are is
 
 - [AI Features Documentation](https://docs.gitlab.com/development/ai_features/)
 - [Code Suggestions Setup Guide](https://docs.gitlab.com/development/code_suggestions/)
-- [Staging Environment Documentation](link-to-docs)
-- [License Management Guidelines](link-to-guidelines)
+- [License Management Guidelines for Code Suggestions](https://docs.gitlab.com/development/code_suggestions/#setup-instructions-to-use-gdk-with-the-code-suggestions-add-on) and [CLOUD_CONNECTOR_SELF_SIGN_TOKENS environment variable](https://docs.gitlab.com/development/ai_features/#optional-set-cloud_connector_self_sign_tokens-environment-variable)
 
 ## Support Channels
 
@@ -77,7 +76,7 @@ For issues with self-service process:
 
 - Primary Support: #g_provision Slack channel
 - Secondary Support: #s_fulfillment Slack channel
-- Documentation Issues: [GitLab AI Documentation](gitlab-org-link)
+- Documentation Issues: [GitLab AI Documentation](https://docs.gitlab.com/development/ai_features/)
 
 ## Notes
 
