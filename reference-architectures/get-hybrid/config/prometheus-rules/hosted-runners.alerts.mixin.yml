@@ -37,7 +37,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="api_requests",type="hosted-runners"}) >= 0.02083
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="api_requests",type="hosted-runners"}) >= 0.01389
             )
           for: 2m
           labels:
@@ -87,7 +87,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="api_requests",type="hosted-runners"}) >= 0.00347
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="api_requests",type="hosted-runners"}) >= 0.00231
             )
           for: 2m
           labels:
@@ -209,7 +209,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.02083
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.01389
             )
           for: 2m
           labels:
@@ -255,7 +255,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.00347
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.00231
             )
           for: 2m
           labels:
@@ -305,7 +305,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.02083
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.01389
             )
           for: 2m
           labels:
@@ -355,7 +355,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.00347
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="ci_runner_jobs",type="hosted-runners"}) >= 0.00231
             )
           for: 2m
           labels:
@@ -408,7 +408,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="pending_builds",type="hosted-runners"}) >= 0.02083
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="pending_builds",type="hosted-runners"}) >= 0.01389
             )
           for: 2m
           labels:
@@ -460,7 +460,7 @@ groups:
             )
             and on(type,component,shard)
             (
-              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="pending_builds",type="hosted-runners"}) >= 0.00347
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="pending_builds",type="hosted-runners"}) >= 0.00231
             )
           for: 2m
           labels:
@@ -507,7 +507,7 @@ groups:
             )
             and on(type,component)
             (
-              sum by(type,component) (gitlab_component_ops:rate_1h{component="polling",type="hosted-runners"}) >= 0.02083
+              sum by(type,component) (gitlab_component_ops:rate_1h{component="polling",type="hosted-runners"}) >= 0.01389
             )
           for: 2m
           labels:
@@ -555,7 +555,7 @@ groups:
             )
             and on(type,component)
             (
-              sum by(type,component) (gitlab_component_ops:rate_6h{component="polling",type="hosted-runners"}) >= 0.00347
+              sum by(type,component) (gitlab_component_ops:rate_6h{component="polling",type="hosted-runners"}) >= 0.00231
             )
           for: 2m
           labels:
@@ -606,7 +606,7 @@ groups:
             )
             and on(type,component)
             (
-              sum by(type,component) (gitlab_component_ops:rate_1h{component="queuing_queries_duration",type="hosted-runners"}) >= 0.02083
+              sum by(type,component) (gitlab_component_ops:rate_1h{component="queuing_queries_duration",type="hosted-runners"}) >= 0.01389
             )
           for: 2m
           labels:
@@ -657,7 +657,7 @@ groups:
             )
             and on(type,component)
             (
-              sum by(type,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",type="hosted-runners"}) >= 0.00347
+              sum by(type,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",type="hosted-runners"}) >= 0.00231
             )
           for: 2m
           labels:
@@ -672,6 +672,200 @@ groups:
             slo_alert: "yes"
             user_impacting: "no"
             window: 6h
+    - interval: 1m
+      name: 'Service Component Alerts: hosted-runners-logging'
+      rules:
+        - alert: HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard
+          annotations:
+            description: |
+                This log SLI represents the total number of errors encountered by Fluentd while writing logs to S3 destination.
+
+                Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+                Currently the error-rate is {{ $value | humanizePercentage }}.
+            grafana_dashboard_id: hosted-runners-logging-main/hosted-runners-logging-overview
+            grafana_dashboard_link: https://dashboards.gitlab.net/d/hosted-runners-logging-main/hosted-runners-logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard }}
+            grafana_min_zoom_hours: "6"
+            grafana_panel_id: "3320013885"
+            grafana_variables: environment,stage,shard
+            promql_template_1: |
+                sum by (shard) (
+                  rate(fluentd_output_status_num_errors{job="hosted-runners-fluentd-agent",plugin="s3",shard=~".*"}[5m])
+                )
+            runbook: docs/hosted-runners-logging/README.md
+            title: The usage_logs SLI of the hosted-runners-logging service on shard `{{ $labels.shard }}` has an error rate violating SLO
+          expr: |
+            (
+              (
+                gitlab_component_shard_errors:ratio_1h{component="usage_logs",type="hosted-runners-logging"}
+                > (14.4 * 0.001000)
+              )
+              and on (type,component,shard)
+              (
+                gitlab_component_shard_errors:ratio_5m{component="usage_logs",type="hosted-runners-logging"}
+                > (14.4 * 0.001000)
+              )
+            )
+            and on(type,component,shard)
+            (
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_1h{component="usage_logs",type="hosted-runners-logging"}) >= 0.01389
+            )
+          for: 2m
+          labels:
+            aggregation: component_shard
+            alert_class: slo_violation
+            alert_type: symptom
+            feature_category: not_owned
+            pager: pagerduty
+            rules_domain: general
+            severity: s1
+            sli_type: error
+            slo_alert: "yes"
+            user_impacting: "no"
+            window: 1h
+        - alert: HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard
+          annotations:
+            description: |
+                This log SLI represents the total number of errors encountered by Fluentd while writing logs to S3 destination.
+
+                Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
+
+                Currently the error-rate is {{ $value | humanizePercentage }}.
+            grafana_dashboard_id: hosted-runners-logging-main/hosted-runners-logging-overview
+            grafana_dashboard_link: https://dashboards.gitlab.net/d/hosted-runners-logging-main/hosted-runners-logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard }}
+            grafana_min_zoom_hours: "6"
+            grafana_panel_id: "3320013885"
+            grafana_variables: environment,stage,shard
+            promql_template_1: |
+                sum by (shard) (
+                  rate(fluentd_output_status_num_errors{job="hosted-runners-fluentd-agent",plugin="s3",shard=~".*"}[5m])
+                )
+            runbook: docs/hosted-runners-logging/README.md
+            title: The usage_logs SLI of the hosted-runners-logging service on shard `{{ $labels.shard }}` has an error rate violating SLO
+          expr: |
+            (
+              (
+                gitlab_component_shard_errors:ratio_6h{component="usage_logs",type="hosted-runners-logging"}
+                > (6 * 0.001000)
+              )
+              and on (type,component,shard)
+              (
+                gitlab_component_shard_errors:ratio_30m{component="usage_logs",type="hosted-runners-logging"}
+                > (6 * 0.001000)
+              )
+            )
+            and on(type,component,shard)
+            (
+              sum by(type,component,shard) (gitlab_component_shard_ops:rate_6h{component="usage_logs",type="hosted-runners-logging"}) >= 0.00231
+            )
+          for: 2m
+          labels:
+            aggregation: component_shard
+            alert_class: slo_violation
+            alert_type: symptom
+            feature_category: not_owned
+            pager: pagerduty
+            rules_domain: general
+            severity: s1
+            sli_type: error
+            slo_alert: "yes"
+            user_impacting: "no"
+            window: 6h
+        - alert: HostedRunnersLoggingServiceUsageReplicationErrorSLOViolation
+          annotations:
+            description: |
+                This log SLI represents the total number of errors encountered by S3 replicating objects to the central S3 destination.
+
+                Currently the error-rate is {{ $value | humanizePercentage }}.
+            grafana_dashboard_id: hosted-runners-logging-main/hosted-runners-logging-overview
+            grafana_dashboard_link: https://dashboards.gitlab.net/d/hosted-runners-logging-main/hosted-runners-logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
+            grafana_min_zoom_hours: "6"
+            grafana_panel_id: "1779856505"
+            grafana_variables: environment,stage
+            promql_template_1: |
+                sum by () (
+                  avg_over_time(aws_s3_operations_failed_replication_sum[5m])
+                )
+            runbook: docs/hosted-runners-logging/README.md
+            title: The usage_replication SLI of the hosted-runners-logging service (`{{ $labels.stage }}` stage) has an error rate violating SLO
+          expr: |
+            (
+              (
+                gitlab_component_errors:ratio_1h{component="usage_replication",type="hosted-runners-logging"}
+                > (14.4 * 0.001000)
+              )
+              and on (type,component)
+              (
+                gitlab_component_errors:ratio_5m{component="usage_replication",type="hosted-runners-logging"}
+                > (14.4 * 0.001000)
+              )
+            )
+            and on(type,component)
+            (
+              sum by(type,component) (gitlab_component_ops:rate_1h{component="usage_replication",type="hosted-runners-logging"}) >= 0.01389
+            )
+          for: 2m
+          labels:
+            aggregation: component
+            alert_class: slo_violation
+            alert_type: symptom
+            feature_category: not_owned
+            pager: pagerduty
+            rules_domain: general
+            severity: s1
+            sli_type: error
+            slo_alert: "yes"
+            user_impacting: "no"
+            window: 1h
+        - alert: HostedRunnersLoggingServiceUsageReplicationErrorSLOViolation
+          annotations:
+            description: |
+                This log SLI represents the total number of errors encountered by S3 replicating objects to the central S3 destination.
+
+                Currently the error-rate is {{ $value | humanizePercentage }}.
+            grafana_dashboard_id: hosted-runners-logging-main/hosted-runners-logging-overview
+            grafana_dashboard_link: https://dashboards.gitlab.net/d/hosted-runners-logging-main/hosted-runners-logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
+            grafana_min_zoom_hours: "6"
+            grafana_panel_id: "1779856505"
+            grafana_variables: environment,stage
+            promql_template_1: |
+                sum by () (
+                  avg_over_time(aws_s3_operations_failed_replication_sum[5m])
+                )
+            runbook: docs/hosted-runners-logging/README.md
+            title: The usage_replication SLI of the hosted-runners-logging service (`{{ $labels.stage }}` stage) has an error rate violating SLO
+          expr: |
+            (
+              (
+                gitlab_component_errors:ratio_6h{component="usage_replication",type="hosted-runners-logging"}
+                > (6 * 0.001000)
+              )
+              and on (type,component)
+              (
+                gitlab_component_errors:ratio_30m{component="usage_replication",type="hosted-runners-logging"}
+                > (6 * 0.001000)
+              )
+            )
+            and on(type,component)
+            (
+              sum by(type,component) (gitlab_component_ops:rate_6h{component="usage_replication",type="hosted-runners-logging"}) >= 0.00231
+            )
+          for: 2m
+          labels:
+            aggregation: component
+            alert_class: slo_violation
+            alert_type: symptom
+            feature_category: not_owned
+            pager: pagerduty
+            rules_domain: general
+            severity: s1
+            sli_type: error
+            slo_alert: "yes"
+            user_impacting: "no"
+            window: 6h
+    - interval: 1m
+      name: 'Custom Alerts: hosted-runners'
+      rules:
         - alert: HostedRunnersServiceRunnerManagerDownSingleShard
           annotations:
             description: The runner manager in HostedRunnersService has disconnected for a single shard. This may impact job scheduling for that shard.

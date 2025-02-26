@@ -1,0 +1,1777 @@
+{
+      "__inputs": [ ],
+      "__requires": [ ],
+      "annotations": {
+         "list": [ ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 1,
+      "hideControls": false,
+      "id": null,
+      "links": [ ],
+      "panels": [
+         {
+            "collapse": false,
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 2,
+            "panels": [ ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Hosted Runner(s) Logging Overview",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 2,
+            "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 9,
+               "w": 12,
+               "x": 0,
+               "y": 1
+            },
+            "id": 3,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "nullPointMode": "null",
+            "options": {
+               "dataLinks": [
+                  {
+                     "targetBlank": true,
+                     "title": "hosted-runners-logging Service Error-Rate SLO Analysis",
+                     "url": "/d/alerts-component_shard_slo_error?${__url_time_range}&${__all_variables}&var-component=usage_logs&var-type=hosted-runners-logging"
+                  }
+               ]
+            },
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+               {
+                  "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
+                  "color": "#FF4500",
+                  "dashLength": 4,
+                  "dashes": true,
+                  "legend": true,
+                  "lines": true,
+                  "linewidth": 2,
+                  "nullPointMode": "connected",
+                  "spaceLength": 10,
+                  "zindex": -2
+               },
+               {
+                  "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
+                  "color": "#F2495C",
+                  "dashLength": 4,
+                  "dashes": true,
+                  "legend": true,
+                  "lines": true,
+                  "linewidth": 4,
+                  "nullPointMode": "connected",
+                  "spaceLength": 4,
+                  "zindex": -2
+               },
+               {
+                  "alias": "/.*shard (apdex|error ratio|RPS)$/",
+                  "color": "#E7D551"
+               },
+               {
+                  "alias": "{{component}} - {{shard}} error ratio avg",
+                  "color": "#5794F2",
+                  "dashLength": 1,
+                  "fillGradient": 10,
+                  "linewidth": 1,
+                  "spaceLength": 1,
+                  "zindex": -3
+               },
+               {
+                  "alias": "last week",
+                  "color": "#dddddd80",
+                  "dashLength": 4,
+                  "dashes": true,
+                  "fill": 0,
+                  "legend": true,
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "connected",
+                  "spaceLength": 2,
+                  "zindex": -3
+               },
+               {
+                  "alias": "{{component}} - {{shard}} error ratio",
+                  "color": "#E7D551",
+                  "fillBelowTo": "{{component}} - {{shard}} error ratio avg",
+                  "zindex": 3
+               }
+            ],
+            "spaceLength": 10,
+            "stableId": "service-hosted-runners-logging-error-rate",
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "clamp_max(\n  max_over_time(gitlab_component_shard_errors:ratio_5m{component=\"usage_logs\",type=\"hosted-runners-logging\"}[$__interval])\n,\n  1\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{component}} - {{shard}} error ratio",
+                  "refId": "A"
+               },
+               {
+                  "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})\n)\n",
+                  "format": "time_series",
+                  "interval": "5m",
+                  "intervalFactor": 1,
+                  "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+                  "refId": "B"
+               },
+               {
+                  "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})\n)\n",
+                  "format": "time_series",
+                  "interval": "5m",
+                  "intervalFactor": 1,
+                  "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+                  "refId": "C"
+               },
+               {
+                  "expr": "clamp_max(\n  avg_over_time(gitlab_component_shard_errors:ratio_5m{component=\"usage_logs\",type=\"hosted-runners-logging\"}[$__interval])\n,\n  1\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{component}} - {{shard}} error ratio avg",
+                  "refId": "D"
+               },
+               {
+                  "expr": "clamp_max(\n  gitlab_component_shard_errors:ratio_5m{component=\"usage_logs\",type=\"hosted-runners-logging\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})\n)\n))\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "last week",
+                  "refId": "E"
+               }
+            ],
+            "title": "hosted-runners-logging Service Error Ratio",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "mode": "time",
+               "show": true
+            },
+            "yaxes": [
+               {
+                  "format": "percentunit",
+                  "label": "Error %",
+                  "logBase": 1,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "datasource": "$PROMETHEUS_DS",
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "decimals": 0,
+                  "displayName": "Status",
+                  "mappings": [
+                     {
+                        "id": 0,
+                        "options": {
+                           "0": {
+                              "color": "black",
+                              "index": 0,
+                              "text": "Healthy"
+                           },
+                           "1": {
+                              "color": "orange",
+                              "index": 1,
+                              "text": "Warning: 1h deteriorating"
+                           },
+                           "10": {
+                              "color": "orange",
+                              "index": 10,
+                              "text": "Warning: 6h recovering, 1h recovering"
+                           },
+                           "11": {
+                              "color": "red",
+                              "index": 11,
+                              "text": "Degraded: 6h recovering, 1h degraded"
+                           },
+                           "12": {
+                              "color": "red",
+                              "index": 12,
+                              "text": "Degraded: 6h degraded"
+                           },
+                           "13": {
+                              "color": "red",
+                              "index": 13,
+                              "text": "Degraded: 6h degraded, 1h deteriorating"
+                           },
+                           "14": {
+                              "color": "red",
+                              "index": 14,
+                              "text": "Degraded: 6h degraded, 1h recovering"
+                           },
+                           "15": {
+                              "color": "red",
+                              "index": 15,
+                              "text": "Degraded: 6h degraded, 1h degraded"
+                           },
+                           "2": {
+                              "color": "orange",
+                              "index": 2,
+                              "text": "Warning: 1h recovering"
+                           },
+                           "3": {
+                              "color": "red",
+                              "index": 3,
+                              "text": "Degraded: 1h degraded"
+                           },
+                           "4": {
+                              "color": "orange",
+                              "index": 4,
+                              "text": "Warning: 6h deteriorating"
+                           },
+                           "5": {
+                              "color": "orange",
+                              "index": 5,
+                              "text": "Warning: 6h deteriorating, 1h deteriorating"
+                           },
+                           "6": {
+                              "color": "orange",
+                              "index": 6,
+                              "text": "Warning: 6h deteriorating, 1h recovering"
+                           },
+                           "7": {
+                              "color": "red",
+                              "index": 7,
+                              "text": "Degraded: 6h deteriorating, 1h degraded"
+                           },
+                           "8": {
+                              "color": "orange",
+                              "index": 8,
+                              "text": "Warning: 6h recovering"
+                           },
+                           "9": {
+                              "color": "orange",
+                              "index": 9,
+                              "text": "Warning: 6h recovering, 1h deteriorating"
+                           }
+                        },
+                        "type": "value"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "black",
+                           "value": 0
+                        },
+                        {
+                           "color": "orange",
+                           "value": 1
+                        },
+                        {
+                           "color": "orange",
+                           "value": 2
+                        },
+                        {
+                           "color": "red",
+                           "value": 3
+                        },
+                        {
+                           "color": "orange",
+                           "value": 4
+                        },
+                        {
+                           "color": "orange",
+                           "value": 5
+                        },
+                        {
+                           "color": "orange",
+                           "value": 6
+                        },
+                        {
+                           "color": "red",
+                           "value": 7
+                        },
+                        {
+                           "color": "orange",
+                           "value": 8
+                        },
+                        {
+                           "color": "orange",
+                           "value": 9
+                        },
+                        {
+                           "color": "orange",
+                           "value": 10
+                        },
+                        {
+                           "color": "red",
+                           "value": 11
+                        },
+                        {
+                           "color": "red",
+                           "value": 12
+                        },
+                        {
+                           "color": "red",
+                           "value": 13
+                        },
+                        {
+                           "color": "red",
+                           "value": 14
+                        },
+                        {
+                           "color": "red",
+                           "value": 15
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               }
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 12,
+               "x": 0,
+               "y": 10
+            },
+            "id": 4,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "vertical",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "7",
+            "targets": [
+               {
+                  "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_shard_errors:ratio_1h{component=\"usage_logs\",type=\"hosted-runners-logging\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_shard_errors:ratio_5m{component=\"usage_logs\",type=\"hosted-runners-logging\"} > on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_shard_errors:ratio_1h{component=\"usage_logs\",type=\"hosted-runners-logging\"} > on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_shard_errors:ratio_30m{component=\"usage_logs\",type=\"hosted-runners-logging\"} > on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_shard_errors:ratio_6h{component=\"usage_logs\",type=\"hosted-runners-logging\"} > on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"usage_logs\",type=\"hosted-runners-logging\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+                  "format": "time_series",
+                  "instant": true,
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "hosted-runners-logging Service | Errors",
+                  "refId": "A"
+               }
+            ],
+            "title": "",
+            "transparent": false,
+            "type": "stat"
+         },
+         {
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 2,
+            "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 10,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 5,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+               {
+                  "alias": "/.*shard (apdex|error ratio|RPS)$/",
+                  "color": "#E7D551"
+               },
+               {
+                  "alias": "{{component}} - {{shard}} RPS",
+                  "color": "#E7D551",
+                  "zindex": 3
+               },
+               {
+                  "alias": "last week",
+                  "color": "#dddddd80",
+                  "dashLength": 4,
+                  "dashes": true,
+                  "fill": 0,
+                  "legend": true,
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "connected",
+                  "spaceLength": 2,
+                  "zindex": -3
+               },
+               {
+                  "alias": "upper normal",
+                  "color": "#73BF69",
+                  "dashLength": 8,
+                  "dashes": true,
+                  "fillBelowTo": "lower normal",
+                  "legend": false,
+                  "lines": false,
+                  "linewidth": 1,
+                  "nullPointMode": "connected",
+                  "spaceLength": 8,
+                  "zindex": -3
+               },
+               {
+                  "alias": "lower normal",
+                  "color": "#73BF69",
+                  "dashLength": 8,
+                  "dashes": true,
+                  "legend": false,
+                  "lines": false,
+                  "linewidth": 1,
+                  "nullPointMode": "connected",
+                  "spaceLength": 8,
+                  "zindex": -3
+               }
+            ],
+            "spaceLength": 10,
+            "stableId": "service-hosted-runners-logging-ops-rate",
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "avg_over_time(gitlab_component_shard_ops:rate_5m{component=\"usage_logs\",type=\"hosted-runners-logging\"}[$__interval])\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{component}} - {{shard}} RPS",
+                  "refId": "A"
+               },
+               {
+                  "expr": "gitlab_component_shard_ops:rate_5m{component=\"usage_logs\",type=\"hosted-runners-logging\"} offset 1w\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "last week",
+                  "refId": "B"
+               },
+               {
+                  "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{component=\"usage_logs\",type=\"hosted-runners-logging\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{component=\"usage_logs\",type=\"hosted-runners-logging\"}\n  ),\n  0\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "upper normal",
+                  "refId": "C"
+               },
+               {
+                  "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{component=\"usage_logs\",type=\"hosted-runners-logging\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{component=\"usage_logs\",type=\"hosted-runners-logging\"}\n  ),\n  0\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "lower normal",
+                  "refId": "D"
+               }
+            ],
+            "title": "hosted-runners-logging Service RPS - Requests per Second",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "mode": "time",
+               "show": true
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "Operations per Second",
+                  "logBase": 1,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 1000
+            },
+            "id": 6,
+            "panels": [ ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Fluentd Operations",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 0,
+               "y": 1001
+            },
+            "id": 7,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_emit_records{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}}",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Current emit records",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 6,
+               "y": 1001
+            },
+            "id": 8,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_retry_wait{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}}",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Current retry wait",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 12,
+               "y": 1001
+            },
+            "id": 9,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_write_count{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}}",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Current write counts",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 18,
+               "y": 1001
+            },
+            "id": 10,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_retry_count{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}} - Retry rate",
+                  "refId": "A"
+               },
+               {
+                  "expr": "sum by (shard, plugin) (\n    rate(fluentd_output_status_num_errors{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}} - Error rate",
+                  "refId": "B"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Fluentd output error/retry rate",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "ops",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 0,
+               "y": 1009
+            },
+            "id": 11,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_flush_time_count{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}} - Time",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Fluentd output status flush time rate",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "ms",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 6,
+               "y": 1009
+            },
+            "id": 12,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  max_over_time(fluentd_output_status_buffer_queue_length{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}} - Count",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Maximum buffer length in last 5min",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 12,
+               "y": 1009
+            },
+            "id": 13,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "sum by (shard, plugin) (\n  fluentd_output_status_buffer_total_bytes{shard=~\"$shard\", plugin=~\"$plugin\"}\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}}",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Total size of queue buffers",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "bytes",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 18,
+               "y": 1009
+            },
+            "id": 14,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "min by(plugin, shard) (\n  fluentd_output_status_buffer_available_space_ratio{shard=~\"$shard\", plugin=~\"$plugin\"}\n)\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{shard}} - {{plugin}}",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Buffer available space ratio",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "percent",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "collapse": false,
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 2000
+            },
+            "id": 15,
+            "panels": [ ],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Replication Metrics",
+            "titleSize": "h6",
+            "type": "row"
+         },
+         {
+            "aliasColors": { },
+            "bars": true,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 0,
+               "y": 2001
+            },
+            "id": 16,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": false,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "avg_over_time(aws_s3_operations_pending_replication_sum{rule_id=\"replication-rule-hosted-runner\"}[10m])\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "Pending operations",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Operations pending replication",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 6,
+               "y": 2001
+            },
+            "id": 17,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "avg_over_time(aws_s3_replication_latency_maximum{rule_id=\"replication-rule-hosted-runner\"}[10m])\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "Latency",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Replication latency",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": true,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 12,
+               "y": 2001
+            },
+            "id": 18,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": false,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "avg_over_time(aws_s3_bytes_pending_replication_maximum{rule_id=\"replication-rule-hosted-runner\"}[10m])\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "Bytes pending",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Bytes pending replication",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "bytes",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         },
+         {
+            "aliasColors": { },
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "$PROMETHEUS_DS",
+            "decimals": 0,
+            "description": "",
+            "fill": 0,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 6,
+               "x": 18,
+               "y": 2001
+            },
+            "id": 19,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "hideEmpty": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sideWidth": null,
+               "total": false,
+               "values": true
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [ ],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": null,
+            "seriesOverrides": [ ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+               {
+                  "expr": "avg_over_time(aws_s3_operations_failed_replication_sum{rule_id=\"replication-rule-hosted-runner\"}[10m])\n",
+                  "format": "time_series",
+                  "interval": "1m",
+                  "intervalFactor": 1,
+                  "legendFormat": "Failed replication",
+                  "refId": "A"
+               }
+            ],
+            "thresholds": [ ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Operations failed replication",
+            "tooltip": {
+               "shared": true,
+               "sort": 2,
+               "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": [ ]
+            },
+            "yaxes": [
+               {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+               },
+               {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": 1,
+                  "min": 0,
+                  "show": false
+               }
+            ]
+         }
+      ],
+      "refresh": "",
+      "rows": [ ],
+      "schemaVersion": 16,
+      "style": "light",
+      "tags": [
+         "hosted-runners",
+         "dedicated"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": {
+                  "text": "Global",
+                  "value": "Global"
+               },
+               "hide": 0,
+               "label": null,
+               "name": "PROMETHEUS_DS",
+               "options": [ ],
+               "query": "prometheus",
+               "refresh": 1,
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": null,
+               "current": {
+                  "text": "All",
+                  "value": "All"
+               },
+               "datasource": "$PROMETHEUS_DS",
+               "hide": 0,
+               "includeAll": false,
+               "label": null,
+               "multi": false,
+               "name": "shard",
+               "options": [ ],
+               "query": "label_values(gitlab_runner_version_info,shard)\n",
+               "refresh": 2,
+               "regex": "",
+               "sort": true,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": null,
+               "current": {
+                  "text": "All",
+                  "value": "All"
+               },
+               "datasource": "$PROMETHEUS_DS",
+               "hide": 0,
+               "includeAll": false,
+               "label": null,
+               "multi": false,
+               "name": "plugin",
+               "options": [ ],
+               "query": "label_values(fluentd_output_status_flush_time_count,plugin)\n",
+               "refresh": 2,
+               "regex": "",
+               "sort": true,
+               "tagValuesQuery": "",
+               "tags": [ ],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h/m",
+         "to": "now/m"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "1m",
+            "5m",
+            "10m",
+            "15m",
+            "30m"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "utc",
+      "title": "Hosted Runners Logging",
+      "version": 0
+   }
