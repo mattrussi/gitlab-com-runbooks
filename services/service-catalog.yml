@@ -164,7 +164,7 @@ services:
     tier: inf
     friendly_name: ClickHouse Cloud
     label: Service::ClickHouseCloud
-    owner: doe-ops
+    owner: clickhouse
     teams:
       - clickhouse
     technical:
@@ -262,15 +262,15 @@ services:
     owner: technical_writing
     technical:
       project:
-        - https://gitlab.com/gitlab-org/gitlab-docs
+        - https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com
       documents:
         design:
-        architecture: https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/architecture.md
+        architecture: https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/doc/architecture.md
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/docs.gitlab.com
-        developer_guide: https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/development.md
+        developer_guide: https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/doc/development.md
         service:
-          - https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc
+          - https://gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/-/blob/main/doc
         security:
       dependencies:
         - service: elasticsearch

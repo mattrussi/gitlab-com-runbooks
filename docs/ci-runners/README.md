@@ -367,3 +367,4 @@ To minimize disruptions, GitLab enforces a **Production Change Lock** during cri
 * [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [CiRunnersServicePollingErrorSLOViolation](alerts/CiRunnersServicePollingErrorSLOViolation.md)
 * [CiRunnersServiceQueuingQueriesDurationApdexSLOViolation](alerts/CiRunnersServiceQueuingQueriesDurationApdexSLOViolation.md)
+* [CiRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard](alerts/CiRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard.md)

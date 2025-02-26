@@ -139,6 +139,17 @@
               "type": "null"
             }
           ]
+        },
+        "pagerduty_service": {
+          "description": "The PagerDuty Service name or ID used to escalate to the team.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "dependencies": {

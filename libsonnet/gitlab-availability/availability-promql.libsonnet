@@ -7,11 +7,15 @@ local strings = import 'utils/strings.libsonnet';
   new(keyServices, aggregationSet, extraSelector={}):: {
     local burnRate = '1h',  // use the one hour burn rate as the largest non-upscaled one
 
-    local serviceSelector = selectors.serializeHash({ type: { oneOf: keyServices } } + extraSelector),
+    local selector = if keyServices == '*' then
+      extraSelector
+    else
+      extraSelector { type: { oneOf: keyServices } },
+
 
     local formatConfig = {
       aggregationLabels: aggregations.serialize(aggregationSet.labels),
-      selector: serviceSelector,
+      selector: selectors.serializeHash(selector),
       apdexSuccessRate: aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=true),
       errorRate: aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true),
       apdexWeight: aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=true),

@@ -40,6 +40,7 @@ generateTests([
       pager: 'pagerduty',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'production_slack_channel',
     ],
@@ -52,6 +53,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'slack_bridge-prod',
       'production_slack_channel',
@@ -65,6 +67,7 @@ generateTests([
       env: 'thanos',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'slack_bridge-prod',
       'production_slack_channel',
@@ -101,6 +104,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'slack_bridge-prod',
       'team_gitaly_alerts_channel',
@@ -127,6 +131,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_alerts_slack_channel',
     ],
   },
@@ -148,6 +153,7 @@ generateTests([
     },
     receivers: [
       'issue:gitlab.com/gitlab-com/gl-infra/infrastructure',
+      'incidentio',
       'prod_alerts_slack_channel',
     ],
   },
@@ -159,6 +165,7 @@ generateTests([
     },
     receivers: [
       'issue:gitlab.com/gitlab-com/gl-infra/infrastructure',
+      'incidentio',
       'prod_alerts_slack_channel',
     ],
   },
@@ -171,6 +178,7 @@ generateTests([
     },
     receivers: [
       'issue:gitlab.com/gitlab-com/gl-infra/production',
+      'incidentio',
       'prod_pagerduty',
       'production_slack_channel',
     ],
@@ -182,6 +190,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_alerts_slack_channel',
     ],
   },
@@ -225,6 +234,7 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'slack_bridge-prod',  // Slackline
       'team_gitaly_alerts_channel',  // Gitaly team alerts channel
@@ -253,6 +263,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'team_runner_alerts_channel',
       'production_slack_channel',
@@ -265,6 +276,7 @@ generateTests([
       env: 'thanos',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'production_slack_channel',
     ],
@@ -277,6 +289,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'team_gitlab_pages_alerts_channel',
       'production_slack_channel',
@@ -290,6 +303,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'team_gitlab_pages_alerts_channel',
       'prod_alerts_slack_channel',
     ],
@@ -303,6 +317,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'team_runner_alerts_channel',
       'production_slack_channel',
@@ -316,6 +331,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'slack_bridge-prod',
       'team_runner_alerts_channel',
       'prod_alerts_slack_channel',
@@ -330,6 +346,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'production_slack_channel',
     ],
@@ -378,6 +395,7 @@ generateTests([
       env: 'gprd',
     },
     receivers: [
+      'incidentio',
       'team_runner_alerts_channel',
       'prod_alerts_slack_channel',
     ],
@@ -402,6 +420,7 @@ generateTests([
       pager: 'platform_insights_pagerduty',
     },
     receivers: [
+      'incidentio',
       'team_platform_insights_alerts_channel',
       'platform_insights_pagerduty',
     ],
@@ -424,6 +443,7 @@ generateTests([
       team: 'platform_insights',
     },
     receivers: [
+      'incidentio',
       'team_platform_insights_alerts_channel',
       // We are ok with #alerts channel getting notifications for services that
       // SREs are not responsible ATM.
@@ -457,6 +477,7 @@ generateTests([
       window: '6h',
     },
     receivers: [
+      'incidentio',
       'prod_pagerduty',
       'slack_bridge-prod',
       'team_pipeline_validation_alerts_channel',
@@ -466,25 +487,23 @@ generateTests([
   {
     name: 'slo_alert=yes, env=gstg type=web should go to feed_alerts_staging and blackhole',
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web' },
-    receivers: ['feed_alerts_staging', 'blackhole'],
+    receivers: [
+      'feed_alerts_staging',
+      'blackhole'
+      ],
   },
   {
     name: 'slo_alert=yes, env=gstg type=web, aggregation=regional_component should go to blackhole',
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web', aggregation: 'regional_component' },
-    receivers: ['blackhole'],
+    receivers: [
+      'blackhole'
+      ],
   },
   {
     name: 'slo_alert=yes, env=gprd, team=ai_model_validation should go to g_mlops-alerts',
     labels: { env: 'gprd', team: 'ai_model_validation' },
     receivers: [
-      'team_ai_model_validation_alerts_channel',
-      'prod_alerts_slack_channel',
-    ],
-  },
-  {
-    name: 'slo_alert=yes, env=gprd, team=ai_model_validation should go to g_mlops-alerts',
-    labels: { env: 'gprd', team: 'ai_model_validation' },
-    receivers: [
+      'incidentio',
       'team_ai_model_validation_alerts_channel',
       'prod_alerts_slack_channel',
     ],
@@ -493,6 +512,7 @@ generateTests([
     name: 'env=gprd, feature_category=code_suggestions should go to g_mlops-alerts',
     labels: { env: 'gprd', feature_category: 'code_suggestions' },
     receivers: [
+      'incidentio',
       'team_code_creation_alerts_channel',
       'prod_alerts_slack_channel',
     ],
@@ -501,6 +521,7 @@ generateTests([
     name: 'env=gprd, product_stage_group=ai_model_validation should go to g_mlops-alerts',
     labels: { env: 'gprd', product_stage_group: 'ai_model_validation' },
     receivers: [
+      'incidentio',
       'team_ai_model_validation_alerts_channel',
       'prod_alerts_slack_channel',
     ],

@@ -3,16 +3,16 @@
 # NOTE: please add new plugins to ./scripts/install-asdf-plugins.sh when adding items here
 amtool       0.28.0 # datasource=github-releases depName=prometheus/alertmanager
 go-jsonnet   0.20.0 # datasource=github-releases depName=google/go-jsonnet
-golang       1.23.6 # datasource=golang-version depName=go
+golang       1.24.0 # datasource=golang-version depName=go
 jb           0.6.0 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
-jsonnet-tool 1.17.0 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
-kubectl      1.32.1 # datasource=github-releases depName=kubernetes/kubernetes
+jsonnet-tool 1.17.1 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
+kubectl      1.32.2 # datasource=github-releases depName=kubernetes/kubernetes
 kubeconform  0.6.7 # datasource=github-releases depName=yannh/kubeconform
-nodejs       22.13.1 # datasource=node depName=nodejs/node
+nodejs       22.14.0 # datasource=node depName=nodejs/node
 pre-commit   4.1.0 # datasource=github-releases depName=pre-commit/pre-commit
-promtool     3.1.0 # datasource=github-releases depName=prometheus/prometheus
+promtool     3.2.0 # datasource=github-releases depName=prometheus/prometheus
 python       system
-ruby         3.4.1 # datasource=ruby-version depName=ruby/ruby
+ruby         3.4.2 # datasource=ruby-version depName=ruby/ruby
 shellcheck   0.10.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt        3.10 # datasource=github-releases depName=mvdan/sh
 terraform    1.10.5 # datasource=github-releases depName=hashicorp/terraform

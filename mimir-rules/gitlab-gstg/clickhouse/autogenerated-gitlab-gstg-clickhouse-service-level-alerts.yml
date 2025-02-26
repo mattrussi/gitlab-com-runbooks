@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_FailedQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_FailedSelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -34,18 +34,19 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 1h
     expr: |
       (
         (
           gitlab_component_errors:ratio_1h{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -70,7 +71,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_FailedQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_FailedSelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -82,18 +83,19 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 6h
     expr: |
       (
         (
           gitlab_component_errors:ratio_6h{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="reads",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -118,7 +120,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_Query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_SelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -130,6 +132,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="reads",env="gstg",monitor="global",stage="main",type="clickhouse"} == 0
@@ -155,7 +158,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(ClickHouseProfileEvents_Query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(ClickHouseProfileEvents_SelectQuery{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/clickhouse/README.md#alerts
     labels:
@@ -167,6 +170,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="reads",env="gstg",monitor="global",stage="main",type="clickhouse"} offset 1h
@@ -202,18 +206,19 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 1h
     expr: |
       (
         (
           gitlab_component_errors:ratio_1h{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -250,18 +255,19 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: clickhouse
       user_impacting: "yes"
       window: 6h
     expr: |
       (
         (
           gitlab_component_errors:ratio_6h{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="writes",env="gstg",monitor="global",type="clickhouse"}
-          > (6 * 0.001000)
+          > (6 * 0.000000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -298,6 +304,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="writes",env="gstg",monitor="global",stage="main",type="clickhouse"} == 0
@@ -335,6 +342,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: clickhouse
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="writes",env="gstg",monitor="global",stage="main",type="clickhouse"} offset 1h

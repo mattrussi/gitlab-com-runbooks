@@ -12,12 +12,20 @@
           },
         },
       },
-      warm: {
+      cold: {
         min_age: '2d',
         actions: {
           readonly: {},
           set_priority: {
             priority: 50,
+          },
+          allocate: {
+            number_of_replicas: 0,
+          },
+          searchable_snapshot: {
+            force_merge_index: true,
+            snapshot_repository: 'found-snapshots',
+
           },
         },
       },

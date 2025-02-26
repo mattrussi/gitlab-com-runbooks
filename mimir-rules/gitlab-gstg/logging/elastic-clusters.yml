@@ -5,6 +5,7 @@ groups:
         expr: probe_success{instance="https://e8fabf53b73247e98df7c355d6a782fc.us-central1.gcp.cloud.es.io:9243/*/_ilm/explain",type="blackbox"} == 0
         for: 5m
         labels:
+          team: observability
           severity: s4
           alert_type: cause
           environment: gstg
@@ -16,6 +17,7 @@ groups:
         expr: probe_success{instance="https://e8fabf53b73247e98df7c355d6a782fc.us-central1.gcp.cloud.es.io:9243/_ilm/status",type="blackbox"} == 0
         for: 15m
         labels:
+          team: observability
           severity: s4
           alert_type: cause
           environment: gstg
@@ -27,6 +29,7 @@ groups:
         expr: probe_success{instance="https://92c87c26b16049b0a30af16b94105528.us-central1.gcp.cloud.es.io:9243/*/_ilm/explain",type="blackbox"} == 0
         for: 15m
         labels:
+          team: observability
           severity: s3
           alert_type: cause
           environment: gprd
@@ -38,6 +41,7 @@ groups:
         expr: deriv(elasticsearch_thread_pool_rejected_count{exported_type!="write", env="gstg"}[5m]) > 0.001
         for: 5m
         labels:
+          team: observability
           severity: s3
           alert_type: cause
         annotations:
@@ -48,6 +52,7 @@ groups:
         expr: deriv(elasticsearch_thread_pool_rejected_count{exported_type="write", env="gstg"}[5m]) > 0.001
         for: 3m
         labels:
+          team: observability
           severity: s3
           alert_type: cause
         annotations:
@@ -58,6 +63,7 @@ groups:
         expr: elasticsearch_cluster_health_number_of_pending_tasks{env="gstg"} > 0
         for: 15m
         labels:
+          team: observability
           severity: s3
           alert_type: symptom
         annotations:

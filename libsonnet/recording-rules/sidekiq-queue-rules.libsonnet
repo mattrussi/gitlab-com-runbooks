@@ -174,6 +174,36 @@ local sidekiqAlerts(registry, extraSelector) =
       },
     },
     {
+      alert: 'ScanDependenciesWorkerHighErrorRate',
+      expr: |||
+        sum by (env, worker) (
+          application_sli_aggregation:sidekiq_execution:error:rate_5m{
+            worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
+            %(selector)s
+          }
+        ) > 0.001
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+      },
+      'for': '5m',
+      labels: {
+        severity: 's4',
+        aggregation: 'sidekiq_execution',
+        sli_type: 'error',
+        alert_type: 'symptom',
+        team: 'code_creation',
+      },
+      annotations: {
+        title: 'High error rate for `{{ $labels.worker }}`',
+        description: |||
+          Sidekiq jobs error rate from `{{ $labels.worker }}` has exceeded 0.1%. This may be caused by exceptions from unexpected data types or values in the job execution.
+        |||,
+        grafana_dashboard_id: 'sidekiq-worker-detail',
+        grafana_min_zoom_hours: '6',
+        grafana_variables: 'environment,worker',
+      },
+    },
+    {
       alert: 'SidekiqJobsDeferredByDBHealthCheck',
       expr: |||
         sum by (env, worker, feature_category)  (

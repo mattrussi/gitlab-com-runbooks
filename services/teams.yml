@@ -5,6 +5,7 @@ teams:
   slack_channel: production
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
+  pagerduty_service: GitLab Production
 
 - name: create
   url: https://about.gitlab.com/handbook/engineering/development/dev/create/
@@ -37,9 +38,10 @@ teams:
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
-  manager: andrashorvath
+  manager: jcaigitlab
   slack_alerts_channel: gitaly-alerts
   product_stage_group: gitaly
+  pagerduty_service: Gitaly
   ignored_components:
   - graphql_query
 
@@ -446,12 +448,6 @@ teams:
   slack_error_budget_channel: g_srm_security_policies
   send_error_budget_weekly_to_slack: true
 
-- name: doe-ops
-  url: https://about.gitlab.com/handbook/engineering/development/ops
-  slack_channel: doe-ops
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-
 - name: knowledge
   product_stage_group: knowledge
   slack_error_budget_channel:
@@ -532,7 +528,12 @@ teams:
 
 # ClickHouse (virtual)
 - name: clickhouse
+  slack_channel: f_clickhouse
   slack_alerts_channel: f_clickhouse_infra_alerts
+  url: https://gitlab.com/groups/gitlab-org/maintainers/clickhouse/-/group_members?with_inherited_permissions=exclude
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  send_slo_alerts_to_team_slack_channel: true
 
 # Delivery
 
@@ -588,6 +589,13 @@ teams:
 - name: environment_automation
   product_stage_group: environment_automation
   slack_channel: f_gitlab_dedicated
+
+- name: pubsec_services
+  product_stage_group: pubsec_services
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/gitlab-dedicated/us-public-sector-services/
+  manager: mckgl
+  label: "team::US PubSec"
+  slack_channel: g_dedicated-us-pubsec
 
 # Production Engineering
 

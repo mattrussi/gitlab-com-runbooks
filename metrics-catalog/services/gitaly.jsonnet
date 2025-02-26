@@ -157,7 +157,7 @@ metricsCatalog.serviceDefinition({
           ignore_outliers: [
             {
               start: '2025-01-27',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19217
-              end: '2025-02-02',
+              end: '2025-02-12',  // + https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19295
             },
           ],
         },
