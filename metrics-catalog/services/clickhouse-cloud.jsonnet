@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
     },
     serviceDependencies: {},
     monitoringThresholds: {
-        errorRatio: 1.0,
+        errorRatio: 0.995,
     },
     provisioning: {
         kubernetes: false,
