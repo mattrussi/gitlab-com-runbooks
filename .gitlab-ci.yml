@@ -279,6 +279,7 @@ ensure-generated-content-up-to-date:
     - !reference [.default-job-rules, rules]
     - *if-merge-request-rule
   script:
+    - rm -rf ./.cache
     - make jsonnet-bundle ensure-generated-content-up-to-date
 
 test-jsonnet:
