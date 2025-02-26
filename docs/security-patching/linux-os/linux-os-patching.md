@@ -33,11 +33,11 @@ This document targets VM instances running Linux based operating systems that ma
 
 ### Distribution Updates
 
-GitLab almost exclusively deploys Ubuntu as the base operating system for VMs supporting GitLab.com. By default, Canonical provides 5 years of security patching for their LTS releases (releases on even numbered years in April). 
+GitLab almost exclusively deploys Ubuntu as the base operating system for VMs supporting GitLab.com. By default, Canonical provides 5 years of security patching for their LTS releases (releases on even numbered years in April).
 
 All of our Ubuntu systems have unattended upgrades enabled, meaning they will automatically install *security* patches on a daily basis.
 
-While there is currently no guaranteed support for packages outside of the Ubuntu `main` repositories, we should strive to keep our fleet within the official 5 year LTS support window, as packages in additional repositories such as `universe` and `multiverse` tend to no longer receive updates past this period. 
+While there is currently no guaranteed support for packages outside of the Ubuntu `main` repositories, we should strive to keep our fleet within the official 5 year LTS support window, as packages in additional repositories such as `universe` and `multiverse` tend to no longer receive updates past this period.
 
 ### Ubuntu Pro
 
@@ -55,7 +55,7 @@ Any of the following scenarios will qualify a system for enrollment in Ubuntu Pr
 
 - The OS is no longer in it's LTS support window.
 - The systems cannot be rebooted without downtime on GitLab.com
-- There is no automation available for apply updates, and rebooting the systems.
+- There is no automation available for applying updates and rebooting the systems.
 
 ## Services
 
