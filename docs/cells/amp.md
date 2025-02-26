@@ -58,6 +58,8 @@ Both environments are managed within the [`AMP repository`](https://gitlab.com/g
 
 All AMP environments, including the Cells environments, are bootstrapped via GitLab CI pipelines. The process initializes the necessary infrastructure and configures the Kubernetes clusters that will host the AMP control plane.
 
+Please refer to [AMP Environment Bootstrap](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/#amp-environment-bootstrap) to know more about the complete bootstrapping process.
+
 ### Terraform State
 
 Each environment maintains its own Terraform state stored in GitLab Terraform State storage. The state files are managed at [https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/terraform](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/terraform). This ensures proper separation between environments and prevents cross-environment changes.
