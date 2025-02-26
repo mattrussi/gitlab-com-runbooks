@@ -25,6 +25,7 @@
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Accessing the Rails Console as an SRE](../console/access.md)
 * [../duo/code_suggestion_failover.md](../duo/code_suggestion_failover.md)
+* [../duo/duo_license.md](../duo/duo_license.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [HAProxy Logging](../frontend/haproxy-logging.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
