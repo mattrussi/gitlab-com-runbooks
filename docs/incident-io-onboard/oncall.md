@@ -24,11 +24,8 @@ This document highlights the steps for responders on how to acknowledge incident
 
 This is something we are iterating on. The process is:
 
-1. [Acknowledge](#production) the alert in PagerDuty within the response time.
-2. Check if it's related to an active incident. While we transition to incident.io , be sure to check for recent incidents in both:
-   - [incident.io](https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JK9KV07AV2WZKHYZD1GTK5KB) (new)
-   - [production engineering]() (old)
-1. If it is, respond according to the existing protocol for that incident
+1. Acknowledge page within the response time.
+2. Check if it's related to an active incident in the [Production project](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100)
 2. You can declare an incident by using the command `/inc create` to create one , all incidents of type `Gitlab.com` will be announced in `#incident-dotcom`
 2. This will generate an incident Slack channel and Zoom call for you.
 3. You can choose to **Block Deployments** , **Feature Flags** , or **Keeping the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel

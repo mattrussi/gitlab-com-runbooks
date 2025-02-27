@@ -31,7 +31,7 @@ This document highlights the basic onboarding steps to incident.io.
   ![img](img/incidentio-slackchannel.png)
 
 </details>
-- Whenever you create an incident, a GitLab issue will be created [here](), as well as a Zoom incident call.
+- Whenever you create an incident, a GitLab issue will be created [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100), as well as a Zoom incident call.
 - You can update the incident from Slack using the `/inc` command or via the incident dashboard. To go to the incident dashboard, click on `overview` and then `incident homepage`.
 
 <details>
