@@ -39,6 +39,7 @@ metricsCatalog.serviceDefinition(
           label: 'shard=rest-aggregated',
         },
       ],
+      saturation_dimensions_keep_aggregate: false,
       components: [
         {
           name: 'redis_primary_cpu',
