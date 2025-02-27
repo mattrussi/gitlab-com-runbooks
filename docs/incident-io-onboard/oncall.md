@@ -13,9 +13,9 @@ This document highlights the steps for responders on how to acknowledge incident
 - This is how it would look like on the incident.io mobile app , to view the `Alerts` attatched to the incident , you can switch to the Alerts tab
 
 <p align="left">
-    <img src="img/1_phone.jpg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle; margin-right: 1%;">
-    <img src="img/2_phone.jpg" alt="via mobile application" width="31.5%" height="auto" style="vertical-align: middle; margin-right: 1%;">
-    <img src="img/3_phone.jpeg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle;">
+<img src="img/1_phone.jpg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle; margin-right: 1%;">
+<img src="img/2_phone.jpg" alt="via mobile application" width="31.5%" height="auto" style="vertical-align: middle; margin-right: 1%;">
+<img src="img/3_phone.jpeg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle;">
 </p>
 
 - Once in the incident slack channel you can start troubleshooting the incident , join the incident zoom call and use the available commands for several actions.
@@ -30,7 +30,7 @@ This is something we are iterating on. The process is:
 2. This will generate an incident Slack channel and Zoom call for you.
 3. You can choose to **Block Deployments** , **Feature Flags** , or **Keeping the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
 
-![img](/img/custom.png)
+![img](img/custom.png)
 
 1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/production) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
@@ -40,8 +40,8 @@ This is something we are iterating on. The process is:
 
 When working on an alert, you'll collaborate in the incident-specific Slack channel created by [incident.io](incident-management.md#navigating-through-an-incident). Use the incident's Slack channel for all investigation notes and updates. Key information can be pinned using the :pushpin: emoji, which will automatically be reflected in the incident.io dashboard and GitLab issue.
 
-* In Grafana, click `Share` > `Copy` for the link; this will ensure the link is locked to the chosen time. **Note**: `Shorten URL` does not work.
-* In OpenSearch, click `Share`, enable `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
+- In Grafana, click `Share` > `Copy` for the link; this will ensure the link is locked to the chosen time. **Note**: `Shorten URL` does not work.
+- In OpenSearch, click `Share`, enable `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
 
 Important investigation details to document:
 
@@ -71,16 +71,17 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 We manage incidents using [incident.io](incident-management.md). When an incident is created using `/inc create` in Slack, it automatically creates both a dedicated Slack channel and a GitLab issue. Lifecycles are defined [here](https://app.incident.io/gitlab/settings/lifecycle?tab=lifecycles). The incident has a few especially notable stages:
 
-#### Active
+### Active
 
 Active incidents are managed through:
+
 - The incident-specific Slack channel created by incident.io
 - The automatically created GitLab issue in the [incident management project](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/incident-management/-/issues)
 - The incident.io dashboard - see [Navigating through an incident](incident-management.md#navigating-through-an-incident)
 
 [View currently active incidents](https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JK9KV07AV2WZKHYZD1GTK5KB).
 
-#### Monitoring
+### Monitoring
 
 An incident is considered in a `monitoring` status in the following scenarios :
 
@@ -91,7 +92,7 @@ Update the incident status using the `/inc` command in the incident's Slack chan
 
 [View currently mitigated incidents](https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JK9KV07AV2WZKHYZD1GTK5KB&status%5Bone_of%5D=01JH40E0GPQQZNK1DJHH2TCTEG)
 
-#### Closed
+### Closed
 
 The incident is resolved when it is fully addressed. Use incident.io's [Post-Incident workflow](https://help.incident.io/collections/7841117054-learning-from-incidents) to properly close out the incident, which may include [creating a post-incident review](https://help.incident.io/articles/8600719118-creating-postmortems-in-3-clicks). Incident reviews are typically performed for all S1 and S2 incidents or if an incident review is requested as per [GitLab's incident review process](https://handbook.gitlab.com/handbook/engineering/infrastructure/incident-review/#the-criteria-which-triggers-a-review).
 
