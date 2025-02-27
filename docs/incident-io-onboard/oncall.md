@@ -30,8 +30,12 @@ This is something we are iterating on. The process is:
    - [production engineering]() (old)
 1. If it is, respond according to the existing protocol for that incident
 2. You can declare an incident by using the command `/inc create` to create one , all incidents of type `Gitlab.com` will be announced in `#incident-dotcom`
+2. This will generate an incident Slack channel and Zoom call for you.
+3. You can choose to **Block Deployments** , **Feature Flags** , or **Keeping the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
 
-1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/incident-io-staging-secondary/-/issues) issue will be automatically created and linked to the incident.
+![img](/img/custom.png)
+
+1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/production) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
 1. Begin [working on the alert](#working-on-the-alert)
 
