@@ -66,7 +66,4 @@ If you have issues logging in, please contact #it_help
 
 ## Future improvements
 
-- Custom workflows to automatically invite the concerned team members to the incident.
-- On-call integration that allows you to directly page the required teams while declaring an incident.
-- Custom incident tickets.
-- Follow our epic [Implement incident.io - Improvements](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1489)
+Follow our epic [Implement incident.io - Improvements](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1489)
