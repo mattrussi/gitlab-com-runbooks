@@ -2600,6 +2600,32 @@ services:
         grafana_folder: ops-gitlab-net
         primary_grafana_dashboard: ops-gitlab-net-main/ops-gitlab-net-overview
 
+  - name: dev-gitlab-org
+    tier: sv
+    friendly_name: dev.gitlab.org
+    label: DevGitlabOrg
+    owner: release
+    technical:
+      project:
+        - https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/dev
+        - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/dev-gitlab-org.json
+        - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/dev-environment.md
+      documents:
+        design:
+        architecture:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/118
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+
   - name: istio
     tier: inf
     friendly_name: Istio
