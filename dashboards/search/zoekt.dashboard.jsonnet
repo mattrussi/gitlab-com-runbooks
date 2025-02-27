@@ -186,21 +186,15 @@ basic.dashboard(
         queries=[
           {
             query: |||
-              quantile(0.10, search_zoekt_task_processing_queue_size{environment="$environment"})
+              quantile(0.50, search_zoekt_task_processing_queue_size{environment="$environment"})by (node_name)
             |||,
-            legendFormat: 'p10',
+            legendFormat: '{{node_name}} - p50',
           },
           {
             query: |||
-              quantile(0.50, search_zoekt_task_processing_queue_size{environment="$environment"})
+              quantile(0.90, search_zoekt_task_processing_queue_size{environment="$environment"})by (node_name)
             |||,
-            legendFormat: 'p50',
-          },
-          {
-            query: |||
-              quantile(0.90, search_zoekt_task_processing_queue_size{environment="$environment"})
-            |||,
-            legendFormat: 'p90',
+            legendFormat: '{{node_name}} - p90',
           },
         ],
         format='short',
