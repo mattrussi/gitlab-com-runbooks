@@ -47,7 +47,7 @@ For machines that we enroll in Ubuntu Pro, ESM (extended security maintenance) c
 
 #### Kernel Livepatch
 
-This service allows us to apply High and Critical severity security fixes to running machines without the need to reboot the instance. Each kernel supported by Livepatch has a limited [support period](https://ubuntu.com/security/livepatch/docs/livepatch/reference/kernels) ranging from 9-13 months, where they are elligible for updates before a reboot will be required to receive further updates. This means, at minimum, every machine should be restarted once a year to ensure critical kernel security fixes will be available.
+This service allows us to apply High and Critical severity security fixes to running machines without the need to reboot the instance. Each kernel supported by Livepatch has a limited [support period](https://ubuntu.com/security/livepatch/docs/livepatch/reference/kernels) ranging from 9-13 months, where they are eligible for updates before a reboot will be required to receive further updates. This means, at minimum, every machine should be restarted once a year to ensure critical kernel security fixes will be available.
 
 #### Requirements
 
