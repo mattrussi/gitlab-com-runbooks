@@ -6,7 +6,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 ## How to raise an incident
 
-- Go to the `#incidents` Slack channel.
+- Go to the `#incident-dotcom` Slack channel.
 - Type the command `/inc create`.
 - This opens a popup to declare an incident.
 - Give your incident a name and choose the incident type to be `Gitlab.com`.
@@ -70,3 +70,4 @@ If you have issues logging in, please contact #it_help
 - Custom workflows to automatically invite the concerned team members to the incident.
 - On-call integration that allows you to directly page the required teams while declaring an incident.
 - Custom incident tickets.
+- Follow our epic [Implement incident.io - Improvements](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1489)

@@ -24,20 +24,20 @@ This document highlights the steps for responders on how to acknowledge incident
 
 This is something we are iterating on. The process is:
 
-1. [Acknowledge](#incident-io-incidents) the alert in PagerDuty within the reponse time.
+1. [Acknowledge](#production) the alert in PagerDuty within the response time.
 2. Check if it's related to an active incident. While we transition to incident.io , be sure to check for recent incidents in both:
    - [incident.io](https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JK9KV07AV2WZKHYZD1GTK5KB) (new)
    - [production engineering]() (old)
 1. If it is, respond according to the existing protocol for that incident
-2. You can declare an incident with the alert by clicking on the `declare incident` option or alternatively use the command `/inc create` to create one.
-![img](img/declare_from_alert.png)
+2. You can declare an incident by using the command `/inc create` to create one , all incidents of type `Gitlab.com` will be announced in `#incident-dotcom`
+
 1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/incident-io-staging-secondary/-/issues) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
 1. Begin [working on the alert](#working-on-the-alert)
 
 ### Working on the Alert
 
-When working on an alert, you'll collaborate in the incident-specific Slack channel created by [incident.io](). Use the incident's Slack channel for all investigation notes and updates. Key information can be pinned using the :pushpin: emoji, which will automatically be reflected in the incident.io dashboard and GitLab issue.
+When working on an alert, you'll collaborate in the incident-specific Slack channel created by [incident.io](incident-management.md#navigating-through-an-incident). Use the incident's Slack channel for all investigation notes and updates. Key information can be pinned using the :pushpin: emoji, which will automatically be reflected in the incident.io dashboard and GitLab issue.
 
 * In Grafana, click `Share` > `Copy` for the link; this will ensure the link is locked to the chosen time. **Note**: `Shorten URL` does not work.
 * In OpenSearch, click `Share`, enable `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
@@ -75,7 +75,7 @@ We manage incidents using [incident.io](incident-management.md). When an inciden
 Active incidents are managed through:
 - The incident-specific Slack channel created by incident.io
 - The automatically created GitLab issue in the [incident management project](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/incident-management/-/issues)
-- The incident.io dashboard - see [Navigating through an incident]()
+- The incident.io dashboard - see [Navigating through an incident](incident-management.md#navigating-through-an-incident)
 
 [View currently active incidents](https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JK9KV07AV2WZKHYZD1GTK5KB).
 
