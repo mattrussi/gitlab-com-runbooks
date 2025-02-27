@@ -13,7 +13,6 @@ This document highlights the basic onboarding steps to incident.io.
 - You can choose if you wish to block deployments/feature flags by selecting `yes` from the respective dropdown menu
 - You can also choose to keep the issue confidential by selecting `Yes` from the dropdown menu
 
-
 <details>
   <summary>Click to expand image</summary>
 
