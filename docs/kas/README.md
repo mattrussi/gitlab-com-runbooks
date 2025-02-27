@@ -17,7 +17,7 @@
 ## Troubleshooting Pointers
 
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
-* [Cells and AMP Documentation](../cells/amp.md)
+* [Cells and Amp Documentation](../cells/amp.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Kubernetes-Agent Basic Troubleshooting](kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](kubernetes-agent-disable-integrations.md)
