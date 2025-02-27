@@ -9,11 +9,16 @@ This document highlights the basic onboarding steps to incident.io.
 - Go to the `#incidents` Slack channel.
 - Type the command `/inc create`.
 - This opens a popup to declare an incident.
-- Give your incident a name and choose the incident type to be `Dedicated`.
-- When declaring the incident do not select the `Triage` incident type (this is unused in dedicated for now)
+- Give your incident a name and choose the incident type to be `Gitlab.com`.
+- You can choose if you wish to block deployments/feature flags by selecting `yes` from the respective dropdown menu
+- You can also choose to keep the issue confidential by selecting `Yes` from the dropdown menu
+
 
 <details>
   <summary>Click to expand image</summary>
+
+  ![img](img/declare.png)
+
 </details>
 
 ## Navigating through an incident
