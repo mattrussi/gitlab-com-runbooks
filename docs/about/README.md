@@ -83,6 +83,7 @@
 * [PostgreSQL subtransactions](../patroni/postgresql-subtransactions.md)
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [Postgresql](../patroni/postgresql.md)
+* [SQL query analysis and optimization for Postgres](../patroni/query-analysis.md)
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
 * [../pd-event-logger-7760xa/events.md](../pd-event-logger-7760xa/events.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)

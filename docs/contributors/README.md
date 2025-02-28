@@ -17,6 +17,7 @@
 
 * [contributors.gitlab.com](contributors-dashboard.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [High-level performance analysis and troubleshooting of a Postgres node](../patroni/single-node-high-level.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 <!-- END_MARKER -->
 
