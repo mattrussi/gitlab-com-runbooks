@@ -42,6 +42,7 @@
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+* [Postgres wait events analysis (a.k.a. Active Session History; ASH dashboard)](../patroni/wait-events-analisys.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
