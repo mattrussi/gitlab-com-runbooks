@@ -6,7 +6,7 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 
 ## Prerequisites
 
-- Active staging.gitlab.com account, if you do not have one go to https://staging.gitlab.com/help to sign in with your GitLab email account
+- Active staging.gitlab.com account, if you do not have one go to [staging](https://staging.gitlab.com/help) to sign in with your GitLab email account
 - Existing Ultimate/Premium license on staging
 - GitLab.org group membership
 
