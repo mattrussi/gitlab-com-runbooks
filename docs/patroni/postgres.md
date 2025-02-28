@@ -43,6 +43,15 @@ Some relevant dashboards:
 
 - [Postgres Queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?orgId=1&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=prometheus-01-inf-gprd)
 
+:new: As of October 2024, there are also new dashboards for Postgres performance analysis and troubleshooting:
+
+1. [Postgres node performance overview (high-level)](https://dashboards.gitlab.net/d/postgres-ai-node-performance-overview)
+2. [Postgres aggregated query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_02)
+3. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
+4. [Postgres wait events analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04)
+
+See also: [Runbook "High-level performance analysis and troubleshooting of a Postgres node"](./single-node-high-level.md).
+
 ## Availability
 
 Alerts that check for availability are XIDConsumptionTooLow
