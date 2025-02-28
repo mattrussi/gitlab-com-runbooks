@@ -53,15 +53,19 @@ Important investigation details to document:
 
 As you work through an investigation, it is important to keep track of any ~"corrective actions"s (label: `~corrective action`) that need to be followed up on. Some strategies are to note these in the `Investigation Thread` or create a separate `Corrective Actions` thread to keep as reference. Once the Incident is over, the EOC should create Issues for the ~"corrective actions"s, as detailed in [Post-Incident Responsibilities](#post-incident-responsibilities).
 
-# Manual Escalation
+# Escalation
 
-- These steps highlights the way to manually escalate to a team or individual , CMOC , IMOC during an incident
+- These steps highlights the way to escalate to a team or individual , CMOC , IMOC during an incident
 
-- From the incident channel once you wish to manually escalate to a team / individual , use the command `/inc escalate` , this should trigger an escalation form pop-up
+- From the incident channel once you wish to escalate to a team / individual , use the command `/inc escalate` , this should trigger an escalation form pop-up
 
 ![img](img/escalate.png)
 
 - Choose the oncall team you wish to escalate to from the drop-down menu / the individual you wish to escalate to , you can enter an optional notification message you would wish for the responder to see
+
+- Page Security : for medium/high severity incidents, refer to how to engage the [SEOC](https://handbook.gitlab.com/handbook/security/security-operations/sirt/engaging-security-on-call/#engage-the-security-engineer-on-call). For lower severity incidents, refer to the [incident severity table](https://handbook.gitlab.com/handbook/security/security-operations/sirt/engaging-security-on-call/#incident-severity) to determine the right course of action
+
+- Page Dev : by typing /devoncall incident-issue-url into #dev-escalation. Handbook
 
 **_Note- When escalating from a woodhouse generated Slack channel please mention the incident slack channel in the Notification Message_**
 
@@ -100,4 +104,16 @@ The incident is resolved when it is fully addressed. Use incident.io's [Post-Inc
 
 ## Post-Incident Responsibilities
 
-## Prioritization
+- Follow-ups are a way for your team to capture something that needs to be done after an incident is closed. These will come in all shapes and sizes, from an urgent task such as reverting a temporary workaround, to a low priority task such as investigating how to move to a new cloud provider. You are able to assign each follow-up a priority, to capture this level of importance within incident.io.
+
+- Create follow-ups by using the command `/inc follow-up` , this opens up a form , fill in the required title and assign it to yourself or someone else as required
+
+![img](img/followup.png)
+
+
+- Alternatively you can also create a follow-up by reacting :fast_forward: to a message on Slack , this creates a Gitlab issue
+
+<p align="left">
+<img src="img/followup2.png" alt="via mobile application" width="50%" height="auto">
+<img src="img/gitlabissue.png" alt="via mobile application" width="50%" height="auto">
+</p>
