@@ -55,13 +55,13 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 # Manual Escalation
 
-- These steps highlights the way to manually escalate to a team or individual during an incident
+- These steps highlights the way to manually escalate to a team or individual , CMOC , IMOC during an incident
 
 - From the incident channel once you wish to manually escalate to a team / individual , use the command `/inc escalate` , this should trigger an escalation form pop-up
 
 ![img](img/escalate.png)
 
-- Choose the team you wish to escalate to from the drop-down menu / the individual you wish to escalate to , you can enter an optional notification message you would wish for the responder to see
+- Choose the oncall team you wish to escalate to from the drop-down menu / the individual you wish to escalate to , you can enter an optional notification message you would wish for the responder to see
 
 **_Note- When escalating from a woodhouse generated Slack channel please mention the incident slack channel in the Notification Message_**
 
