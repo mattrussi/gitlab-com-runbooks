@@ -26,8 +26,8 @@ This is something we are iterating on. The process is:
 
 1. Acknowledge page within the response time.
 2. Check if it's related to an active incident in the [Production project](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100)
-2. You can declare an incident by using the command `/inc create` to create one , all incidents of type `Gitlab.com` will be announced in `#incident-dotcom`
-2. This will generate an incident Slack channel and Zoom call for you.
+2. You can declare an incident by using the command `/inc create` to create one , all incidents will typically be announced in the `#incidents` channel , to only view annoucements for incidents of type `Gitlab.com` please navigate to `#incidents-dotcom`
+2. Declaring an incident will generate an incident Slack channel and Zoom call for you.
 3. You can choose to **Block Deployments** , **Feature Flags** , or **Keeping the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
 
 ![img](img/custom.png)
