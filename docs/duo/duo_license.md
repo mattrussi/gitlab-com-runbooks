@@ -1,5 +1,3 @@
-<!-- Permit linking to GitLab docs and issues -->
-<!-- markdownlint-disable MD034 -->
 # Duo Enterprise License Access Process for Staging Environment
 
 This guide explains how to self-service Duo Enterprise license access in the staging environment for backend developers, SREs, and other engineers who need to test AI features.
@@ -10,8 +8,18 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 
 - Active staging.gitlab.com account, if you do not have one go to https://staging.gitlab.com/help to sign in with your GitLab email account
 - Existing Ultimate/Premium license on staging
-- Access to Okta for Zuora SSO
 - GitLab.org group membership
+
+## Access Request Process for Zuora Sandbox
+
+Before you can manage licenses in Zuora, you'll need access to the Zuora Central Sandbox environment:
+
+1. Create an Access Request issue in the [access-requests project](https://gitlab.com/gitlab-com/team-member-epics/access-requests)
+2. Request access to **[Staging] Zuora Central Sandbox (Tenant ID: 10000796)**
+3. Provide a justification (e.g., "Need to test Duo Enterprise licensing")
+4. Your manager will need to approve the request with proper labels
+
+After approval, a member of the fulfillment team will provision your Zuora access.
 
 ## Self-Service Process
 
@@ -22,17 +30,16 @@ This guide explains how to self-service Duo Enterprise license access in the sta
 
 ### Add Duo License Through Zuora
 
-1. Access Zuora through Okta SSO
-2. Select the Central Sandbox ("Staging") environment
-3. Use search bar (or CMD+K) to locate your subscription using the Zuora ID
-4. Click "Create order"
-5. Select "Add product"
-6. Choose Duo Enterprise version
+1. Access Zuora through Okta SSO (Central Sandbox - Staging environment)
+2. Use search bar (or CMD+K) to locate your subscription using the Zuora ID
+3. Click "Create order"
+4. Select "Add product"
+5. Choose Duo Enterprise version
    - Click the arrow next to the product
    - Select desired renewal rate
    - Check the box to confirm selection
-7. Click "Add product"
-8. Click "Activate"
+6. Click "Add product"
+7. Click "Activate"
 
 ### Verify License Access
 
@@ -68,7 +75,8 @@ The GitLab AI Features Health Check will surface specific errors if there are is
 
 - [AI Features Documentation](https://docs.gitlab.com/development/ai_features/)
 - [Code Suggestions Setup Guide](https://docs.gitlab.com/development/code_suggestions/)
-- [License Management Guidelines for Code Suggestions](https://docs.gitlab.com/development/code_suggestions/#setup-instructions-to-use-gdk-with-the-code-suggestions-add-on) and [CLOUD_CONNECTOR_SELF_SIGN_TOKENS environment variable](https://docs.gitlab.com/development/ai_features/#optional-set-cloud_connector_self_sign_tokens-environment-variable)
+- [License Management Guidelines for Code Suggestions](https://docs.gitlab.com/development/code_suggestions/#setup-instructions-to-use-gdk-with-the-code-suggestions-add-on)
+- [CLOUD_CONNECTOR_SELF_SIGN_TOKENS environment variable](https://docs.gitlab.com/development/ai_features/#optional-set-cloud_connector_self_sign_tokens-environment-variable)
 
 ## Support Channels
 
