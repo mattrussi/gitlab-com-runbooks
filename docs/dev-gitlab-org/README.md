@@ -11,7 +11,10 @@
 
 ## Logging
 
-* [](https://nonprod-log.gitlab.net/app/r/s/FUSMg)
+* [Rails](https://nonprod-log.gitlab.net/app/r/s/FUSMg)
+* [Gitaly](https://nonprod-log.gitlab.net/app/r/s/DUsV1)
+* [GitLab Shell](https://nonprod-log.gitlab.net/app/r/s/nDLCx)
+* [Sidekiq](https://nonprod-log.gitlab.net/app/r/s/k0z53)
 
 ## Troubleshooting Pointers
 
