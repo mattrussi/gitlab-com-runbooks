@@ -902,13 +902,6 @@
             },
             {
                "includeAll": false,
-               "name": "shard",
-               "query": "label_values(node_uname_info{type=\"hosted-runners\"},shard)",
-               "refresh": 1,
-               "type": "query"
-            },
-            {
-               "includeAll": false,
                "name": "service",
                "query": "label_values(node_uname_info{type=\"hosted-runners\", shard=\"$shard\"},service)",
                "refresh": 1,

@@ -20,15 +20,6 @@ local row = grafana.row;
       .addTemplate($._runnerManagerTemplate)
       .addTemplate(
         {
-          name: 'shard',
-          type: 'query',
-          query: 'label_values(node_uname_info{type="hosted-runners"},shard)',
-          includeAll: false,
-          refresh: 1,
-        }
-      )
-      .addTemplate(
-        {
           name: 'service',
           type: 'query',
           query: 'label_values(node_uname_info{type="hosted-runners", shard="$shard"},service)',
