@@ -64,6 +64,150 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_apdex_success_total:rate_5m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_apdex_total:rate_5m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_total:rate_5m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_glql_query_error_total:rate_5m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_5m
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_errors:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300))
+            )
+            /
+            (gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_5m
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 300)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
       component: graphql_query
       monitor: global
       tier: sv
@@ -697,6 +841,150 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_apdex_success_total:rate_30m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_apdex_total:rate_30m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_total:rate_30m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_glql_query_error_total:rate_30m{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_30m
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_errors:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800))
+            )
+            /
+            (gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_30m
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800))
+            )
+            /
+            (gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: graphql_query
       monitor: global
       tier: sv
@@ -1327,6 +1615,150 @@ groups:
       /
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="global_search",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_apdex_success_total:rate_1h{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_apdex_total:rate_1h{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_glql_query_total:rate_1h{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_glql_query_error_total:rate_1h{endpoint_id!="glql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_1h
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_errors:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600))
+            )
+            /
+            (gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_1h
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 3600)),
+        0, 1
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1973,6 +2405,142 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_6h
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_errors:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600))
+            )
+            /
+            (gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_6h
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: graphql_query
       monitor: global
       tier: sv
@@ -2585,6 +3153,142 @@ groups:
       /
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_3d{component="global_search",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: glql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_3d
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_errors:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200))
+            )
+            /
+            (gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_3d
+    labels:
+      component: glql_query
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      clamp_min(gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}) * (1 - (gitlab_component_apdex:success:rate_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} / gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200))
+            )
+            /
+            (gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_3d{component="glql_query",env="pre",monitor="global",tier="sv",type="api"} * 259200)),
+        0, 1
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:

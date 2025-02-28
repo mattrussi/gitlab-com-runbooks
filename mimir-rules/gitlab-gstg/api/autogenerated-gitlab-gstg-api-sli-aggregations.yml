@@ -14,6 +14,29 @@ groups:
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,search_level,search_scope,search_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_global_search_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: api - glql_query - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_glql_query_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_apdex_total:rate_5m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_error_total:rate_5m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_error_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_total:rate_5m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - graphql_query - 5m burn-rate'
   interval: 1m
   rules:
@@ -105,6 +128,29 @@ groups:
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,search_level,search_scope,search_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_global_search_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: api - glql_query - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_glql_query_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_apdex_total:rate_30m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_error_total:rate_30m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_error_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_total:rate_30m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - graphql_query - 30m burn-rate'
   interval: 2m
   rules:
@@ -195,6 +241,29 @@ groups:
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,search_level,search_scope,search_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_global_search_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - glql_query - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_glql_query_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_apdex_total:rate_1h
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_error_total:rate_1h
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_error_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_glql_query_total:rate_1h
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_glql_query_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: api - graphql_query - 1h burn-rate'
   interval: 1m
