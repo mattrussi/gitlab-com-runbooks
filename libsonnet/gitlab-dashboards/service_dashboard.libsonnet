@@ -42,6 +42,7 @@ local headlineMetricsRow(
   selectorHash,
   showSaturationCell,
   stableIdPrefix='',
+  useTimeSeriesPlugin=false,
       ) =
   local hasApdex = metricsCatalogServiceInfo.hasApdex();
   local hasErrorRate = metricsCatalogServiceInfo.hasErrorRate();
@@ -60,7 +61,8 @@ local headlineMetricsRow(
     showOpsRate=hasRequestRate,
     showSaturationCell=showSaturationCell,
     compact=false,
-    rowHeight=10
+    rowHeight=10,
+    useTimeSeriesPlugin=useTimeSeriesPlugin,
   );
 
 local overviewDashboard(
@@ -77,6 +79,7 @@ local overviewDashboard(
   showProvisioningDetails=true,
   showSystemDiagrams=true,
   expectMultipleSeries=false,
+  useTimeSeriesPlugin=false,
       ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
@@ -110,7 +113,8 @@ local overviewDashboard(
         startRow=startRow,
         metricsCatalogServiceInfo=metricsCatalogServiceInfo,
         selectorHash=selectorHash,
-        showSaturationCell=std.length(saturationComponents) > 0
+        showSaturationCell=std.length(saturationComponents) > 0,
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     .addPanels(
