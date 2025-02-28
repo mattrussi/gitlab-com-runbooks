@@ -2620,11 +2620,12 @@ services:
         security:
       logging:
         - name:
-          permalink:
+          permalink: https://nonprod-log.gitlab.net/app/r/s/FUSMg
     observability:
       monitors:
         grafana_folder:
-        primary_grafana_dashboard:
+        primary_grafana_dashboard: # Do not have at the moment. Good start: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&from=now-3h&to=now&timezone=utc&var-env=ops&var-node=dev-1-01-sv-dev-1.c.gitlab-dev-1.internal
+        sentry_slug: https://new-sentry.gitlab.net/organizations/gitlab/projects/gitlabcom/?environment=dev&project=3
 
   - name: istio
     tier: inf
