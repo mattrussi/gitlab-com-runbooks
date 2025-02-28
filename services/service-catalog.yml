@@ -2619,8 +2619,14 @@ services:
         service:
         security:
       logging:
-        - name:
+        - name: Rails
           permalink: https://nonprod-log.gitlab.net/app/r/s/FUSMg
+        - name: Gitaly
+          permalink: https://nonprod-log.gitlab.net/app/r/s/DUsV1
+        - name: GitLab Shell
+          permalink: https://nonprod-log.gitlab.net/app/r/s/nDLCx
+        - name: Sidekiq
+          permalink: https://nonprod-log.gitlab.net/app/r/s/k0z53
     observability:
       monitors:
         grafana_folder:
