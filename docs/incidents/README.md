@@ -43,5 +43,5 @@ curl \
 ```
 
 - `<channel ID>`: is the channel ID of the channel you wish to rename. To find this, click the channel in Slack and scroll to the bottom where you will see `Channel ID: <id>`.
-- `<bearer token>`: `SLACK_BOT_ACCESS_TOKEN` in [woodhouse CI variables](https://ops.gitlab.net/gitlab-com/gl-infra/woodhouse/-/settings/ci_cd).
+- `<bearer token>`: `SLACK_BOT_ACCESS_TOKEN` in [vault for Woodhouse Runway deployment](https://vault.gitlab.net/ui/vault/secrets/runway/kv/env%2Fproduction%2Fservice%2Fwoodhouse-slack%2FSLACK_BOT_ACCESS_TOKEN).
 - `incident-XXXXX` is the new name of the channel.
