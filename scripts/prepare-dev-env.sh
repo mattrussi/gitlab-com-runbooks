@@ -63,6 +63,7 @@ fi
 echo "installing required plugins with mise install.."
 mise plugins update
 mise install
+eval "$(mise activate bash)"
 
 # pre-commit is optional
 if command -v pre-commit &>/dev/null; then
