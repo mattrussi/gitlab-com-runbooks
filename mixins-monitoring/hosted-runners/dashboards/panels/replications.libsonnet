@@ -27,7 +27,7 @@ local latency(selector) =
   basic.timeseries(
     title='Replication latency',
     legendFormat='Latency',
-    format='short',
+    format='ms',
     query=|||
         avg_over_time(aws_s3_replication_latency_maximum{%(selector)s}[10m])
     ||| % { selector: selector }
