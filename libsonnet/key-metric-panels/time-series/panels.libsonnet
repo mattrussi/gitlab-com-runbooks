@@ -10,7 +10,7 @@ local defaultApdexDescription = 'Apdex is a measure of requests that complete wi
 local generalPanel(
   title,
   description=null,
-  linewidth=2,
+  linewidth=3,
   legend_show=true,
       ) =
   panel.basic(
@@ -42,7 +42,7 @@ local genericApdexPanel(
     title,
     description=description,
     legend_show=if legend_show == null then !compact else legend_show,
-    linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
+    linewidth=if linewidth == null then if compact then 2 else 3 else linewidth,
   )
   .addTarget(  // Primary metric (worst case)
     target.prometheus(
@@ -91,7 +91,7 @@ local apdexPanel(
     compact=compact,
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
     legendFormat=legendFormat,
-    linewidth=if expectMultipleSeries then 1 else 2,
+    linewidth=if expectMultipleSeries then 2 else 3,
     selectorHash=selectorHashWithExtras,
     fixedThreshold=fixedThreshold,
     shardLevelSli=shardLevelSli,
@@ -153,7 +153,7 @@ local apdexPanel(
     .addSeriesOverride(seriesOverrides.goldenMetric(confidenceSignalSeriesName))
     .addSeriesOverride({
       alias: legendFormat,
-      color: '#082e69',
+      color: '#082e6980',
       lines: true,
     })
   else
