@@ -40,14 +40,11 @@ This is something we are iterating on. The process is:
 
 When working on an alert, you'll collaborate in the incident-specific Slack channel created by [incident.io](incident-management.md#navigating-through-an-incident). Use the incident's Slack channel for all investigation notes and updates. Key information can be pinned using the :pushpin: emoji, which will automatically be reflected in the incident.io dashboard and GitLab issue.
 
-- In Grafana, click `Share`; this will copy a shortened link including the selected time range.
-- In Kibana, click `Share` > `Get Links` > Toggle `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
-
 Important investigation details to document:
 
 1. Screenshots and evidence: If any information is provided via screenshots, make sure to add a `Source` link to each screenshot. Make sure to use absolute time - and not `Last x hours` or `now-x hours`.
    1. In Grafana, click `Share` > `Copy` for the link; this will ensure the link is locked to the chosen time. **Note**: `Shorten URL` does not work.
-   1. In OpenSearch, click `Share`, enable `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
+   1. In Kibana, click `Share` > `Get Links` > Toggle `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
 1. Use Zoom calls when needed for real-time collaboration, and utilize incident.io's Scribe feature to summarize call discussions directly in the incident channel.
 1. Regular status updates can be posted using incident.io's update feature via the `/inc` command.
 
