@@ -24,7 +24,7 @@ This document highlights the steps for responders on how to acknowledge incident
 
 This is something we are iterating on. The process is:
 
-1. Acknowledge page within the response time.
+1. Acknowledge page within the response time ie: within 15 minutes , 10 minutes for Customer Emergency On-Call Rotation
 1. Check if it's related to an active incident in the [Production project](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100)
 1. You can declare an incident by using the command `/inc create`. All incidents will typically be announced in the `#incidents` channel. To only view announcements for incidents of type `Gitlab.com`, please navigate to `#incidents-dotcom`.
 1. Declaring an incident will generate an incident Slack channel and Zoom call for you.
