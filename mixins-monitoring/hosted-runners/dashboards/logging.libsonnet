@@ -6,12 +6,17 @@ local runnerPanels = import './panels/runner.libsonnet';
 local fluentdPanels = import './panels/fluentd.libsonnet';
 local replicationPanels = import './panels/replications.libsonnet';
 
+
 local row = grafana.row;
 
 {
   _runnerManagerTemplate:: $._config.templates.runnerManager,
 
   _fluentdPluginTemplate:: $._config.templates.fluentdPlugin,
+
+  _fluentdPanels:: fluentdPanels.new($._config.fluentdPluginSelector),
+
+  _replicationPanels:: replicationPanels.new($._config.replicationSelector),
 
   grafanaDashboards+:: {
     'logging.json':
@@ -36,23 +41,23 @@ local row = grafana.row;
         row.new(title='Fluentd Operations'),
         gridPos={ x: 0, y: 1000, w: 24, h: 1 }
       ).addPanels(layout.grid([
-        fluentdPanels.emitRecords($._config.fluentdPluginSelector),
-        fluentdPanels.retryWait($._config.fluentdPluginSelector),
-        fluentdPanels.writeCounts($._config.fluentdPluginSelector),
-        fluentdPanels.errorAndRetryRate($._config.fluentdPluginSelector),
-        fluentdPanels.outputFlushTime($._config.fluentdPluginSelector),
-        fluentdPanels.bufferLength($._config.fluentdPluginSelector),
-        fluentdPanels.bufferTotalSize($._config.fluentdPluginSelector),
-        fluentdPanels.bufferFreeSpace($._config.fluentdPluginSelector),
+        $._fluentdPanels.emitRecords,
+        $._fluentdPanels.retryWait,
+        $._fluentdPanels.writeCounts,
+        $._fluentdPanels.errorAndRetryRate,
+        $._fluentdPanels.outputFlushTime,
+        $._fluentdPanels.bufferLength,
+        $._fluentdPanels.bufferTotalSize,
+        $._fluentdPanels.bufferFreeSpace,
       ], cols=4, rowHeight=8, startRow=1001))
       .addPanel(
         row.new(title='Replication Metrics'),
         gridPos={ x: 0, y: 2000, w: 24, h: 1 }
       ).addPanels(layout.grid([
-        replicationPanels.pendingOperations($._config.replicationSelector),
-        replicationPanels.latency($._config.replicationSelector),
-        replicationPanels.bytesPending($._config.replicationSelector),
-        replicationPanels.operationsFailed($._config.replicationSelector),
+        $._replicationPanels.pendingOperations($._config.replicationSelector),
+        $._replicationPanels.latency($._config.replicationSelector),
+        $._replicationPanels.bytesPending($._config.replicationSelector),
+        $._replicationPanels.operationsFailed($._config.replicationSelector),
       ], cols=4, rowHeight=8, startRow=2001))
   }
 }

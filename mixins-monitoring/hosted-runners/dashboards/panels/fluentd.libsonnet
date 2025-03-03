@@ -1,5 +1,6 @@
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 local emitRecords(selector) =
   basic.timeseries(
@@ -107,13 +108,18 @@ local bufferFreeSpace(selector) =
     ||| % { selector: selector }
   );
 
-{
-    emitRecords:: emitRecords,
-    retryWait:: retryWait,
-    writeCounts:: writeCounts,
-    errorAndRetryRate:: errorAndRetryRate,
-    outputFlushTime:: outputFlushTime,
-    bufferLength:: bufferLength,
-    bufferTotalSize:: bufferTotalSize,
-    bufferFreeSpace:: bufferFreeSpace
+{ 
+  new(selectorHash):: {
+    local selector = selectors.serializeHash(selectorHash),
+
+    emitRecords:: emitRecords(selector),
+    retryWait:: retryWait(selector),
+    writeCounts:: writeCounts(selector),
+    errorAndRetryRate:: errorAndRetryRate(selector),
+    outputFlushTime:: outputFlushTime(selector),
+    bufferLength:: bufferLength(selector),
+    bufferTotalSize:: bufferTotalSize(selector),
+    bufferFreeSpace:: bufferFreeSpace(selector)
+  }
 }
+

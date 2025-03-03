@@ -1,5 +1,6 @@
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 local barPanel(title, legendFormat, format, query ) =
     basic.timeseries(
@@ -55,8 +56,12 @@ local operationsFailed(selector) =
   );
 
 {
+  new(selectorHash):: {
+    local selector = selectors.serializeHash(selectorHash),
+
     pendingOperations:: pendingOperations,
     latency:: latency,
     bytesPending:: bytesPending,
     operationsFailed:: operationsFailed
+  }
 }
