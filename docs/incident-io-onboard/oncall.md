@@ -10,7 +10,7 @@ This document highlights the steps for responders on how to acknowledge incident
 
 ![via Slack](img/ack.png)
 
-- This is how it would look like on the incident.io mobile app , to view the `Alerts` attatched to the incident , you can switch to the Alerts tab
+- See the following screenshots of the incident.app mobile app showing a page that has been received. To view the alerts, you can switch to the _Alerts_ tab.
 
 <p align="left">
 <img src="img/1_phone.jpg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle; margin-right: 1%;">
@@ -25,12 +25,12 @@ This document highlights the steps for responders on how to acknowledge incident
 This is something we are iterating on. The process is:
 
 1. Acknowledge page within the response time.
-2. Check if it's related to an active incident in the [Production project](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100)
-2. You can declare an incident by using the command `/inc create` to create one , all incidents will typically be announced in the `#incidents` channel , to only view annoucements for incidents of type `Gitlab.com` please navigate to `#incidents-dotcom`
-2. Declaring an incident will generate an incident Slack channel and Zoom call for you.
-3. You can choose to **Block Deployments** , **Feature Flags** , or **Keeping the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
+1. Check if it's related to an active incident in the [Production project](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100)
+1. You can declare an incident by using the command `/inc create`. All incidents will typically be announced in the `#incidents` channel. To only view announcements for incidents of type `Gitlab.com`, please navigate to `#incidents-dotcom`.
+1. Declaring an incident will generate an incident Slack channel and Zoom call for you.
+1. You can choose to **Block Deployments**, **Feature Flags**, or **Keep the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
 
-![img](img/custom.png)
+    ![img](img/custom.png)
 
 1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/production) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
@@ -40,8 +40,8 @@ This is something we are iterating on. The process is:
 
 When working on an alert, you'll collaborate in the incident-specific Slack channel created by [incident.io](incident-management.md#navigating-through-an-incident). Use the incident's Slack channel for all investigation notes and updates. Key information can be pinned using the :pushpin: emoji, which will automatically be reflected in the incident.io dashboard and GitLab issue.
 
-- In Grafana, click `Share` > `Copy` for the link; this will ensure the link is locked to the chosen time. **Note**: `Shorten URL` does not work.
-- In OpenSearch, click `Share`, enable `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
+- In Grafana, click `Share`; this will copy a shortened link including the selected time range.
+- In Kibana, click `Share` > `Get Links` > Toggle `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
 
 Important investigation details to document:
 
