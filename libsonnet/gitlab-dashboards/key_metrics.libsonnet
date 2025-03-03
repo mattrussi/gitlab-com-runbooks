@@ -73,7 +73,8 @@ local getColumnWidths(
     staticTitlePrefix=null,
     legendFormatPrefix=null,
     includeLastWeek=true,
-    fixedThreshold=null
+    fixedThreshold=null,
+    useTimeSeriesPlugin=false,
   )::
     local typeHash = if serviceType == null then {} else { type: serviceType };
     local selectorHashWithExtras = selectorHash + typeHash;
@@ -104,7 +105,8 @@ local getColumnWidths(
         includePredictions=true,
         compact=compact,
         includeLastWeek=includeLastWeek,
-        fixedThreshold=fixedThreshold
+        fixedThreshold=fixedThreshold,
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
       +
       (

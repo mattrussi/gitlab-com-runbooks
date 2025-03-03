@@ -2,6 +2,7 @@ local apdexPanel = import './apdex-panel.libsonnet';
 local errorRatioPanel = import './error-ratio-panel.libsonnet';
 local operationRatePanel = import './operation-rate-panel.libsonnet';
 local statusDescription = import './status_description.libsonnet';
+local panels = import './time-series/panels.libsonnet';
 
 local selectorToGrafanaURLParams(selectorHash) =
   local pairs = std.foldl(
@@ -34,6 +35,7 @@ local row(
   includeLastWeek=true,
   fixedThreshold=null,
   shardLevelSli=false,
+  useTimeSeriesPlugin=false,
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
   local selectorHashWithExtras = selectorHash + typeSelector;
@@ -50,25 +52,45 @@ local row(
     if showApdex then
       [
         [
-          apdexPanel.panel(
-            title='%(titlePrefix)s Apdex' % formatConfig,
-            sli=sli,
-            aggregationSet=aggregationSet,
-            selectorHash=selectorHashWithExtras,
-            stableId='%(stableIdPrefix)s-apdex' % formatConfig,
-            legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
-            description=apdexDescription,
-            expectMultipleSeries=expectMultipleSeries,
-            compact=compact,
-            fixedThreshold=fixedThreshold,
-            includeLastWeek=includeLastWeek,
-            shardLevelSli=shardLevelSli
-          )
-          .addDataLink({
-            url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
-            title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
-            targetBlank: true,
-          }),
+          if useTimeSeriesPlugin then
+            panels.apdex(
+              title='%(titlePrefix)s Apdex' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
+              description=apdexDescription,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli,
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
+              title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
+              targetBlank: true,
+            })
+          else
+            apdexPanel.panel(
+              title='%(titlePrefix)s Apdex' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              stableId='%(stableIdPrefix)s-apdex' % formatConfig,
+              legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
+              description=apdexDescription,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
+              title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
+              targetBlank: true,
+            }),
         ]
         +
         (
