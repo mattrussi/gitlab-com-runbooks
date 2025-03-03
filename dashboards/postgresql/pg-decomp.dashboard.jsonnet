@@ -443,6 +443,7 @@ basic.dashboard(
 
 .addTemplate(sourceClusterNameTemplate)
 .addTemplate(destinationClusterNameTemplate)
+.addTemplate(versionTemplate)
 .addPanel(context, gridPos={ x: 0, y: 0, w: 6, h: 7 })
 .addPanel(clusterLeft, gridPos={ x: 0, y: 7, w: 6, h: 3 })
 .addPanel(logicalReplicationLag, gridPos={ x: 6, y: 0, w: 12, h: 10 })
