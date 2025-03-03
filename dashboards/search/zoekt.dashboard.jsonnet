@@ -186,7 +186,7 @@ basic.dashboard(
         queries=[
           {
             query: |||
-              quantile(0.50, search_zoekt_task_processing_queue_size{environment="$environment"})by (node_name)
+              quantile by (node_name) (0.50, search_zoekt_task_processing_queue_size{environment="$environment"})
             |||,
             legendFormat: '{{node_name}} - p50',
           },
