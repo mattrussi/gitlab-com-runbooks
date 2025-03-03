@@ -16,7 +16,7 @@ This document outlines the steps to troubleshoot issues related to the alert `Ho
 - Use the CloudWatch log filtering feature to search for the keyword `s3`.
 - Review all error entries that pertain to the S3 plugin.
 
-### 6. Analyze the Errors
+6. **Analyze the Errors**
 
 - Identify the specific error messages related to the S3 plugin.
 - Common issues to look for:
