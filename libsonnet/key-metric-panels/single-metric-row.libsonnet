@@ -115,24 +115,43 @@ local row(
     if showErrorRatio then
       [
         [
-          errorRatioPanel.panel(
-            '%(titlePrefix)s Error Ratio' % formatConfig,
-            sli=sli,
-            aggregationSet=aggregationSet,
-            selectorHash=selectorHashWithExtras,
-            stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
-            legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
-            expectMultipleSeries=expectMultipleSeries,
-            compact=compact,
-            fixedThreshold=fixedThreshold,
-            includeLastWeek=includeLastWeek,
-            shardLevelSli=shardLevelSli
-          )
-          .addDataLink({
-            url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
-            title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
-            targetBlank: true,
-          }),
+          if useTimeSeriesPlugin then
+            panels.errorRatio(
+              '%(titlePrefix)s Error Ratio' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
+              title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
+              targetBlank: true,
+            })
+          else
+            errorRatioPanel.panel(
+              '%(titlePrefix)s Error Ratio' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
+              legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
+              title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
+              targetBlank: true,
+            }),
         ]
         +
         (
