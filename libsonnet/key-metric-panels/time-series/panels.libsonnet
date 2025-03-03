@@ -1,73 +1,7 @@
 local sliPromQL = import '../sli_promql.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
-
-local defaultApdexDescription = 'Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.';
-
-local generalPanel(
-  title,
-  description=null,
-  linewidth=3,
-  legend_show=true,
-      ) =
-  panel.basic(
-    title,
-    linewidth=linewidth,
-    description=if description == null then defaultApdexDescription else description,
-    legend_show=legend_show,
-    unit='percentunit',
-  )
-  .addSeriesOverride(seriesOverrides.degradationSlo)
-  .addSeriesOverride(seriesOverrides.outageSlo)
-  .addSeriesOverride(seriesOverrides.shardLevelSli);
-
-local genericApdexPanel(
-  title,
-  description=null,
-  compact=false,
-  primaryQueryExpr,
-  legendFormat,
-  linewidth=null,
-  sort='increasing',
-  legend_show=null,
-  expectMultipleSeries=false,
-  selectorHash,
-  fixedThreshold=null,
-  shardLevelSli
-      ) =
-  generalPanel(
-    title,
-    description=description,
-    legend_show=if legend_show == null then !compact else legend_show,
-    linewidth=if linewidth == null then if compact then 2 else 3 else linewidth,
-  )
-  .addTarget(  // Primary metric (worst case)
-    target.prometheus(
-      primaryQueryExpr,
-      legendFormat=legendFormat,
-    )
-  )
-  .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
-    target.prometheus(
-      sliPromQL.apdex.serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold, shardLevelSli),
-      interval='5m',
-      legendFormat='6h Degradation SLO (5% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
-    ),
-  )
-  .addTarget(  // Double apdex SLO is Outage-level SLO
-    target.prometheus(
-      sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash, fixedThreshold, shardLevelSli),
-      interval='5m',
-      legendFormat='1h Outage SLO (2% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
-    ),
-  )
-  .addYaxis(
-    max=1,
-    label=if compact then '' else 'Apdex %',
-  );
 
 local apdexPanel(
   title,
@@ -83,23 +17,49 @@ local apdexPanel(
   fixedThreshold=null,
   shardLevelSli
       ) =
+  local defaultApdexDescription = 'Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.';
   local selectorHashWithExtras = selectorHash + aggregationSet.selector;
+  local linewidth = if expectMultipleSeries then 2 else 3;
 
-  local panel = genericApdexPanel(
-    title,
-    description=description,
-    compact=compact,
-    primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
-    legendFormat=legendFormat,
-    linewidth=if expectMultipleSeries then 2 else 3,
-    selectorHash=selectorHashWithExtras,
-    fixedThreshold=fixedThreshold,
-    shardLevelSli=shardLevelSli,
-  );
+  local panel =
+    panel.basic(
+      title,
+      linewidth=if linewidth == null then if compact then 2 else 3 else linewidth,
+      description=if description == null then defaultApdexDescription else description,
+      legend_show=!compact,
+      unit='percentunit',
+    )
+    .addSeriesOverride(seriesOverrides.degradationSlo)
+    .addSeriesOverride(seriesOverrides.outageSlo)
+    .addSeriesOverride(seriesOverrides.shardLevelSli)
+    .addTarget(  // Primary metric (worst case)
+      target.prometheus(
+        sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
+        legendFormat=legendFormat,
+      )
+    )
+    .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
+      target.prometheus(
+        sliPromQL.apdex.serviceApdexDegradationSLOQuery(selectorHashWithExtras, fixedThreshold, shardLevelSli),
+        interval='5m',
+        legendFormat='6h Degradation SLO (5% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
+      ),
+    )
+    .addTarget(  // Double apdex SLO is Outage-level SLO
+      target.prometheus(
+        sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHashWithExtras, fixedThreshold, shardLevelSli),
+        interval='5m',
+        legendFormat='1h Outage SLO (2% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
+      ),
+    )
+    .addYaxis(
+      max=1,
+      label=if compact then '' else 'Apdex %',
+    );
 
   local panelWithAverage = if !expectMultipleSeries then
     panel.addTarget(  // Primary metric (avg case)
-      promQuery.target(
+      target.prometheus(
         sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=false),
         legendFormat=legendFormat + ' avg',
       )
@@ -110,7 +70,7 @@ local apdexPanel(
 
   local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithAverage.addTarget(  // Last week
-      promQuery.target(
+      target.prometheus(
         sliPromQL.apdexQuery(
           aggregationSet,
           null,
@@ -144,7 +104,7 @@ local apdexPanel(
   local panelWithConfidenceIndicator = if confidenceSLI != null then
     local confidenceSignalSeriesName = 'Apdex SLI (upper %s confidence boundary)' % [confidenceIntervalLevel];
     panelWithLastWeek.addTarget(
-      promQuery.target(
+      target.prometheus(
         sliPromQL.apdexConfidenceQuery(confidenceIntervalLevel, aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=false),
         legendFormat=confidenceSignalSeriesName,
       )
