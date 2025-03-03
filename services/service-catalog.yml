@@ -2600,6 +2600,39 @@ services:
         grafana_folder: ops-gitlab-net
         primary_grafana_dashboard: ops-gitlab-net-main/ops-gitlab-net-overview
 
+  - name: dev-gitlab-org
+    tier: sv
+    friendly_name: dev.gitlab.org
+    label: DevGitlabOrg
+    owner: release
+    technical:
+      project:
+        - https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/dev
+        - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/dev-gitlab-org.json
+        - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/dev-environment.md
+      documents:
+        design:
+        architecture:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/118
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name: Rails
+          permalink: https://nonprod-log.gitlab.net/app/r/s/FUSMg
+        - name: Gitaly
+          permalink: https://nonprod-log.gitlab.net/app/r/s/DUsV1
+        - name: GitLab Shell
+          permalink: https://nonprod-log.gitlab.net/app/r/s/nDLCx
+        - name: Sidekiq
+          permalink: https://nonprod-log.gitlab.net/app/r/s/k0z53
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard: # Do not have at the moment. Good start: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&from=now-3h&to=now&timezone=utc&var-env=ops&var-node=dev-1-01-sv-dev-1.c.gitlab-dev-1.internal
+        sentry_slug: https://new-sentry.gitlab.net/organizations/gitlab/projects/gitlabcom/?environment=dev&project=3
+
   - name: istio
     tier: inf
     friendly_name: Istio
