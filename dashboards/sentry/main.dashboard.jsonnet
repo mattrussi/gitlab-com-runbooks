@@ -8,5 +8,6 @@ local environmentSelector = {
 serviceDashboard.overview(
   'sentry',
   environmentSelectorHash=environmentSelector,
+  useTimeSeriesPlugin=true,
 )
 .overviewTrailer()
