@@ -107,7 +107,6 @@ The incident is resolved when it is fully addressed. Use incident.io's [Post-Inc
 
 ![img](img/followup.png)
 
-
 - Alternatively you can also create a follow-up by reacting :fast_forward: to a message on Slack , this creates a Gitlab issue
 
 <p align="left">
