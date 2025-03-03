@@ -28,7 +28,7 @@ local versionTemplate = grafana.template.new(
   'version',
   '$PROMETHEUS_DS',
   'query_result(min by(__name__) (pg_settings_server_version_num{fqdn=~"patroni-${src_cluster}.*"}))',
-  regex='/.*\\} (\\d{2})/',
+  regex='/.*\\v(\\d{2})/',
   refresh='load',
   sort=1,
 );
@@ -81,7 +81,7 @@ local replicationLagSourceSeconds =
   .addTarget(
     promQuery.target(
       |||
-        sum(pg_replication_lag{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}) by (fqdn)
+        sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${src_cluster}-v${version}.*"}) by (fqdn)
       |||,
     ),
   );
