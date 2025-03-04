@@ -7,7 +7,7 @@ local utilizationRatesPanel(
   serviceType,
   selectorHash,
   compact=false,
-  linewidth=if compact then 2 else 3,
+  linewidth=if compact then 1 else 2,
       ) =
   local hasShardSelector = std.objectHas(selectorHash, 'shard');
   local aggregationLabels = if !hasShardSelector then ['component'] else ['component', 'shard'];

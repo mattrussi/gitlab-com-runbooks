@@ -126,6 +126,7 @@ local overviewDashboard(
         selectorHash=selectorHash,
         expectMultipleSeries=expectMultipleSeries,
         shardAggregationSet=std.get(aggregationSets, 'shardComponentSLIs'),
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     .addPanels(

@@ -65,6 +65,7 @@ local sliOverviewMatrixRow(
   legendFormatPrefix,
   expectMultipleSeries,
   shardAggregationSet=null,  // replaces aggregationSet if exists
+  useTimeSeriesPlugin=false
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
   local shardSelector = if shardAggregationSet != null && sli.shardLevelMonitoring then
@@ -98,7 +99,8 @@ local sliOverviewMatrixRow(
       showErrorRatio=sli.hasErrorRate(),
       showOpsRate=true,
       includePredictions=false,
-      shardLevelSli=sli.shardLevelMonitoring
+      shardLevelSli=sli.shardLevelMonitoring,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
     +
     (
@@ -211,6 +213,7 @@ local sliDetailErrorRatePanel(
     legendFormatPrefix='',
     expectMultipleSeries=false,
     shardAggregationSet=null,
+    useTimeSeriesPlugin=false,
   )::
     local service = metricsCatalog.getService(serviceType);
     [
@@ -229,6 +232,7 @@ local sliDetailErrorRatePanel(
               legendFormatPrefix=legendFormatPrefix,
               expectMultipleSeries=expectMultipleSeries,
               shardAggregationSet=shardAggregationSet,
+              useTimeSeriesPlugin=useTimeSeriesPlugin,
             ), std.objectFields(service.serviceLevelIndicators)
         )
       )
