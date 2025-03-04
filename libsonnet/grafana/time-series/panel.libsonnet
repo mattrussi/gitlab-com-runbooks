@@ -28,7 +28,7 @@ local basic(
     if legend_min then 'min',
     if legend_max then 'max',
     if legend_avg then 'mean',
-    if legend_current then 'last',
+    if legend_current then 'lastNotNull',
     if legend_total then 'total',
   ];
   local legendDisplayMode = if legend_alignAsTable then
