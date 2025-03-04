@@ -190,8 +190,11 @@ Keys must be rotated in staging and production. The general steps in both enviro
 1. Run `sudo gitlab-rake cloud_connector:keys:list` to verify there is exactly one key.
 1. Run `sudo gitlab-rake cloud_connector:keys:create` to add a new key to rotate to.
 1. Run `sudo gitlab-rake cloud_connector:keys:list` to verify there are exactly two keys.
-1. Wait for validators to have fetched the new key via OIDC Discovery. This may take up to 24 hours,
-   depending on how long validators cache keys.
+1. Ensure validators have fetched the new key via OIDC Discovery.
+   Depending on the particular system, this may involve:
+   - Wait at least 24 hours or longer, depending on how long keys are cached for.
+   - Restart the system or otherwise evict its key cache.
+   - For the AI Gateway only, ensure [this dashboard](https://log.gprd.gitlab.net/app/r/s/p7Rhe) shows no events.
 1. Run `sudo gitlab-rake cloud_connector:keys:rotate` to swap current key with new key, enacting the rotation.
 1. Monitor affected systems to still work as intended (failure would surface as 401s).
 1. Run `sudo gitlab-rake cloud_connector:keys:trim` to remove the now unused key.
