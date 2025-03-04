@@ -4,9 +4,9 @@ This document highlights the steps for responders on how to acknowledge incident
 
 # Responder Quick Start guide
 
-- The steps assumes you are on an incident.io oncall rotation
+- <b>All [manual escalations](#manual-escalation) to the Infrastructure teams will now be via incident.io , if your team is still in an oncall rotation in PagerDuty , you will still be paged by PagerDuty for alerts please acknowledge the page in PagerDuty but all manual escalations to you/your team will be via incident.io oncall.</b>
 - Please install the [incident.io app](https://help.incident.io/articles/3472064049-get-started-as-an-on-call-responder) on your mobile device for ease
-- Once you are paged , you can acknowledge an incident either via the incident.io app , or through Slack , from there you can easily navigate to the incident slack channel
+- Once you are paged via incident.io , you can acknowledge an incident either via the incident.io app , or through Slack , from there you can easily navigate to the incident slack channel
 
 <img src="img/ack.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
 
@@ -50,7 +50,7 @@ Important investigation details to document:
 
 As you work through an investigation, it is important to keep track of any ~"corrective actions"s (label: `~corrective action`) that need to be followed up on. Some strategies are to note these in the `Investigation Thread` or create a separate `Corrective Actions` thread to keep as reference. Once the Incident is over, the EOC should create Issues for the ~"corrective actions"s, as detailed in [Post-Incident Responsibilities](#post-incident-responsibilities).
 
-# Escalation
+# Manual Escalation
 
 - These steps highlights the way to escalate to a team or individual , CMOC , IMOC during an incident
 
