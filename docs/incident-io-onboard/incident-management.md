@@ -15,9 +15,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-
-  ![img](img/declare.png)
-
+  <img src="img/declare.png" style="width: 50%;" alt="Resized Image">
 </details>
 
 ## Navigating through an incident
@@ -26,18 +24,15 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-
-  ![img](img/incidentio-slackchannel.png)
-
+  <img src="img/incidentio-slackchannel.png" style="width: 50%;" alt="Resized Image">
 </details>
+
 - Whenever you create an incident, a GitLab issue will be created [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100), as well as a Zoom incident call.
 - You can update the incident from Slack using the `/inc` command or via the incident dashboard. To go to the incident dashboard, click on `overview` and then `incident homepage`.
 
 <details>
   <summary>Click to expand image</summary>
-
-![img](img/incidentio-dashboard.png)
-
+  <img src="img/incidentio-dashboard.png" style="width: 50%;" alt="Resized Image">
 </details>
 
 - The dashboard provides a nice overview of the incident. To view the dashboard, you need to [log in](#login-to-the-incidentio-dashboard) to incident.io first.
@@ -45,9 +40,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-
-![img](img/incidentio-options.png)
-
+  <img src="img/incidentio-options.png" style="width: 50%;" alt="Resized Image">
 </details>
 
 - You can move to the incident Slack channel and start debugging.

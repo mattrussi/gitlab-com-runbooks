@@ -8,14 +8,20 @@ This document highlights the steps for responders on how to acknowledge incident
 - Please install the [incident.io app](https://help.incident.io/articles/3472064049-get-started-as-an-on-call-responder) on your mobile device for ease
 - Once you are paged , you can acknowledge an incident either via the incident.io app , or through Slack , from there you can easily navigate to the incident slack channel
 
-![via Slack](img/ack.png)
+<img src="img/ack.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
 
 - See the following screenshots of the incident.app mobile app showing a page that has been received. To view the alerts, you can switch to the _Alerts_ tab.
 
-<p align="left">
+<!-- <p align="left">
 <img src="img/1_phone.jpg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle; margin-right: 1%;">
 <img src="img/2_phone.jpg" alt="via mobile application" width="31.5%" height="auto" style="vertical-align: middle; margin-right: 1%;">
 <img src="img/3_phone.jpeg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle;">
+</p> -->
+
+<p align="left">
+<img src="img/1_phone.jpg" alt="via mobile application" width="22%" height="auto" style="vertical-align: middle; margin-right: 1%; margin-left: 3.5%;">
+<img src="img/2_phone.jpg" alt="via mobile application" width="21.5%" height="auto" style="vertical-align: middle; margin-right: 1%;">
+<img src="img/3_phone.jpeg" alt="via mobile application" width="22%" height="auto" style="vertical-align: middle;">
 </p>
 
 - Once in the incident slack channel you can start troubleshooting the incident , join the incident zoom call and use the available commands for several actions.
@@ -30,7 +36,7 @@ This is something we are iterating on. The process is:
 1. Declaring an incident will generate an incident Slack channel and Zoom call for you.
 1. You can choose to **Block Deployments**, **Feature Flags**, or **Keep the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
 
-    ![img](img/custom.png)
+    <img src="img/custom.png" style="width: 50%;" alt="Resized Image">
 
 1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/production) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
@@ -56,7 +62,7 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 - From the incident channel once you wish to escalate to a team / individual , use the command `/inc escalate` , this should trigger an escalation form pop-up
 
-![img](img/escalate.png)
+<img src="img/escalate.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
 
 - Choose the oncall team you wish to escalate to from the drop-down menu / the individual you wish to escalate to , you can enter an optional notification message you would wish for the responder to see
 
@@ -66,7 +72,7 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 **_Note- When escalating from a woodhouse generated Slack channel please mention the incident slack channel in the Notification Message_**
 
-![img](img/notify.png)
+<img src="img/notify.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
 
 ## Incident Lifecycle
 
@@ -105,11 +111,11 @@ The incident is resolved when it is fully addressed. Use incident.io's [Post-Inc
 
 - Create follow-ups by using the command `/inc follow-up` , this opens up a form , fill in the required title and assign it to yourself or someone else as required
 
-![img](img/followup.png)
+<img src="img/followup.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
 
 - Alternatively you can also create a follow-up by reacting :fast_forward: to a message on Slack , this creates a Gitlab issue
 
 <p align="left">
-<img src="img/followup2.png" alt="via mobile application" width="50%" height="auto">
-<img src="img/gitlabissue.png" alt="via mobile application" width="50%" height="auto">
+<img src="img/followup2.png" alt="via mobile application" width="50%" height="auto" style="margin-left: 3.5%;">
+<img src="img/gitlabissue.png" alt="via mobile application" width="50%" height="auto" style="margin-left: 3.5%;">
 </p>
