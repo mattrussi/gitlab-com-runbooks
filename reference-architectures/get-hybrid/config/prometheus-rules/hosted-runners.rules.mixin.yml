@@ -5151,7 +5151,7 @@ groups:
           labels:
             component: usage_logs
             regional_aggregation: "no"
-            service_aggregation: "no"
+            service_aggregation: "yes"
             tier: inf
             type: hosted-runners-logging
           record: gitlab_component_service:mapping
