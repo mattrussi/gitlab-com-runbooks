@@ -108,7 +108,7 @@ local bufferFreeSpace(selector) =
     ||| % { selector: selector }
   );
 
-{ 
+{
   new(selectorHash):: {
     local selector = selectors.serializeHash(selectorHash),
 
@@ -122,4 +122,3 @@ local bufferFreeSpace(selector) =
     bufferFreeSpace:: bufferFreeSpace(selector)
   }
 }
-
