@@ -120,30 +120,6 @@ groups:
           )
         )
         > 0
-  - alert: ScanDependenciesWorkerHighErrorRate
-    for: 5m
-    annotations:
-      title: High error rate for `{{ $labels.worker }}`
-      description: |
-        Sidekiq jobs error rate from `{{ $labels.worker }}` has exceeded 0.1%. This may be caused by exceptions from unexpected data types or values in the job execution.
-      grafana_dashboard_id: sidekiq-worker-detail
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-worker-detail?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-worker={{ $labels.worker }}
-      grafana_min_zoom_hours: "6"
-      grafana_variables: environment,worker
-    labels:
-      aggregation: sidekiq_execution
-      alert_type: symptom
-      severity: s4
-      sli_type: error
-      team: code_creation
-    expr: |
-      sum by (env, worker) (
-        application_sli_aggregation:sidekiq_execution:error:rate_5m{
-          worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
-          env="gprd"
-        }
-      ) > 0.001
   - alert: SidekiqJobsDeferredByDBHealthCheck
     for: 2h
     annotations:

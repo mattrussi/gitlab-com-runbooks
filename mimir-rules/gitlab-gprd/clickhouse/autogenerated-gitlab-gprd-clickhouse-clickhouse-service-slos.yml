@@ -9,21 +9,21 @@ groups:
       monitor: global
       tier: inf
       type: clickhouse
-    expr: "0.005000"
+    expr: "0.000000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: reads
       monitor: global
       tier: inf
       type: clickhouse
-    expr: "0.005000"
+    expr: "0.000000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: writes
       monitor: global
       tier: inf
       type: clickhouse
-    expr: "0.005000"
+    expr: "0.000000"
   - record: gitlab_component_service:mapping
     labels:
       component: reads

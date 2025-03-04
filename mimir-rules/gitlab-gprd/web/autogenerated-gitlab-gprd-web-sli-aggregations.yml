@@ -204,8 +204,7 @@ groups:
       sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(haproxy_backend_http_responses_total{backend=~"canary_web|main_web|web",env="gprd",type=~"frontend"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 5m burn-rate -
-    gprd-gitlab-gke'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m
@@ -218,8 +217,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 5m burn-rate -
-    gprd-us-east1-b'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m
@@ -232,8 +230,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 5m burn-rate -
-    gprd-us-east1-c'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m
@@ -246,8 +243,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 5m burn-rate -
-    gprd-us-east1-d'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m
@@ -260,8 +256,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 5m burn-rate -
-    gitlab-3okls'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 5m burn-rate - gitlab-3okls'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_5m
@@ -607,8 +602,7 @@ groups:
       sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(haproxy_backend_http_responses_total{backend=~"canary_web|main_web|web",env="gprd",type=~"frontend"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 30m burn-rate -
-    gprd-gitlab-gke'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m
@@ -621,8 +615,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 30m burn-rate -
-    gprd-us-east1-b'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m
@@ -635,8 +628,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 30m burn-rate -
-    gprd-us-east1-c'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m
@@ -649,8 +641,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 30m burn-rate -
-    gprd-us-east1-d'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m
@@ -663,8 +654,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 30m burn-rate -
-    gitlab-3okls'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 30m burn-rate - gitlab-3okls'
   interval: 2m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_30m
@@ -1010,8 +1000,7 @@ groups:
       sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(haproxy_backend_http_responses_total{backend=~"canary_web|main_web|web",env="gprd",type=~"frontend"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 1h burn-rate -
-    gprd-gitlab-gke'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h
@@ -1024,8 +1013,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 1h burn-rate -
-    gprd-us-east1-b'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h
@@ -1038,8 +1026,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 1h burn-rate -
-    gprd-us-east1-c'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h
@@ -1052,8 +1039,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 1h burn-rate -
-    gprd-us-east1-d'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h
@@ -1066,8 +1052,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,request_rejected,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_path_traversal_check_request_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: web - rails_middleware_path_traversal - 1h burn-rate -
-    gitlab-3okls'
+- name: 'SLI Aggregations: web - middleware_path_traversal - 1h burn-rate - gitlab-3okls'
   interval: 1m
   rules:
   - record: sli_aggregations:gitlab_sli_path_traversal_check_request_apdex_success_total:rate_1h
