@@ -1,5 +1,5 @@
 local sliPromQL = import '../sli_promql.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local override = import 'grafana/time-series/override.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 
@@ -23,7 +23,7 @@ local genericOperationRatePanel(
     min=0,
     label=if compact then '' else 'Operations per Second',
   )
-  .addSeriesOverride(seriesOverrides.shardLevelSli);
+  .addSeriesOverride(override.shardLevelSli);
 
 local operationRatePanel(
   title,
@@ -51,7 +51,7 @@ local operationRatePanel(
     );
 
   local panelWithSeriesOverrides = if !expectMultipleSeries then
-    panel.addSeriesOverride(seriesOverrides.goldenMetric(legendFormat))
+    panel.addSeriesOverride(override.goldenMetric(legendFormat))
   else
     panel;
 
@@ -63,7 +63,7 @@ local operationRatePanel(
         legendFormat='last week',
       )
     )
-    .addSeriesOverride(seriesOverrides.lastWeek)
+    .addSeriesOverride(override.lastWeek)
   else
     panelWithSeriesOverrides;
 
@@ -81,8 +81,8 @@ local operationRatePanel(
         legendFormat='lower normal',
       ),
     )
-    .addSeriesOverride(seriesOverrides.upper)
-    .addSeriesOverride(seriesOverrides.lower)
+    .addSeriesOverride(override.upper)
+    .addSeriesOverride(override.lower)
   else
     panelWithLastWeek;
 

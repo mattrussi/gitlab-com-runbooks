@@ -13,8 +13,8 @@ test.suite({
     actual: std.map(function(x) x.toString(), colors.linearGradient(colors.BLUE, colors.YELLOW, 4)),
     expect: [
       colors.BLUE.toString(),
-      '#8dacaf',
-      '#c3c56c',
+      colors.rgba(141, 172, 175, 0.67).toString(),
+      colors.rgba(195, 197, 108, 0.83).toString(),
       colors.YELLOW.toString(),
     ],
   },

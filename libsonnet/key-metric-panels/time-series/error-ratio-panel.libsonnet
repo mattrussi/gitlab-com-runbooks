@@ -1,5 +1,5 @@
 local sliPromQL = import '../sli_promql.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local override = import 'grafana/time-series/override.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 
@@ -24,9 +24,9 @@ local genericErrorPanel(
     legend_show=if legend_show == null then !compact else legend_show,
     unit='percentunit',
   )
-  .addSeriesOverride(seriesOverrides.degradationSlo)
-  .addSeriesOverride(seriesOverrides.outageSlo)
-  .addSeriesOverride(seriesOverrides.shardLevelSli)
+  .addSeriesOverride(override.degradationSlo)
+  .addSeriesOverride(override.outageSlo)
+  .addSeriesOverride(override.shardLevelSli)
   .addTarget(
     target.prometheus(
       primaryQueryExpr,
@@ -85,7 +85,7 @@ local errorRatioPanel(
         legendFormat=legendFormat + ' avg',
       )
     )
-    .addSeriesOverride(seriesOverrides.averageCaseSeries(legendFormat + ' avg', { fillGradient: 10 }))
+    .addSeriesOverride(override.averageCaseSeries(legendFormat + ' avg', { fillGradient: 10 }))
   else
     panel;
 
@@ -103,7 +103,7 @@ local errorRatioPanel(
         legendFormat='last week',
       )
     )
-    .addSeriesOverride(seriesOverrides.lastWeek)
+    .addSeriesOverride(override.lastWeek)
   else
     panelWithAverage;
 
@@ -132,17 +132,16 @@ local errorRatioPanel(
       )
     )
     // If there is a confidence SLI, we use that as the golden signal
-    .addSeriesOverride(seriesOverrides.goldenMetric(confidenceSignalSeriesName))
+    .addSeriesOverride(override.goldenMetric(confidenceSignalSeriesName))
     .addSeriesOverride({
       alias: legendFormat,
       color: '#082e69',
-      lines: true,
     })
 
 
   else
     // If there is no confidence SLI, we use the main (non-confidence) signal as the golden signal
-    panelWithLastWeek.addSeriesOverride(seriesOverrides.goldenMetric(legendFormat, { fillBelowTo: legendFormat + ' avg' }));
+    panelWithLastWeek.addSeriesOverride(override.goldenMetric(legendFormat, { fillBelowTo: legendFormat + ' avg' }));
 
   panelWithConfidenceIndicator;
 

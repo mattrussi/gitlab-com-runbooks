@@ -1,5 +1,5 @@
 local sliPromQL = import '../sli_promql.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local override = import 'grafana/time-series/override.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 
@@ -18,9 +18,9 @@ local generalPanel(
     legend_show=legend_show,
     unit='percentunit',
   )
-  .addSeriesOverride(seriesOverrides.degradationSlo)
-  .addSeriesOverride(seriesOverrides.outageSlo)
-  .addSeriesOverride(seriesOverrides.shardLevelSli);
+  .addSeriesOverride(override.degradationSlo)
+  .addSeriesOverride(override.outageSlo)
+  .addSeriesOverride(override.shardLevelSli);
 
 local genericApdexPanel(
   title,
@@ -39,7 +39,7 @@ local genericApdexPanel(
     title,
     description=description,
     legend_show=if legend_show == null then !compact else legend_show,
-    linewidth=if linewidth == null then if compact then 2 else 3 else linewidth,
+    linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
   )
   .addTarget(  // Primary metric (worst case)
     target.prometheus(
@@ -88,7 +88,7 @@ local apdexPanel(
     compact=compact,
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
     legendFormat=legendFormat,
-    linewidth=if expectMultipleSeries then 2 else 3,
+    linewidth=if expectMultipleSeries then 1 else 2,
     selectorHash=selectorHashWithExtras,
     fixedThreshold=fixedThreshold,
     shardLevelSli=shardLevelSli,
@@ -101,7 +101,7 @@ local apdexPanel(
         legendFormat=legendFormat + ' avg',
       )
     )
-    .addSeriesOverride(seriesOverrides.averageCaseSeries(legendFormat + ' avg', { fillBelowTo: legendFormat }))
+    .addSeriesOverride(override.averageCaseSeries(legendFormat + ' avg', { fillBelowTo: legendFormat }))
   else
     panel;
 
@@ -119,7 +119,7 @@ local apdexPanel(
         legendFormat='last week',
       )
     )
-    .addSeriesOverride(seriesOverrides.lastWeek)
+    .addSeriesOverride(override.lastWeek)
   else
     panelWithAverage;
 
@@ -147,15 +147,14 @@ local apdexPanel(
       )
     )
     // If there is a confidence SLI, we use that as the golden signal
-    .addSeriesOverride(seriesOverrides.goldenMetric(confidenceSignalSeriesName))
+    .addSeriesOverride(override.goldenMetric(confidenceSignalSeriesName))
     .addSeriesOverride({
       alias: legendFormat,
-      color: '#082e6980',
-      lines: true,
+      color: '#082e69',
     })
   else
     // If there is no confidence SLI, we use the main (non-confidence) signal as the golden signal
-    panelWithLastWeek.addSeriesOverride(seriesOverrides.goldenMetric(legendFormat));
+    panelWithLastWeek.addSeriesOverride(override.goldenMetric(legendFormat));
 
   panelWithConfidenceIndicator;
 
