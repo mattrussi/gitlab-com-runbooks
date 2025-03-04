@@ -18,6 +18,23 @@ tiers:
 # You can check the schema for a service in https://gitlab-com.gitlab.io/runbooks/service-catalog-schema.html,
 # and read more about it in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/README.md#schema
 services:
+  - name: amp
+    tier: inf
+    label: Amp
+    friendly_name: Amp
+    owner: cells_infrastructure
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/
+      documents:
+        architecture: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/tree/main/architecture
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/cells/amp.md
+      logging:
+        - name: cellsdev
+          permalink: https://console.cloud.google.com/logs/query?project=amp-b6f1
+        - name: cellsprod
+          permalink: https://console.cloud.google.com/logs/query?project=amp-3c0d
+
   - name: api
     friendly_name: GitLab API
     tier: sv
