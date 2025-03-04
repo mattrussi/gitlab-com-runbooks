@@ -175,17 +175,29 @@ local row(
     // SLI request rate (mandatory, but not all are aggregatable)
     if showOpsRate then
       [[
-        operationRatePanel.panel(
-          '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
-          aggregationSet=aggregationSet,
-          selectorHash=selectorHashWithExtras,
-          stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
-          legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
-          expectMultipleSeries=expectMultipleSeries,
-          includePredictions=includePredictions,
-          includeLastWeek=includeLastWeek,
-          compact=compact,
-        ),
+        if useTimeSeriesPlugin then
+          panels.operationRate(
+            '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
+            aggregationSet=aggregationSet,
+            selectorHash=selectorHashWithExtras,
+            legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
+            expectMultipleSeries=expectMultipleSeries,
+            includePredictions=includePredictions,
+            includeLastWeek=includeLastWeek,
+            compact=compact,
+          )
+        else
+          operationRatePanel.panel(
+            '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
+            aggregationSet=aggregationSet,
+            selectorHash=selectorHashWithExtras,
+            stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
+            legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
+            expectMultipleSeries=expectMultipleSeries,
+            includePredictions=includePredictions,
+            includeLastWeek=includeLastWeek,
+            compact=compact,
+          ),
       ]]
     else
       []
