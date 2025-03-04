@@ -12,12 +12,6 @@ This document highlights the steps for responders on how to acknowledge incident
 
 - See the following screenshots of the incident.app mobile app showing a page that has been received. To view the alerts, you can switch to the _Alerts_ tab.
 
-<!-- <p align="left">
-<img src="img/1_phone.jpg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle; margin-right: 1%;">
-<img src="img/2_phone.jpg" alt="via mobile application" width="31.5%" height="auto" style="vertical-align: middle; margin-right: 1%;">
-<img src="img/3_phone.jpeg" alt="via mobile application" width="32%" height="auto" style="vertical-align: middle;">
-</p> -->
-
 <p align="left">
 <img src="img/1_phone.jpg" alt="via mobile application" width="22%" height="auto" style="vertical-align: middle; margin-right: 1%; margin-left: 3.5%;">
 <img src="img/2_phone.jpg" alt="via mobile application" width="21.5%" height="auto" style="vertical-align: middle; margin-right: 1%;">
