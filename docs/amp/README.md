@@ -11,6 +11,8 @@
 
 ## Logging
 
+* [cellsdev](https://console.cloud.google.com/logs/query?project=amp-b6f1)
+* [cellsprod](https://console.cloud.google.com/logs/query?project=amp-3c0d)
 
 ## Troubleshooting Pointers
 
