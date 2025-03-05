@@ -17,4 +17,18 @@ local template = grafana.template;
             multi=false,
             includeAll=false
         ),
+
+    fluentdPlugin::
+        template.new(
+            'plugin',
+            '$PROMETHEUS_DS',
+            query=|||
+                label_values(fluentd_output_status_flush_time_count,plugin)
+            |||,
+            current='All',
+            refresh='time',
+            sort=true,
+            multi=false,
+            includeAll=false
+        ),
 }

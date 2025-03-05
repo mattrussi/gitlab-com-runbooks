@@ -44,9 +44,13 @@ local customRules() =
     }
   ];
 
-  {
-    rules+: alerts.processAlertRules(rules),
-  };
+  [
+    {
+      interval: '1m',
+      name: 'Custom Alerts: hosted-runners',
+      rules+: alerts.processAlertRules(rules)
+    }
+  ];
 
 
 local alertsForServices(config) =
@@ -54,7 +58,7 @@ local alertsForServices(config) =
     local minimumSamplesForMonitoring = config.minimumSamplesForMonitoring;
     local minimumSamplesForTrafficCessation = config.minimumSamplesForTrafficCessation;
 
-    std.foldl(
+    local serviceAlerts = std.foldl(
       function(memo, service)
         memo + serviceAlertsGenerator(
         service,
@@ -62,11 +66,12 @@ local alertsForServices(config) =
           metricsConfig.aggregationSets,
           minimumSamplesForMonitoring,
           minimumSamplesForTrafficCessation
-        ),
-        customRules()
+        )
       ),
       metricsConfig.monitoredServices,
       []
     );
+
+    serviceAlerts + customRules();
 
 alertsForServices

@@ -6,10 +6,11 @@ local options = import 'gitlab-metrics-options.libsonnet';
 
 referenceArchitecturesGitLabConfig + {
   monitoredServices: [
-     import '../lib/service.libsonnet'
+     import '../services/runner.libsonnet',
+     import '../services/logging.libsonnet'
   ],
 
-  saturationMonitoring+: import '../lib/saturation.libsonnet',
+  saturationMonitoring+: import '../services/runner-saturation.libsonnet',
 
   labelTaxonomy:: labelSet.makeLabelSet({
     environmentThanos: null,  // No thanos

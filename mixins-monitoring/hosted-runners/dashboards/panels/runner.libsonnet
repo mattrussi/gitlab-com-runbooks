@@ -10,7 +10,7 @@ local text = grafana.text;
 
 local headlineMetricsRow(
   serviceType,
-  rowTitle='',
+  rowTitle='Hosted Runner(s) Overview',
   metricsCatalogServiceInfo,
   selectorHash,
   showSaturationCell,
@@ -23,7 +23,7 @@ local headlineMetricsRow(
   keyMetrics.headlineMetricsRow(
     serviceType=serviceType,
     startRow=0,
-    rowTitle="Hosted Runner(s) Overview",
+    rowTitle=rowTitle,
     selectorHash=selectorHashWithExtras,
     stableIdPrefix='',
     showApdex=hasApdex,
