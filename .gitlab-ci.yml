@@ -272,8 +272,9 @@ rubocop:
 ensure-generated-content-up-to-date:
   extends:
     - .default-job
-    - .jsonnet-cache
   stage: test
+  variables:
+    - GL_JSONNET_CACHE_SKIP: true
   needs: []
   rules:
     - !reference [.default-job-rules, rules]
