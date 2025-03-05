@@ -87,6 +87,6 @@ else
 
     url=$(echo "${response}" | jq -r '.url')
     title=$(echo "${snapshot}" | jq -r '.dashboard.title')
-    echo "Installed ${url}?var-environment=gprd&orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-stage=main - ${title}"
+    echo "Installed ${url}?var-environment=gprd&orgId=1&var-PROMETHEUS_DS=mimir-runway&var-stage=main - ${title}"
   done
 fi
