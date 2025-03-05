@@ -62,6 +62,24 @@ local capacityComponentColors = {
     dashLength: 4,
     nullPointMode: 'connected',
   },
+  softSlo:: {
+    alias: '/^Soft SLO/',
+    color: '#FF4500',  // "Orange red"
+    dashes: true,
+    legend: true,
+    linewidth: 2,
+    dashLength: 4,
+    nullPointMode: 'connected',
+  },
+  hardSlo:: {
+    alias: '/^Hard SLO/',
+    color: '#F2495C',  // "Red"
+    dashes: true,
+    legend: true,
+    linewidth: 4,
+    dashLength: 4,
+    nullPointMode: 'connected',
+  },
   averageCaseSeries(alias, overrides={}):: {
     alias: alias,
     linewidth: 1,

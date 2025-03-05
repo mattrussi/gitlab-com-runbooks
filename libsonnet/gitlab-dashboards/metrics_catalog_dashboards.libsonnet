@@ -165,20 +165,34 @@ local sliDetailOpsRatePanel(
   legendFormat='%(sliName)s operations',
   intervalFactor=1,
   withoutLabels=[],
+  useTimeSeriesPlugin=false,
       ) =
-
-  basic.timeseries(
-    title=if title == null then 'RPS for ' + sli.name else title,
-    query=ignoreZero(sli.requestRate.aggregatedRateQuery(
-      aggregationLabels=aggregationLabels,
-      selector=selector,
-      rangeInterval='$__interval',
-      withoutLabels=withoutLabels,
-    )),
-    legendFormat=legendFormat % { sliName: sli.name },
-    intervalFactor=intervalFactor,
-    yAxisLabel='Requests per Second'
-  );
+  if useTimeSeriesPlugin then
+    panel.timeseries(
+      title=if title == null then 'RPS for ' + sli.name else title,
+      query=ignoreZero(sli.requestRate.aggregatedRateQuery(
+        aggregationLabels=aggregationLabels,
+        selector=selector,
+        rangeInterval='$__interval',
+        withoutLabels=withoutLabels,
+      )),
+      legendFormat=legendFormat % { sliName: sli.name },
+      intervalFactor=intervalFactor,
+      yAxisLabel='Requests per Second'
+    )
+  else
+    basic.timeseries(
+      title=if title == null then 'RPS for ' + sli.name else title,
+      query=ignoreZero(sli.requestRate.aggregatedRateQuery(
+        aggregationLabels=aggregationLabels,
+        selector=selector,
+        rangeInterval='$__interval',
+        withoutLabels=withoutLabels,
+      )),
+      legendFormat=legendFormat % { sliName: sli.name },
+      intervalFactor=intervalFactor,
+      yAxisLabel='Requests per Second'
+    );
 
 local sliDetailErrorRatePanel(
   title=null,
@@ -383,7 +397,8 @@ local sliDetailErrorRatePanel(
                       sli=sli,
                       selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat=aggregationSet.legendFormat,
-                      aggregationLabels=aggregationSet.aggregationLabels
+                      aggregationLabels=aggregationSet.aggregationLabels,
+                      useTimeSeriesPlugin=useTimeSeriesPlugin,
                     )
                   else
                     null,

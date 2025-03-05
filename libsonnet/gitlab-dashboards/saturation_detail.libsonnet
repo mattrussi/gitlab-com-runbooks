@@ -8,6 +8,7 @@ local text = grafana.text;
 local issueSearch = import './issue_search.libsonnet';
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local panels = import './key-metric-panels/time-series/panels.libsonnet';
 
 local maxOverTime(query) =
   'max_over_time(%(query)s[$__interval])' % { query: query };
@@ -160,24 +161,35 @@ local maxOverTime(query) =
     },
 
 
-  componentSaturationPanel(component, selectorHash)::
+  componentSaturationPanel(component, selectorHash, useTimeSeriesPlugin=false)::
     local componentDetails = saturationResources[component];
     local query = componentDetails.getQuery(selectorHash, componentDetails.getBurnRatePeriod(), maxAggregationLabels=componentDetails.resourceLabels);
 
-    self.saturationPanel(
-      '%s component saturation: %s' % [component, componentDetails.title],
-      description=componentDetails.description + ' Lower is better.',
-      component=component,
-      linewidth=1,
-      query=query,
-      legendFormat=componentDetails.getLegendFormat(),
-      selector=selectorHash,
-    ),
+    if useTimeSeriesPlugin then
+      panels.saturationDetail(
+        '%s component saturation: %s' % [component, componentDetails.title],
+        description=componentDetails.description + ' Lower is better.',
+        component=component,
+        linewidth=1,
+        query=query,
+        legendFormat=componentDetails.getLegendFormat(),
+        selector=selectorHash,
+      )
+    else
+      self.saturationPanel(
+        '%s component saturation: %s' % [component, componentDetails.title],
+        description=componentDetails.description + ' Lower is better.',
+        component=component,
+        linewidth=1,
+        query=query,
+        legendFormat=componentDetails.getLegendFormat(),
+        selector=selectorHash,
+      ),
 
-  saturationDetailPanels(selectorHash, components)::
+  saturationDetailPanels(selectorHash, components, useTimeSeriesPlugin=false)::
     row.new(title='🌡 Saturation Details', collapse=true)
     .addPanels(layout.grid([
-      self.componentSaturationPanel(component, selectorHash)
+      self.componentSaturationPanel(component, selectorHash, useTimeSeriesPlugin)
       for component in components
     ])),
 
