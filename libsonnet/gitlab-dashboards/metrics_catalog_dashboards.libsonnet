@@ -3,6 +3,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local selectors = import 'promql/selectors.libsonnet';
@@ -187,21 +188,35 @@ local sliDetailErrorRatePanel(
   legendFormat='%(sliName)s errors',
   intervalFactor=1,
   withoutLabels=[],
+  useTimeSeriesPlugin=false,
       ) =
-
-  basic.timeseries(
-    title=if title == null then 'Errors for ' + sli.name else title,
-    query=ignoreZero(sli.errorRate.aggregatedRateQuery(
-      aggregationLabels=aggregationLabels,
-      selector=selector,
-      rangeInterval='$__interval',
-      withoutLabels=withoutLabels,
-    )),
-    legendFormat=legendFormat % { sliName: sli.name },
-    intervalFactor=intervalFactor,
-    yAxisLabel='Errors',
-    decimals=2,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeseries(
+      title=if title == null then 'Errors for ' + sli.name else title,
+      query=ignoreZero(sli.errorRate.aggregatedRateQuery(
+        aggregationLabels=aggregationLabels,
+        selector=selector,
+        rangeInterval='$__interval',
+        withoutLabels=withoutLabels,
+      )),
+      legendFormat=legendFormat % { sliName: sli.name },
+      intervalFactor=intervalFactor,
+      yAxisLabel='Errors',
+    )
+  else
+    basic.timeseries(
+      title=if title == null then 'Errors for ' + sli.name else title,
+      query=ignoreZero(sli.errorRate.aggregatedRateQuery(
+        aggregationLabels=aggregationLabels,
+        selector=selector,
+        rangeInterval='$__interval',
+        withoutLabels=withoutLabels,
+      )),
+      legendFormat=legendFormat % { sliName: sli.name },
+      intervalFactor=intervalFactor,
+      yAxisLabel='Errors',
+      decimals=2,
+    );
 {
   // Generates a grid/matrix of SLI data for the given service/stage
   sliMatrixForService(
@@ -294,7 +309,8 @@ local sliDetailErrorRatePanel(
     sliName,
     selectorHash,
     aggregationSets,
-    minLatency=0.01
+    minLatency=0.01,
+    useTimeSeriesPlugin=false,
   )::
     local service = metricsCatalog.getService(serviceType);
     local sli = service.serviceLevelIndicators[sliName];
@@ -324,7 +340,7 @@ local sliDetailErrorRatePanel(
                       selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      min=minLatency
+                      min=minLatency,
                     )
                   else
                     null,
@@ -356,6 +372,7 @@ local sliDetailErrorRatePanel(
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       selector=filteredSelectorHash + aggregationSet.selector,
+                      useTimeSeriesPlugin=useTimeSeriesPlugin,
                     )
                   else
                     null,
@@ -468,7 +485,7 @@ local sliDetailErrorRatePanel(
       )
     ),
 
-  autoDetailRows(serviceType, selectorHash, startRow)::
+  autoDetailRows(serviceType, selectorHash, startRow, useTimeSeriesPlugin=false)::
     local s = self;
     local service = metricsCatalog.getService(serviceType);
     local serviceLevelIndicators = service.listServiceLevelIndicators();
@@ -483,7 +500,7 @@ local sliDetailErrorRatePanel(
             ] +
             std.map(function(c) { title: 'per ' + c, aggregationLabels: c, selector: { [c]: { ne: '' } }, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
-          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets),
+          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets, useTimeSeriesPlugin=useTimeSeriesPlugin),
         serviceLevelIndicatorsFiltered
       )
       , cols=1, startRow=startRow

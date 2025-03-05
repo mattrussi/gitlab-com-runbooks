@@ -130,7 +130,7 @@ local overviewDashboard(
       )
     )
     .addPanels(
-      metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=200)
+      metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=200, useTimeSeriesPlugin=useTimeSeriesPlugin)
     )
     .addPanelsIf(
       showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().vms == true,
