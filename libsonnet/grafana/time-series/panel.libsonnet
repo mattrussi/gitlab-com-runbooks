@@ -25,13 +25,13 @@ local basic(
       'prometheus'
     else
       error 'unsupported datasource: ' + dataSource;
-  local legendCalcs = [
+  local legendCalcs = std.prune([
     if legend_min then 'min',
     if legend_max then 'max',
     if legend_avg then 'mean',
     if legend_current then 'lastNotNull',
     if legend_total then 'total',
-  ];
+  ]);
   local legendDisplayMode = if legend_alignAsTable then
     'table'
   else
@@ -104,7 +104,7 @@ local basic(
           id: matcherId,
           options: override.alias,
         },
-        properties: [
+        properties: std.prune([
           if std.objectHas(override, 'dashes') && override.dashes then
             {
               id: 'custom.lineStyle',
@@ -150,7 +150,7 @@ local basic(
               id: 'custom.spanNulls',
               value: true,
             },
-        ],
+        ]),
       }),
 
     addTarget(target):: self {
