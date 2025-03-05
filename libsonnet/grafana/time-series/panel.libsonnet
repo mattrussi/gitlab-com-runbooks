@@ -5,7 +5,7 @@ local ts = g.panel.timeSeries;
 local basic(
   title,
   linewidth=1,
-  dataSource='$PROMETHEUS_DS',
+  datasource='$PROMETHEUS_DS',
   description='',
   legend_show=true,
   legend_min=true,
@@ -21,10 +21,10 @@ local basic(
   unit=null,
       ) =
   local datasourceType =
-    if dataSource == '$PROMETHEUS_DS' then
+    if datasource == '$PROMETHEUS_DS' then
       'prometheus'
     else
-      error 'unsupported datasource: ' + dataSource;
+      error 'unsupported data source: ' + datasource;
   local legendCalcs = std.prune([
     if legend_min then 'min',
     if legend_max then 'max',
@@ -47,7 +47,7 @@ local basic(
 
   ts.new(title) +
   ts.datasource.withType(datasourceType) +
-  ts.datasource.withUid(dataSource) +
+  ts.datasource.withUid(datasource) +
   ts.fieldConfig.defaults.custom.withAxisGridShow(lines) +
   ts.fieldConfig.defaults.custom.withLineWidth(linewidth) +
   ts.fieldConfig.defaults.custom.withPointSize(pointradius) +
@@ -158,7 +158,7 @@ local basic(
     },
   };
 
-local multiTimeseries(
+local multiTimeSeries(
   title='Multi timeseries',
   description='',
   queries=[],
@@ -200,7 +200,7 @@ local multiTimeseries(
     label=yAxisLabel,
   );
 
-local timeseries(
+local timeSeries(
   title='Timeseries',
   description='',
   query='',
@@ -217,7 +217,7 @@ local timeseries(
   lines=true,
   datasource='$PROMETHEUS_DS',
       ) =
-  multiTimeseries(
+  multiTimeSeries(
     queries=[{ query: query, legendFormat: legendFormat }],
     title=title,
     description=description,
@@ -234,7 +234,42 @@ local timeseries(
     datasource=datasource,
   );
 
+local latencyTimeSeries(
+  title='Latency',
+  description='',
+  query='',
+  legendFormat='',
+  format='short',
+  yAxisLabel='Duration',
+  interval='1m',
+  intervalFactor=1,
+  legend_show=true,
+  linewidth=2,
+  min=0,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  basic(
+    title,
+    description=description,
+    linewidth=linewidth,
+    datasource=datasource,
+    legend_show=legend_show,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    unit=format,
+  )
+  .addTarget(target.prometheus(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
+  .addYaxis(
+    min=min,
+    label=yAxisLabel,
+  );
+
 {
   basic: basic,
-  timeseries: timeseries,
+  timeSeries: timeSeries,
+  latencyTimeSeries: latencyTimeSeries,
 }

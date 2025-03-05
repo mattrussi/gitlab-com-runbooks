@@ -7,7 +7,7 @@ local graphPanel = grafana.graphPanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 
-serviceDashboard.overview('logging')
+serviceDashboard.overview('logging', useTimeSeriesPlugin=true)
 .overviewTrailer()
 .addPanel(
   row.new(title='PubSub Subscriptions Details', collapse=true)

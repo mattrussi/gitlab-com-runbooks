@@ -17,7 +17,7 @@ local saturationPanel(title, description, component, linewidth=1, query=null, le
     title=title,
     description=description,
     linewidth=linewidth,
-    dataSource='$PROMETHEUS_DS',
+    datasource='$PROMETHEUS_DS',
     legend_show=true,
     legend_min=true,
     legend_max=true,

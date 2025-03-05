@@ -131,30 +131,52 @@ local sliDetailLatencyPanel(
   min=0.01,
   intervalFactor=1,
   withoutLabels=[],
+  useTimeSeriesPlugin=false,
       ) =
   local percentile = getLatencyPercentileForService(serviceType);
   local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sli.name };
 
-  basic.latencyTimeseries(
-    title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sli.name else title) % formatConfig,
-    query=ignoreZero(sli.apdex.percentileLatencyQuery(
-      percentile=percentile,
-      aggregationLabels=aggregationLabels,
-      selector=selector,
-      rangeInterval='$__interval',
-      withoutLabels=withoutLabels,
-    )),
-    logBase=logBase,
-    format=sli.apdex.unit,
-    legendFormat=legendFormat % formatConfig,
-    min=min,
-    intervalFactor=intervalFactor,
-  ) + {
-    thresholds: std.prune([
-      if sli.apdex.toleratedThreshold != null then thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
-      thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
-    ]),
-  };
+  if useTimeSeriesPlugin then
+    panel.latencyTimeSeries(
+      title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sli.name else title) % formatConfig,
+      query=ignoreZero(sli.apdex.percentileLatencyQuery(
+        percentile=percentile,
+        aggregationLabels=aggregationLabels,
+        selector=selector,
+        rangeInterval='$__interval',
+        withoutLabels=withoutLabels,
+      )),
+      format=sli.apdex.unit,
+      legendFormat=legendFormat % formatConfig,
+      min=min,
+      intervalFactor=intervalFactor,
+    ) + {
+      thresholds: std.prune([
+        if sli.apdex.toleratedThreshold != null then thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
+        thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
+      ]),
+    }
+  else
+    basic.latencyTimeseries(
+      title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sli.name else title) % formatConfig,
+      query=ignoreZero(sli.apdex.percentileLatencyQuery(
+        percentile=percentile,
+        aggregationLabels=aggregationLabels,
+        selector=selector,
+        rangeInterval='$__interval',
+        withoutLabels=withoutLabels,
+      )),
+      logBase=logBase,
+      format=sli.apdex.unit,
+      legendFormat=legendFormat % formatConfig,
+      min=min,
+      intervalFactor=intervalFactor,
+    ) + {
+      thresholds: std.prune([
+        if sli.apdex.toleratedThreshold != null then thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
+        thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
+      ]),
+    };
 
 local sliDetailOpsRatePanel(
   title=null,
@@ -168,7 +190,7 @@ local sliDetailOpsRatePanel(
   useTimeSeriesPlugin=false,
       ) =
   if useTimeSeriesPlugin then
-    panel.timeseries(
+    panel.timeSeries(
       title=if title == null then 'RPS for ' + sli.name else title,
       query=ignoreZero(sli.requestRate.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
@@ -205,7 +227,7 @@ local sliDetailErrorRatePanel(
   useTimeSeriesPlugin=false,
       ) =
   if useTimeSeriesPlugin then
-    panel.timeseries(
+    panel.timeSeries(
       title=if title == null then 'Errors for ' + sli.name else title,
       query=ignoreZero(sli.errorRate.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
@@ -355,6 +377,7 @@ local sliDetailErrorRatePanel(
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       min=minLatency,
+                      useTimeSeriesPlugin=useTimeSeriesPlugin,
                     )
                   else
                     null,
