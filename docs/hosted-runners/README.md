@@ -5,4 +5,6 @@ This documentation serves as a guide for on-call engineers responding to an inci
 1. [HostedRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard](./jobs_apdex_slo_violation.md)
 2. [HostedRunnersServicePendingBuildsSaturationSingleShard](./pending_queue_duration.md)
 3. [HostedRunnersServiceCiRunnerJobsErrorSLOViolationSingleShard](./runner_system_failure.md)
-3. [HostedRunnersServiceRunnerManagerDownSingleShard](./runners_manager_is_down.md)
+4. [HostedRunnersServiceRunnerManagerDownSingleShard](./runners_manager_is_down.md)
+5. [HostedRunnersLoggingServiceUsageReplicationErrorSLOViolation](./usage_replication_error.md)
+6. [HostedRunnersLoggingServiceUsageLogsErrorSLOViolationSingleShard](./logging_service_usage_logs_error.md)

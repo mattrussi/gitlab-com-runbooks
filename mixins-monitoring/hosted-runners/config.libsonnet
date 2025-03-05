@@ -26,7 +26,11 @@ local templates = import 'lib/templates.libsonnet';
     // Query selector based on the hosted runner job combine with runner name
     runnerJobSelector: 'job="hosted-runners-prometheus-agent"',
 
-    minimumSamplesForMonitoring: 75,
+    fluentdPluginSelector: 'shard=~"$shard", plugin=~"$plugin"',
+
+    replicationSelector: 'rule_id="replication-rule-hosted-runner"',
+
+    minimumSamplesForMonitoring: 50,
 
     minimumSamplesForTrafficCessation: 300,
 

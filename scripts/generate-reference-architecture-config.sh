@@ -190,21 +190,22 @@ function generate_mixins() {
   local mixins_file="$2"
   local dest_dir="$3"
   local reference_architecture_src_dir="$4"
-
   local mixins_out=""
 
   if [[ -f $mixins_file ]]; then
     "${REPO_DIR}/scripts/ensure-mixtool.sh"
 
-    mixins_out=$(jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
-      "$mixins_src_dir"/generate-mixin.sh all "$mixin" "$dest_dir"
-      echo "$dest_dir/dashboards/${mixin}.json"
-      echo "$dest_dir/prometheus-rules/${mixin}.rules.mixin.yml"
-      echo "$dest_dir/prometheus-rules/${mixin}.alerts.mixin.yml"
-    done)
-
+    mixins_out=$({
+      # Process each mixin and generate associated prometheus files.
+      jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
+        "$mixins_src_dir"/generate-mixin.sh all "$mixin" "$dest_dir"
+        echo "$dest_dir/prometheus-rules/${mixin}.rules.mixin.yml"
+        echo "$dest_dir/prometheus-rules/${mixin}.alerts.mixin.yml"
+      done
+      find "$dest_dir/dashboards" -maxdepth 1 -type f -name "*.json"
+    })
   else
-    mixins_out="mixins.jsonnet file does not exist in $overrides_dir or ${reference_architecture_src_dir}/mixins"
+    mixins_out="mixins.jsonnet file does not exist in \$overrides_dir or ${reference_architecture_src_dir}/mixins"
   fi
 
   echo "$mixins_out"
