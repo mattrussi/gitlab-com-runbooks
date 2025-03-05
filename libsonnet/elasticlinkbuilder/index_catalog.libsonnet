@@ -270,6 +270,12 @@ local indexDefaults = {
     defaultFilters: [matchFilter('json.subcomponent', 'graphql_json')],
   },
 
+  rails_glql: self.rails {
+    defaultSeriesSplitField: 'json.meta.caller_id.keyword',
+    defaultColumns: ['json.meta.caller_id', 'json.operation_name', 'json.meta.feature_category', 'json.operation_fingerprint', 'json.duration_s'],
+    defaultFilters: [matchFilter('json.subcomponent', 'graphql_json')],
+  },
+
   rails_cdot: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'b881d9e0-5de8-49ce-ae7c-2b279a4f4741',
