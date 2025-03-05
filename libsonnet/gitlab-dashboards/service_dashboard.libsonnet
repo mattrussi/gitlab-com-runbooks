@@ -158,7 +158,7 @@ local overviewDashboard(
       [
         // saturationSelector is env + type + stage
         local saturationSelector = saturationEnvironmentSelectorHash + stageLabels + { type: type };
-        saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
+        saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents, useTimeSeriesPlugin=useTimeSeriesPlugin)
         { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
       ]
     );
