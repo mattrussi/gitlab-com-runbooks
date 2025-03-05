@@ -1,3 +1,4 @@
+local target = import './target.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local ts = g.panel.timeSeries;
 
@@ -157,6 +158,83 @@ local basic(
     },
   };
 
+local multiTimeseries(
+  title='Multi timeseries',
+  description='',
+  queries=[],
+  format='short',
+  interval='1m',
+  intervalFactor=1,
+  yAxisLabel='',
+  legend_show=true,
+  legend_rightSide=false,
+  linewidth=2,
+  min=0,
+  max=null,
+  lines=true,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  local panel = basic(
+    title,
+    description=description,
+    linewidth=linewidth,
+    legend_rightSide=legend_rightSide,
+    legend_show=legend_show,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    lines=lines,
+    unit=format,
+  );
+
+  local addPanelTarget(panel, query) =
+    panel.addTarget(target.prometheus(query.query, legendFormat=query.legendFormat, interval=interval, intervalFactor=intervalFactor));
+
+  std.foldl(addPanelTarget, queries, panel)
+  .addYaxis(
+    min=min,
+    max=max,
+    label=yAxisLabel,
+  );
+
+local timeseries(
+  title='Timeseries',
+  description='',
+  query='',
+  legendFormat='',
+  format='short',
+  interval='1m',
+  intervalFactor=1,
+  yAxisLabel='',
+  legend_show=true,
+  legend_rightSide=false,
+  linewidth=2,
+  min=0,
+  max=null,
+  lines=true,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  multiTimeseries(
+    queries=[{ query: query, legendFormat: legendFormat }],
+    title=title,
+    description=description,
+    format=format,
+    interval=interval,
+    intervalFactor=intervalFactor,
+    yAxisLabel=yAxisLabel,
+    legend_show=legend_show,
+    legend_rightSide=legend_rightSide,
+    linewidth=linewidth,
+    min=min,
+    max=max,
+    lines=lines,
+    datasource=datasource,
+  );
+
 {
   basic: basic,
+  timeseries: timeseries,
 }
