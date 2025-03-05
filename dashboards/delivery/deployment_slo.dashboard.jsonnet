@@ -38,11 +38,19 @@ local explainer = |||
   - __Apdex__ shows the Apdex score over time
 |||;
 
-local pipeline_duration_query = |||
+local pipeline_duration_query_per_day = |||
   quantile(%(quantile)s,
-    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[$__range])
+    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[1d])
       unless
-    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[1h] offset $__range)
+    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[1h] offset 1d)
+  )
+|||;
+
+local pipeline_duration_query_per_week = |||
+  quantile(%(quantile)s,
+    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[1w])
+      unless
+    last_over_time(delivery_deployment_pipeline_duration_seconds{pipeline_name="%(pipeline_name)s",project_name="%(project)s"}[1h] offset 1w)
   )
 |||;
 
@@ -165,7 +173,7 @@ basic.dashboard(
 
     graphPanel.new(
       'Duration of Omnibus packager pipelines',
-      description='Time taken for 80% and 90% of Omnibus packager pipelines to complete',
+      description='Time taken for 80% of Omnibus packager pipelines to complete',
       decimals=2,
       labelY1='Duration',
       legend_values=true,
@@ -176,20 +184,20 @@ basic.dashboard(
     )
     .addTarget(
       prometheus.target(
-        pipeline_duration_query % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/omnibus-gitlab' },
-        legendFormat='Omnibus P80 duration',
+        pipeline_duration_query_per_day % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/omnibus-gitlab' },
+        legendFormat='Omnibus P80 duration per day',
       )
     )
     .addTarget(
       prometheus.target(
-        pipeline_duration_query % { quantile: '0.9', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/omnibus-gitlab' },
-        legendFormat='Omnibus P90 duration',
+        pipeline_duration_query_per_week % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/omnibus-gitlab' },
+        legendFormat='Omnibus P80 duration per week',
       )
     ),
 
     graphPanel.new(
       'Duration of CNG packager pipelines',
-      description='Time taken for 80% and 90% of CNG packager pipelines to complete',
+      description='Time taken for 80% of CNG packager pipelines to complete',
       decimals=2,
       labelY1='Duration',
       legend_values=true,
@@ -200,14 +208,14 @@ basic.dashboard(
     )
     .addTarget(
       prometheus.target(
-        pipeline_duration_query % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/charts/components/images' },
-        legendFormat='CNG P80 duration',
+        pipeline_duration_query_per_day % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/charts/components/images' },
+        legendFormat='CNG P80 duration per day',
       )
     )
     .addTarget(
       prometheus.target(
-        pipeline_duration_query % { quantile: '0.9', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/charts/components/images' },
-        legendFormat='CNG P90 duration',
+        pipeline_duration_query_per_week % { quantile: '0.8', pipeline_name: 'AUTO_DEPLOY_BUILD_PIPELINE', project: 'gitlab/charts/components/images' },
+        legendFormat='CNG P80 duration per week',
       )
     ),
   ], cols=2, rowHeight=10, startRow=300)
