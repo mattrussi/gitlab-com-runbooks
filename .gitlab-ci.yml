@@ -274,7 +274,7 @@ ensure-generated-content-up-to-date:
     - .default-job
   stage: test
   variables:
-    - GL_JSONNET_CACHE_SKIP: true
+    GL_JSONNET_CACHE_SKIP: true
   needs: []
   rules:
     - !reference [.default-job-rules, rules]
