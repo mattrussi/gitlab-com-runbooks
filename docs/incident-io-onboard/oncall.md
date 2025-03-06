@@ -8,7 +8,7 @@ This document highlights the steps for responders on how to acknowledge incident
 - Please install the [incident.io app](https://help.incident.io/articles/3472064049-get-started-as-an-on-call-responder) on your mobile device for ease
 - Once you are paged via incident.io , you can acknowledge an incident either via the incident.io app , or through Slack , from there you can easily navigate to the incident slack channel
 
-<img src="img/ack.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
+<img src="img/ack.png" style="width: 50%; margin-left: 3.5%;" alt="Acknowledge Incident">
 
 - See the following screenshots of the incident.app mobile app showing a page that has been received. To view the alerts, you can switch to the _Alerts_ tab.
 
@@ -26,11 +26,11 @@ This is something we are iterating on. The process is:
 
 1. Acknowledge page within the response time ie: within 15 minutes , 10 minutes for Customer Emergency On-Call Rotation
 1. Check if it's related to an active incident in the [Production project](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100)
-1. You can declare an incident by using the command `/inc create`. All incidents will typically be announced in the `#incidents` channel. To only view announcements for incidents of type `Gitlab.com`, please navigate to `#incidents-dotcom`.
+1. You can declare an incident by using the command `/incident declare`. All incidents will typically be announced in the `#incidents` channel. To only view announcements for incidents of type `Gitlab.com`, please navigate to `#incidents-dotcom`.
 1. Declaring an incident will generate an incident Slack channel and Zoom call for you.
-1. You can choose to **Block Deployments**, **Feature Flags**, or **Keep the issue confidential** by updating the respective custom field using the command `/inc field` from the incident Slack channel
+1. You can choose to **Block Deployments**, **Feature Flags**, or **Keep the issue confidential** by updating the respective custom field using the command `/incident field` from the incident Slack channel
 
-    <img src="img/custom.png" style="width: 50%;" alt="Resized Image">
+    <img src="img/custom.png" style="width: 20%;" alt="Custom Fields">
 
 1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/production) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
@@ -46,7 +46,7 @@ Important investigation details to document:
    1. In Grafana, click `Share` > `Copy` for the link; this will ensure the link is locked to the chosen time. **Note**: `Shorten URL` does not work.
    1. In Kibana, click `Share` > `Get Links` > Toggle `Short URL` > `Copy link`; this ensure the link works correctly and retains filters.
 1. Use Zoom calls when needed for real-time collaboration, and utilize incident.io's Scribe feature to summarize call discussions directly in the incident channel.
-1. Regular status updates can be posted using incident.io's update feature via the `/inc` command.
+1. Regular status updates can be posted using incident.io's update feature via the `/incident` command.
 
 As you work through an investigation, it is important to keep track of any ~"corrective actions"s (label: `~corrective action`) that need to be followed up on. Some strategies are to note these in the `Investigation Thread` or create a separate `Corrective Actions` thread to keep as reference. Once the Incident is over, the EOC should create Issues for the ~"corrective actions"s, as detailed in [Post-Incident Responsibilities](#post-incident-responsibilities).
 
@@ -54,9 +54,9 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 - These steps highlights the way to escalate to a team or individual , CMOC , IMOC during an incident
 
-- From the incident channel once you wish to escalate to a team / individual , use the command `/inc escalate` , this should trigger an escalation form pop-up
+- From the incident channel once you wish to escalate to a team / individual , use the command `/incident escalate` , this should trigger an escalation form pop-up
 
-<img src="img/escalate.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
+<img src="img/escalate.png" style="width: 20%; margin-left: 3.5%;" alt="Escalate form">
 
 - Choose the oncall team you wish to escalate to from the drop-down menu / the individual you wish to escalate to , you can enter an optional notification message you would wish for the responder to see
 
@@ -64,9 +64,9 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 - Page Dev : by typing /devoncall incident-issue-url into #dev-escalation. Handbook
 
-**_Note- When escalating from a woodhouse generated Slack channel please mention the incident slack channel in the Notification Message_**
+**_Note- When escalating from a woodhouse generated Slack channel please mention the incident slack channel in the Notification Message (( not recommended ))_**
 
-<img src="img/notify.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
+<img src="img/notify.png" style="width: 20%; margin-left: 3.5%;" alt="Notify Slack channel">
 
 ## Incident Lifecycle
 
@@ -89,7 +89,7 @@ An incident is considered in a `monitoring` status in the following scenarios :
 1. The problem has been alleviated or addressed (at least temporarily) but may reoccur.
 1. The problem is no longer active but we are still waiting for alerts to clear.
 
-Update the incident status using the `/inc` command in the incident's Slack channel to reflect mitigation. This will update the status of the incident in incident.io. When the incident is resolved, you will separately need to close the incident issue.
+Update the incident status using the `/incident` command in the incident's Slack channel to reflect mitigation. This will update the status of the incident in incident.io. When the incident is resolved, you will separately need to close the incident issue.
 
 [View currently mitigated incidents](https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JK9KV07AV2WZKHYZD1GTK5KB&status%5Bone_of%5D=01JH40E0GPQQZNK1DJHH2TCTEG)
 
@@ -103,13 +103,13 @@ The incident is resolved when it is fully addressed. Use incident.io's [Post-Inc
 
 - Follow-ups are a way for your team to capture something that needs to be done after an incident is closed. These will come in all shapes and sizes, from an urgent task such as reverting a temporary workaround, to a low priority task such as investigating how to move to a new cloud provider. You are able to assign each follow-up a priority, to capture this level of importance within incident.io.
 
-- Create follow-ups by using the command `/inc follow-up` , this opens up a form , fill in the required title and assign it to yourself or someone else as required
+- Create follow-ups by using the command `/incident follow-up` , this opens up a form , fill in the required title and assign it to yourself or someone else as required
 
-<img src="img/followup.png" style="width: 50%; margin-left: 3.5%;" alt="Resized Image">
+<img src="img/followup.png" style="width: 20%; margin-left: 3.5%;" alt="Follow Up>
 
 - Alternatively you can also create a follow-up by reacting :fast_forward: to a message on Slack , this creates a Gitlab issue
 
 <p align="left">
-<img src="img/followup2.png" alt="via mobile application" width="50%" height="auto" style="margin-left: 3.5%;">
-<img src="img/gitlabissue.png" alt="via mobile application" width="50%" height="auto" style="margin-left: 3.5%;">
+<img src="img/followup2.png" alt="via mobile application" width="20%" height="auto" style="margin-left: 3.5%;">
+<img src="img/gitlabissue.png" alt="via mobile application" width="20%" height="auto" style="margin-left: 3.5%;">
 </p>

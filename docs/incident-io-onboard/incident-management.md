@@ -7,7 +7,7 @@ This document highlights the basic onboarding steps to incident.io.
 ## How to raise an incident
 
 - Go to the `#incident-dotcom` Slack channel.
-- Type the command `/inc create`.
+- Type the command `/incident declare`.
 - This opens a popup to declare an incident.
 - Give your incident a name and choose the incident type to be `Gitlab.com`.
 - You can choose if you wish to block deployments/feature flags by selecting `yes` from the respective dropdown menu
@@ -15,7 +15,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-  <img src="img/declare.png" style="width: 50%;" alt="Resized Image">
+  <img src="img/declare.png" style="width: 20%;" alt="Declare Incident">
 </details>
 
 ## Navigating through an incident
@@ -24,7 +24,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-  <img src="img/incidentio-slackchannel.png" style="width: 50%;" alt="Resized Image">
+  <img src="img/incidentio-slackchannel.png" style="width: 20%;" alt="Incident Slack channel">
 </details>
 
 - Whenever you create an incident, a GitLab issue will be created [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=opened&first_page_size=100), as well as a Zoom incident call.
@@ -32,7 +32,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-  <img src="img/incidentio-dashboard.png" style="width: 50%;" alt="Resized Image">
+  <img src="img/incidentio-dashboard.png" style="width: 20%;" alt="Incident Homepage">
 </details>
 
 - The dashboard provides a nice overview of the incident. To view the dashboard, you need to [log in](#login-to-the-incidentio-dashboard) to incident.io first.
@@ -40,7 +40,7 @@ This document highlights the basic onboarding steps to incident.io.
 
 <details>
   <summary>Click to expand image</summary>
-  <img src="img/incidentio-options.png" style="width: 50%;" alt="Resized Image">
+  <img src="img/incidentio-options.png" style="width: 20%;" alt="Incident Commands">
 </details>
 
 - You can move to the incident Slack channel and start debugging.
