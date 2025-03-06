@@ -50,7 +50,6 @@ This document highlights the basic onboarding steps to incident.io.
 
 ## Login to the incident.io dashboard
 
-- Make sure you are logged into the [incident.io](https://incident.io/) dashboard.
 - Navigate to [incident.io](https://incident.io/).
 - Click on Log in -> Sign-in with SAML SSO
 - Congratulations, you are successfully logged in to the incident.io dashboard.
