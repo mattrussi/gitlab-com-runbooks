@@ -149,7 +149,7 @@ local overviewDashboard(
       showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().kubernetes == true,
       [
         row.new(title='☸️ Kubernetes Overview', collapse=true)
-        .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1)) +
+        .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin)) +
         { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
       ]
     )

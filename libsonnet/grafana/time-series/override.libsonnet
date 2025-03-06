@@ -62,6 +62,10 @@ local capacityComponentColors = {
     dashLength: 4,
     nullPointMode: 'connected',
   },
+  networkReceive:: {
+    alias: '/receive .*/',
+    transform: 'negative-Y',
+  },
   softSlo:: {
     alias: '/^Soft SLO/',
     color: '#FF4500',  // "Orange red"
