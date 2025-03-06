@@ -1,3 +1,4 @@
+local override = import './override.libsonnet';
 local target = import './target.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local ts = g.panel.timeSeries;
@@ -150,6 +151,11 @@ local basic(
               id: 'custom.spanNulls',
               value: true,
             },
+          if std.objectHas(override, 'transform') then
+            {
+              id: 'custom.transform',
+              value: override.transform,
+            },
         ]),
       }),
 
@@ -268,8 +274,52 @@ local latencyTimeSeries(
     label=yAxisLabel,
   );
 
+local networkTrafficGraph(
+  title='Node Network Utilization',
+  description='Network utilization',
+  sendQuery=null,
+  legendFormat='{{ fqdn }}',
+  receiveQuery=null,
+  intervalFactor=1,
+  legend_show=true,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  basic(
+    title,
+    linewidth=1,
+    description=description,
+    datasource=datasource,
+    legend_show=legend_show,
+    legend_min=false,
+    legend_max=false,
+    legend_current=false,
+    legend_total=false,
+    legend_avg=false,
+    legend_alignAsTable=false,
+    unit='Bps',
+  )
+  .addSeriesOverride(override.networkReceive)
+  .addTarget(
+    target.prometheus(
+      sendQuery,
+      legendFormat='send ' + legendFormat,
+      intervalFactor=intervalFactor,
+    )
+  )
+  .addTarget(
+    target.prometheus(
+      receiveQuery,
+      legendFormat='receive ' + legendFormat,
+      intervalFactor=intervalFactor,
+    )
+  )
+  .addYaxis(
+    label='Network utilization',
+  );
+
 {
   basic: basic,
   timeSeries: timeSeries,
   latencyTimeSeries: latencyTimeSeries,
+  networkTrafficGraph: networkTrafficGraph,
 }
