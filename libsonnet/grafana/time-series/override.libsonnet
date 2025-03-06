@@ -90,6 +90,10 @@ local capacityComponentColors = {
     dashLength: 1,
     color: '#5794F280',
   } + overrides,
+  negativeY:: {
+    alias: '/.*/',
+    transform: 'negative-Y',
+  },
   shardLevelSli:: {
     alias: '/.*shard (apdex|error ratio|RPS)$/',
     color: '#E7D551',  // "Yellow"

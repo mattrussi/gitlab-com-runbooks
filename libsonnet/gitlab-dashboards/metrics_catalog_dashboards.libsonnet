@@ -11,6 +11,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
+local override = import 'grafana/time-series/override.libsonnet';
 
 local row = grafana.row;
 
@@ -383,22 +384,37 @@ local sliDetailErrorRatePanel(
                     null,
 
                   if misc.isPresent(aggregationSet.aggregationLabels) && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
-                    basic.percentageTimeseries(
-                      title='Apdex attribution for ' + sliName + ' Latency - ' + aggregationSet.title,
-                      description='Attributes apdex downscoring',
-                      query=sli.apdex.apdexAttribution(
-                        aggregationLabel=aggregationSet.aggregationLabels,
-                        selector=filteredSelectorHash + aggregationSet.selector,
-                        rangeInterval='$__interval',
-                      ),
-                      legendFormat=aggregationSet.legendFormat % { sliName: sliName },
-                      intervalFactor=1,
-                      decimals=2,
-                      linewidth=1,
-                      fill=4,
-                      stack=true,
-                    )
-                    .addSeriesOverride(seriesOverrides.negativeY)
+                    if useTimeSeriesPlugin then
+                      panel.percentageTimeSeries(
+                        title='Apdex attribution for ' + sliName + ' Latency - ' + aggregationSet.title,
+                        description='Attributes apdex downscoring',
+                        query=sli.apdex.apdexAttribution(
+                          aggregationLabel=aggregationSet.aggregationLabels,
+                          selector=filteredSelectorHash + aggregationSet.selector,
+                          rangeInterval='$__interval',
+                        ),
+                        legendFormat=aggregationSet.legendFormat % { sliName: sliName },
+                        intervalFactor=1,
+                        linewidth=1,
+                      )
+                      .addSeriesOverride(override.negativeY)
+                    else
+                      basic.percentageTimeseries(
+                        title='Apdex attribution for ' + sliName + ' Latency - ' + aggregationSet.title,
+                        description='Attributes apdex downscoring',
+                        query=sli.apdex.apdexAttribution(
+                          aggregationLabel=aggregationSet.aggregationLabels,
+                          selector=filteredSelectorHash + aggregationSet.selector,
+                          rangeInterval='$__interval',
+                        ),
+                        legendFormat=aggregationSet.legendFormat % { sliName: sliName },
+                        intervalFactor=1,
+                        decimals=2,
+                        linewidth=1,
+                        fill=4,
+                        stack=true,
+                      )
+                      .addSeriesOverride(seriesOverrides.negativeY)
                   else
                     null,
 
