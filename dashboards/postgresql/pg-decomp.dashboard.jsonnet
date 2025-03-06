@@ -7,6 +7,8 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 
+local tableList = 'dast_pre_scan_verification_steps|dast_pre_scan_verifications|dast_profile_schedules|dast_profiles|dast_profiles_pipelines|dast_profiles_tags|dast_scanner_profiles|dast_scanner_profiles_builds|dast_site_profile_secret_variables|dast_site_profiles|dast_site_profiles_builds|dast_site_tokens|dast_site_validations|dast_sites|dependency_list_export_parts|dependency_list_exports|group_security_exclusions|project_security_exclusions|project_security_statistics|sbom_component_versions|sbom_components|sbom_occurrences|sbom_occurrences_vulnerabilities|sbom_source_packages|sbom_sources|security_findings|security_scans|vulnerabilities|vulnerability_archive_exports|vulnerability_archived_records|vulnerability_archives|vulnerability_export_parts|vulnerability_exports|vulnerability_external_issue_links|vulnerability_feedback|vulnerability_finding_evidences|vulnerability_finding_links|vulnerability_finding_signatures|vulnerability_findings_remediations|vulnerability_flags|vulnerability_historical_statistics|vulnerability_identifiers|vulnerability_issue_links|vulnerability_merge_request_links|vulnerability_namespace_historical_statistics|vulnerability_occurrence_identifiers|vulnerability_occurrences|vulnerability_reads|vulnerability_remediations|vulnerability_representation_information|vulnerability_scanners|vulnerability_severity_overrides|vulnerability_state_transitions|vulnerability_statistics|vulnerability_user_mentions';
+
 local sourceClusterNameTemplate = grafana.template.new(
   'src_cluster',
   '$PROMETHEUS_DS',
@@ -356,6 +358,56 @@ local targetWritesTuple =
     ),
   );
 
+local sourceWritesTupleTables =
+  panels.generalGraphPanel('🏹 Source writes (tuple ins/upd/del) for Decomp Tables', decimals=2, legend_show=true, legend_min=false, legend_current=false)
+  .resetYaxes()
+  .addYaxis(
+    format='ops/s',
+  )
+  .addYaxis(
+    format='short',
+    max=1,
+    min=0,
+    show=false,
+  )
+  .addTarget(
+    promQuery.target(
+      |||
+        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"${tableList}"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"${tableList}"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"${tableList}"}[1m])) by (instance)
+        and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
+
+local targetWritesTupleTables =
+  panels.generalGraphPanel('🎯 Target writes (tuple ins/upd/del) for Decomp Tables', decimals=2, legend_show=true, legend_min=false, legend_current=false)
+  .resetYaxes()
+  .addYaxis(
+    format='ops/s',
+  )
+  .addYaxis(
+    format='short',
+    max=1,
+    min=0,
+    show=false,
+  )
+  .addTarget(
+    promQuery.target(
+      |||
+        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)
+        and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
+
 local sourceIndexTupleFetches =
   panels.generalGraphPanel('🏹 Source index tuple fetches', decimals=3, legend_show=true, legend_min=false, legend_current=false)
   .resetYaxes()
@@ -492,10 +544,12 @@ basic.dashboard(
   row.new(title='Tuple stats: ins/upd/del, index fetches, seq reads', collapse=true)
   .addPanel(sourceWritesTuple, gridPos={ x: 0, y: 14, w: 12, h: 8 })
   .addPanel(targetWritesTuple, gridPos={ x: 12, y: 14, w: 12, h: 8 })
-  .addPanel(sourceIndexTupleFetches, gridPos={ x: 0, y: 22, w: 12, h: 8 })
-  .addPanel(targetIndexTupleFetches, gridPos={ x: 12, y: 22, w: 12, h: 8 })
-  .addPanel(sourceSeqTupleReads, gridPos={ x: 0, y: 30, w: 12, h: 8 })
-  .addPanel(targetSeqTupleReads, gridPos={ x: 12, y: 30, w: 12, h: 8 }),
+  .addPanel(sourceWritesTupleTables, gridPos={ x: 0, y: 22, w: 12, h: 8 })
+  .addPanel(targetWritesTupleTables, gridPos={ x: 12, y: 22, w: 12, h: 8 })
+  .addPanel(sourceIndexTupleFetches, gridPos={ x: 0, y: 30, w: 12, h: 8 })
+  .addPanel(targetIndexTupleFetches, gridPos={ x: 12, y: 30, w: 12, h: 8 })
+  .addPanel(sourceSeqTupleReads, gridPos={ x: 0, y: 30, w: 38, h: 8 })
+  .addPanel(targetSeqTupleReads, gridPos={ x: 12, y: 30, w: 38, h: 8 }),
   gridPos={
     x: 0,
     y: 14,
