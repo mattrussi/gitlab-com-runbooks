@@ -31,6 +31,7 @@
 * [Chefspec](../config_management/chefspec.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../duo/code_suggestion_failover.md](../duo/code_suggestion_failover.md)
+* [Duo Enterprise License Access Process for Staging Environment](../duo/duo_license.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [Gitaly error rate is too high](../gitaly/gitaly-error-rate.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
