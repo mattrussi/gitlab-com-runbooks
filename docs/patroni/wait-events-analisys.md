@@ -30,7 +30,7 @@ These events need to be sampled for analysis. With external sampling (e.g., dash
 
 ## Dashboards to be used
 
-1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04](Postgres Wait sampling dashboard)
+1. [Postgres Wait sampling dashboard](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04)
 
 Additionally, for further steps:
 
