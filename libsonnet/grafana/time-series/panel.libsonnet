@@ -20,6 +20,7 @@ local basic(
   pointradius=5,
   lines=true,
   unit=null,
+  drawStyle='line',
       ) =
   local datasourceType =
     if datasource == '$PROMETHEUS_DS' then
@@ -50,6 +51,7 @@ local basic(
   ts.datasource.withType(datasourceType) +
   ts.datasource.withUid(datasource) +
   ts.fieldConfig.defaults.custom.withAxisGridShow(lines) +
+  ts.fieldConfig.defaults.custom.withDrawStyle(drawStyle) +
   ts.fieldConfig.defaults.custom.withLineWidth(linewidth) +
   ts.fieldConfig.defaults.custom.withPointSize(pointradius) +
   ts.fieldConfig.defaults.custom.withShowPoints(showPoints) +
