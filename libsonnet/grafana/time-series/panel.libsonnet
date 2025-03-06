@@ -276,6 +276,85 @@ local latencyTimeSeries(
     label=yAxisLabel,
   );
 
+local percentageTimeSeries(
+  title,
+  description='',
+  query='',
+  legendFormat='',
+  yAxisLabel='Percent',
+  interval='1m',
+  intervalFactor=1,
+  linewidth=2,
+  legend_show=true,
+  min=null,
+  max=null,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  local formatConfig = {
+    query: query,
+  };
+  basic(
+    title,
+    description=description,
+    linewidth=linewidth,
+    datasource=datasource,
+    legend_show=legend_show,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    unit='percentunit',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        clamp_min(clamp_max(%(query)s,1),0)
+      ||| % formatConfig,
+      legendFormat=legendFormat,
+      interval=interval,
+      intervalFactor=intervalFactor
+    )
+  )
+  .addYaxis(
+    min=min,
+    max=max,
+    label=yAxisLabel,
+  );
+
+local queueLengthTimeSeries(
+  title='Timeseries',
+  description='',
+  query='',
+  legendFormat='',
+  format='short',
+  interval='1m',
+  intervalFactor=1,
+  yAxisLabel='Queue Length',
+  linewidth=2,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  basic(
+    title,
+    description=description,
+    linewidth=linewidth,
+    datasource=datasource,
+    legend_show=true,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    unit=format,
+  )
+  .addTarget(target.prometheus(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
+  .addYaxis(
+    min=0,
+    label=yAxisLabel,
+  );
+
 local networkTrafficGraph(
   title='Node Network Utilization',
   description='Network utilization',
@@ -323,5 +402,7 @@ local networkTrafficGraph(
   basic: basic,
   timeSeries: timeSeries,
   latencyTimeSeries: latencyTimeSeries,
+  percentageTimeSeries: percentageTimeSeries,
+  queueLengthTimeSeries: queueLengthTimeSeries,
   networkTrafficGraph: networkTrafficGraph,
 }
