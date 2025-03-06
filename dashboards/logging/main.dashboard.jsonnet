@@ -11,7 +11,7 @@ local target = import 'grafana/time-series/target.libsonnet';
 
 local useTimeSeriesPlugin = true;
 
-serviceDashboard.overview('logging', useTimeSeriesPlugin=useTimeSeriesPlugin)
+serviceDashboard.overview('logging')
 .overviewTrailer()
 .addPanel(
   row.new(title='PubSub Subscriptions Details', collapse=true)
