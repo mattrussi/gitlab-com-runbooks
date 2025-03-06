@@ -398,11 +398,11 @@ local targetWritesTupleTables =
   .addTarget(
     promQuery.target(
       |||
-        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])
+        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])
         +
-        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])
+        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])
         +
-        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)
+        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])) by (instance)
         and on(instance) pg_replication_is_replica==0
       |||,
     ),
