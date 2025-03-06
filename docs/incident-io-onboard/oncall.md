@@ -34,6 +34,7 @@ This is something we are iterating on. The process is:
 
 1. An [incident management project](https://gitlab.com/gitlab-com/gl-infra/production) issue will be automatically created and linked to the incident.
    - See [How to raise an incident](incident-management.md#how-to-raise-an-incident) for detailed steps.
+1. EOC is automatically assigned the incident lead for all S3 and S4 incidents , IMOC is automatically assigned lead for all S1 and S2 incidents , if you wish to change the incident lead for some reason , please use `/incident lead` command
 1. Begin [working on the alert](#working-on-the-alert)
 
 ### Working on the Alert
@@ -48,11 +49,13 @@ Important investigation details to document:
 1. Use Zoom calls when needed for real-time collaboration, and utilize incident.io's Scribe feature to summarize call discussions directly in the incident channel.
 1. Regular status updates can be posted using incident.io's update feature via the `/incident` command.
 
+You can use `:boom:` emoji in Slack to assign an action related to the incident , Assigning an action does not create a Gitlab issue or MR.
+
 As you work through an investigation, it is important to keep track of any ~"corrective actions"s (label: `~corrective action`) that need to be followed up on. Some strategies are to note these in the `Investigation Thread` or create a separate `Corrective Actions` thread to keep as reference. Once the Incident is over, the EOC should create Issues for the ~"corrective actions"s, as detailed in [Post-Incident Responsibilities](#post-incident-responsibilities).
 
 # Manual Escalation
 
-- These steps highlights the way to escalate to a team or individual , CMOC , IMOC during an incident
+- These steps highlights the way to escalate to a team or individual , CMOC , IMOC during an incident.
 
 - From the incident channel once you wish to escalate to a team / individual , use the command `/incident escalate` , this should trigger an escalation form pop-up
 
@@ -104,6 +107,8 @@ The incident is resolved when it is fully addressed. Use incident.io's [Post-Inc
 - Follow-ups are a way for your team to capture something that needs to be done after an incident is closed. These will come in all shapes and sizes, from an urgent task such as reverting a temporary workaround, to a low priority task such as investigating how to move to a new cloud provider. You are able to assign each follow-up a priority, to capture this level of importance within incident.io.
 
 - Create follow-ups by using the command `/incident follow-up` , this opens up a form , fill in the required title and assign it to yourself or someone else as required
+
+**_Note : Follow-ups create a Gitlab issue _**
 
 <img src="img/followup.png" style="width: 20%; margin-left: 3.5%;" alt="Follow Up>
 
