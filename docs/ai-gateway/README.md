@@ -119,14 +119,14 @@ For more details, refer to [Runway runbook](../runway/README.md).
 
 ## Pausing AI Gateway Deployments
 
-Runway handles the multi-stage deployments of AI Gateway. In certain situations (for example, during incident mitigation or maintenance), it may be benificial to temporarily disable these continuous deployments. To do this, the pipeline cna be configured to require manual intervention before deploying changes.
+Runway handles the multi-stage deployments of AI Gateway. In certain situations (for example, during incident mitigation or maintenance), it may be beneficial to temporarily disable these continuous deployments. To do this, the pipeline can be configured to require manual intervention before deploying changes.
 
 **Temporarily disabling automatic deployments:**
 
-1. Open the AI Gateway project in Gitlab: Got to the projects **Settings >> CI/CD** page.
+1. Open the AI Gateway project in Gitlab: Go to the project's **Settings >> CI/CD** page.
 1. Add a CI/CD variable: Under **Variables**, define a new variable named `RUNWAY_DEPLOYMENT_ACTION`.
 1. Set the value to "manual": Enter `manual` as the value for `RUNWAY_DEPLOYMENT_ACTION`, Mark the variable as *protected* and save changes.
-1. Confirm pipeline behavior: With this variable set, any new AI Gateway deployment pipeline will pause before deploying. The deployment job will be not proceed to staging or production until manually triggered.
+1. Confirm pipeline behavior: With this variable set, any new AI Gateway deployment pipeline will pause before deploying. The deployment job will not proceed to staging or production until manually triggered.
 
 This configuration effectively pauses all continuous deployments. To resume normal automated deployments, remove the `RUNWAY_DEPLOYMENT_ACTION` variable. Once this variable is removed, Runway will revert to automatically deploying new changes on pipeline runs as usual.
 
