@@ -20,7 +20,7 @@ The wait events analysis dashboard serves as a vital tool for database performan
 
 - identify performance bottlenecks without needing to dive deep into database internals
 - understand whether performance issues stem from CPU utilization, I/O operations, memory constraints, lock or lwlock contentions
-- trace problematic wait events back to specific queries (identifying their `queryid` values – the same `quyerid` that are used in other areas of query analysis such as based on `pg_stat_statements`, `pg_stat_kcache`, or logging including `auto_explain`).
+- trace problematic wait events back to specific queries (identifying their `queryid` values – the same `queryid` that are used in other areas of query analysis such as based on `pg_stat_statements`, `pg_stat_kcache`, or logging including `auto_explain`).
 - think of wait events as a queue at a busy restaurant - this dashboard shows you not just how long the line is, but why people are waiting (kitchen backup, seating limitations, or staff shortages) and which orders are causing the longest delays; this practical insight can help move from reactive firefighting to proactive performance management
 - the ASH dashboard bridges the gap between observing performance problems and understanding their root causes, enabling faster and more accurate resolution of database performance issues
 
@@ -30,7 +30,7 @@ These events need to be sampled for analysis. With external sampling (e.g., dash
 
 ## Dashboards to be used
 
-1. [https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04](Postgres Wait sampling dashboard)
+1. [Postgres Wait sampling dashboard](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04)
 
 Additionally, for further steps:
 
@@ -73,6 +73,6 @@ This panel shows the highest-level view of wait event analysis. Use `wait_event_
 
 This panel allows to identify the queries that are responsible for high values for specific wait events – we can do it finding the `queryid` values for those queries. To do that, make sure you use or not use filters on `wait_event_type` and `wait_event` in the top panel of the dashboard – these filters are optional and should be used to drill down in case if the nature of active session spikes is not trivial.
 
-`queryid` values here are the same `quyerid` that are used in other areas of query analysis such as based on `pg_stat_statements`, `pg_stat_kcache`, or logging including `auto_explain`.
+`queryid` values here are the same `queryid` that are used in other areas of query analysis such as based on `pg_stat_statements`, `pg_stat_kcache`, or logging including `auto_explain`.
 
 Note that for some backends, you'll see textual value (e.g., `Postgres process - parallel worker`, `Postgres process - autovacuum worker`) instead of `queryid`. This gives ability to see the contribution of Postgres helper processes to load.
