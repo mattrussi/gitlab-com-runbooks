@@ -6,6 +6,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local quantilePanel = import 'grafana/quantile_panel.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
@@ -18,7 +19,7 @@ local linksForService(type) =
     platformLinks.kubenetesDetail(type),
   ];
 
-local panelsForDeployment(serviceType, deployment, selectorHash) =
+local panelsForDeployment(serviceType, deployment, selectorHash, useTimeSeriesPlugin=false) =
   local deploymentSelectorHash = selectorHash {
     type: serviceType,
     deployment: deployment,
@@ -35,60 +36,116 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
     containerSelector: selectors.serializeHash(containerSelectorHash),
   };
 
-  [
-    basic.timeseries(
-      title='%(deployment)s Deployment: CPU' % formatConfig,
-      query=|||
-        sum by(cluster) (
-          rate(
-            container_cpu_usage_seconds_total:labeled{
+  if useTimeSeriesPlugin then
+    [
+      panel.timeSeries(
+        title='%(deployment)s Deployment: CPU' % formatConfig,
+        query=|||
+          sum by(cluster) (
+            rate(
+              container_cpu_usage_seconds_total:labeled{
+                %(containerSelector)s
+              }[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
+        linewidth=1,
+        legendFormat='{{ cluster }}',
+        intervalFactor=2,
+      ),
+      panel.timeSeries(
+        title='%(deployment)s Deployment: Memory' % formatConfig,
+        query=|||
+          sum by(cluster) (
+            container_memory_working_set_bytes:labeled{
               %(containerSelector)s
-            }[$__rate_interval]
+            }
           )
-        )
-      ||| % formatConfig,
-      format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
-      linewidth=1,
-      legendFormat='{{ cluster }}',
-      intervalFactor=2,
-    ),
-    basic.timeseries(
-      title='%(deployment)s Deployment: Memory' % formatConfig,
-      query=|||
-        sum by(cluster) (
-          container_memory_working_set_bytes:labeled{
-            %(containerSelector)s
-          }
-        )
-      ||| % formatConfig,
-      format='bytes',
-      linewidth=1,
-      legendFormat='{{ cluster }}',
-    ),
-    basic.networkTrafficGraph(
-      title='%(deployment)s Deployment: Network IO' % formatConfig,
-      sendQuery=|||
-        sum by(cluster) (
-          rate(
-            container_network_transmit_bytes_total:labeled{
-              %(deploymentSelector)s
-            }[$__rate_interval]
+        ||| % formatConfig,
+        format='bytes',
+        linewidth=1,
+        legendFormat='{{ cluster }}',
+      ),
+      panel.networkTrafficGraph(
+        title='%(deployment)s Deployment: Network IO' % formatConfig,
+        sendQuery=|||
+          sum by(cluster) (
+            rate(
+              container_network_transmit_bytes_total:labeled{
+                %(deploymentSelector)s
+              }[$__rate_interval]
+            )
           )
-        )
-      ||| % formatConfig,
-      receiveQuery=|||
-        sum by(cluster) (
-          rate(
-            container_network_receive_bytes_total:labeled{
-              %(deploymentSelector)s
-            }[$__rate_interval]
+        ||| % formatConfig,
+        receiveQuery=|||
+          sum by(cluster) (
+            rate(
+              container_network_receive_bytes_total:labeled{
+                %(deploymentSelector)s
+              }[$__rate_interval]
+            )
           )
-        )
-      ||| % formatConfig,
-      legendFormat='{{ cluster }}',
-      intervalFactor=2,
-    ),
-  ];
+        ||| % formatConfig,
+        legendFormat='{{ cluster }}',
+        intervalFactor=2,
+      ),
+    ]
+  else
+    [
+      basic.timeseries(
+        title='%(deployment)s Deployment: CPU' % formatConfig,
+        query=|||
+          sum by(cluster) (
+            rate(
+              container_cpu_usage_seconds_total:labeled{
+                %(containerSelector)s
+              }[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
+        linewidth=1,
+        legendFormat='{{ cluster }}',
+        intervalFactor=2,
+      ),
+      basic.timeseries(
+        title='%(deployment)s Deployment: Memory' % formatConfig,
+        query=|||
+          sum by(cluster) (
+            container_memory_working_set_bytes:labeled{
+              %(containerSelector)s
+            }
+          )
+        ||| % formatConfig,
+        format='bytes',
+        linewidth=1,
+        legendFormat='{{ cluster }}',
+      ),
+      basic.networkTrafficGraph(
+        title='%(deployment)s Deployment: Network IO' % formatConfig,
+        sendQuery=|||
+          sum by(cluster) (
+            rate(
+              container_network_transmit_bytes_total:labeled{
+                %(deploymentSelector)s
+              }[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        receiveQuery=|||
+          sum by(cluster) (
+            rate(
+              container_network_receive_bytes_total:labeled{
+                %(deploymentSelector)s
+              }[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        legendFormat='{{ cluster }}',
+        intervalFactor=2,
+      ),
+    ];
 
 local panelsForRequestsUtilization(serviceType, selectorHash) =
   local nodeSelectorHash = selectorHash {
@@ -362,7 +419,7 @@ local dashboardsForService(
       },
   };
 
-local deploymentOverview(type, selector, startRow=1) =
+local deploymentOverview(type, selector, startRow=1, useTimeSeriesPlugin=false) =
   local serviceInfo = metricsCatalog.getService(type);
   local deployments = std.objectFields(serviceInfo.kubeResources);
   local serviceHasDedicatedKubeNodePool = serviceInfo.hasDedicatedKubeNodePool();
@@ -384,7 +441,7 @@ local deploymentOverview(type, selector, startRow=1) =
             panel {
               links: links,
             },
-          panelsForDeployment(type, deployment, selector)
+          panelsForDeployment(type, deployment, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)
         ),
       deployments
     ) + (
