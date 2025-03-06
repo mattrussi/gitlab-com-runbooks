@@ -70,7 +70,7 @@ As you work through an investigation, it is important to keep track of any ~"cor
 
 ## Incident Lifecycle
 
-We manage incidents using [incident.io](incident-management.md). When an incident is created using `/inc create` in Slack, it automatically creates both a dedicated Slack channel and a GitLab issue. Lifecycles are defined [here](https://app.incident.io/gitlab/settings/lifecycle?tab=lifecycles). The incident has a few especially notable stages:
+We manage incidents using [incident.io](incident-management.md). When an incident is created using `/incident create` in Slack, it automatically creates both a dedicated Slack channel and a GitLab issue. Lifecycles are defined [here](https://app.incident.io/gitlab/settings/lifecycle?tab=lifecycles). The incident has a few especially notable stages:
 
 ### Active
 
