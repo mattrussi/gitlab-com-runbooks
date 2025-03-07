@@ -7,6 +7,7 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'api' };
 
@@ -258,7 +259,7 @@ metricsCatalog.serviceDefinition({
       },
       dependsOn: dependOnPatroni.sqlComponents,
     }
-  ) + sliLibrary.get('glql_query').generateServiceLevelIndicator(
+  ) + sliLibrary.get('glql').generateServiceLevelIndicator(
     // glql:unknown signifies that the glql query came from outside the GitLab codebase,
     // eg, from an API user, or the iGraphQL Explorer. We have no control over these queries and
     // they could fail for a variety of reasons, including invalid queries, misformed graphql etc.
