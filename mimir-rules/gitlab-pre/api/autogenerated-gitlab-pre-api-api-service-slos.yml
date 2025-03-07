@@ -44,14 +44,14 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: glql_query
+      component: glql
       monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: glql_query
+      component: glql
       monitor: global
       tier: sv
       type: api
@@ -176,7 +176,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: glql_query
+      component: glql
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "yes"
