@@ -624,7 +624,7 @@
             "steppedLine": false,
             "targets": [
                {
-                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_emit_records{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "expr": "sum by (shard, plugin) (\n  increase(fluentd_output_status_emit_records{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -713,7 +713,7 @@
             "steppedLine": false,
             "targets": [
                {
-                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_retry_wait{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_retry_wait{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -802,7 +802,7 @@
             "steppedLine": false,
             "targets": [
                {
-                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_write_count{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "expr": "sum by (shard, plugin) (\n  increase(fluentd_output_status_write_count{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -891,7 +891,7 @@
             "steppedLine": false,
             "targets": [
                {
-                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_retry_count{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_retry_count{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -899,7 +899,7 @@
                   "refId": "A"
                },
                {
-                  "expr": "sum by (shard, plugin) (\n    rate(fluentd_output_status_num_errors{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "expr": "sum by (shard, plugin) (\n    rate(fluentd_output_status_num_errors{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -988,7 +988,7 @@
             "steppedLine": false,
             "targets": [
                {
-                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_flush_time_count{shard=~\"$shard\", plugin=~\"$plugin\"}[1m])\n)\n",
+                  "expr": "sum by (shard, plugin) (\n  rate(fluentd_output_status_flush_time_count{shard=~\"$shard\", plugin=~\"$plugin\"}[5m])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,

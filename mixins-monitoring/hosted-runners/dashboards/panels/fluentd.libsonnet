@@ -9,7 +9,7 @@ local emitRecords(selector) =
     format='short',
     query=|||
       sum by (shard, plugin) (
-        rate(fluentd_output_status_emit_records{%(selector)s}[1m])
+        increase(fluentd_output_status_emit_records{%(selector)s}[5m])
       )
     ||| % { selector: selector }
   );
@@ -21,7 +21,7 @@ local retryWait(selector) =
     format='short',
     query=|||
       sum by (shard, plugin) (
-        rate(fluentd_output_status_retry_wait{%(selector)s}[1m])
+        rate(fluentd_output_status_retry_wait{%(selector)s}[5m])
       )
     ||| % { selector: selector }
   );
@@ -33,7 +33,7 @@ local writeCounts(selector) =
     format='short',
     query=|||
       sum by (shard, plugin) (
-        rate(fluentd_output_status_write_count{%(selector)s}[1m])
+        increase(fluentd_output_status_write_count{%(selector)s}[5m])
       )
     ||| % { selector: selector }
   );
@@ -45,14 +45,14 @@ local errorAndRetryRate(selector) =
     format='ops',
     query=|||
       sum by (shard, plugin) (
-        rate(fluentd_output_status_retry_count{%(selector)s}[1m])
+        rate(fluentd_output_status_retry_count{%(selector)s}[5m])
       )
     ||| % { selector: selector }
   ).addTarget(
     promQuery.target(
       expr=|||
         sum by (shard, plugin) (
-            rate(fluentd_output_status_num_errors{%(selector)s}[1m])
+            rate(fluentd_output_status_num_errors{%(selector)s}[5m])
         )
       ||| % { selector: selector },
       legendFormat='{{shard}} - {{plugin}} - Error rate',
@@ -66,7 +66,7 @@ local outputFlushTime(selector) =
     format='ms',
     query=|||
       sum by (shard, plugin) (
-        rate(fluentd_output_status_flush_time_count{%(selector)s}[1m])
+        rate(fluentd_output_status_flush_time_count{%(selector)s}[5m])
       )
     ||| % { selector: selector }
   );
@@ -119,6 +119,6 @@ local bufferFreeSpace(selector) =
     outputFlushTime:: outputFlushTime(selector),
     bufferLength:: bufferLength(selector),
     bufferTotalSize:: bufferTotalSize(selector),
-    bufferFreeSpace:: bufferFreeSpace(selector)
-  }
+    bufferFreeSpace:: bufferFreeSpace(selector),
+  },
 }
