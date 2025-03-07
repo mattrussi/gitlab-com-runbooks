@@ -34,9 +34,9 @@ local row = grafana.row;
         runnerPanels.uptimeTable($._config.runnerJobSelector),
         runnerPanels.notes(
           content=|||
-            This is global overview of all hosted runner.
+            This is global overview of all hosted runners.
 
-            For more information check the hosted runner dashboard in the ruuner project.
+            For more information check the hosted runner dashboard in the runner project.
           |||
         ),
       ], cols=3, rowHeight=6, startRow=0))
@@ -167,7 +167,7 @@ local row = grafana.row;
 
             5xx responses are considered to be errors, and could indicate postgres timeouts (after 15s) on the main query used in assigning jobs to runners.
           |||
-        )
+        ),
       ], cols=3, rowHeight=10, startRow=5001)),
   },
 }
