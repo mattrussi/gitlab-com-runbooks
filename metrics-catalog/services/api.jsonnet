@@ -265,7 +265,7 @@ metricsCatalog.serviceDefinition({
     // they could fail for a variety of reasons, including invalid queries, misformed graphql etc.
     // They should not be included in the SLI.
     // Invalid queries from the GitLab codebase should be included in the SLI, however.
-    railsSelector {
+    railsSelector, {
       useConfidenceLevelForSLIAlerts: '98%',
       serviceAggregation: false,
       severity: 's3',  // Don't page SREs for this SLI
