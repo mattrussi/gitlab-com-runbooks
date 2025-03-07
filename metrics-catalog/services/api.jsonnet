@@ -264,15 +264,18 @@ metricsCatalog.serviceDefinition({
     // they could fail for a variety of reasons, including invalid queries, misformed graphql etc.
     // They should not be included in the SLI.
     // Invalid queries from the GitLab codebase should be included in the SLI, however.
-    railsSelector { endpoint_id: { ne: 'glql:unknown' } }, {
+    railsSelector {
       useConfidenceLevelForSLIAlerts: '98%',
       serviceAggregation: false,
+      severity: 's3',  // Don't page SREs for this SLI
       toolingLinks: [
-        toolingLinks.kibana(title='Rails', index='rails_glql'),
+        toolingLinks.kibana(
+          title='Glql queries',
+          index='rails',
+          filters=[matching.existsFilter('json.graphql.glql_referer')],
+        ),
       ],
       monitoringThresholds+: {
-        // lowered from 0.9995 until https://gitlab.com/gitlab-org/gitlab/-/issues/469590
-        // is resolved.
         errorRatio: 0.999,
       },
       dependsOn: dependOnPatroni.sqlComponents,

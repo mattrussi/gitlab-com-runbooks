@@ -50,23 +50,26 @@ local list = [
     |||,
   }),
   sliDefinition.new({
-    name: 'glql_query',
-    significantLabels: ['endpoint_id', 'feature_category', 'query_urgency'],
+    name: 'glql',
+    significantLabels: ['endpoint_id', 'feature_category', 'query_urgency', 'error_type'],
     kinds: [sliDefinition.errorRateKind, sliDefinition.apdexKind],
+    featureCategory: 'markdown',
     description: |||
-      A GLQL query is executed in the context of a GraphQL request. An error does not
-      always result in a 5xx error. But could contain errors in the response.
-      Multiple queries could be batched inside a single request.
-
-      This SLI counts all operations, a succeeded operation does not contain errors in
-      it's response or return a 500 error.
+      A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx;
+      sometimes errors are simply returned in the response.
+      Although multiple queries can be batched in one request,
+      GLQL sends one query per request and queues them.
 
       The number of GLQL queries meeting their duration target based on the urgency
-      of the endpoint. By default, a query should take no more than 1s. We're working
+      of the endpoint (which currently is setup as low). By default, a query should take no more than 1s. We're working
       on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
       We're only taking known operations into account. Known operations are queries
       defined in our codebase and originating from our frontend.
+
+      Invalid GLQL queries (for example, due to syntax errors) do not count towards the error budget.
+      We specifically monitor QueryAborted errors because they indicate timeouts;
+      if a query times out, our rate limiter throttles it.
     |||,
   }),
   sliDefinition.new({
