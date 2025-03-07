@@ -2937,3 +2937,31 @@ services:
       logging:
         - name: stackdriver
           permalink: https://cloudlogging.app.goo.gl/bdSg6UmtgiwMTBKs6
+
+  - name: openbao
+    tier: sv
+    friendly_name: OpenBao for Pipeline Secrets Manager
+    label: RunwayOpenBao
+    owner: pipeline_security
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/govern/secrets-management/openbao-internal
+      documents:
+        design: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/secret_manager/
+        architecture:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/117
+        sre_guide:
+        developer_guide:
+        service:
+          - https://github.com/openbao/openbao
+        security: https://openbao.org/docs/internals/security/
+      dependencies:
+        - service: vault
+        - service: patroni
+          # See: https://gitlab.com/gitlab-com/gl-infra/platform/runway/team/-/issues/374#note_2235571614
+      logging:
+        - name: openbao
+          permalink: # tbd
+    observability:
+      monitors:
+        primary_grafana_dashboard: # tbd
