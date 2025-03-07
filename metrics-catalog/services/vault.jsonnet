@@ -9,7 +9,7 @@ local googleLoadBalancerComponents = import './lib/google_load_balancer_componen
 metricsCatalog.serviceDefinition({
   type: 'vault',
   tier: 'inf',
-  tenants: [ 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-ops', 'gitlab-pre'],
 
   tags: ['golang'],
 

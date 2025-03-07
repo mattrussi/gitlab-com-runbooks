@@ -72,7 +72,7 @@ local bigQueryDuration(runner_type) = panels.heatmap(
       )
     )
   ||| % {
-    runner_type: runner_type
+    runner_type: runner_type,
   },
   description=|||
     The "big query SQL" is the SQL query GitLab uses to retrieve the jobs queue from the database. That query

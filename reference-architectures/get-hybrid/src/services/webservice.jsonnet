@@ -84,8 +84,8 @@ metricsCatalog.serviceDefinition({
       local workhorseSelector = {
         route_id: {
           ne: [
-           'health',
-           'liveness',
+            'health',
+            'liveness',
           ],
         },
       },
