@@ -110,6 +110,7 @@ To see which server is the current primary view the
 
 ### Other possible causes
 
+- Check for any active incidents/deployments around the time of the alert
 - TODO: Add other relevant PromQL queries, e.g. LWLocks, etc.
 
 ### Map queryid to SQL
