@@ -68,9 +68,9 @@ dashboardIncident.incidentDashboard(
 )
 .addGrid(
   panels=[
-    databaseGraphs.bigQueryDuration('instance_type'),
-    databaseGraphs.bigQueryDuration('group_type'),
-    databaseGraphs.bigQueryDuration('project_type'),
+    databaseGraphs.bigQueryDuration("instance_type"),
+    databaseGraphs.bigQueryDuration("group_type"),
+    databaseGraphs.bigQueryDuration("project_type"),
   ],
   startRow=4000,
   rowHeight=8,

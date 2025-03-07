@@ -17,7 +17,6 @@
 ## Troubleshooting Pointers
 
 * [`gitalyctl`](../gitaly/gitalyctl.md)
-* [Overview](../incident-io-onboard/oncall.md)
 * [Woodhouse-Slack Overview](../woodhouse-slack/overview.md)
 <!-- END_MARKER -->
 

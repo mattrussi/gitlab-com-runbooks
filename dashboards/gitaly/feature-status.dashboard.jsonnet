@@ -27,7 +27,7 @@ local customTimeseriesPanel(
   description='',
   thresholdStyle='off',
   scaleDistribution='linear'
-      ) = {
+) = {
   type: 'timeseries',
   title: title,
   description: description,
@@ -53,18 +53,18 @@ local customTimeseriesPanel(
         // Use a conditional expression for scaleDistribution, here if condition is not satisfied key becomes null which is then ignored.
         [if scaleDistribution == 'log' then 'scaleDistribution']: {
           type: 'log',
-          log: 10,
+          log: 10
         },
         [if scaleDistribution == 'linear' then 'scaleDistribution']: {
-          type: 'linear',
+          type: 'linear'
         },
         axisCenteredZero: false,
         thresholdsStyle: {
-          mode: thresholdStyle,
+          mode: thresholdStyle
         },
       },
       color: {
-        mode: 'palette-classic',
+        mode: 'palette-classic'
       },
       mappings: [],
       thresholds: thresholds,
@@ -81,14 +81,14 @@ local customTimeseriesPanel(
       showLegend: true,
       displayMode: 'list',
       placement: 'bottom',
-      calcs: legendCalcs,
+      calcs: legendCalcs
     },
   },
   targets: [
     {
       datasource: {
         type: 'prometheus',
-        uid: '$PROMETHEUS_DS',
+        uid: '$PROMETHEUS_DS'
       },
       expr: expr,
       format: 'time_series',
@@ -140,7 +140,7 @@ basic.dashboard(
           { color: 'transparent', value: 0.999 },
         ],
       },
-      thresholdStyle='line+area',
+      thresholdStyle = 'line+area',
       legendCalcs=['mean', 'min'],
       description='This graph represents the percentage of requests that succeed.',
     ),
@@ -241,13 +241,13 @@ basic.dashboard(
           expr: |||
             sum(rate(grpc_server_handled_total{%(selector)s}[1m]))
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'now',
+          legendFormat: 'now'
         },
         {
           expr: |||
             sum(rate(grpc_server_handled_total{%(selector)s}[1m] offset 1w))
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'last week',
+          legendFormat: 'last week'
         },
       ],
     },

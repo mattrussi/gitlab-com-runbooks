@@ -1,12 +1,13 @@
-local aggregationSets = import 'reference-aggregation-sets.libsonnet';
 local referenceArchitecturesGitLabConfig = import 'runbooks/reference-architectures/get-hybrid/src/gitlab-metrics-config.libsonnet';
+local aggregationSets = import 'reference-aggregation-sets.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local labelSet = (import 'label-taxonomy/label-set.libsonnet');
 local options = import 'gitlab-metrics-options.libsonnet';
 
-referenceArchitecturesGitLabConfig {
+referenceArchitecturesGitLabConfig + {
   monitoredServices: [
-    import '../lib/service.libsonnet',
+     import '../services/runner.libsonnet',
+     import '../services/logging.libsonnet'
   ],
 
   saturationMonitoring+: import '../services/runner-saturation.libsonnet',
@@ -18,7 +19,7 @@ referenceArchitecturesGitLabConfig {
     service: 'type',
     stage: null,  // No stages
     shard: 'shard',
-    node: null,  // No node
+    node: null, // No node
     sliComponent: 'component',
-  }),
+  })
 }

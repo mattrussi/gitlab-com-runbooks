@@ -32,7 +32,6 @@
 * [HostedRunnersServicePendingBuildsSaturationSingleShard](../hosted-runners/pending_queue_duration.md)
 * [../hosted-runners/runner_system_failure.md](../hosted-runners/runner_system_failure.md)
 * [HTTP Router Worker Logs](../http-router/logging.md)
-* [GitLab Production Onboarding for Incident.io](../incident-io-onboard/incident-management.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)

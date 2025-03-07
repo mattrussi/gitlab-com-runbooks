@@ -16,7 +16,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       type: 'hosted-runners',
       tier: 'inf',
     },
-    grafana_dashboard_uid: 'gitlab_runner_concurrent',
+    grafana_dashboard_uid: 'gitlab_runner_concurrent' ,
     query: |||
       (
         sum by (shard, type) (gitlab_runner_jobs)
@@ -28,5 +28,5 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       soft: 0.80,
       hard: 0.90,
     },
-  }),
+  })
 }

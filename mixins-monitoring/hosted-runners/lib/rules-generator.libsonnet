@@ -58,17 +58,17 @@ local serviceSLOsGroups(service) =
     rules:
       std.flattenArrays([
         serviceSLOsRulesetGenerator.generateRecordingRulesForService(service),
-        serviceMappingRulesetGenerator.generateRecordingRulesForService(service),
-      ]),
+        serviceMappingRulesetGenerator.generateRecordingRulesForService(service)
+      ])
   }];
 
 local componentMapping(service) =
   local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
 
   [{
-    name: 'Component mapping: %s' % [service.type],
-    interval: '1m',
-    rules: componentMappingRuleSetGenerator.generateRecordingRulesForService(service),
+      name: 'Component mapping: %s' % [service.type],
+      interval: '1m',
+      rules: componentMappingRuleSetGenerator.generateRecordingRulesForService(service),
   }];
 
 local aggregationRulesForService(config) =
@@ -85,7 +85,7 @@ local aggregationRulesForService(config) =
         componentMapping(service),
       config.gitlabMetricsConfig.monitoredServices,
       []
-    ),
+    )
   ]);
 
 aggregationRulesForService

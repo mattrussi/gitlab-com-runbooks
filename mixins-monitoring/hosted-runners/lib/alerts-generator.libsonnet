@@ -24,15 +24,15 @@ local alertDescriptors(aggregationSets, minimumSamplesForMonitoring, minimumSamp
 }];
 
 local annotations(description='') = {
-  runbook: 'docs/hosted-runners/README.md',
-  description: description,
+  runbook: "docs/hosted-runners/README.md",
+  description: description
 };
 
 local customRules() =
   local rules = [
     {
       alert: 'HostedRunnersServiceRunnerManagerDownSingleShard',
-      expr: 'gitlab_component_shard_ops:rate_5m{component="api_requests",type="hosted-runners"} == 0',
+      expr:'gitlab_component_shard_ops:rate_5m{component="api_requests",type="hosted-runners"} == 0',
       'for': '5m',
       labels: {
         severity: 's1',
@@ -41,7 +41,7 @@ local customRules() =
       annotations: annotations(
         description='The runner manager in HostedRunnersService has disconnected for a single shard. This may impact job scheduling for that shard.',
       ),
-    },
+    }
   ];
 
   [
@@ -54,13 +54,13 @@ local customRules() =
 
 
 local alertsForServices(config) =
-  local metricsConfig = config.gitlabMetricsConfig;
-  local minimumSamplesForMonitoring = config.minimumSamplesForMonitoring;
-  local minimumSamplesForTrafficCessation = config.minimumSamplesForTrafficCessation;
+    local metricsConfig = config.gitlabMetricsConfig;
+    local minimumSamplesForMonitoring = config.minimumSamplesForMonitoring;
+    local minimumSamplesForTrafficCessation = config.minimumSamplesForTrafficCessation;
 
-  std.foldl(
-    function(memo, service)
-      memo + serviceAlertsGenerator(
+    local serviceAlerts = std.foldl(
+      function(memo, service)
+        memo + serviceAlertsGenerator(
         service,
         alertDescriptors(
           metricsConfig.aggregationSets,
@@ -68,9 +68,9 @@ local alertsForServices(config) =
           minimumSamplesForTrafficCessation
         )
       ),
-    metricsConfig.monitoredServices,
-    []
-  );
+      metricsConfig.monitoredServices,
+      []
+    );
 
     serviceAlerts + customRules();
 

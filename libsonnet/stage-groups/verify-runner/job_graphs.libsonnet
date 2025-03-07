@@ -1,7 +1,7 @@
 local panels = import './panels.libsonnet';
-local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
 local aggregatorLegendFormat(aggregator) = '{{ %s }}' % aggregator;
 local aggregatorsLegendFormat(aggregators) = '%s' % std.join(' - ', std.map(aggregatorLegendFormat, aggregators));

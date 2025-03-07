@@ -11,7 +11,7 @@ serviceDashboard.overview(
   showSystemDiagrams=false,
   showProvisioningDetails=false,
   omitEnvironmentDropdown=true,
-  environmentSelectorHash={ env: 'ops' },
+  environmentSelectorHash={ env: "ops" },
 )
 .addPanel(
   row.new(title='Mailgun Metrics'),

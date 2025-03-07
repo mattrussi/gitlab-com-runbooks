@@ -6,7 +6,7 @@ local panels = import 'stage-groups/verify-runner//panels.libsonnet';
 
 local filtering_query(metric) =
   'query_result(sum by(instance) (%(metric)s{environment=~"$environment", stage=~"$stage", shard=~"$shard"}) > 0)' % {
-    metric: metric,
+    metric: metric
   };
 
 local dmInstance = template.new(
@@ -81,7 +81,7 @@ local jobsRunning(partition, variable) =
         gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}
       )
     ||| % {
-      variable: variable,
+      variable: variable
     },
   );
 
@@ -100,11 +100,11 @@ local jobsStarted(partition, variable) =
         )
       )
     ||| % {
-      variable: variable,
+      variable: variable
     },
   ) + {
     lines: false,
-    bars: true,
+    bars: true
   };
 
 local jobsFailed(partition, variable) =
@@ -122,11 +122,11 @@ local jobsFailed(partition, variable) =
         )
       )
     ||| % {
-      variable: variable,
+      variable: variable
     },
   ) + {
     lines: false,
-    bars: true,
+    bars: true
   };
 
 local queueDurationHistogram(partition, variable) =
@@ -137,7 +137,7 @@ local queueDurationHistogram(partition, variable) =
         increase(gitlab_runner_job_queue_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval])
       )
     ||| % {
-      variable: variable,
+      variable: variable
     },
     color_mode='spectrum',
     color_colorScheme='Oranges',
