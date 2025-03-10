@@ -3,6 +3,9 @@ local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local row = grafana.row;
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 serviceDashboard.overview('web-pages')
 .addPanel(
@@ -17,12 +20,20 @@ serviceDashboard.overview('web-pages')
 .addPanels(
   layout.grid(
     [
-      basic.multiQuantileTimeseries(
-        title='web_pages_server Response Time',
-        selector='env="$environment",stage="$stage",type="web-pages"',
-        aggregators='env,environment,stage',
-        bucketMetric='gitlab_pages_http_request_duration_seconds_bucket',
-      ),
+      if useTimeSeriesPlugin then
+        panel.multiQuantileTimeSeries(
+          title='web_pages_server Response Time',
+          selector='env="$environment",stage="$stage",type="web-pages"',
+          aggregators='env,environment,stage',
+          bucketMetric='gitlab_pages_http_request_duration_seconds_bucket',
+        )
+      else
+        basic.multiQuantileTimeseries(
+          title='web_pages_server Response Time',
+          selector='env="$environment",stage="$stage",type="web-pages"',
+          aggregators='env,environment,stage',
+          bucketMetric='gitlab_pages_http_request_duration_seconds_bucket',
+        ),
     ],
     startRow=1001
   )

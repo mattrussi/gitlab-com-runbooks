@@ -1,6 +1,7 @@
 local override = import './override.libsonnet';
 local target = import './target.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local ts = g.panel.timeSeries;
 
 local basic(
@@ -21,6 +22,8 @@ local basic(
   lines=true,
   unit=null,
   drawStyle='line',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   local datasourceType =
     if datasource == '$PROMETHEUS_DS' then
@@ -61,6 +64,22 @@ local basic(
   ts.options.legend.withPlacement(legendPlacement) +
   ts.panelOptions.withDescription(description) +
   ts.standardOptions.withUnit(unit) +
+  (if std.length(thresholdSteps) > 0 then
+     ts.fieldConfig.defaults.custom.withThresholdsStyle({
+       mode: 'area',
+     }) +
+     ts.standardOptions.thresholds.withMode(thresholdMode) +
+     ts.standardOptions.thresholds.withSteps(
+       [
+         {
+           color: '#00000000',
+           value: null,
+         },
+       ] +
+       thresholdSteps
+     )
+   else
+     {})
   {
     addYaxis(min=null, max=null, label=null, show=true)::
       local axisPlacement = if show then
@@ -181,6 +200,8 @@ local multiTimeSeries(
   max=null,
   lines=true,
   datasource='$PROMETHEUS_DS',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   local panel = basic(
     title,
@@ -196,6 +217,8 @@ local multiTimeSeries(
     legend_alignAsTable=true,
     lines=lines,
     unit=format,
+    thresholdMode=thresholdMode,
+    thresholdSteps=thresholdSteps,
   );
 
   local addPanelTarget(panel, query) =
@@ -206,6 +229,42 @@ local multiTimeSeries(
     min=min,
     max=max,
     label=yAxisLabel,
+  );
+
+local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rangeInterval) =
+  |||
+    histogram_quantile(%(percentile)g, sum by (%(aggregator)s, le) (
+      rate(%(bucketMetric)s{%(selector)s}[%(rangeInterval)s])
+    ))
+  ||| % {
+    percentile: percentile,
+    aggregator: aggregator,
+    selector: selectors.serializeHash(selector),
+    bucketMetric: bucketMetric,
+    rangeInterval: rangeInterval,
+  };
+
+local multiQuantileTimeSeries(
+  title='Quantile latencies',
+  selector='',
+  legendFormat='latency',
+  bucketMetric='',
+  aggregators='',
+  percentiles=[50, 90, 95, 99],
+  legend_rightSide=false,
+      ) =
+  multiTimeSeries(
+    title=title,
+    queries=std.map(
+      function(p) {
+        query: latencyHistogramQuery(p / 100, bucketMetric, selector, aggregators, '$__interval'),
+        legendFormat: '%s p%s' % [legendFormat, p],
+      },
+      percentiles
+    ),
+    yAxisLabel='Duration',
+    format='short',
+    legend_rightSide=legend_rightSide,
   );
 
 local timeSeries(
@@ -224,6 +283,8 @@ local timeSeries(
   max=null,
   lines=true,
   datasource='$PROMETHEUS_DS',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   multiTimeSeries(
     queries=[{ query: query, legendFormat: legendFormat }],
@@ -240,6 +301,8 @@ local timeSeries(
     max=max,
     lines=lines,
     datasource=datasource,
+    thresholdMode=thresholdMode,
+    thresholdSteps=thresholdSteps,
   );
 
 local latencyTimeSeries(
@@ -355,6 +418,34 @@ local queueLengthTimeSeries(
     label=yAxisLabel,
   );
 
+local saturationTimeSeries(
+  title='Saturation',
+  description='',
+  query='',
+  legendFormat='',
+  yAxisLabel='Saturation',
+  interval='1m',
+  intervalFactor=1,
+  linewidth=2,
+  legend_show=true,
+  min=0,
+  max=1,
+      ) =
+  percentageTimeSeries(
+    title=title,
+    description=description,
+    query=query,
+    legendFormat=legendFormat,
+    yAxisLabel=yAxisLabel,
+    interval=interval,
+    intervalFactor=intervalFactor,
+    linewidth=linewidth,
+    legend_show=legend_show,
+    min=min,
+    max=max,
+  );
+
+
 local networkTrafficGraph(
   title='Node Network Utilization',
   description='Network utilization',
@@ -402,7 +493,9 @@ local networkTrafficGraph(
   basic: basic,
   timeSeries: timeSeries,
   latencyTimeSeries: latencyTimeSeries,
+  multiQuantileTimeSeries: multiQuantileTimeSeries,
   percentageTimeSeries: percentageTimeSeries,
   queueLengthTimeSeries: queueLengthTimeSeries,
+  saturationTimeSeries: saturationTimeSeries,
   networkTrafficGraph: networkTrafficGraph,
 }

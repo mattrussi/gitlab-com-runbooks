@@ -135,7 +135,7 @@ local overviewDashboard(
     .addPanelsIf(
       showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().vms == true,
       [
-        nodeMetrics.nodeMetricsDetailRow(selectorHash) {
+        nodeMetrics.nodeMetricsDetailRow(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin) {
           gridPos: {
             x: 0,
             y: 300,
