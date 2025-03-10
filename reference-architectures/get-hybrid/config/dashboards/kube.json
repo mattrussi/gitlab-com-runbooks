@@ -126,179 +126,273 @@
       "type": "row"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Apdex %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "kube Service Apdex SLO Analysis",
+              "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=kube"
+            }
+          ],
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube apdex avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "kube apdex"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube apdex"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 9,
         "w": 6,
         "x": 0,
         "y": 1
       },
-      "id": 1070736363,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 3,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "kube Service Apdex SLO Analysis",
-            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=kube"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "kube apdex avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillBelowTo": "kube apdex",
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "kube apdex",
-          "color": "#E7D551",
-          "zindex": 3
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "service-kube-apdex",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"kube\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "kube apdex",
-          "refId": "A"
+          "legendFormat": "kube apdex"
         },
         {
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"kube\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"kube\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"kube\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "kube apdex avg",
-          "refId": "D"
+          "legendFormat": "kube apdex avg"
         },
         {
           "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"kube\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"kube\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         }
       ],
       "title": "kube Service Apdex",
-      "tooltip": {
-        "shared": true,
-        "sort": 1,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Apdex %",
-          "logBase": 1,
-          "max": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -505,180 +599,273 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Error %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "kube Service Error-Rate SLO Analysis",
+              "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=kube"
+            }
+          ],
+          "min": 0,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube error ratio avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube error ratio"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "kube error ratio avg"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 9,
         "w": 6,
         "x": 6,
         "y": 1
       },
-      "id": 2327477058,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 5,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "kube Service Error-Rate SLO Analysis",
-            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=kube"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "kube error ratio avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillGradient": 10,
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "kube error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "kube error ratio avg",
-          "zindex": 3
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "service-kube-error-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"kube\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "kube error ratio",
-          "refId": "A"
+          "legendFormat": "kube error ratio"
         },
         {
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"kube\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"kube\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"kube\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "kube error ratio avg",
-          "refId": "D"
+          "legendFormat": "kube error ratio avg"
         },
         {
           "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"kube\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"kube\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         }
       ],
       "title": "kube Service Error Ratio",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Error %",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -885,185 +1072,269 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "upper normal"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    8
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73BF69",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "lower normal"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lower normal"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    8
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73BF69",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 10,
         "w": 6,
         "x": 12,
         "y": 1
       },
-      "id": 2409443320,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "kube RPS",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "upper normal",
-          "color": "#73BF69",
-          "dashLength": 8,
-          "dashes": true,
-          "fillBelowTo": "lower normal",
-          "legend": false,
-          "lines": false,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 8,
-          "zindex": -3
-        },
-        {
-          "alias": "lower normal",
-          "color": "#73BF69",
-          "dashLength": 8,
-          "dashes": true,
-          "legend": false,
-          "lines": false,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 8,
-          "zindex": -3
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "service-kube-ops-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"kube\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "kube RPS",
-          "refId": "A"
+          "legendFormat": "kube RPS"
         },
         {
           "expr": "gitlab_service_ops:rate_5m{type=\"kube\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "B"
+          "legendFormat": "last week"
         },
         {
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"kube\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"kube\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "upper normal",
-          "refId": "C"
+          "legendFormat": "upper normal"
         },
         {
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"kube\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"kube\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "lower normal",
-          "refId": "D"
+          "legendFormat": "lower normal"
         }
       ],
       "title": "kube Service RPS - Requests per Second",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Operations per Second",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Saturation %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "max": 1,
+          "unit": "percentunit"
+        }
+      },
       "gridPos": {
         "h": 10,
         "w": 6,
         "x": 18,
         "y": 1
       },
-      "id": 1217942947,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
+      "id": 8,
       "links": [
         {
           "title": "kube Service | kube_persistent_volume_claim_disk_space resource Dashboard",
@@ -1078,52 +1349,31 @@
           "url": "https://dashboards.gitlab.net/d/alerts-sat_node_group_cpu/?var-environment=gprd\u0026var-type=kube\u0026var-stage=main\u0026var-component=node_group_cpu"
         }
       ],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "spaceLength": 10,
-      "stableId": "service-utilization",
-      "stack": false,
-      "steppedLine": false,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"kube\"}[$__interval]\n  )\n) by (component)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{ component }} component",
-          "refId": "A"
+          "legendFormat": "{{ component }} component"
         }
       ],
       "title": "Saturation",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Saturation %",
-          "logBase": 1,
-          "max": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "collapse": false,
@@ -1145,179 +1395,273 @@
       "type": "row"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Apdex %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "apiserver SLI Apdex SLO Analysis",
+              "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=apiserver\u0026var-type=kube"
+            }
+          ],
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "apiserver apdex avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "apiserver apdex"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "apiserver apdex"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 7,
         "w": 6,
         "x": 0,
         "y": 21
       },
-      "id": 1666123778,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 10,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "apiserver SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=apiserver\u0026var-type=kube"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "apiserver apdex avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillBelowTo": "apiserver apdex",
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "apiserver apdex",
-          "color": "#E7D551",
-          "zindex": 3
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-apiserver-apdex",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"apiserver\",type=\"kube\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "apiserver apdex",
-          "refId": "A"
+          "legendFormat": "apiserver apdex"
         },
         {
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"apiserver\",type=\"kube\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"apiserver\",type=\"kube\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"apiserver\",type=\"kube\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "apiserver apdex avg",
-          "refId": "D"
+          "legendFormat": "apiserver apdex avg"
         },
         {
           "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"apiserver\",type=\"kube\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"apiserver\",type=\"kube\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         }
       ],
       "title": "apiserver SLI Apdex",
-      "tooltip": {
-        "shared": true,
-        "sort": 1,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Apdex %",
-          "logBase": 1,
-          "max": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -1524,180 +1868,273 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Error %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "apiserver SLI Error-Rate SLO Analysis",
+              "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=apiserver\u0026var-type=kube"
+            }
+          ],
+          "min": 0,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "apiserver error ratio avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "apiserver error ratio"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "apiserver error ratio avg"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 7,
         "w": 6,
         "x": 6,
         "y": 21
       },
-      "id": 693885455,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 12,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "apiserver SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=apiserver\u0026var-type=kube"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "apiserver error ratio avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillGradient": 10,
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "apiserver error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "apiserver error ratio avg",
-          "zindex": 3
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-apiserver-error-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"apiserver\",type=\"kube\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "apiserver error ratio",
-          "refId": "A"
+          "legendFormat": "apiserver error ratio"
         },
         {
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"apiserver\",type=\"kube\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"apiserver\",type=\"kube\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"apiserver\",type=\"kube\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "apiserver error ratio avg",
-          "refId": "D"
+          "legendFormat": "apiserver error ratio avg"
         },
         {
           "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"apiserver\",type=\"kube\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"apiserver\",type=\"kube\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         }
       ],
       "title": "apiserver SLI Error Ratio",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Error %",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -1904,113 +2341,137 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "apiserver RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 8,
         "w": 6,
         "x": 12,
         "y": 21
       },
-      "id": 3184144040,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "apiserver RPS",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-apiserver-ops-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"apiserver\",type=\"kube\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "apiserver RPS",
-          "refId": "A"
+          "legendFormat": "apiserver RPS"
         },
         {
           "expr": "gitlab_component_ops:rate_5m{component=\"apiserver\",type=\"kube\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "B"
+          "legendFormat": "last week"
         }
       ],
       "title": "apiserver SLI RPS - Requests per Second",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Operations per Second",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "content": "### Description\n\nThe Kubernetes API server validates and configures data for the api objects which\ninclude pods, services, and others. The API Server services REST operations\nand provides the frontend to the cluster's shared state through which all other components\ninteract.\n\nThis SLI measures all non-health-check endpoints. Long-polling endpoints are excluded from apdex scores.\n\n\n\n### Observability Tools\n\n\n",
@@ -2037,14 +2498,27 @@
       "id": 16,
       "panels": [
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0.01,
+              "unit": "s"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 8,
@@ -2052,36 +2526,27 @@
             "y": 0
           },
           "id": 17,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 overall",
-              "refId": "A"
+              "legendFormat": "p95 overall"
             }
           ],
           "thresholds": [
@@ -2096,42 +2561,30 @@
             }
           ],
           "title": "Estimated p95 apiserver Latency - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Errors",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 8,
@@ -2139,75 +2592,54 @@
             "y": 0
           },
           "id": 18,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by () (\n  rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",scope!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "overall",
-              "refId": "A"
+              "legendFormat": "overall"
             }
           ],
           "title": "apiserver Errors - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 8,
@@ -2215,75 +2647,54 @@
             "y": 0
           },
           "id": 19,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by () (\n  rate(apiserver_request_total{job=\"apiserver\",scope!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "overall",
-              "refId": "A"
+              "legendFormat": "overall"
             }
           ],
           "title": "apiserver RPS - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0.01,
+              "unit": "s"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2291,36 +2702,27 @@
             "y": 10
           },
           "id": 20,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,scope) (\n    rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 {{scope}}",
-              "refId": "A"
+              "legendFormat": "p95 {{scope}}"
             }
           ],
           "thresholds": [
@@ -2335,42 +2737,43 @@
             }
           ],
           "title": "Estimated p95 apiserver Latency - per scope",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "Attributes apdex downscoring",
-          "fill": 4,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Percent",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/.*/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.transform",
+                    "value": "negative-Y"
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2378,80 +2781,54 @@
             "y": 10
           },
           "id": 21,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*/",
-              "transform": "negative-Y"
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
             }
-          ],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
+          },
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "clamp_min(clamp_max((\n  (\n    sum by (scope) (\n  rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"+Inf\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n)\n\n    -\n    (\n      sum by (scope) (\n  rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(scope) group_left()\n  (\n    sum by () (\n  rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"+Inf\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{scope}}",
-              "refId": "A"
+              "legendFormat": "{{scope}}"
             }
           ],
           "title": "Apdex attribution for apiserver Latency - per scope",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Percent",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Errors",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2459,75 +2836,54 @@
             "y": 10
           },
           "id": 22,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (scope) (\n  rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",scope!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{scope}}",
-              "refId": "A"
+              "legendFormat": "{{scope}}"
             }
           ],
           "title": "apiserver Errors - per scope",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2535,75 +2891,54 @@
             "y": 10
           },
           "id": 23,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (scope) (\n  rate(apiserver_request_total{job=\"apiserver\",scope!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{scope}}",
-              "refId": "A"
+              "legendFormat": "{{scope}}"
             }
           ],
           "title": "apiserver RPS - per scope",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0.01,
+              "unit": "s"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2611,36 +2946,27 @@
             "y": 20
           },
           "id": 24,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,resource) (\n    rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",resource!=\"\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 {{resource}}",
-              "refId": "A"
+              "legendFormat": "p95 {{resource}}"
             }
           ],
           "thresholds": [
@@ -2655,42 +2981,43 @@
             }
           ],
           "title": "Estimated p95 apiserver Latency - per resource",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "Attributes apdex downscoring",
-          "fill": 4,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Percent",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/.*/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.transform",
+                    "value": "negative-Y"
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2698,80 +3025,54 @@
             "y": 20
           },
           "id": 25,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*/",
-              "transform": "negative-Y"
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
             }
-          ],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
+          },
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "clamp_min(clamp_max((\n  (\n    sum by (resource) (\n  rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"+Inf\",resource!=\"\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n)\n\n    -\n    (\n      sum by (resource) (\n  rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",resource!=\"\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(resource) group_left()\n  (\n    sum by () (\n  rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"+Inf\",resource!=\"\",scope!=\"\",verb!~\"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{resource}}",
-              "refId": "A"
+              "legendFormat": "{{resource}}"
             }
           ],
           "title": "Apdex attribution for apiserver Latency - per resource",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Percent",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Errors",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2779,75 +3080,54 @@
             "y": 20
           },
           "id": 26,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (resource) (\n  rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",resource!=\"\",scope!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{resource}}",
-              "refId": "A"
+              "legendFormat": "{{resource}}"
             }
           ],
           "title": "apiserver Errors - per resource",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -2855,65 +3135,31 @@
             "y": 20
           },
           "id": 27,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (resource) (\n  rate(apiserver_request_total{job=\"apiserver\",resource!=\"\",scope!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{resource}}",
-              "refId": "A"
+              "legendFormat": "{{resource}}"
             }
           ],
           "title": "apiserver RPS - per resource",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         }
       ],
       "repeat": null,
@@ -2936,565 +3182,826 @@
       "id": 28,
       "panels": [
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "disk space utilization on persistent volume claims.\n Lower is better.",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Saturation %",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "max": 1,
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^Soft SLO/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#FF4500",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^Hard SLO/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#F2495C",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 4
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/aggregated /"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#E7D551",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^95th quantile for week/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#37872D",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 1
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^99th quantile for week/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#56A64B",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
             "y": 0
           },
-          "id": 4167694322,
+          "id": 29,
           "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
+            "sortDesc": true
           },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-            {
-              "alias": "/^Soft SLO/",
-              "color": "#FF4500",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^Hard SLO/",
-              "color": "#F2495C",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 4,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            },
-            {
-              "alias": "/aggregated /",
-              "color": "#E7D551",
-              "linewidth": 2,
-              "zindex": 3
-            },
-            {
-              "alias": "/^95th quantile for week/",
-              "color": "#37872D",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 1,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^99th quantile for week/",
-              "color": "#56A64B",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
             }
-          ],
-          "spaceLength": 10,
-          "stableId": "saturation-kube_persistent_volume_claim_disk_space",
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "clamp_min(\n  clamp_max(\n    max by(cluster,namespace,persistentvolumeclaim) (\n  clamp_min(\n    clamp_max(\n      kubelet_volume_stats_used_bytes\n      /\n      kubelet_volume_stats_capacity_bytes\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{ cluster }} {{ namespace }} {{ persistentvolumeclaim }}",
-              "refId": "A"
+              "legendFormat": "{{ cluster }} {{ namespace }} {{ persistentvolumeclaim }}"
             },
             {
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"kube\", component=\"kube_persistent_volume_claim_disk_space\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "aggregated {{ component }}",
-              "refId": "B"
+              "legendFormat": "aggregated {{ component }}"
             },
             {
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"kube\", component=\"kube_persistent_volume_claim_disk_space\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "95th quantile for week {{ component }}",
-              "refId": "C"
+              "legendFormat": "95th quantile for week {{ component }}"
             },
             {
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"kube\", component=\"kube_persistent_volume_claim_disk_space\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "99th quantile for week {{ component }}",
-              "refId": "D"
+              "legendFormat": "99th quantile for week {{ component }}"
             },
             {
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_persistent_volume_claim_disk_space\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
-              "refId": "E"
+              "legendFormat": "Soft SLO: {{ component }}"
             },
             {
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_persistent_volume_claim_disk_space\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Hard SLO: {{ component }}",
-              "refId": "F"
+              "legendFormat": "Hard SLO: {{ component }}"
             }
           ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "kube_persistent_volume_claim_disk_space component saturation: Kube Persistent Volume Claim Space Utilisation",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Saturation %",
-              "logBase": 1,
-              "max": 1,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "inode utilization on persistent volume claims.\n Lower is better.",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Saturation %",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "max": 1,
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^Soft SLO/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#FF4500",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^Hard SLO/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#F2495C",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 4
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/aggregated /"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#E7D551",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^95th quantile for week/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#37872D",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 1
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^99th quantile for week/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#56A64B",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
             "y": 0
           },
-          "id": 3153876074,
+          "id": 30,
           "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
+            "sortDesc": true
           },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-            {
-              "alias": "/^Soft SLO/",
-              "color": "#FF4500",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^Hard SLO/",
-              "color": "#F2495C",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 4,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            },
-            {
-              "alias": "/aggregated /",
-              "color": "#E7D551",
-              "linewidth": 2,
-              "zindex": 3
-            },
-            {
-              "alias": "/^95th quantile for week/",
-              "color": "#37872D",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 1,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^99th quantile for week/",
-              "color": "#56A64B",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
             }
-          ],
-          "spaceLength": 10,
-          "stableId": "saturation-kube_persistent_volume_claim_inodes",
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "clamp_min(\n  clamp_max(\n    max by(persistentvolumeclaim) (\n  clamp_min(\n    clamp_max(\n      kubelet_volume_stats_inodes_used\n      /\n      kubelet_volume_stats_inodes\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{ persistentvolumeclaim }}",
-              "refId": "A"
+              "legendFormat": "{{ persistentvolumeclaim }}"
             },
             {
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"kube\", component=\"kube_persistent_volume_claim_inodes\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "aggregated {{ component }}",
-              "refId": "B"
+              "legendFormat": "aggregated {{ component }}"
             },
             {
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"kube\", component=\"kube_persistent_volume_claim_inodes\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "95th quantile for week {{ component }}",
-              "refId": "C"
+              "legendFormat": "95th quantile for week {{ component }}"
             },
             {
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"kube\", component=\"kube_persistent_volume_claim_inodes\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "99th quantile for week {{ component }}",
-              "refId": "D"
+              "legendFormat": "99th quantile for week {{ component }}"
             },
             {
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_persistent_volume_claim_inodes\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
-              "refId": "E"
+              "legendFormat": "Soft SLO: {{ component }}"
             },
             {
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_persistent_volume_claim_inodes\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Hard SLO: {{ component }}",
-              "refId": "F"
+              "legendFormat": "Hard SLO: {{ component }}"
             }
           ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "kube_persistent_volume_claim_inodes component saturation: Kube Persistent Volume Claim inode Utilisation",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Saturation %",
-              "logBase": 1,
-              "max": 1,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "This resource measures average CPU utilization across an all cores in a node group\n\nIf it is becoming saturated, it may indicate that the node group needs resizing.\n Lower is better.",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Saturation %",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "max": 1,
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^Soft SLO/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#FF4500",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^Hard SLO/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#F2495C",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 4
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/aggregated /"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#E7D551",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^95th quantile for week/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#37872D",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 1
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/^99th quantile for week/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.lineStyle",
+                    "value": {
+                      "dash": [
+                        4
+                      ],
+                      "fill": "dash"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#56A64B",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  {
+                    "id": "custom.lineWidth",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.spanNulls",
+                    "value": true
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
             "y": 10
           },
-          "id": 2284482674,
+          "id": 31,
           "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
+            "sortDesc": true
           },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-            {
-              "alias": "/^Soft SLO/",
-              "color": "#FF4500",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^Hard SLO/",
-              "color": "#F2495C",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 4,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            },
-            {
-              "alias": "/aggregated /",
-              "color": "#E7D551",
-              "linewidth": 2,
-              "zindex": 3
-            },
-            {
-              "alias": "/^95th quantile for week/",
-              "color": "#37872D",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 1,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^99th quantile for week/",
-              "color": "#56A64B",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
             }
-          ],
-          "spaceLength": 10,
-          "stableId": "saturation-node_group_cpu",
-          "stack": false,
-          "steppedLine": false,
+          },
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      1 - avg by (type) (\n        rate(node_cpu_seconds_total{mode=\"idle\", type=~\".*pool\"}[5m])\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{ type }}",
-              "refId": "A"
+              "legendFormat": "{{ type }}"
             },
             {
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"kube\", component=\"node_group_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "aggregated {{ component }}",
-              "refId": "B"
+              "legendFormat": "aggregated {{ component }}"
             },
             {
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"kube\", component=\"node_group_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "95th quantile for week {{ component }}",
-              "refId": "C"
+              "legendFormat": "95th quantile for week {{ component }}"
             },
             {
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"kube\", component=\"node_group_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "99th quantile for week {{ component }}",
-              "refId": "D"
+              "legendFormat": "99th quantile for week {{ component }}"
             },
             {
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"node_group_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
-              "refId": "E"
+              "legendFormat": "Soft SLO: {{ component }}"
             },
             {
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"node_group_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Hard SLO: {{ component }}",
-              "refId": "F"
+              "legendFormat": "Hard SLO: {{ component }}"
             }
           ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
           "title": "node_group_cpu component saturation: Average Node Pool CPU Utilization",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Saturation %",
-              "logBase": 1,
-              "max": 1,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         }
       ],
       "repeat": null,

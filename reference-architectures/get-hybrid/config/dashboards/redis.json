@@ -126,179 +126,273 @@
       "type": "row"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Apdex %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "redis Service Apdex SLO Analysis",
+              "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=redis"
+            }
+          ],
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis apdex avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "redis apdex"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis apdex"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 9,
         "w": 8,
         "x": 0,
         "y": 1
       },
-      "id": 3833589948,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 3,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "redis Service Apdex SLO Analysis",
-            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=redis"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "redis apdex avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillBelowTo": "redis apdex",
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "redis apdex",
-          "color": "#E7D551",
-          "zindex": 3
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "service-redis-apdex",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis apdex",
-          "refId": "A"
+          "legendFormat": "redis apdex"
         },
         {
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"redis\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"redis\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis apdex avg",
-          "refId": "D"
+          "legendFormat": "redis apdex avg"
         },
         {
           "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"redis\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"redis\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         }
       ],
       "title": "redis Service Apdex",
-      "tooltip": {
-        "shared": true,
-        "sort": 1,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Apdex %",
-          "logBase": 1,
-          "max": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -505,180 +599,273 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Error %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "redis Service Error-Rate SLO Analysis",
+              "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=redis"
+            }
+          ],
+          "min": 0,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis error ratio avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis error ratio"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "redis error ratio avg"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 9,
         "w": 8,
         "x": 8,
         "y": 1
       },
-      "id": 318223678,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 5,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "redis Service Error-Rate SLO Analysis",
-            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=redis"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "redis error ratio avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillGradient": 10,
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "redis error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "redis error ratio avg",
-          "zindex": 3
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "service-redis-error-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"redis\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis error ratio",
-          "refId": "A"
+          "legendFormat": "redis error ratio"
         },
         {
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"redis\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis error ratio avg",
-          "refId": "D"
+          "legendFormat": "redis error ratio avg"
         },
         {
           "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"redis\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         }
       ],
       "title": "redis Service Error Ratio",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Error %",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -885,154 +1072,239 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "upper normal"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    8
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73BF69",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "lower normal"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lower normal"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    8
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73BF69",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 10,
         "w": 8,
         "x": 16,
         "y": 1
       },
-      "id": 2521729619,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "redis RPS",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "upper normal",
-          "color": "#73BF69",
-          "dashLength": 8,
-          "dashes": true,
-          "fillBelowTo": "lower normal",
-          "legend": false,
-          "lines": false,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 8,
-          "zindex": -3
-        },
-        {
-          "alias": "lower normal",
-          "color": "#73BF69",
-          "dashLength": 8,
-          "dashes": true,
-          "legend": false,
-          "lines": false,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 8,
-          "zindex": -3
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "service-redis-ops-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis RPS",
-          "refId": "A"
+          "legendFormat": "redis RPS"
         },
         {
           "expr": "gitlab_service_ops:rate_5m{type=\"redis\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "B"
+          "legendFormat": "last week"
         },
         {
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"redis\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"redis\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "upper normal",
-          "refId": "C"
+          "legendFormat": "upper normal"
         },
         {
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"redis\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"redis\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "lower normal",
-          "refId": "D"
+          "legendFormat": "lower normal"
         }
       ],
       "title": "redis Service RPS - Requests per Second",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Operations per Second",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "collapse": false,
@@ -1054,113 +1326,137 @@
       "type": "row"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "primary_server RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
         "y": 21
       },
-      "id": 175328272,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "primary_server RPS",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-primary_server-ops-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"primary_server\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "primary_server RPS",
-          "refId": "A"
+          "legendFormat": "primary_server RPS"
         },
         {
           "expr": "gitlab_component_ops:rate_5m{component=\"primary_server\",type=\"redis\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "B"
+          "legendFormat": "last week"
         }
       ],
       "title": "primary_server SLI RPS - Requests per Second",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Operations per Second",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "content": "### Description\n\nOperations on the Redis primary for Redis instance.\n\n\n\n### Observability Tools\n\n\n",
@@ -1176,192 +1472,295 @@
       "type": "text"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Apdex %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "rails_redis_client SLI Apdex SLO Analysis",
+              "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=rails_redis_client\u0026var-type=redis"
+            }
+          ],
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_redis_client apdex avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "rails_redis_client apdex"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Apdex SLI (upper 98% confidence boundary)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_redis_client apdex"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#082e69",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 7,
         "w": 6,
         "x": 0,
         "y": 31
       },
-      "id": 2248986914,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 11,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "rails_redis_client SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=rails_redis_client\u0026var-type=redis"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "rails_redis_client apdex avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillBelowTo": "rails_redis_client apdex",
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "Apdex SLI (upper 98% confidence boundary)",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "rails_redis_client apdex",
-          "color": "#082e69",
-          "lines": true
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-rails_redis_client-apdex",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "rails_redis_client apdex",
-          "refId": "A"
+          "legendFormat": "rails_redis_client apdex"
         },
         {
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"rails_redis_client\",type=\"redis\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"rails_redis_client\",type=\"redis\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "rails_redis_client apdex avg",
-          "refId": "D"
+          "legendFormat": "rails_redis_client apdex avg"
         },
         {
           "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"rails_redis_client\",type=\"redis\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"rails_redis_client\",type=\"redis\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         },
         {
           "expr": "avg_over_time(gitlab_component_apdex:confidence:ratio_5m{component=\"rails_redis_client\",confidence=\"98%\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "Apdex SLI (upper 98% confidence boundary)",
-          "refId": "F"
+          "legendFormat": "Apdex SLI (upper 98% confidence boundary)"
         }
       ],
       "title": "rails_redis_client SLI Apdex",
-      "tooltip": {
-        "shared": true,
-        "sort": 1,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Apdex %",
-          "logBase": 1,
-          "max": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -1568,192 +1967,287 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Error %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "rails_redis_client SLI Error-Rate SLO Analysis",
+              "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=rails_redis_client\u0026var-type=redis"
+            }
+          ],
+          "min": 0,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_redis_client error ratio avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Error SLI (lower 98% confidence boundary)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_redis_client error ratio"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#082e69",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 7,
         "w": 6,
         "x": 6,
         "y": 31
       },
-      "id": 487497488,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 13,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "rails_redis_client SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=rails_redis_client\u0026var-type=redis"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "rails_redis_client error ratio avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillGradient": 10,
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "Error SLI (lower 98% confidence boundary)",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "rails_redis_client error ratio",
-          "color": "#082e69",
-          "lines": true
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-rails_redis_client-error-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "rails_redis_client error ratio",
-          "refId": "A"
+          "legendFormat": "rails_redis_client error ratio"
         },
         {
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"rails_redis_client\",type=\"redis\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"rails_redis_client\",type=\"redis\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "rails_redis_client error ratio avg",
-          "refId": "D"
+          "legendFormat": "rails_redis_client error ratio avg"
         },
         {
           "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"rails_redis_client\",type=\"redis\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"rails_redis_client\",type=\"redis\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         },
         {
           "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:confidence:ratio_5m{component=\"rails_redis_client\",confidence=\"98%\",type=\"redis\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "Error SLI (lower 98% confidence boundary)",
-          "refId": "F"
+          "legendFormat": "Error SLI (lower 98% confidence boundary)"
         }
       ],
       "title": "rails_redis_client SLI Error Ratio",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Error %",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -1960,113 +2454,137 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_redis_client RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 8,
         "w": 6,
         "x": 12,
         "y": 31
       },
-      "id": 3147312091,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "rails_redis_client RPS",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-rails_redis_client-ops-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "rails_redis_client RPS",
-          "refId": "A"
+          "legendFormat": "rails_redis_client RPS"
         },
         {
           "expr": "gitlab_component_ops:rate_5m{component=\"rails_redis_client\",type=\"redis\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "B"
+          "legendFormat": "last week"
         }
       ],
       "title": "rails_redis_client SLI RPS - Requests per Second",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Operations per Second",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "content": "### Description\n\nAggregation of all Redis operations issued from the Rails codebase\nthrough `Gitlab::Redis::Wrapper` subclasses.\n\n",
@@ -2082,192 +2600,295 @@
       "type": "text"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Apdex %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "redis SLI Apdex SLO Analysis",
+              "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=redis\u0026var-type=redis"
+            }
+          ],
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis apdex avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "redis apdex"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Apdex SLI (upper 98% confidence boundary)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis apdex"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#082e69",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
         "y": 41
       },
-      "id": 4221579207,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
+      "id": 17,
       "options": {
-        "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "redis SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=redis\u0026var-type=redis"
-          }
-        ]
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-          "color": "#FF4500",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "connected",
-          "spaceLength": 10,
-          "zindex": -2
-        },
-        {
-          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-          "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "redis apdex avg",
-          "color": "#5794F2",
-          "dashLength": 1,
-          "fillBelowTo": "redis apdex",
-          "linewidth": 1,
-          "spaceLength": 1,
-          "zindex": -3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
-        },
-        {
-          "alias": "Apdex SLI (upper 98% confidence boundary)",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "redis apdex",
-          "color": "#082e69",
-          "lines": true
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-redis-apdex",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"redis\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis apdex",
-          "refId": "A"
+          "legendFormat": "redis apdex"
         },
         {
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"redis\",type=\"redis\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-          "refId": "B"
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
         },
         {
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"redis\",type=\"redis\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 1,
-          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-          "refId": "C"
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
         },
         {
           "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"redis\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis apdex avg",
-          "refId": "D"
+          "legendFormat": "redis apdex avg"
         },
         {
           "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"redis\",type=\"redis\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"redis\",type=\"redis\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "E"
+          "legendFormat": "last week"
         },
         {
           "expr": "avg_over_time(gitlab_component_apdex:confidence:ratio_5m{component=\"redis\",confidence=\"98%\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "Apdex SLI (upper 98% confidence boundary)",
-          "refId": "F"
+          "legendFormat": "Apdex SLI (upper 98% confidence boundary)"
         }
       ],
       "title": "redis SLI Apdex",
-      "tooltip": {
-        "shared": true,
-        "sort": 1,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "Apdex %",
-          "logBase": 1,
-          "max": 1,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -2474,113 +3095,137 @@
       "type": "stat"
     },
     {
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never"
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "redis RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
         "y": 41
       },
-      "id": 3565255509,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/.*shard (apdex|error ratio|RPS)$/",
-          "color": "#E7D551"
-        },
-        {
-          "alias": "redis RPS",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
-          "alias": "last week",
-          "color": "#dddddd80",
-          "dashLength": 4,
-          "dashes": true,
-          "fill": 0,
-          "legend": true,
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "connected",
-          "spaceLength": 2,
-          "zindex": -3
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         }
-      ],
-      "spaceLength": 10,
-      "stableId": "sli-redis-ops-rate",
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"redis\",type=\"redis\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "redis RPS",
-          "refId": "A"
+          "legendFormat": "redis RPS"
         },
         {
           "expr": "gitlab_component_ops:rate_5m{component=\"redis\",type=\"redis\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "last week",
-          "refId": "B"
+          "legendFormat": "last week"
         }
       ],
       "title": "redis SLI RPS - Requests per Second",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Operations per Second",
-          "logBase": 1,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "collapse": true,
@@ -2594,14 +3239,27 @@
       "id": 20,
       "panels": [
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 24,
@@ -2609,75 +3267,54 @@
             "y": 0
           },
           "id": 21,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by () (\n  rate(redis_commands_processed_total{type=\"redis\"}[$__interval]) and on (instance) redis_instance_info{role=\"master\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "overall",
-              "refId": "A"
+              "legendFormat": "overall"
             }
           ],
           "title": "primary_server RPS - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 24,
@@ -2685,65 +3322,31 @@
             "y": 10
           },
           "id": 22,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (instance) (\n  rate(redis_commands_processed_total{instance!=\"\",type=\"redis\"}[$__interval]) and on (instance) redis_instance_info{role=\"master\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
+              "legendFormat": "{{instance}}"
             }
           ],
           "title": "primary_server RPS - per instance",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         }
       ],
       "repeat": null,
@@ -2766,14 +3369,27 @@
       "id": 23,
       "panels": [
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0.01,
+              "unit": "s"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 8,
@@ -2781,36 +3397,27 @@
             "y": 0
           },
           "id": 24,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_redis_client_requests_duration_seconds_bucket{}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 overall",
-              "refId": "A"
+              "legendFormat": "p95 overall"
             }
           ],
           "thresholds": [
@@ -2834,42 +3441,30 @@
             }
           ],
           "title": "Estimated p95 rails_redis_client Latency - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Errors",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 8,
@@ -2877,75 +3472,54 @@
             "y": 0
           },
           "id": 25,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by () (\n  rate(gitlab_redis_client_exceptions_total{}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "overall",
-              "refId": "A"
+              "legendFormat": "overall"
             }
           ],
           "title": "rails_redis_client Errors - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 8,
@@ -2953,75 +3527,54 @@
             "y": 0
           },
           "id": 26,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by () (\n  rate(gitlab_redis_client_requests_total{}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "overall",
-              "refId": "A"
+              "legendFormat": "overall"
             }
           ],
           "title": "rails_redis_client RPS - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0.01,
+              "unit": "s"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -3029,36 +3582,27 @@
             "y": 10
           },
           "id": 27,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,type) (\n    rate(gitlab_redis_client_requests_duration_seconds_bucket{}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 {{type}}",
-              "refId": "A"
+              "legendFormat": "p95 {{type}}"
             }
           ],
           "thresholds": [
@@ -3082,42 +3626,43 @@
             }
           ],
           "title": "Estimated p95 rails_redis_client Latency - per type",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "Attributes apdex downscoring",
-          "fill": 4,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Percent",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byRegexp",
+                  "options": "/.*/"
+                },
+                "properties": [
+                  {
+                    "id": "custom.transform",
+                    "value": "negative-Y"
+                  }
+                ]
+              }
+            ]
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -3125,80 +3670,54 @@
             "y": 10
           },
           "id": 28,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*/",
-              "transform": "negative-Y"
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
             }
-          ],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
+          },
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "clamp_min(clamp_max((\n  (\n    sum by (type) (\n  rate(gitlab_redis_client_requests_duration_seconds_bucket{le=\"+Inf\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (type) (\n    rate(gitlab_redis_client_requests_duration_seconds_bucket{le=\"0.5\"}[$__interval])\n  )\n  +\n  sum by (type) (\n    rate(gitlab_redis_client_requests_duration_seconds_bucket{le=\"0.75\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(type) group_left()\n  (\n    sum by () (\n  rate(gitlab_redis_client_requests_duration_seconds_bucket{le=\"+Inf\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{type}}",
-              "refId": "A"
+              "legendFormat": "{{type}}"
             }
           ],
           "title": "Apdex attribution for rails_redis_client Latency - per type",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Percent",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Errors",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -3206,75 +3725,54 @@
             "y": 10
           },
           "id": 29,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (type) (\n  rate(gitlab_redis_client_exceptions_total{}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{type}}",
-              "refId": "A"
+              "legendFormat": "{{type}}"
             }
           ],
           "title": "rails_redis_client Errors - per type",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 6,
@@ -3282,65 +3780,31 @@
             "y": 10
           },
           "id": 30,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by (type) (\n  rate(gitlab_redis_client_requests_total{}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{type}}",
-              "refId": "A"
+              "legendFormat": "{{type}}"
             }
           ],
           "title": "rails_redis_client RPS - per type",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         }
       ],
       "repeat": null,
@@ -3363,14 +3827,27 @@
       "id": 31,
       "panels": [
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0.01,
+              "unit": "s"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 12,
@@ -3378,36 +3855,27 @@
             "y": 0
           },
           "id": 32,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_cache_operation_duration_seconds_bucket{}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "p95 overall",
-              "refId": "A"
+              "legendFormat": "p95 overall"
             }
           ],
           "thresholds": [
@@ -3431,42 +3899,30 @@
             }
           ],
           "title": "Estimated p95 redis Latency - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         },
         {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
           "description": "",
-          "fill": 0,
-          "fillGradient": 0,
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never"
+              },
+              "min": 0,
+              "unit": "short"
+            }
+          },
           "gridPos": {
             "h": 10,
             "w": 12,
@@ -3474,65 +3930,31 @@
             "y": 0
           },
           "id": 33,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
           },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
+          "pluginVersion": "v11.4.0",
           "targets": [
             {
               "expr": "sum by () (\n  rate(gitlab_cache_operation_duration_seconds_count{}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "overall",
-              "refId": "A"
+              "legendFormat": "overall"
             }
           ],
           "title": "redis RPS - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
+          "type": "timeseries"
         }
       ],
       "repeat": null,

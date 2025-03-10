@@ -79,16 +79,7 @@ local overviewDashboard(
   showProvisioningDetails=true,
   showSystemDiagrams=true,
   expectMultipleSeries=false,
-  useTimeSeriesPlugin=std.member(
-    [
-      'api',
-      'git',
-      'logging',
-      'mimr',
-      'sentry',
-      'web',
-    ], type
-  ),
+  useTimeSeriesPlugin=true,
       ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
