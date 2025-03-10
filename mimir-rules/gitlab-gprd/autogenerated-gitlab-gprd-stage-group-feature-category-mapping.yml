@@ -155,7 +155,7 @@ groups:
     labels:
       feature_category: cloud_connector
       monitor: global
-      product_stage: systems
+      product_stage: production_engineering
       stage_group: cloud_connector
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
