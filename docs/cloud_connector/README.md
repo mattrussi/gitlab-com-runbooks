@@ -173,3 +173,48 @@ observes stricter rate limits than a large customer.
 Any other clients will be lumped together and observe a generic rate limit.
 
 <!-- markdownlint-enable MD034 -->
+
+## Key rotation
+
+Cloud Connector uses JSON Web Tokens to authenticate requests in backends. For multi-tenant customers on gitlab.com,
+the Rails application issues and signs these tokens. For single-tenant customers (SM/Dedicated), CustomersDot issues
+and signs these tokens. To validate tokens, Cloud Connector backends fetch the corresponding keys from the gitlab.com
+and CustomersDot Rails applications respectively.
+
+Keys should be rotated on a 6 month schedule both in staging and production.
+
+### Rotating keys for gitlab.com
+
+Keys must be rotated in staging and production. The general steps in both environments are:
+
+1. Run `sudo gitlab-rake cloud_connector:keys:list` to verify there is exactly one key.
+1. Run `sudo gitlab-rake cloud_connector:keys:create` to add a new key to rotate to.
+1. Run `sudo gitlab-rake cloud_connector:keys:list` to verify there are exactly two keys.
+1. Ensure validators have fetched the new key via OIDC Discovery.
+   Depending on the particular system, this may involve:
+   - Wait at least 24 hours or longer, depending on how long keys are cached for.
+   - Restart the system or otherwise evict its key cache.
+   - For the AI Gateway only, ensure [this dashboard](https://log.gprd.gitlab.net/app/r/s/p7Rhe) shows no events.
+1. Run `sudo gitlab-rake cloud_connector:keys:rotate` to swap current key with new key, enacting the rotation.
+1. Monitor affected systems to still work as intended (failure would surface as 401s).
+1. Run `sudo gitlab-rake cloud_connector:keys:trim` to remove the now unused key.
+1. Monitor affected systems to still work as intended (failure would surface as 401s).
+
+#### Rotating keys in staging
+
+1. Run `/change declare` in Slack and create a C3 [Change Request](https://handbook.gitlab.com/handbook/engineering/infrastructure/change-management/).
+1. Teleport to `console-01-sv-gstg`.
+1. Run steps outlined [above](#rotating-keys-for-gitlabcom).
+1. Close the CR issue.
+
+#### Rotating keys in production
+
+1. Run `/change declare` in Slack and create a C2 [Change Request](https://handbook.gitlab.com/handbook/engineering/infrastructure/change-management/).
+1. Teleport to `console-01-sv-gprd`.
+1. Run steps outlined [above](#rotating-keys-for-gitlabcom).
+1. Close the CR issue.
+1. Create a Slack reminder in `#g_cloud_connector` set to 6 months from now with a link to this runbook.
+
+### Rotating keys for customers.gitlab.com
+
+Follow instructions [here](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/doc/security/jwk_signing_key_rotation.md).

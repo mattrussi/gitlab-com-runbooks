@@ -33,32 +33,46 @@ This document targets VM instances running Linux based operating systems that ma
 
 ### Distribution Updates
 
-GitLab almost exclusively deploys Ubuntu as the base operating system for VMs supporting GitLab.com. By default, Canonical provides 5 years of security patching for their LTS releases (releases on even numbered years in April). We subscribe to Ubuntu Pro (INFRA-ONLY), which includes ESM (extended security maintenance) coverage extending this support for core packages out to 10 years.
+GitLab almost exclusively deploys Ubuntu as the base operating system for VMs supporting GitLab.com. By default, Canonical provides 5 years of security patching for their LTS releases (releases on even numbered years in April).
 
 All of our Ubuntu systems have unattended upgrades enabled, meaning they will automatically install *security* patches on a daily basis.
 
-While there is currently no guaranteed support for packages outside of the Ubuntu `main` repositories, we should strive to keep our fleet within the official 5 year LTS support window, as packages in additional repositories such as `universe` and `multiverse` tend to no longer receive updates past this period. Canonical offers support for the packages in the `universe` repository for an additional licensing fee that we may consider in the future.
+While there is currently no guaranteed support for packages outside of the Ubuntu `main` repositories, we should strive to keep our fleet within the official 5 year LTS support window, as packages in additional repositories such as `universe` and `multiverse` tend to no longer receive updates past this period.
 
-### Kernel
+### Ubuntu Pro
 
-All Chef managed Linux machines that GitLab maintains should be enrolled in Ubuntu Pro, with access to the [Livepatch](https://ubuntu.com/security/livepatch) service. This service allows us to apply High and Critical severity security fixes to running machines without the need to reboot the instance. Each kernel supported by Livepatch has a limited [support period](https://ubuntu.com/security/livepatch/docs/livepatch/reference/kernels) ranging from 9-13 months, where they are elligible for updates before a reboot will be required to receive further updates. This means, at minimum, every machine should be restarted once a year to ensure critical kernel security fixes will be available.
+#### ESM (INFRA-ONLY)
+
+For machines that we enroll in Ubuntu Pro, ESM (extended security maintenance) coverage extends security patching support for packages in the `main` Ubuntu repository out to 10 years. This support does not extend to packages installed via the `universe` or `multiverse` repositories, or PPA respositories maintained by parties other than Canonical. Canonical offers support for the packages in the `universe` repository for an additional licensing fee that we may consider in the future.
+
+#### Kernel Livepatch
+
+This service allows us to apply High and Critical severity security fixes to running machines without the need to reboot the instance. Each kernel supported by Livepatch has a limited [support period](https://ubuntu.com/security/livepatch/docs/livepatch/reference/kernels) ranging from 9-13 months, where they are eligible for updates before a reboot will be required to receive further updates. This means, at minimum, every machine should be restarted once a year to ensure critical kernel security fixes will be available.
+
+#### Requirements
+
+Any of the following scenarios will qualify a system for enrollment in Ubuntu Pro:
+
+- The OS is no longer in it's LTS support window.
+- The systems cannot be rebooted without downtime on GitLab.com
+- There is no automation available for applying updates and rebooting the systems.
 
 ## Services
 
 The major Linux fleets that support GitLab.com are:
 
-| Service | Owner | Exposure | Maintenance Impact | Automation | Cadence (weeks) |
-| ------- | ----- | -------- | :----------------: | :--------: | --------------- |
-| [GKE](systems/gke.md)     | foundations | external | low | partial | external |
-| [Runner Managers](systems/runner-managers.md) | scalability:practices | internal | low | no | 8 |
-| [HAProxy](systems/haproxy.md) | foundations | external | low | partial | 8 |
-| [Gitaly](systems/gitaly.md) | data-access::durability | internal | high | no | as needed |
-| [Patroni](systems/patroni.md) | reliability_database_reliability | internal | low | no | 8 |
-| [PGBouncer](systems/pgbouncer.md) | reliability_database_reliability | internal | low | no | 8 |
-| [Redis](systems/redis.md) | data-access::durability | internal | low | no | 8 |
-| [Console](systems/console.md) | none | internal | low | no | 8 |
-| [Deploy](systems/deploy.md) | none | internal | medium | no | 12 |
-| [Bastions](systems/bastions.md) | none | external | low | partial | 8 |
+| Service | Owner | Exposure | Maintenance Impact | Automation | Ubuntu Pro |Cadence (weeks) |
+| ------- | ----- | -------- | :----------------: | :--------: | ---------- |--------------- |
+| [GKE](systems/gke.md)     | foundations | external | low | partial | N/A | external |
+| [Runner Managers](systems/runner-managers.md) | scalability:practices | internal | low | partial| no | 8 |
+| [HAProxy](systems/haproxy.md) | foundations | external | low | partial | no | 8 |
+| [Gitaly](systems/gitaly.md) | data-access::durability | internal | high | no | yes | as needed |
+| [Patroni](systems/patroni.md) | reliability_database_reliability | internal | low | no | yes | 8 |
+| [PGBouncer](systems/pgbouncer.md) | reliability_database_reliability | internal | low | no | yes | 8 |
+| [Redis](systems/redis.md) | data-access::durability | internal | low | no | yes | 8 |
+| [Console](systems/console.md) | none | internal | low | no | yes | 8 |
+| [Deploy](systems/deploy.md) | none | internal | medium | no | yes | 12 |
+| [Bastions](systems/bastions.md) | none | external | low | partial | no | 8 |
 
 ### Definitions
 

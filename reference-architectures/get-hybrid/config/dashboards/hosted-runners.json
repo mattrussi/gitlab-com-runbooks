@@ -1356,7 +1356,7 @@
             "type": "table"
          },
          {
-            "content": "This is global overview of all hosted runner.\n\nFor more information check the hosted runner dashboard in the ruuner project.\n",
+            "content": "This is global overview of all hosted runners.\n\nFor more information check the hosted runner dashboard in the runner project.\n",
             "datasource": null,
             "gridPos": {
                "h": 6,

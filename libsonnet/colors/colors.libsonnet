@@ -5,7 +5,10 @@ local rgba(red, green, blue, alpha) =
     blue: blue,
     alpha: alpha,
     toRGBA():: 'rgba(%(red)d,%(green)d,%(blue)d,%(alpha).2f)' % self,
-    toHex():: '#%(red)02x%(green)02x%(blue)02x' % self,
+    toHex():: if alpha == 1 then
+      '#%(red)02x%(green)02x%(blue)02x' % self
+    else
+      '#%(red)02x%(green)02x%(blue)02x%(alpha_hex)02x' % (self + { alpha_hex: std.floor(alpha * 255) }),
     toString()::
       if alpha == 1 then
         self.toHex()
@@ -15,11 +18,12 @@ local rgba(red, green, blue, alpha) =
 
 local hex(string) =
   local s = std.lstripChars(string, '#');
-  local value = std.parseHex(s);
-  local red = (value >> 16) % 256;
-  local green = (value >> 8) % 256;
-  local blue = value % 256;
-  rgba(red, green, blue, 1);
+  local hasAlpha = std.length(s) == 8;
+  local red = std.parseHex(std.substr(s, 0, 2));
+  local green = std.parseHex(std.substr(s, 2, 2));
+  local blue = std.parseHex(std.substr(s, 4, 2));
+  local alpha = if hasAlpha then std.parseHex(std.substr(s, 6, 2)) / 255 else 1;
+  rgba(red, green, blue, alpha);
 
 // Returns an array of colors in a linear gradient
 local linearGradient(start, end, steps) =
@@ -54,7 +58,7 @@ local linearGradient(start, end, steps) =
 
   // Colors taken from Grafana color picker palettes
   GREEN:: hex('#73BF69'),
-  BLUE:: hex('#5794F2'),
+  BLUE:: hex('#5794F280'),
   ORANGE:: hex('#FF9830'),
   RED:: hex('#F2495C'),
   YELLOW:: hex('#FADE2A'),

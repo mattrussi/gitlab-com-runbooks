@@ -6,7 +6,8 @@
 
 Access to Vault is managed through [Okta](https://gitlab.okta.com), with Okta groups being given access to sets of readonly and read/write secret paths.
 
-⚠️ For ease of access auditing and administration, access can not given on a per user basis, only per group.
+> [!note]
+> For ease of access auditing and administration, access can not given on a per user basis, only per group.
 
 To obtain access to Vault for your team:
 

@@ -2,6 +2,7 @@ local apdexPanel = import './apdex-panel.libsonnet';
 local errorRatioPanel = import './error-ratio-panel.libsonnet';
 local operationRatePanel = import './operation-rate-panel.libsonnet';
 local statusDescription = import './status_description.libsonnet';
+local panels = import './time-series/panels.libsonnet';
 
 local selectorToGrafanaURLParams(selectorHash) =
   local pairs = std.foldl(
@@ -34,6 +35,7 @@ local row(
   includeLastWeek=true,
   fixedThreshold=null,
   shardLevelSli=false,
+  useTimeSeriesPlugin=false,
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
   local selectorHashWithExtras = selectorHash + typeSelector;
@@ -50,25 +52,45 @@ local row(
     if showApdex then
       [
         [
-          apdexPanel.panel(
-            title='%(titlePrefix)s Apdex' % formatConfig,
-            sli=sli,
-            aggregationSet=aggregationSet,
-            selectorHash=selectorHashWithExtras,
-            stableId='%(stableIdPrefix)s-apdex' % formatConfig,
-            legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
-            description=apdexDescription,
-            expectMultipleSeries=expectMultipleSeries,
-            compact=compact,
-            fixedThreshold=fixedThreshold,
-            includeLastWeek=includeLastWeek,
-            shardLevelSli=shardLevelSli
-          )
-          .addDataLink({
-            url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
-            title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
-            targetBlank: true,
-          }),
+          if useTimeSeriesPlugin then
+            panels.apdex(
+              title='%(titlePrefix)s Apdex' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
+              description=apdexDescription,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli,
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
+              title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
+              targetBlank: true,
+            })
+          else
+            apdexPanel.panel(
+              title='%(titlePrefix)s Apdex' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              stableId='%(stableIdPrefix)s-apdex' % formatConfig,
+              legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
+              description=apdexDescription,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
+              title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
+              targetBlank: true,
+            }),
         ]
         +
         (
@@ -93,24 +115,43 @@ local row(
     if showErrorRatio then
       [
         [
-          errorRatioPanel.panel(
-            '%(titlePrefix)s Error Ratio' % formatConfig,
-            sli=sli,
-            aggregationSet=aggregationSet,
-            selectorHash=selectorHashWithExtras,
-            stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
-            legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
-            expectMultipleSeries=expectMultipleSeries,
-            compact=compact,
-            fixedThreshold=fixedThreshold,
-            includeLastWeek=includeLastWeek,
-            shardLevelSli=shardLevelSli
-          )
-          .addDataLink({
-            url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
-            title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
-            targetBlank: true,
-          }),
+          if useTimeSeriesPlugin then
+            panels.errorRatio(
+              '%(titlePrefix)s Error Ratio' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
+              title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
+              targetBlank: true,
+            })
+          else
+            errorRatioPanel.panel(
+              '%(titlePrefix)s Error Ratio' % formatConfig,
+              sli=sli,
+              aggregationSet=aggregationSet,
+              selectorHash=selectorHashWithExtras,
+              stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
+              legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
+              expectMultipleSeries=expectMultipleSeries,
+              compact=compact,
+              fixedThreshold=fixedThreshold,
+              includeLastWeek=includeLastWeek,
+              shardLevelSli=shardLevelSli
+            )
+            .addDataLink({
+              url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
+              title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
+              targetBlank: true,
+            }),
         ]
         +
         (
@@ -134,17 +175,29 @@ local row(
     // SLI request rate (mandatory, but not all are aggregatable)
     if showOpsRate then
       [[
-        operationRatePanel.panel(
-          '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
-          aggregationSet=aggregationSet,
-          selectorHash=selectorHashWithExtras,
-          stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
-          legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
-          expectMultipleSeries=expectMultipleSeries,
-          includePredictions=includePredictions,
-          includeLastWeek=includeLastWeek,
-          compact=compact,
-        ),
+        if useTimeSeriesPlugin then
+          panels.operationRate(
+            '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
+            aggregationSet=aggregationSet,
+            selectorHash=selectorHashWithExtras,
+            legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
+            expectMultipleSeries=expectMultipleSeries,
+            includePredictions=includePredictions,
+            includeLastWeek=includeLastWeek,
+            compact=compact,
+          )
+        else
+          operationRatePanel.panel(
+            '%(titlePrefix)s RPS - Requests per Second' % formatConfig,
+            aggregationSet=aggregationSet,
+            selectorHash=selectorHashWithExtras,
+            stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
+            legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
+            expectMultipleSeries=expectMultipleSeries,
+            includePredictions=includePredictions,
+            includeLastWeek=includeLastWeek,
+            compact=compact,
+          ),
       ]]
     else
       []

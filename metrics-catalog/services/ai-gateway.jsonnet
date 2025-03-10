@@ -33,7 +33,7 @@ metricsCatalog.serviceDefinition(
     type='ai-gateway',
     team='code_creation',
     apdexScore=0.98,
-    errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
+    errorRatio=0.99,
     featureCategory='code_suggestions',
     // Runway is using stackdriver metrics, these metrics use many buckets in milliseconds
     // To pick an available bucket, we need to look at the source metrics

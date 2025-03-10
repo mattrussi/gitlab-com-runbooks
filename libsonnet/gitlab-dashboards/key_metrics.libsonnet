@@ -4,6 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local utilizationRatesPanel = import 'key-metric-panels/utilization-rates-panel.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local panels = import 'key-metric-panels/time-series/panels.libsonnet';
 local row = grafana.row;
 
 local managedDashboardsForService(serviceType) =
@@ -73,7 +74,8 @@ local getColumnWidths(
     staticTitlePrefix=null,
     legendFormatPrefix=null,
     includeLastWeek=true,
-    fixedThreshold=null
+    fixedThreshold=null,
+    useTimeSeriesPlugin=false,
   )::
     local typeHash = if serviceType == null then {} else { type: serviceType };
     local selectorHashWithExtras = selectorHash + typeHash;
@@ -104,19 +106,28 @@ local getColumnWidths(
         includePredictions=true,
         compact=compact,
         includeLastWeek=includeLastWeek,
-        fixedThreshold=fixedThreshold
+        fixedThreshold=fixedThreshold,
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
       +
       (
         if showSaturationCell then
           [[
-            utilizationRatesPanel.panel(
-              serviceType,
-              selectorHash=selectorHashWithShard,
-              compact=compact,
-              stableId='%(stableIdPrefix)sservice-utilization' % formatConfig,
-              linewidth=1,
-            ),
+            if useTimeSeriesPlugin then
+              panels.utilizationRate(
+                serviceType,
+                selectorHash=selectorHashWithShard,
+                compact=compact,
+                linewidth=1,
+              )
+            else
+              utilizationRatesPanel.panel(
+                serviceType,
+                selectorHash=selectorHashWithShard,
+                compact=compact,
+                stableId='%(stableIdPrefix)sservice-utilization' % formatConfig,
+                linewidth=1,
+              ),
           ]]
         else
           []

@@ -278,12 +278,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -332,12 +332,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -388,12 +388,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -444,12 +444,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -725,12 +725,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_1h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_5m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -778,12 +778,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_6h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_30m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -833,12 +833,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:confidence:ratio_1h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:confidence:ratio_5m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -888,12 +888,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:confidence:ratio_6h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:confidence:ratio_30m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1174,12 +1174,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1228,12 +1228,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1284,12 +1284,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1340,12 +1340,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1601,12 +1601,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1650,12 +1650,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1701,12 +1701,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1752,12 +1752,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="runway_ingress",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1953,12 +1953,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2002,12 +2002,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2053,12 +2053,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -2104,12 +2104,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="runway_lb",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -2512,12 +2512,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2560,12 +2560,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2610,12 +2610,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="server",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="server",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -2660,12 +2660,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="server",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="server",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -2921,12 +2921,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server_chat",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server_chat",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2970,12 +2970,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server_chat",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server_chat",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3021,12 +3021,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="server_chat",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="server_chat",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3072,12 +3072,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="server_chat",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="server_chat",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3333,12 +3333,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3382,12 +3382,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3433,12 +3433,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3484,12 +3484,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="server_code_completions",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3745,12 +3745,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3794,12 +3794,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3845,12 +3845,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3896,12 +3896,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="server_code_generations",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -4152,12 +4152,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -4200,12 +4200,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -4250,12 +4250,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -4300,12 +4300,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="server_x_ray",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -4348,12 +4348,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="waf",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="waf",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -4396,12 +4396,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="waf",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="waf",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -4446,12 +4446,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="waf",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="waf",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.020000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -4496,12 +4496,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="waf",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="waf",monitor="global",type="ai-gateway"}
-          > (6 * 0.020000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
