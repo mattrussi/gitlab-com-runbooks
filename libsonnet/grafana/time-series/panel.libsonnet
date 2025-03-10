@@ -22,7 +22,7 @@ local basic(
   lines=true,
   unit=null,
   drawStyle='line',
-  thresholdMode=null,
+  thresholdMode='absolute',
   thresholdSteps=[],
       ) =
   local datasourceType =
@@ -65,8 +65,19 @@ local basic(
   ts.panelOptions.withDescription(description) +
   ts.standardOptions.withUnit(unit) +
   (if std.length(thresholdSteps) > 0 then
+     ts.fieldConfig.defaults.custom.withThresholdsStyle({
+       mode: 'area',
+     }) +
      ts.standardOptions.thresholds.withMode(thresholdMode) +
-     ts.standardOptions.thresholds.withStepsMixin(thresholdSteps)
+     ts.standardOptions.thresholds.withSteps(
+       [
+         {
+           color: '#00000000',
+           value: null,
+         },
+       ] +
+       thresholdSteps
+     )
    else
      {})
   {
@@ -189,6 +200,8 @@ local multiTimeSeries(
   max=null,
   lines=true,
   datasource='$PROMETHEUS_DS',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   local panel = basic(
     title,
@@ -204,6 +217,8 @@ local multiTimeSeries(
     legend_alignAsTable=true,
     lines=lines,
     unit=format,
+    thresholdMode=thresholdMode,
+    thresholdSteps=thresholdSteps,
   );
 
   local addPanelTarget(panel, query) =
@@ -286,6 +301,8 @@ local timeSeries(
     max=max,
     lines=lines,
     datasource=datasource,
+    thresholdMode=thresholdMode,
+    thresholdSteps=thresholdSteps,
   );
 
 local latencyTimeSeries(
