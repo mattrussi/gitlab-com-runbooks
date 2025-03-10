@@ -11,10 +11,10 @@ local row = grafana.row;
   grafanaDashboards+:: {
     'hosted-runners-slos.json':
       local dashboard = basic.dashboard(
-        title='Hosted Runners SLO',
-        description='Hosted Runners SLO over the past month',
+        title='Hosted Runners SLOs',
+        description='Hosted Runners SLOs over the past month',
         tags=['hosted-runners', 'slas', 'service-levels'],
-        editable=true,
+        editable=false,
         includeStandardEnvironmentAnnotations=false,
         includeEnvironmentTemplate=false,
         defaultDatasource=$._config.prometheusDatasource,
