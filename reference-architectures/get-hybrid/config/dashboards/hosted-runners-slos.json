@@ -394,7 +394,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Job Queuing Duration SLO",
+            "title": "Job Queue Latency SLO",
             "transformations": [ ],
             "transparent": false,
             "type": "stat"
@@ -468,7 +468,7 @@
                   "refId": "A"
                }
             ],
-            "title": "Queuing Duration Violations Count",
+            "title": "Jobs Violating Latency",
             "transformations": [ ],
             "transparent": false,
             "type": "stat"
@@ -530,7 +530,7 @@
             "thresholds": [ ],
             "timeFrom": null,
             "timeShift": null,
-            "title": "Job Queuing Duration SLO Over Time",
+            "title": "Job Queuing Latency SLO Over Time",
             "tooltip": {
                "shared": true,
                "sort": 2,

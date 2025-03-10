@@ -95,7 +95,7 @@ local rollingAvailability(selector) =
 local jobQueuingSLO(selector) =
   basic.statPanel(
     title='',
-    panelTitle='Job Queuing Duration SLO',
+    panelTitle='Job Queue Latency SLO',
     description="Percentage of all jobs over the dashboard's range that were executed within an acceptable time. Excludes jobs that were delayed because the scaleMax threshold was hit.",
     query=|||
       1 -
@@ -138,7 +138,7 @@ local jobQueuingSLO(selector) =
 local queuingViolationsCount(selector) =
   basic.statPanel(
     title='',
-    panelTitle='Queuing Duration Violations Count',
+    panelTitle='Jobs Violating Latency',
     description="Number of jobs over the dashboard's range that exceeded the acceptable time. Excludes jobs that were delayed because the scaleMax threshold was hit.",
     query=|||
       sum(sum_over_time(
@@ -173,7 +173,7 @@ local queuingViolationsCount(selector) =
 
 local jobQueuingSLOOverTime(selector) =
   basic.timeseries(
-    title='Job Queuing Duration SLO Over Time',
+    title='Job Queuing Latency SLO Over Time',
     description="Percentage of all jobs looking back over the dashboard's range that were executed within an acceptable time. Excludes jobs that were delayed because the scaleMax threshold was hit.",
     query=|||
       1 -
