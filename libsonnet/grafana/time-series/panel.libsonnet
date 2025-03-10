@@ -21,6 +21,8 @@ local basic(
   lines=true,
   unit=null,
   drawStyle='line',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   local datasourceType =
     if datasource == '$PROMETHEUS_DS' then
@@ -61,6 +63,8 @@ local basic(
   ts.options.legend.withPlacement(legendPlacement) +
   ts.panelOptions.withDescription(description) +
   ts.standardOptions.withUnit(unit) +
+  ts.standardOptions.thresholds.withMode(thresholdMode) +
+  ts.standardOptions.thresholds.withStepsMixin(thresholdSteps) +
   {
     addYaxis(min=null, max=null, label=null, show=true)::
       local axisPlacement = if show then
@@ -224,6 +228,8 @@ local timeSeries(
   max=null,
   lines=true,
   datasource='$PROMETHEUS_DS',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   multiTimeSeries(
     queries=[{ query: query, legendFormat: legendFormat }],
@@ -355,6 +361,34 @@ local queueLengthTimeSeries(
     label=yAxisLabel,
   );
 
+local saturationTimeSeries(
+  title='Saturation',
+  description='',
+  query='',
+  legendFormat='',
+  yAxisLabel='Saturation',
+  interval='1m',
+  intervalFactor=1,
+  linewidth=2,
+  legend_show=true,
+  min=0,
+  max=1,
+      ) =
+  percentageTimeSeries(
+    title=title,
+    description=description,
+    query=query,
+    legendFormat=legendFormat,
+    yAxisLabel=yAxisLabel,
+    interval=interval,
+    intervalFactor=intervalFactor,
+    linewidth=linewidth,
+    legend_show=legend_show,
+    min=min,
+    max=max,
+  );
+
+
 local networkTrafficGraph(
   title='Node Network Utilization',
   description='Network utilization',
@@ -404,5 +438,6 @@ local networkTrafficGraph(
   latencyTimeSeries: latencyTimeSeries,
   percentageTimeSeries: percentageTimeSeries,
   queueLengthTimeSeries: queueLengthTimeSeries,
+  saturationTimeSeries: saturationTimeSeries,
   networkTrafficGraph: networkTrafficGraph,
 }
