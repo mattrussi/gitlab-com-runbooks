@@ -2,7 +2,7 @@ module gitlab.com/gitlab-com/runbooks/alertmanager/templates
 
 go 1.24.1
 
-require github.com/prometheus/alertmanager v0.28.0
+require github.com/prometheus/alertmanager v0.28.1
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
