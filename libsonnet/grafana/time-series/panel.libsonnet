@@ -1,6 +1,7 @@
 local override = import './override.libsonnet';
 local target = import './target.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local ts = g.panel.timeSeries;
 
 local basic(
@@ -21,7 +22,7 @@ local basic(
   lines=true,
   unit=null,
   drawStyle='line',
-  thresholdMode='absolute',
+  thresholdMode=null,
   thresholdSteps=[],
       ) =
   local datasourceType =
@@ -63,8 +64,11 @@ local basic(
   ts.options.legend.withPlacement(legendPlacement) +
   ts.panelOptions.withDescription(description) +
   ts.standardOptions.withUnit(unit) +
-  ts.standardOptions.thresholds.withMode(thresholdMode) +
-  ts.standardOptions.thresholds.withStepsMixin(thresholdSteps) +
+  (if std.length(thresholdSteps) > 0 then
+     ts.standardOptions.thresholds.withMode(thresholdMode) +
+     ts.standardOptions.thresholds.withStepsMixin(thresholdSteps)
+   else
+     {})
   {
     addYaxis(min=null, max=null, label=null, show=true)::
       local axisPlacement = if show then
@@ -210,6 +214,42 @@ local multiTimeSeries(
     min=min,
     max=max,
     label=yAxisLabel,
+  );
+
+local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rangeInterval) =
+  |||
+    histogram_quantile(%(percentile)g, sum by (%(aggregator)s, le) (
+      rate(%(bucketMetric)s{%(selector)s}[%(rangeInterval)s])
+    ))
+  ||| % {
+    percentile: percentile,
+    aggregator: aggregator,
+    selector: selectors.serializeHash(selector),
+    bucketMetric: bucketMetric,
+    rangeInterval: rangeInterval,
+  };
+
+local multiQuantileTimeSeries(
+  title='Quantile latencies',
+  selector='',
+  legendFormat='latency',
+  bucketMetric='',
+  aggregators='',
+  percentiles=[50, 90, 95, 99],
+  legend_rightSide=false,
+      ) =
+  multiTimeSeries(
+    title=title,
+    queries=std.map(
+      function(p) {
+        query: latencyHistogramQuery(p / 100, bucketMetric, selector, aggregators, '$__interval'),
+        legendFormat: '%s p%s' % [legendFormat, p],
+      },
+      percentiles
+    ),
+    yAxisLabel='Duration',
+    format='short',
+    legend_rightSide=legend_rightSide,
   );
 
 local timeSeries(
@@ -436,6 +476,7 @@ local networkTrafficGraph(
   basic: basic,
   timeSeries: timeSeries,
   latencyTimeSeries: latencyTimeSeries,
+  multiQuantileTimeSeries: multiQuantileTimeSeries,
   percentageTimeSeries: percentageTimeSeries,
   queueLengthTimeSeries: queueLengthTimeSeries,
   saturationTimeSeries: saturationTimeSeries,
