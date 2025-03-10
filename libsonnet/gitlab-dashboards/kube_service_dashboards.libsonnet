@@ -147,7 +147,7 @@ local panelsForDeployment(serviceType, deployment, selectorHash, useTimeSeriesPl
       ),
     ];
 
-local panelsForRequestsUtilization(serviceType, selectorHash) =
+local panelsForRequestsUtilization(serviceType, selectorHash, useTimeSeriesPlugin=false) =
   local nodeSelectorHash = selectorHash {
     type: serviceType,
   };
@@ -157,46 +157,88 @@ local panelsForRequestsUtilization(serviceType, selectorHash) =
     nodeSelector: selectors.serializeHash(nodeSelectorHash),
   };
 
-  [
-    basic.timeseries(
-      title='Node CPU Requests Utilization' % formatConfig,
-      description=|||
-        Ratio of requested CPU resources from allocatable resources.
-        Ideally we have requests utilization close to 100%. Values are
-        below 100% typically because pods do not fit well on nodes or
-        because we might be bound by memory requests already.
-      |||,
-      query=|||
-        sum by (node) (
-          kube_pod_container_resource_requests{resource="cpu", unit="core"}
-        )
-        / on (node) group_left()
-        kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
-      ||| % formatConfig,
-      format='percentunit',
-      linewidth=1,
-      legendFormat='{{ node }}',
-    ),
-    basic.timeseries(
-      title='Node Memory Requests Utilization' % formatConfig,
-      description=|||
-        Ratio of requested Memory resources from allocatable resources.
-        Ideally we have requests utilization close to 100%. Values are
-        below 100% typically because pods do not fit well on nodes or
-        because we might be bound by CPU requests already.
-      |||,
-      query=|||
-        sum by (node) (
-          kube_pod_container_resource_requests{resource="memory", unit="byte"}
-        )
-        / on (node) group_left()
-        kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
-      ||| % formatConfig,
-      format='percentunit',
-      linewidth=1,
-      legendFormat='{{ node }}',
-    ),
-  ];
+  if useTimeSeriesPlugin then
+    [
+      panel.timeSeries(
+        title='Node CPU Requests Utilization' % formatConfig,
+        description=|||
+          Ratio of requested CPU resources from allocatable resources.
+          Ideally we have requests utilization close to 100%. Values are
+          below 100% typically because pods do not fit well on nodes or
+          because we might be bound by memory requests already.
+        |||,
+        query=|||
+          sum by (node) (
+            kube_pod_container_resource_requests{resource="cpu", unit="core"}
+          )
+          / on (node) group_left()
+          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
+        ||| % formatConfig,
+        format='percentunit',
+        linewidth=1,
+        legendFormat='{{ node }}',
+      ),
+      panel.timeSeries(
+        title='Node Memory Requests Utilization' % formatConfig,
+        description=|||
+          Ratio of requested Memory resources from allocatable resources.
+          Ideally we have requests utilization close to 100%. Values are
+          below 100% typically because pods do not fit well on nodes or
+          because we might be bound by CPU requests already.
+        |||,
+        query=|||
+          sum by (node) (
+            kube_pod_container_resource_requests{resource="memory", unit="byte"}
+          )
+          / on (node) group_left()
+          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
+        ||| % formatConfig,
+        format='percentunit',
+        linewidth=1,
+        legendFormat='{{ node }}',
+      ),
+    ]
+  else
+    [
+      basic.timeseries(
+        title='Node CPU Requests Utilization' % formatConfig,
+        description=|||
+          Ratio of requested CPU resources from allocatable resources.
+          Ideally we have requests utilization close to 100%. Values are
+          below 100% typically because pods do not fit well on nodes or
+          because we might be bound by memory requests already.
+        |||,
+        query=|||
+          sum by (node) (
+            kube_pod_container_resource_requests{resource="cpu", unit="core"}
+          )
+          / on (node) group_left()
+          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
+        ||| % formatConfig,
+        format='percentunit',
+        linewidth=1,
+        legendFormat='{{ node }}',
+      ),
+      basic.timeseries(
+        title='Node Memory Requests Utilization' % formatConfig,
+        description=|||
+          Ratio of requested Memory resources from allocatable resources.
+          Ideally we have requests utilization close to 100%. Values are
+          below 100% typically because pods do not fit well on nodes or
+          because we might be bound by CPU requests already.
+        |||,
+        query=|||
+          sum by (node) (
+            kube_pod_container_resource_requests{resource="memory", unit="byte"}
+          )
+          / on (node) group_left()
+          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
+        ||| % formatConfig,
+        format='percentunit',
+        linewidth=1,
+        legendFormat='{{ node }}',
+      ),
+    ];
 
 local rowsForContainer(container, deployment, selectorHash) =
   local containerSelectorHash = selectorHash {
@@ -446,7 +488,7 @@ local deploymentOverview(type, selector, startRow=1, useTimeSeriesPlugin=false) 
       deployments
     ) + (
       if serviceHasDedicatedKubeNodePool then
-        [panelsForRequestsUtilization(type, selector)]
+        [panelsForRequestsUtilization(type, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)]
       else
         []
     ),

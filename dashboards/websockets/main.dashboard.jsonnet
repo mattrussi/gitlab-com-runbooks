@@ -5,6 +5,9 @@ local row = grafana.row;
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 serviceDashboard.overview('websockets')
 .addPanel(
@@ -19,23 +22,40 @@ serviceDashboard.overview('websockets')
 .addPanels(
   layout.grid(
     [
-      basic.timeseries(
-        stableId='action_cable_active_connections',
-        title='ActionCable Active Connections',
-        decimals=2,
-        yAxisLabel='Connections',
-        description=|||
-          Number of ActionCable connections active at the time of sampling.
-        |||,
-        query=|||
-          sum(
-            action_cable_active_connections{
-              environment="$environment",
-              stage="$stage",
-            }
-          )
-        |||,
-      ),
+      if useTimeSeriesPlugin then
+        panel.timeSeries(
+          title='ActionCable Active Connections',
+          yAxisLabel='Connections',
+          description=|||
+            Number of ActionCable connections active at the time of sampling.
+          |||,
+          query=|||
+            sum(
+              action_cable_active_connections{
+                environment="$environment",
+                stage="$stage",
+              }
+            )
+          |||,
+        )
+      else
+        basic.timeseries(
+          stableId='action_cable_active_connections',
+          title='ActionCable Active Connections',
+          decimals=2,
+          yAxisLabel='Connections',
+          description=|||
+            Number of ActionCable connections active at the time of sampling.
+          |||,
+          query=|||
+            sum(
+              action_cable_active_connections{
+                environment="$environment",
+                stage="$stage",
+              }
+            )
+          |||,
+        ),
     ],
     startRow=750
   )
@@ -49,18 +69,27 @@ serviceDashboard.overview('websockets')
     h: 1,
   }
 )
-.addPanels(workhorseCommon.workhorsePanels(serviceType='websockets', serviceStage='$stage', startRow=1001))
+.addPanels(workhorseCommon.workhorsePanels(serviceType='websockets', serviceStage='$stage', startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanels(
   layout.grid(
     [
-      basic.timeseries(
-        title='Workhorse Git HTTP Sessions',
-        query=|||
-          gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="websockets"}
-        |||,
-        legendFormat='Sessions',
-        stableId='workhorse-sessions',
-      ),
+      if useTimeSeriesPlugin then
+        panel.timeSeries(
+          title='Workhorse Git HTTP Sessions',
+          query=|||
+            gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="websockets"}
+          |||,
+          legendFormat='Sessions',
+        )
+      else
+        basic.timeseries(
+          title='Workhorse Git HTTP Sessions',
+          query=|||
+            gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="websockets"}
+          |||,
+          legendFormat='Sessions',
+          stableId='workhorse-sessions',
+        ),
     ],
     startRow=2000
   )
@@ -74,5 +103,5 @@ serviceDashboard.overview('websockets')
     h: 1,
   }
 )
-.addPanels(railsCommon.railsPanels(serviceType='websockets', serviceStage='$stage', startRow=3001))
+.addPanels(railsCommon.railsPanels(serviceType='websockets', serviceStage='$stage', startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .overviewTrailer()
