@@ -488,6 +488,46 @@ local targetSeqTupleReads =
     ),
   );
 
+local sourceSeqTupleReadsTable =
+  panels.generalGraphPanel('🏹 Source seq tuple reads for Decomp Tables', decimals=3, legend_show=true, legend_min=false, legend_current=false)
+  .resetYaxes()
+  .addYaxis(
+    format='ops/s',
+  )
+  .addYaxis(
+    format='short',
+    max=1,
+    min=0,
+    show=false,
+  )
+  .addTarget(
+    promQuery.target(
+      |||
+        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"${tableList}"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
+
+local targetSeqTupleReadsTable =
+  panels.generalGraphPanel('🎯 Target seq tuple reads for Decomp Tables', decimals=3, legend_show=true, legend_min=false, legend_current=false)
+  .resetYaxes()
+  .addYaxis(
+    format='ops/s',
+  )
+  .addYaxis(
+    format='short',
+    max=1,
+    min=0,
+    show=false,
+  )
+  .addTarget(
+    promQuery.target(
+      |||
+        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
+
 basic.dashboard(
   'Database Decomposition using logical',
   tags=['postgresql'],
@@ -548,8 +588,10 @@ basic.dashboard(
   .addPanel(targetWritesTupleTables, gridPos={ x: 12, y: 22, w: 12, h: 8 })
   .addPanel(sourceIndexTupleFetches, gridPos={ x: 0, y: 30, w: 12, h: 8 })
   .addPanel(targetIndexTupleFetches, gridPos={ x: 12, y: 30, w: 12, h: 8 })
-  .addPanel(sourceSeqTupleReads, gridPos={ x: 0, y: 30, w: 38, h: 8 })
-  .addPanel(targetSeqTupleReads, gridPos={ x: 12, y: 30, w: 38, h: 8 }),
+  .addPanel(sourceSeqTupleReads, gridPos={ x: 0, y: 38, w: 12, h: 8 })
+  .addPanel(targetSeqTupleReads, gridPos={ x: 12, y: 38, w: 12, h: 8 })
+  .addPanel(sourceSeqTupleReadsTable, gridPos={ x: 0, y: 46, w: 12, h: 8 })
+  .addPanel(targetSeqTupleReadsTable, gridPos={ x: 12, y: 46, w: 12, h: 8 }),
   gridPos={
     x: 0,
     y: 14,
