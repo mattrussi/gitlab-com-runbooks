@@ -190,15 +190,25 @@ Keys must be rotated in staging and production. The general steps in both enviro
 1. Run `sudo gitlab-rake cloud_connector:keys:list` to verify there is exactly one key.
 1. Run `sudo gitlab-rake cloud_connector:keys:create` to add a new key to rotate to.
 1. Run `sudo gitlab-rake cloud_connector:keys:list` to verify there are exactly two keys.
-1. Ensure validators have fetched the new key via OIDC Discovery.
-   Depending on the particular system, this may involve:
-   - Wait at least 24 hours or longer, depending on how long keys are cached for.
-   - Restart the system or otherwise evict its key cache.
-   - For the AI Gateway only, ensure [this dashboard](https://log.gprd.gitlab.net/app/r/s/p7Rhe) shows no events.
+1. Ensure validators have fetched the new key via OIDC Discovery. Since keys are cached both in HTTP
+   caches and application-specific caches, this may require waiting at least 24 hours for these
+   caches to expire. This process can be expedited by:
+   - Restarting/redeploying backend services to evice their in-memory caches.
+   - [Purging HTTP caches in Cloudflare](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/caching/configuration)
+     for the `/oauth/discovery/keys` endpoint.
+1. For the AI Gateway only, ensure [this dashboard](https://log.gprd.gitlab.net/app/r/s/p7Rhe) shows no events.
 1. Run `sudo gitlab-rake cloud_connector:keys:rotate` to swap current key with new key, enacting the rotation.
-1. Monitor affected systems to still work as intended (failure would surface as 401s).
+1. Monitor affected systems:
+   - Ensure Puma and Sidekiq processes have swapped to the new key. This may take some time due keys being cached
+     in process memory.
+     - [Puma key load events](https://log.gprd.gitlab.net/app/r/s/4tqY3)
+     - [Sidekiq key load events](https://log.gprd.gitlab.net/app/r/s/s2iae)
+   - Ensure all Puma and Sidekiq workers are now [using the new key to sign requests](https://dashboards.gitlab.net/goto/s7KShmhHg?orgId=1).
+   - **Do not proceed with the process until:**
+     1. Keys in use to sign requests have converged fully to the new key.
+     1. Backends should not see elevated rates of `401 Unauthorized` responses.
 1. Run `sudo gitlab-rake cloud_connector:keys:trim` to remove the now unused key.
-1. Monitor affected systems to still work as intended (failure would surface as 401s).
+1. Monitor affected systems as before to ensure the rotation was successful.
 
 #### Rotating keys in staging
 
