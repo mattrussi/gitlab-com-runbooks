@@ -122,7 +122,7 @@
             "description": "Estimated time over the dashboard's period where ci_runner_jobs failed due to internal errors",
             "fieldConfig": {
                "defaults": {
-                  "decimals": 2,
+                  "decimals": 0,
                   "displayName": "",
                   "links": [ ],
                   "mappings": [ ],
@@ -209,7 +209,7 @@
             "dashLength": 10,
             "dashes": false,
             "datasource": "$PROMETHEUS_DS",
-            "decimals": 2,
+            "decimals": 3,
             "description": "Percentage of ci_runner_jobs over the dashboard's range that did not have internal errors, looking back over the dashboard's range window.",
             "fill": 0,
             "fillGradient": 0,
@@ -404,7 +404,7 @@
             "description": "Number of jobs over the dashboard's range that exceeded the acceptable time. Excludes jobs that were delayed because the scaleMax threshold was hit.",
             "fieldConfig": {
                "defaults": {
-                  "decimals": 2,
+                  "decimals": 0,
                   "displayName": "",
                   "links": [ ],
                   "mappings": [ ],
@@ -413,20 +413,8 @@
                      "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green",
-                           "value": null
-                        },
-                        {
                            "color": "yellow",
-                           "value": 10
-                        },
-                        {
-                           "color": "orange",
-                           "value": 50
-                        },
-                        {
-                           "color": "red",
-                           "value": 100
+                           "value": null
                         }
                      ]
                   },
@@ -479,7 +467,7 @@
             "dashLength": 10,
             "dashes": false,
             "datasource": "$PROMETHEUS_DS",
-            "decimals": 2,
+            "decimals": 3,
             "description": "Percentage of all jobs looking back over the dashboard's range that were executed within an acceptable time. Excludes jobs that were delayed because the scaleMax threshold was hit.",
             "fill": 0,
             "fillGradient": 0,

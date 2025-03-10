@@ -55,7 +55,7 @@ local budgetSpent(selector) =
     ||| % { selector: selector },
     unit='dtdurationms',
     min=0,
-    decimals=2,
+    decimals=0,
     color=[
       { color: 'red', value: null },
       { color: 'light-red', value: 0.95 },
@@ -87,7 +87,7 @@ local rollingAvailability(selector) =
     format='percentunit',
     min=0,
     max=1,
-    decimals=2,
+    decimals=3,
     fill=0,
     stableId='hosted-runners-rolling-availability'
   );
@@ -160,13 +160,8 @@ local queuingViolationsCount(selector) =
     ||| % { selector: selector },
     unit='none',
     min=0,
-    decimals=2,
-    color=[
-      { color: 'green', value: null },
-      { color: 'yellow', value: 10 },
-      { color: 'orange', value: 50 },
-      { color: 'red', value: 100 },
-    ],
+    color='yellow',
+    decimals=0,
     graphMode='none',
     stableId='job-queuing-violations-count',
   );
@@ -199,7 +194,7 @@ local jobQueuingSLOOverTime(selector) =
     format='percentunit',
     min=0.9,
     max=1,
-    decimals=2,
+    decimals=3,
     fill=0,
     stableId='job-queuing-slo-over-time'
   );
