@@ -835,7 +835,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       self.addPanels(sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector)),
   };
 
-local errorBudgetDetailDashboard(stageGroup) =
+local errorBudgetDetailDashboard(stageGroup, useTimeSeriesPlugin=true) =
   // Missing `feature_category` labels are also accepted for viewing details with a static feature category
   local featureCategoriesSelector = std.join('|', stageGroup.feature_categories + ['']);
   local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
@@ -866,6 +866,7 @@ local errorBudgetDetailDashboard(stageGroup) =
       title='%s: group error budget detail' % [stageGroup.name],
       budget=budget,
       time_from='now-28d/m',
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
     .addPanels(
       keyMetrics.headlineMetricsRow(
@@ -886,7 +887,8 @@ local errorBudgetDetailDashboard(stageGroup) =
         includeLastWeek=false,
         compact=true,
         rowHeight=8,
-        fixedThreshold=budget.slaTarget
+        fixedThreshold=budget.slaTarget,
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     .addPanels(
@@ -903,6 +905,7 @@ local errorBudgetDetailDashboard(stageGroup) =
           stage_group: stageGroup.key,
         },
         sliFilter=sliFilter,
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     );
 
