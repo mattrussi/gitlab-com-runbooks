@@ -493,6 +493,7 @@ local networkTrafficGraph(
   basic: basic,
   timeSeries: timeSeries,
   latencyTimeSeries: latencyTimeSeries,
+  multiTimeSeries: multiTimeSeries,
   multiQuantileTimeSeries: multiQuantileTimeSeries,
   percentageTimeSeries: percentageTimeSeries,
   queueLengthTimeSeries: queueLengthTimeSeries,
