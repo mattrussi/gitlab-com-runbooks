@@ -318,6 +318,8 @@ local latencyTimeSeries(
   linewidth=2,
   min=0,
   datasource='$PROMETHEUS_DS',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   basic(
     title,
@@ -332,6 +334,8 @@ local latencyTimeSeries(
     legend_avg=true,
     legend_alignAsTable=true,
     unit=format,
+    thresholdMode=thresholdMode,
+    thresholdSteps=thresholdSteps,
   )
   .addTarget(target.prometheus(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
   .addYaxis(
