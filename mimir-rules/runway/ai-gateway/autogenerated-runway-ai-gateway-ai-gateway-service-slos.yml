@@ -15,7 +15,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: inference_anthropic
@@ -29,7 +29,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: inference_other
@@ -43,7 +43,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: inference_vertex
@@ -57,7 +57,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
@@ -71,7 +71,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_lb
@@ -85,7 +85,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server
@@ -99,7 +99,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_chat
@@ -113,7 +113,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_code_completions
@@ -127,7 +127,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_code_generations
@@ -141,7 +141,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_x_ray
@@ -155,7 +155,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: waf
@@ -169,7 +169,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.010000"
+    expr: "0.020000"
   - record: gitlab_component_service:mapping
     labels:
       component: inference_anthropic
