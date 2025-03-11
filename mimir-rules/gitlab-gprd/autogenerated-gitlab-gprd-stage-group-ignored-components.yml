@@ -73,13 +73,13 @@ groups:
       product_stage: gitlab_delivery
       stage_group: build
     expr: "1"
-- name: 'Stage group Ignored components: systems - Cloud Connector'
+- name: 'Stage group Ignored components: production_engineering - Cloud Connector'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: systems
+      product_stage: production_engineering
       stage_group: cloud_connector
     expr: "1"
 - name: 'Stage group Ignored components: create - Code Creation'

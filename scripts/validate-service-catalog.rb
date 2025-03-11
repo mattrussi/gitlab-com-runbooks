@@ -67,9 +67,8 @@ class ValidateStageGroupMapping
 
   KNOWN_GROUPS_WITHOUT_TEAM = %w[
     ci_platform contributor_success custom_models design_system distribution_build
-    editor_extensions engineering_analytics engineering_productivity gdk
-    hosted_runners infrastructure not_owned pubsec_services quality
-    secret_detection switchboard technical_writing ux_paper_cuts developer_tooling
+    editor_extensions engineering_analytics gdk hosted_runners infrastructure not_owned
+    pubsec_services quality secret_detection switchboard technical_writing ux_paper_cuts
   ].freeze
 
   def initialize(service_catalog, stage_group_mapping = DEFAULT_STAGE_GROUP_MAPPING)
