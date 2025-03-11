@@ -299,6 +299,7 @@ local sliDetailErrorRatePanel(
     legendFormatPrefix='',
     expectMultipleSeries=false,
     sliFilter=function(x) x,
+    useTimeSeriesPlugin=false,
   )::
 
     local allSLIsForServices = std.flatMap(
@@ -332,6 +333,7 @@ local sliDetailErrorRatePanel(
                   startRow=startRow + 1 + i * 10,
                   legendFormatPrefix=legendFormatPrefix,
                   expectMultipleSeries=expectMultipleSeries,
+                  useTimeSeriesPlugin=useTimeSeriesPlugin,
                 )
               else
                 [],
