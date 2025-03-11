@@ -5,6 +5,9 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
+local override = import 'grafana/time-series/override.libsonnet';
 
 local jobSaturationMetrics = {
   concurrent: 'gitlab_runner_concurrent',
@@ -13,43 +16,80 @@ local jobSaturationMetrics = {
 
 local aggregatorLegendFormat(aggregator) = '{{ %s }}' % aggregator;
 
-local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatching.defaultPartition) =
+local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=false) =
   local serializedAggregation = aggregations.serialize(aggregators);
-  basic.timeseries(
-    title='Runner saturation of %(type)s by %(aggregator)s' % { aggregator: serializedAggregation, type: saturationType },
-    legendFormat='%(aggregators)s' % { aggregators: std.join(' - ', std.map(aggregatorLegendFormat, aggregators)) },
-    format='percentunit',
-    query=runnersManagerMatching.formatQuery(
-      |||
-        sum by (%(aggregator)s) (
-          gitlab_runner_jobs{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
-        )
-        /
-        sum by (%(aggregator)s) (
-          %(maxJobsMetric)s{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
-        )
-      |||,
-      partition,
-      {
-        aggregator: serializedAggregation,
-        maxJobsMetric: jobSaturationMetrics[saturationType],
-      },
-    ),
-  ).addTarget(
-    promQuery.target(
-      expr='0.85',
-      legendFormat='Soft SLO',
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Runner saturation of %(type)s by %(aggregator)s' % { aggregator: serializedAggregation, type: saturationType },
+      legendFormat='%(aggregators)s' % { aggregators: std.join(' - ', std.map(aggregatorLegendFormat, aggregators)) },
+      format='percentunit',
+      query=runnersManagerMatching.formatQuery(
+        |||
+          sum by (%(aggregator)s) (
+            gitlab_runner_jobs{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
+          )
+          /
+          sum by (%(aggregator)s) (
+            %(maxJobsMetric)s{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
+          )
+        |||,
+        partition,
+        {
+          aggregator: serializedAggregation,
+          maxJobsMetric: jobSaturationMetrics[saturationType],
+        },
+      )
+    ).addTarget(
+      target.prometheus(
+        expr='0.85',
+        legendFormat='Soft SLO',
+      )
+    ).addTarget(
+      target.prometheus(
+        expr='0.9',
+        legendFormat='Hard SLO',
+      )
+    ).addSeriesOverride(
+      override.hardSlo
+    ).addSeriesOverride(
+      override.softSlo
     )
-  ).addTarget(
-    promQuery.target(
-      expr='0.9',
-      legendFormat='Hard SLO',
-    )
-  ).addSeriesOverride(
-    seriesOverrides.hardSlo
-  ).addSeriesOverride(
-    seriesOverrides.softSlo
-  );
+  else
+    basic.timeseries(
+      title='Runner saturation of %(type)s by %(aggregator)s' % { aggregator: serializedAggregation, type: saturationType },
+      legendFormat='%(aggregators)s' % { aggregators: std.join(' - ', std.map(aggregatorLegendFormat, aggregators)) },
+      format='percentunit',
+      query=runnersManagerMatching.formatQuery(
+        |||
+          sum by (%(aggregator)s) (
+            gitlab_runner_jobs{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
+          )
+          /
+          sum by (%(aggregator)s) (
+            %(maxJobsMetric)s{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
+          )
+        |||,
+        partition,
+        {
+          aggregator: serializedAggregation,
+          maxJobsMetric: jobSaturationMetrics[saturationType],
+        },
+      ),
+    ).addTarget(
+      promQuery.target(
+        expr='0.85',
+        legendFormat='Soft SLO',
+      )
+    ).addTarget(
+      promQuery.target(
+        expr='0.9',
+        legendFormat='Hard SLO',
+      )
+    ).addSeriesOverride(
+      seriesOverrides.hardSlo
+    ).addSeriesOverride(
+      seriesOverrides.softSlo
+    );
 
 local runnerSaturationCounter(partition=runnersManagerMatching.defaultPartition) =
   gaugePanel.new(
@@ -90,6 +130,5 @@ local runnerSaturationCounter(partition=runnersManagerMatching.defaultPartition)
 
 {
   runnerSaturation:: runnerSaturation,
-
   runnerSaturationCounter:: runnerSaturationCounter,
 }
