@@ -1,4 +1,5 @@
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
@@ -32,16 +33,27 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
-  in_progress_requests_by_node(selectorHash)::
-    basic.timeseries(
-      title='In progress requests',
-      query=|||
-        sum(gitaly_concurrency_limiting_in_progress{%(selector)s}) by (fqdn)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat='{{ fqdn }}',
-      interval='$__interval',
-      linewidth=1,
-    ),
+  in_progress_requests_by_node(selectorHash, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='In progress requests',
+        query=|||
+          sum(gitaly_concurrency_limiting_in_progress{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='In progress requests',
+        query=|||
+          sum(gitaly_concurrency_limiting_in_progress{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+      ),
   queued_requests(selectorHash)::
     basic.timeseries(
       title='Queued requests',
@@ -52,16 +64,27 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
-  queued_requests_by_node(selectorHash)::
-    basic.timeseries(
-      title='Queued requests',
-      query=|||
-        sum(gitaly_concurrency_limiting_queued{%(selector)s}) by (fqdn)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat='{{ fqdn }}',
-      interval='$__interval',
-      linewidth=1,
-    ),
+  queued_requests_by_node(selectorHash, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Queued requests',
+        query=|||
+          sum(gitaly_concurrency_limiting_queued{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Queued requests',
+        query=|||
+          sum(gitaly_concurrency_limiting_queued{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+      ),
   dropped_requests(selectorHash)::
     basic.timeseries(
       title='Dropped requests (RPS)',
@@ -72,16 +95,27 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
-  dropped_requests_by_node(selectorHash)::
-    basic.timeseries(
-      title='Dropped requests (RPS)',
-      query=|||
-        sum(rate(gitaly_requests_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat='{{ reason }} - {{ fqdn }}',
-      interval='$__interval',
-      linewidth=1,
-    ),
+  dropped_requests_by_node(selectorHash, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Dropped requests (RPS)',
+        query=|||
+          sum(rate(gitaly_requests_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ reason }} - {{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Dropped requests (RPS)',
+        query=|||
+          sum(rate(gitaly_requests_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ reason }} - {{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+      ),
   queueing_time(selectorHash)::
     basic.timeseries(
       title='95th queueing time (RPS)',
@@ -93,15 +127,27 @@ local selectors = import 'promql/selectors.libsonnet';
       linewidth=1,
       format='s',
     ),
-  queueing_time_by_node(selectorHash)::
-    basic.timeseries(
-      title='95th queueing time (RPS)',
-      query=|||
-        histogram_quantile(0.95, sum(rate(gitaly_concurrency_limiting_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat='{{ fqdn }}',
-      interval='$__interval',
-      linewidth=1,
-      format='s',
-    ),
+  queueing_time_by_node(selectorHash, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='95th queueing time (RPS)',
+        query=|||
+          histogram_quantile(0.95, sum(rate(gitaly_concurrency_limiting_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+        format='short',
+      )
+    else
+      basic.timeseries(
+        title='95th queueing time (RPS)',
+        query=|||
+          histogram_quantile(0.95, sum(rate(gitaly_concurrency_limiting_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat='{{ fqdn }}',
+        interval='$__interval',
+        linewidth=1,
+        format='s',
+      ),
 }

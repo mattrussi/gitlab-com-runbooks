@@ -2,8 +2,10 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
-
+local panel = import 'grafana/time-series/panel.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 serviceDashboard.overview(
   'mailgun',
@@ -11,7 +13,7 @@ serviceDashboard.overview(
   showSystemDiagrams=false,
   showProvisioningDetails=false,
   omitEnvironmentDropdown=true,
-  environmentSelectorHash={ env: "ops" },
+  environmentSelectorHash={ env: 'ops' },
 )
 .addPanel(
   row.new(title='Mailgun Metrics'),
@@ -23,35 +25,69 @@ serviceDashboard.overview(
   }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Mailgun Delivery Errors',
-      query='sum(rate(mailgun_delivery_errors_total[$__rate_interval])) by (delivery_status_code)',
-      legend_show=false,
-    ),
-    basic.timeseries(
-      title='Estimated p95 Delivery Time',
-      query=|||
-        histogram_quantile(
-          0.95,
-          sum by (le) (
-            rate(mailgun_delivery_time_seconds_bucket[$__rate_interval])
-          )
-        )
-      |||,
-      format='s',
-      legend_show=false,
-    ),
-    basic.timeseries(
-      title='Average deliverytime',
-      query=|||
-        rate(mailgun_delivery_time_seconds_sum[$__rate_interval])
-        /
-        rate(mailgun_delivery_time_seconds_count[$__rate_interval])
-      |||,
-      format='s',
-      legend_show=false,
-    ),
-  ], cols=3, rowHeight=10, startRow=1001)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Mailgun Delivery Errors',
+          query='sum(rate(mailgun_delivery_errors_total[$__rate_interval])) by (delivery_status_code)',
+          legend_show=false,
+        ),
+        panel.timeSeries(
+          title='Estimated p95 Delivery Time',
+          query=|||
+            histogram_quantile(
+              0.95,
+              sum by (le) (
+                rate(mailgun_delivery_time_seconds_bucket[$__rate_interval])
+              )
+            )
+          |||,
+          format='s',
+          legend_show=false,
+        ),
+        panel.timeSeries(
+          title='Average deliverytime',
+          query=|||
+            rate(mailgun_delivery_time_seconds_sum[$__rate_interval])
+            /
+            rate(mailgun_delivery_time_seconds_count[$__rate_interval])
+          |||,
+          format='s',
+          legend_show=false,
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Mailgun Delivery Errors',
+          query='sum(rate(mailgun_delivery_errors_total[$__rate_interval])) by (delivery_status_code)',
+          legend_show=false,
+        ),
+        basic.timeseries(
+          title='Estimated p95 Delivery Time',
+          query=|||
+            histogram_quantile(
+              0.95,
+              sum by (le) (
+                rate(mailgun_delivery_time_seconds_bucket[$__rate_interval])
+              )
+            )
+          |||,
+          format='s',
+          legend_show=false,
+        ),
+        basic.timeseries(
+          title='Average deliverytime',
+          query=|||
+            rate(mailgun_delivery_time_seconds_sum[$__rate_interval])
+            /
+            rate(mailgun_delivery_time_seconds_count[$__rate_interval])
+          |||,
+          format='s',
+          legend_show=false,
+        ),
+      ], cols=3, rowHeight=10, startRow=1001
+  )
 )
 .overviewTrailer()

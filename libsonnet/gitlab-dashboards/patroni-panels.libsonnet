@@ -6,7 +6,8 @@ local serviceDashboard = import './service_dashboard.libsonnet';
 
 local patroni(
   type='patroni',
-  user='gitlab'
+  user='gitlab',
+  useTimeSeriesPlugin=false,
       ) =
   serviceDashboard.overview(type)
   .addPanel(
@@ -18,7 +19,7 @@ local patroni(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.workloadStats(type, 1001))
+  .addPanels(pgbouncerCommonGraphs.workloadStats(type, 1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
   .addPanel(
     row.new(title='pgbouncer Connection Pooling', collapse=false),
     gridPos={
@@ -28,7 +29,7 @@ local patroni(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, user, 2001))
+  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, user, 2001, useTimeSeriesPlugin=useTimeSeriesPlugin))
   .addPanel(
     row.new(title='pgbouncer Network', collapse=false),
     gridPos={
@@ -38,7 +39,7 @@ local patroni(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.networkStats(type, 3001))
+  .addPanels(pgbouncerCommonGraphs.networkStats(type, 3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
   .addPanel(
     row.new(title='postgres process stats', collapse=true)
     .addPanels(
@@ -50,6 +51,7 @@ local patroni(
           type: type,
           stage: 'main',
         },
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     ,
@@ -71,6 +73,7 @@ local patroni(
           type: type,
           stage: 'main',
         },
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     ,
@@ -93,6 +96,7 @@ local patroni(
           type: type,
           stage: 'main',
         },
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     ,

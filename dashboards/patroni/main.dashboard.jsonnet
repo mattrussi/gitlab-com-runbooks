@@ -1,3 +1,3 @@
 local panels = import 'gitlab-dashboards/patroni-panels.libsonnet';
 
-panels.patroni()
+panels.patroni(useTimeSeriesPlugin=true)
