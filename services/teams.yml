@@ -277,16 +277,6 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: cloud_connector
-  label: group::cloud connector
-  product_stage_group: cloud_connector
-  slack_channel: g_cloud_connector
-  slack_alerts_channel: cloud-connector-events
-  ignored_components:
-  - graphql_query
-  alerts:
-  - ops
-
 - name: mlops
   product_stage_group: mlops
   ignored_components:
@@ -629,16 +619,50 @@ teams:
   alerts:
   - ops
 
-# Unlisted
+- name: cloud_connector
+  label: group::cloud connector
+  product_stage_group: cloud_connector
+  slack_channel: g_cloud_connector
+  slack_alerts_channel: cloud-connector-events
+  ignored_components:
+  - graphql_query
+  alerts:
+  - ops
+
+# Developer Experience
 
 - name: developer_tooling
   product_stage_group: developer_tooling
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/developer-tooling/
   slack_channel: g_developer_tooling
   slack_alerts_channel: g_developer_tooling
+
+- name: engineering_productivity
+  product_stage_group: engineering_productivity
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/
+  slack_channel: g_engineering_productivity
+  slack_alerts_channel: g_engineering_productivity
 
 - name: development_analytics
   product_stage_group: development_analytics
   url: https://about.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/development-analytics/
   slack_channel: g_development_analytics
   slack_alerts_channel: g_development_analytics
+
+- name: performance_enablement
+  product_stage_group: performance_enablement
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/performance-enablement/
+  slack_channel: g_performance_enablement
+  slack_alerts_channel: g_performance_enablement
+
+- name: test_governance
+  product_stage_group: test_governance
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/test-governance/
+  slack_channel: g_test_governance
+  slack_alerts_channel: g_test_governance
+
+- name: feature_readiness
+  product_stage_group: feature_readiness
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure-platforms/developer-experience/feature-readiness/
+  slack_channel: g_feature_readiness
+  slack_alerts_channel: g_feature_readiness

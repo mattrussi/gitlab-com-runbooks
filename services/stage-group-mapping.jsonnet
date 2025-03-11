@@ -359,13 +359,6 @@
       'activation',
     ],
   },
-  cloud_connector: {
-    name: 'Cloud Connector',
-    stage: 'systems',
-    feature_categories: [
-      'cloud_connector',
-    ],
-  },
   build: {
     name: 'GitLab Build',
     stage: 'gitlab_delivery',
@@ -425,6 +418,13 @@
       'infra_cost_data',
       'capacity_planning',
       'scalability',
+    ],
+  },
+  cloud_connector: {
+    name: 'Cloud Connector',
+    stage: 'production_engineering',
+    feature_categories: [
+      'cloud_connector',
     ],
   },
   gitaly: {
@@ -507,6 +507,36 @@
       'pubsec_services',
     ],
   },
+  development_analytics: {
+    name: 'Development Analytics',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
+  developer_tooling: {
+    name: 'Developer Tooling',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
+  engineering_productivity: {
+    name: 'Engineering Productivity',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
+  feature_readiness: {
+    name: 'Feature Readiness',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
+  performance_enablement: {
+    name: 'Performance Enablement',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
+  test_governance: {
+    name: 'Test Governance',
+    stage: 'developer_experience',
+    feature_categories: [],
+  },
   mlops: {
     name: 'MLOps',
     stage: 'modelops',
@@ -565,26 +595,6 @@
     feature_categories: [
       'mobile_devops',
     ],
-  },
-  engineering_productivity: {
-    name: 'Engineering Productivity',
-    stage: 'engineering_productivity',
-    feature_categories: [],
-  },
-  developer_tooling: {
-    name: 'Developer Tooling',
-    stage: 'developer_experience',
-    feature_categories: [],
-  },
-  development_analytics: {
-    name: 'Development Analytics',
-    stage: 'developer_experience',
-    feature_categories: [],
-  },
-  quality: {
-    name: 'Quality',
-    stage: 'unlisted_stage',
-    feature_categories: [],
   },
   contributor_success: {
     name: 'Contributor Success',
