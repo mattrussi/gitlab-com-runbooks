@@ -2,7 +2,7 @@
 # Cell Infrastucture Debugging and Development
 
 > [!note]
-> For incidents you should look at using [the breakglass guide instead](./breakglass.md)
+> For incidents you should look at using [the breakglass guide instead](./breakglass.md).
 
 [[_TOC_]]
 
@@ -70,7 +70,7 @@ flowchart TD
 3. Update your quarantine ring cell to use your branch name as a version.
 4. Make changes in your branch, commit and push to a remote branch.
 5. Wait for your branch to be built into an Instrumentor image
-6. Execute the render-debug script for the cell and stage you're targeting
+6. Execute the `render-debug` script for the cell and stage you're targeting
 7. Execute the stage script you are targeting inside the provisioned pod
 8. Repeat steps 4-7 until development is complete.
 
@@ -90,7 +90,7 @@ flowchart TD
 
 Before using the debug environment script, ensure you have:
 
-1. kubectl and gcloud CLI tools installed
+1. `kubectl` and `gcloud` CLI tools installed
 2. NordLayer VPN connection established to access the private gateway
 3. PAM entitlement to access the AMP cluster (See [Breakglass - AMP](#getting-amp-access) section)
 4. Appropriate Kubernetes permissions
@@ -101,18 +101,18 @@ If any of the above are missing the script will alert you and attempt to provisi
 
 | Variable        | Description                               | Example                   |
 |-----------------|-------------------------------------------|---------------------------|
-| AMP_ENVIRONMENT | The AMP environment to access             | `cellsdev` or `cellsprod` |
-| RING            | The ring number (-1 for quarantine rings) | `-1`                      |
-| TENANT_ID       | The ID of the tenant to access (cell ID)  | `12345`                   |
+| `AMP_ENVIRONMENT` | The AMP environment to access             | `cellsdev` or `cellsprod` |
+| `RING`            | The ring number (-1 for quarantine rings) | `-1`                      |
+| `TENANT_ID`       | The ID of the tenant to access (cell ID)  | `12345`                   |
 
 
 #### Optional Environment Variables
 
 | Variable             | Description                                                                                | Default          |
 |----------------------|--------------------------------------------------------------------------------------------|------------------|
-| ALLOW_NON_QUARANTINE | Set to 'true' to allow access to non-quarantine rings                                      | `false`          |
-| SLEEP_TIME           | Duration in seconds for the pod to remain alive                                            | `7200` (2 hours) |
-| ENTITLEMENT_DURATION | Duration for the PAM entitlement (if requested). Should be at least as long as $SLEEP_TIME | `$SLEEP_TIME`    |
+| `ALLOW_NON_QUARANTINE` | Set to 'true' to allow access to non-quarantine rings                                      | `false`          |
+| `SLEEP_TIME`           | Duration in seconds for the pod to remain alive                                            | `7200` (2 hours) |
+| `ENTITLEMENT_DURATION` | Duration for the PAM entitlement (if requested). Should be at least as long as `$SLEEP_TIME` | `$SLEEP_TIME`    |
 
 
 
@@ -152,7 +152,7 @@ export ALLOW_NON_QUARANTINE=true
 
 To access the AMP cluster, you'll need to request PAM entitlement using the specific entitlement created for this purpose.
 
-This will be automatically requested in the script, but is provided here
+This will be automatically requested in the script, but is provided here:
 
 ```sh
 gcloud beta pam grants create \
