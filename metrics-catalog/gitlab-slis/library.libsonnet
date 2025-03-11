@@ -58,17 +58,16 @@ local list = [
       A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx;
       sometimes errors are simply returned in the response.
       Although multiple queries can be batched in one request,
-      GLQL sends one query per request and queues them.
+      GLQL uses TaskQueue to ensure only one query per request is handled.
 
-      The number of GLQL queries meeting their duration target based on the urgency
-      of the endpoint (which currently is setup as low). By default, a query should take no more than 1s. We're working
-      on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+      At the moment, the query urgency is inherited from GraphQL and is set as 'low'
+      https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
 
-      We're only taking known operations into account. Known operations are queries
-      defined in our codebase and originating from our frontend.
+      The current possible values for feature_category are: code_review_workflow, not_owned,
+      portfolio_management, team_planning, and wiki.
 
-      Invalid GLQL queries (for example, due to syntax errors) do not count towards the error budget.
-      We specifically monitor QueryAborted errors because they indicate timeouts;
+      Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget.
+      We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts;
       if a query times out, our rate limiter throttles it.
     |||,
   }),
