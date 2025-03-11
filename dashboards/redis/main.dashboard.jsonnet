@@ -1,4 +1,4 @@
 local redisCommon = import 'gitlab-dashboards/redis_common_graphs.libsonnet';
 
-redisCommon.redisDashboard('redis', cluster=false)
+redisCommon.redisDashboard('redis', cluster=false, useTimeSeriesPlugin=true)
 .overviewTrailer()

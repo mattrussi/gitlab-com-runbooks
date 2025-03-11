@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local redisCommon = import 'gitlab-dashboards/redis_common_graphs.libsonnet';
 
-redisCommon.redisDashboard('redis-pubsub', cluster=false, hitRatio=false)
+redisCommon.redisDashboard('redis-pubsub', cluster=false, hitRatio=false, useTimeSeriesPlugin=true)
 .overviewTrailer()
