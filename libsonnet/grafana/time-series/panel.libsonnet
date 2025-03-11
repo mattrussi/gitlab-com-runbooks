@@ -70,13 +70,19 @@ local basic(
      }) +
      ts.standardOptions.thresholds.withMode(thresholdMode) +
      ts.standardOptions.thresholds.withSteps(
-       [
-         {
-           color: '#00000000',
-           value: null,
-         },
-       ] +
-       thresholdSteps
+       if std.length(std.filter(
+         function(step)
+           step.value == null,
+         thresholdSteps
+       )) == 0 then
+         [
+           {
+             color: '#00000000',
+             value: null,
+           },
+         ] + thresholdSteps
+       else
+         thresholdSteps
      )
    else
      {})
@@ -318,6 +324,8 @@ local latencyTimeSeries(
   linewidth=2,
   min=0,
   datasource='$PROMETHEUS_DS',
+  thresholdMode='absolute',
+  thresholdSteps=[],
       ) =
   basic(
     title,
@@ -332,6 +340,8 @@ local latencyTimeSeries(
     legend_avg=true,
     legend_alignAsTable=true,
     unit=format,
+    thresholdMode=thresholdMode,
+    thresholdSteps=thresholdSteps,
   )
   .addTarget(target.prometheus(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
   .addYaxis(

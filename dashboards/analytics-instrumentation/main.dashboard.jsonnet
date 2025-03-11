@@ -3,6 +3,9 @@ local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 basic.dashboard(
   'Analytics Instrumentation',
@@ -19,15 +22,26 @@ basic.dashboard(
   },
 )
 .addPanel(
-  basic.timeseries(
-    title='GitLab.com Backend sucessful events ratio 1h',
-    legendFormat='$environment',
-    format='percentunit',
-    max=1.2,
-    query=|||
-      sum(rate(gitlab_snowplow_successful_events_total{env="$environment"}[1h])) / sum(rate(gitlab_snowplow_events_total{env="$environment"}[1h]))
-    |||
-  ),
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='GitLab.com Backend sucessful events ratio 1h',
+      legendFormat='$environment',
+      format='percentunit',
+      max=1.2,
+      query=|||
+        sum(rate(gitlab_snowplow_successful_events_total{env="$environment"}[1h])) / sum(rate(gitlab_snowplow_events_total{env="$environment"}[1h]))
+      |||
+    )
+  else
+    basic.timeseries(
+      title='GitLab.com Backend sucessful events ratio 1h',
+      legendFormat='$environment',
+      format='percentunit',
+      max=1.2,
+      query=|||
+        sum(rate(gitlab_snowplow_successful_events_total{env="$environment"}[1h])) / sum(rate(gitlab_snowplow_events_total{env="$environment"}[1h]))
+      |||
+    ),
   gridPos={
     x: 0,
     y: 0,
@@ -36,23 +50,42 @@ basic.dashboard(
   }
 )
 .addPanel(
-  basic.multiTimeseries(
-    title='GitLab.com Backend Events total 1h',
-    queries=[
-      {
-        legendFormat: 'All',
-        query: 'sum(increase(gitlab_snowplow_events_total{env="$environment"}[1h]))',
-      },
-      {
-        legendFormat: 'Successfull',
-        query: 'sum(increase(gitlab_snowplow_successful_events_total{env="$environment"}[1h]))',
-      },
-      {
-        legendFormat: 'Failed',
-        query: 'sum(increase(gitlab_snowplow_failed_events_total{env="$environment"}[1h]))',
-      },
-    ]
-  ),
+  if useTimeSeriesPlugin then
+    panel.multiTimeSeries(
+      title='GitLab.com Backend Events total 1h',
+      queries=[
+        {
+          legendFormat: 'All',
+          query: 'sum(increase(gitlab_snowplow_events_total{env="$environment"}[1h]))',
+        },
+        {
+          legendFormat: 'Successfull',
+          query: 'sum(increase(gitlab_snowplow_successful_events_total{env="$environment"}[1h]))',
+        },
+        {
+          legendFormat: 'Failed',
+          query: 'sum(increase(gitlab_snowplow_failed_events_total{env="$environment"}[1h]))',
+        },
+      ]
+    )
+  else
+    basic.multiTimeseries(
+      title='GitLab.com Backend Events total 1h',
+      queries=[
+        {
+          legendFormat: 'All',
+          query: 'sum(increase(gitlab_snowplow_events_total{env="$environment"}[1h]))',
+        },
+        {
+          legendFormat: 'Successfull',
+          query: 'sum(increase(gitlab_snowplow_successful_events_total{env="$environment"}[1h]))',
+        },
+        {
+          legendFormat: 'Failed',
+          query: 'sum(increase(gitlab_snowplow_failed_events_total{env="$environment"}[1h]))',
+        },
+      ]
+    ),
   gridPos={
     x: 12,
     y: 0,
@@ -69,13 +102,22 @@ basic.dashboard(
     h: 1,
   },
 ).addPanel(
-  basic.timeseries(
-    title='GitLab.com events fired 1h',
-    legendFormat='Environment {{ environment }}',
-    query=|||
-      increase(redis_commands_total{cmd="pfadd",env="$environment"}[1h]) and on(fqdn) redis_instance_info { role="master" }
-    |||
-  ),
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='GitLab.com events fired 1h',
+      legendFormat='Environment {{ environment }}',
+      query=|||
+        increase(redis_commands_total{cmd="pfadd",env="$environment"}[1h]) and on(fqdn) redis_instance_info { role="master" }
+      |||
+    )
+  else
+    basic.timeseries(
+      title='GitLab.com events fired 1h',
+      legendFormat='Environment {{ environment }}',
+      query=|||
+        increase(redis_commands_total{cmd="pfadd",env="$environment"}[1h]) and on(fqdn) redis_instance_info { role="master" }
+      |||
+    ),
   gridPos={
     x: 0,
     y: 0,

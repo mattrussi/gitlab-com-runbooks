@@ -8,11 +8,14 @@ local colorScheme = import 'grafana/color_scheme.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
 local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_limit.libsonnet';
 local gitalyBackupDashboards = import 'gitlab-dashboards/gitaly/backup.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local selector = {
   environment: '$environment',
@@ -143,60 +146,119 @@ serviceDashboard.overview('gitaly')
   }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Gitaly first packet to total request time ratio (GET)',
-      query=|||
-        gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
-        /
-        gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
-      ||| % { selector: selectors.serializeHash(selector) },
-      legendFormat='{{ probe }}',
-      interval='1m',
-      linewidth=1,
-    ),
-    basic.timeseries(
-      title='Gitaly first packet to total request time ratio',
-      query=|||
-        (
-          gitaly_blackbox_git_http_post_first_pack_packet_seconds{%(selector)s}
-          +
-          gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
-        )
-        /
-        (
-          gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
-          +
-          gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
-        )
-      ||| % { selector: selectors.serializeHash(selector) },
-      legendFormat='{{ probe }}',
-      interval='1m',
-      linewidth=1,
-    ),
-    basic.timeseries(
-      title='Gitaly wanted refs to total request time ratio',
-      query=|||
-        gitaly_blackbox_git_http_wanted_refs{%(selector)s}
-        /
-        gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
-      ||| % { selector: selectors.serializeHash(selector) },
-      legendFormat='{{ probe }}',
-      interval='1m',
-      linewidth=1,
-    ),
-    basic.timeseries(
-      title='Gitaly request total time to request total size ratio (POST)',
-      query=|||
-        gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
-        /
-        gitaly_blackbox_git_http_post_pack_bytes{%(selector)s}
-      ||| % { selector: selectors.serializeHash(selector) },
-      legendFormat='{{ probe }}',
-      interval='1m',
-      linewidth=1,
-    ),
-  ], startRow=3001)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Gitaly first packet to total request time ratio (GET)',
+          query=|||
+            gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
+            /
+            gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+        panel.timeSeries(
+          title='Gitaly first packet to total request time ratio',
+          query=|||
+            (
+              gitaly_blackbox_git_http_post_first_pack_packet_seconds{%(selector)s}
+              +
+              gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
+            )
+            /
+            (
+              gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
+              +
+              gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+            )
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+        panel.timeSeries(
+          title='Gitaly wanted refs to total request time ratio',
+          query=|||
+            gitaly_blackbox_git_http_wanted_refs{%(selector)s}
+            /
+            gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+        panel.timeSeries(
+          title='Gitaly request total time to request total size ratio (POST)',
+          query=|||
+            gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
+            /
+            gitaly_blackbox_git_http_post_pack_bytes{%(selector)s}
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Gitaly first packet to total request time ratio (GET)',
+          query=|||
+            gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
+            /
+            gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+        basic.timeseries(
+          title='Gitaly first packet to total request time ratio',
+          query=|||
+            (
+              gitaly_blackbox_git_http_post_first_pack_packet_seconds{%(selector)s}
+              +
+              gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
+            )
+            /
+            (
+              gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
+              +
+              gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+            )
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+        basic.timeseries(
+          title='Gitaly wanted refs to total request time ratio',
+          query=|||
+            gitaly_blackbox_git_http_wanted_refs{%(selector)s}
+            /
+            gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+        basic.timeseries(
+          title='Gitaly request total time to request total size ratio (POST)',
+          query=|||
+            gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
+            /
+            gitaly_blackbox_git_http_post_pack_bytes{%(selector)s}
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat='{{ probe }}',
+          interval='1m',
+          linewidth=1,
+        ),
+      ],
+    startRow=3001
+  )
 )
 .addPanel(
   row.new(title='Pack objects metrics'),
@@ -209,12 +271,12 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
-    gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selector, '{{ fqdn }}'),
-    gitalyPackObjectsDashboards.in_process(selector, '{{ fqdn }}'),
-    gitalyPackObjectsDashboards.queued_commands(selector, '{{ fqdn }}'),
-    gitalyPackObjectsDashboards.queueing_time(selector, '{{ fqdn }}'),
-    gitalyPackObjectsDashboards.dropped_commands(selector, '{{ fqdn }}'),
-    gitalyPackObjectsDashboards.cache_lookup(selector, '{{ result }}'),
+    gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPackObjectsDashboards.in_process(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPackObjectsDashboards.queued_commands(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPackObjectsDashboards.queueing_time(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPackObjectsDashboards.dropped_commands(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPackObjectsDashboards.cache_lookup(selector, '{{ result }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
     gitalyPackObjectsDashboards.pack_objects_info(),
   ], startRow=4001)
 )
@@ -229,10 +291,10 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
-    gitalyPerRPCDashboards.in_progress_requests_by_node(selector),
-    gitalyPerRPCDashboards.queued_requests_by_node(selector),
-    gitalyPerRPCDashboards.queueing_time_by_node(selector),
-    gitalyPerRPCDashboards.dropped_requests_by_node(selector),
+    gitalyPerRPCDashboards.in_progress_requests_by_node(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPerRPCDashboards.queued_requests_by_node(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPerRPCDashboards.queueing_time_by_node(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyPerRPCDashboards.dropped_requests_by_node(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
   ], startRow=5001)
 )
 .addPanel(
@@ -246,8 +308,8 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
-    gitalyAdaptiveLimitDashboards.backoff_events(selector, '{{ fqdn }}'),
-    gitalyAdaptiveLimitDashboards.watcher_errors(selector, '{{ fqdn }}'),
+    gitalyAdaptiveLimitDashboards.backoff_events(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyAdaptiveLimitDashboards.watcher_errors(selector, '{{ fqdn }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
   ], startRow=6001)
 )
 .addPanel(
@@ -261,10 +323,10 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
-    gitalyBackupDashboards.backup_duration(selector),
-    gitalyBackupDashboards.backup_rpc_status(selector),
-    gitalyBackupDashboards.backup_rpc_latency(selector),
-    gitalyBackupDashboards.backup_bundle_upload_rate(selector),
+    gitalyBackupDashboards.backup_duration(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyBackupDashboards.backup_rpc_status(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyBackupDashboards.backup_rpc_latency(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    gitalyBackupDashboards.backup_bundle_upload_rate(selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
   ], startRow=7001)
 )
 .overviewTrailer()

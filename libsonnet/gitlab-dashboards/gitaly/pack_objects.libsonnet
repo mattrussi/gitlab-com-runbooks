@@ -1,59 +1,116 @@
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
-  in_process(selectorHash, legend)::
-    basic.timeseries(
-      title='Gitaly pack-objects concurrency',
-      query=|||
-        max(gitaly_pack_objects_in_progress{%(selector)s}) by (fqdn)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat=legend,
-      interval='$__interval',
-      linewidth=1,
-    ),
-  queued_commands(selectorHash, legend)::
-    basic.timeseries(
-      title='Gitaly pack-objects queued commands (gauage)',
-      query=|||
-        max(gitaly_pack_objects_queued{%(selector)s}) by (fqdn)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat=legend,
-      interval='$__interval',
-      linewidth=1,
-    ),
-  dropped_commands(selectorHash, legend)::
-    basic.timeseries(
-      title='Gitaly pack-objects dropped commands (RPS)',
-      query=|||
-        sum(rate(gitaly_pack_objects_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat=legend,
-      interval='$__interval',
-      linewidth=1,
-    ),
-  queueing_time(selectorHash, legend)::
-    basic.timeseries(
-      title='95th queueing time (RPS)',
-      query=|||
-        histogram_quantile(0.95, sum(rate(gitaly_pack_objects_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat=legend,
-      interval='$__interval',
-      linewidth=1,
-      format='s',
-    ),
-  cache_lookup(selectorHash, legend)::
-    basic.timeseries(
-      title='Gitaly pack-objects cache',
-      query=|||
-        sum(rate(gitaly_pack_objects_cache_lookups_total{%(selector)s}[$__rate_interval])) by (result)
-      ||| % { selector: selectors.serializeHash(selectorHash) },
-      legendFormat=legend,
-      interval='$__interval',
-      linewidth=1,
-      decimals=2,
-    ),
+  in_process(selectorHash, legend, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Gitaly pack-objects concurrency',
+        query=|||
+          max(gitaly_pack_objects_in_progress{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Gitaly pack-objects concurrency',
+        query=|||
+          max(gitaly_pack_objects_in_progress{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      ),
+  queued_commands(selectorHash, legend, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Gitaly pack-objects queued commands (gauage)',
+        query=|||
+          max(gitaly_pack_objects_queued{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Gitaly pack-objects queued commands (gauage)',
+        query=|||
+          max(gitaly_pack_objects_queued{%(selector)s}) by (fqdn)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      ),
+  dropped_commands(selectorHash, legend, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Gitaly pack-objects dropped commands (RPS)',
+        query=|||
+          sum(rate(gitaly_pack_objects_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Gitaly pack-objects dropped commands (RPS)',
+        query=|||
+          sum(rate(gitaly_pack_objects_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      ),
+  queueing_time(selectorHash, legend, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='95th queueing time (RPS)',
+        query=|||
+          histogram_quantile(0.95, sum(rate(gitaly_pack_objects_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+        format='s',
+      )
+    else
+      basic.timeseries(
+        title='95th queueing time (RPS)',
+        query=|||
+          histogram_quantile(0.95, sum(rate(gitaly_pack_objects_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+        format='s',
+      ),
+  cache_lookup(selectorHash, legend, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Gitaly pack-objects cache',
+        query=|||
+          sum(rate(gitaly_pack_objects_cache_lookups_total{%(selector)s}[$__rate_interval])) by (result)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Gitaly pack-objects cache',
+        query=|||
+          sum(rate(gitaly_pack_objects_cache_lookups_total{%(selector)s}[$__rate_interval])) by (result)
+        ||| % { selector: selectors.serializeHash(selectorHash) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+        decimals=2,
+      ),
   cache_served(selectorHash, legend)::
     basic.timeseries(
       title='Gitaly pack-objects cache served bytes',
