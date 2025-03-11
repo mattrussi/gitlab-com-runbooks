@@ -6,7 +6,7 @@ std.foldl(
     local uid = stageGroupDashboards.dashboardUid('detail-%s' % [stageGroup.key]);
 
     memo {
-      [uid]: stageGroupDashboards.errorBudgetDetailDashboard(stageGroup),
+      [uid]: stageGroupDashboards.errorBudgetDetailDashboard(stageGroup, useTimeSeriesPlugin=true),
     },
   // To test on a subset of stages, do something like:
   // stages.groupsForStage('manage'),

@@ -1,7 +1,10 @@
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local diffsDurations(title, description, metricName) =
   local quantileQuery(quantile) = |||
@@ -15,20 +18,35 @@ local diffsDurations(title, description, metricName) =
     quantile: quantile,
     metricName: metricName,
   };
-  basic.multiTimeseries(
-    title=title,
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=description,
-    queries=[{
-      query: quantileQuery(0.50),
-      legendFormat: 'Average',
-    }, {
-      query: quantileQuery(0.90),
-      legendFormat: '90th Percentile',
-    }]
-  );
+  if useTimeSeriesPlugin then
+    panel.multiTimeSeries(
+      title=title,
+      format='short',
+      yAxisLabel='',
+      description=description,
+      queries=[{
+        query: quantileQuery(0.50),
+        legendFormat: 'Average',
+      }, {
+        query: quantileQuery(0.90),
+        legendFormat: '90th Percentile',
+      }]
+    )
+  else
+    basic.multiTimeseries(
+      title=title,
+      decimals=2,
+      format='s',
+      yAxisLabel='',
+      description=description,
+      queries=[{
+        query: quantileQuery(0.50),
+        legendFormat: 'Average',
+      }, {
+        query: quantileQuery(0.90),
+        legendFormat: '90th Percentile',
+      }]
+    );
 
 local diffsAvgRenderingDuration() =
   diffsDurations(
