@@ -17,7 +17,7 @@ failed.
 
 ```mermaid
 ---
-title: When to use Cell Instrumentor Debug Environment
+title: When to use the Cell Infrastructure Development and debugging escalation workflow
 ---
 flowchart TD
     start[Need to test/debug in a cell environment]
@@ -64,10 +64,15 @@ flowchart TD
 ```
 
 1. Pick a Cell to apply your changes to.
-   - The cell should be in the quarantine ring
-   - The cell should not be in use for development by any other team members
-2. Create a branch for your change in [Instrumentor]
+   - The cell should be in the quarantine ring.
+     This `-1` folder for the environment and is checked in the script.
+   - The cell should not be in use for development by any other team members.
+     Check in the [`cells/tissue`] repository for any open MRs targeting the Cell.
+2. Create a branch for your change in [Instrumentor].
 3. Update your quarantine ring cell to use your branch name as a version.
+   1. Create a branch for this change.
+   2. Commit and push the change to the [`cells/tissue`] repo.
+   3. Open a draft MR to ensure your Cell usage is visible.
 4. Make changes in your branch, commit and push to a remote branch.
 5. Wait for your branch to be built into an Instrumentor image
 6. Execute the `render-debug` script for the cell and stage you're targeting
@@ -99,8 +104,8 @@ If any of the above are missing the script will alert you and attempt to provisi
 
 #### Required Environment Variables
 
-| Variable        | Description                               | Example                   |
-|-----------------|-------------------------------------------|---------------------------|
+| Variable          | Description                               | Example                   |
+|-------------------|-------------------------------------------|---------------------------|
 | `AMP_ENVIRONMENT` | The AMP environment to access             | `cellsdev` or `cellsprod` |
 | `RING`            | The ring number (-1 for quarantine rings) | `-1`                      |
 | `TENANT_ID`       | The ID of the tenant to access (cell ID)  | `12345`                   |
@@ -108,10 +113,10 @@ If any of the above are missing the script will alert you and attempt to provisi
 
 #### Optional Environment Variables
 
-| Variable             | Description                                                                                | Default          |
-|----------------------|--------------------------------------------------------------------------------------------|------------------|
-| `ALLOW_NON_QUARANTINE` | Set to 'true' to allow access to non-quarantine rings                                      | `false`          |
-| `SLEEP_TIME`           | Duration in seconds for the pod to remain alive                                            | `7200` (2 hours) |
+| Variable               | Description                                                                                  | Default          |
+|------------------------|----------------------------------------------------------------------------------------------|------------------|
+| `ALLOW_NON_QUARANTINE` | Set to 'true' to allow access to non-quarantine rings                                        | `false`          |
+| `SLEEP_TIME`           | Duration in seconds for the pod to remain alive                                              | `7200` (2 hours) |
 | `ENTITLEMENT_DURATION` | Duration for the PAM entitlement (if requested). Should be at least as long as `$SLEEP_TIME` | `$SLEEP_TIME`    |
 
 
