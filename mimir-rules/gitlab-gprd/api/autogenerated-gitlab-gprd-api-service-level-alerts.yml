@@ -332,13 +332,617 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="global_search",env="gprd",monitor="global",stage="main",type="api"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="global_search",env="gprd",monitor="global",stage="main",type="api"}
+  - alert: ApiServiceGlqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "400125773"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_1h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,component)
+        (
+          gitlab_component_apdex:confidence:ratio_5m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="glql",env="gprd",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGlqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "400125773"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_6h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,component)
+        (
+          gitlab_component_apdex:confidence:ratio_30m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="glql",env="gprd",monitor="global",type="api"}) >= 0.16667
+      )
+  - alert: ApiServiceGlqlApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service in region `{{ $labels.region }}` has
+        an apdex violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "400125773"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:confidence:ratio_1h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,region,component)
+        (
+          gitlab_regional_sli_apdex:confidence:ratio_5m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="glql",env="gprd",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGlqlApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service in region `{{ $labels.region }}` has
+        an apdex violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "400125773"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:confidence:ratio_6h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+        and on (env,environment,tier,type,stage,region,component)
+        (
+          gitlab_regional_sli_apdex:confidence:ratio_30m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="glql",env="gprd",monitor="global",type="api"}) >= 0.16667
+      )
+  - alert: ApiServiceGlqlErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service (`{{ $labels.stage }}` stage) has an
+        error rate violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3121910075"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_glql_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_1h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (14.4 * 0.001000)
+        )
+        and on (env,environment,tier,type,stage,component)
+        (
+          gitlab_component_errors:confidence:ratio_5m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="glql",env="gprd",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGlqlErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service (`{{ $labels.stage }}` stage) has an
+        error rate violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3121910075"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_glql_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_6h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (6 * 0.001000)
+        )
+        and on (env,environment,tier,type,stage,component)
+        (
+          gitlab_component_errors:confidence:ratio_30m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="glql",env="gprd",monitor="global",type="api"}) >= 0.16667
+      )
+  - alert: ApiServiceGlqlErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service in region `{{ $labels.region }}` has
+        an error rate violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3121910075"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_glql_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:confidence:ratio_1h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (14.4 * 0.001000)
+        )
+        and on (env,environment,tier,type,stage,region,component)
+        (
+          gitlab_regional_sli_errors:confidence:ratio_5m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="glql",env="gprd",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGlqlErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The glql SLI of the api service in region `{{ $labels.region }}` has
+        an error rate violating SLO
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3121910075"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_glql_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:confidence:ratio_6h{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (6 * 0.001000)
+        )
+        and on (env,environment,tier,type,stage,region,component)
+        (
+          gitlab_regional_sli_errors:confidence:ratio_30m{component="glql",confidence="98%",env="gprd",monitor="global",type="api"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="glql",env="gprd",monitor="global",type="api"}) >= 0.16667
+      )
+  - alert: ApiServiceGlqlTrafficCessation
+    for: 5m
+    annotations:
+      title: The glql SLI of the api service (`{{ $labels.stage }}` stage) has not
+        received any traffic in the past 30m
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2440456635"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_glql_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="glql",env="gprd",monitor="global",stage="main",type="api"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="glql",env="gprd",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceGlqlTrafficAbsent
+    for: 30m
+    annotations:
+      title: The glql SLI of the api service (`{{ $labels.stage }}` stage) has not
+        reported any traffic in the past 30m
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2440456635"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_glql_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="glql",env="gprd",monitor="global",stage="main",type="api"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="glql",env="gprd",monitor="global",stage="main",type="api"}
+  - alert: ApiServiceGlqlTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The glql SLI of the api service in region `{{ $labels.region }}` has
+        not received any traffic in the past 30m
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2440456635"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_glql_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="glql",env="gprd",monitor="global",stage="main",type="api"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="glql",env="gprd",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceGlqlTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The glql SLI of the api service in region `{{ $labels.region }}` has
+        not reported any traffic in the past 30m
+      description: |
+        A GLQL query runs as part of a GraphQL request. Not every error results in a 5xx; sometimes errors are simply returned in the response. Although multiple queries can be batched in one request, GLQL uses TaskQueue to ensure only one query per request is handled.
+
+        At the moment, the query urgency is inherited from GraphQL and is set as 'low' https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/controllers/graphql_controller.rb#L59
+
+        The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
+
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2440456635"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_glql_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md#alerts
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: markdown
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="glql",env="gprd",monitor="global",stage="main",type="api"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="glql",env="gprd",monitor="global",stage="main",type="api"}
   - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -390,7 +994,7 @@ groups:
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -442,7 +1046,7 @@ groups:
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -496,7 +1100,7 @@ groups:
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -550,7 +1154,7 @@ groups:
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -606,7 +1210,7 @@ groups:
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -662,7 +1266,7 @@ groups:
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -720,7 +1324,7 @@ groups:
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -778,7 +1382,7 @@ groups:
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -820,7 +1424,7 @@ groups:
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -864,7 +1468,7 @@ groups:
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 
@@ -908,7 +1512,7 @@ groups:
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
-        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Mutliple queries could be batched inside a single request.
+        A GraphQL query is executed in the context of a request. An error does not always result in a 5xx error. But could contain errors in the response. Multiple queries could be batched inside a single request.
 
         This SLI counts all operations, a succeeded operation does not contain errors in it's response or return a 500 error.
 

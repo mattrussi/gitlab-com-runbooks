@@ -7,6 +7,7 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'api' };
 
@@ -254,6 +255,23 @@ metricsCatalog.serviceDefinition({
       monitoringThresholds+: {
         // lowered from 0.9995 until https://gitlab.com/gitlab-org/gitlab/-/issues/469590
         // is resolved.
+        errorRatio: 0.999,
+      },
+      dependsOn: dependOnPatroni.sqlComponents,
+    }
+  ) + sliLibrary.get('glql').generateServiceLevelIndicator(
+    railsSelector, {
+      useConfidenceLevelForSLIAlerts: '98%',
+      serviceAggregation: false,
+      severity: 's3',  // Don't page SREs for this SLI
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Glql queries',
+          index='rails',
+          filters=[matching.existsFilter('json.graphql.glql_referer')],
+        ),
+      ],
+      monitoringThresholds+: {
         errorRatio: 0.999,
       },
       dependsOn: dependOnPatroni.sqlComponents,

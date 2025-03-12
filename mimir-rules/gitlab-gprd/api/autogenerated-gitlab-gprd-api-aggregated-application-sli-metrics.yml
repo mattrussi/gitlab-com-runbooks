@@ -37,6 +37,73 @@ groups:
       sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
         (sli_aggregations:gitlab_sli_global_search_apdex_success_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
       )
+- name: 'Application Defined SLI Global metrics: glql (fast burn) emitted by api'
+  interval: 1m
+  rules:
+  - record: application_sli_aggregation:glql:error:rate_5m
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_error_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:ops:rate_5m
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:apdex:weight:score_5m
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_apdex_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:apdex:success:rate_5m
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_apdex_success_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:error:rate_1h
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_error_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:ops:rate_1h
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:apdex:weight:score_1h
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_apdex_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
+      )
+  - record: application_sli_aggregation:glql:apdex:success:rate_1h
+    labels:
+      feature_category: markdown
+      monitor: global
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,query_urgency,error_type) (
+        (sli_aggregations:gitlab_sli_glql_apdex_success_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
+      )
 - name: 'Application Defined SLI Global metrics: graphql_query (fast burn) emitted
     by api'
   interval: 1m
