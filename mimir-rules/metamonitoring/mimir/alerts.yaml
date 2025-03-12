@@ -34,7 +34,7 @@ groups:
           runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimirrequestlatency
         expr: |
           cluster_namespace_job_route:cortex_request_duration_seconds:99quantile{route!~"metrics|/frontend.Frontend/Process|ready|/schedulerpb.SchedulerForFrontend/FrontendLoop|/schedulerpb.SchedulerForQuerier/QuerierLoop|debug_pprof"}
-              >
+             >
           6
         for: 15m
         labels:
@@ -520,7 +520,7 @@ groups:
           runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimirrulerfailedringcheck
         expr: |
           sum by (cluster, namespace, job) (rate(cortex_ruler_ring_check_errors_total[1m]))
-              > 0
+             > 0
         for: 5m
         labels:
           env: ops
@@ -551,7 +551,7 @@ groups:
         expr: |
           max by (cluster, namespace) (memberlist_client_cluster_members_count)
           >
-          (sum by (cluster, namespace) (up{job=~".+/(admin-api|alertmanager|compactor.*|distributor.*|ingester.*|querier.*|ruler|ruler-querier.*|store-gateway.*|cortex|mimir|mimir-write.*|mimir-read.*|mimir-backend.*)"}) + 10)
+          (sum by (cluster, namespace) (up{job=~".+/(admin-api|alertmanager|compactor.*|distributor.*|ingester.*|querier.*|query-frontend.*|ruler|ruler-querier.*|store-gateway.*|cortex|mimir|mimir-write.*|mimir-read.*|mimir-backend.*)"}) + 10)
         for: 20m
         labels:
           env: ops
@@ -564,7 +564,7 @@ groups:
         expr: |
           min by (cluster, namespace) (memberlist_client_cluster_members_count)
           <
-          (sum by (cluster, namespace) (up{job=~".+/(admin-api|alertmanager|compactor.*|distributor.*|ingester.*|querier.*|ruler|ruler-querier.*|store-gateway.*|cortex|mimir|mimir-write.*|mimir-read.*|mimir-backend.*)"}) * 0.5)
+          (sum by (cluster, namespace) (up{job=~".+/(admin-api|alertmanager|compactor.*|distributor.*|ingester.*|querier.*|query-frontend.*|ruler|ruler-querier.*|store-gateway.*|cortex|mimir|mimir-write.*|mimir-read.*|mimir-backend.*)"}) * 0.5)
         for: 20m
         labels:
           env: ops
