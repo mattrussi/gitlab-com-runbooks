@@ -9,6 +9,8 @@ mimir {
       env: 'ops',
     },
 
+    enableTenantAlerts: false,
+
     // Sets the p99 latency alert threshold for queries.
     cortex_p99_latency_threshold_seconds: 6,
   },
