@@ -68,7 +68,8 @@ local list = [
 
       Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget.
       We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts;
-      if a query times out, our rate limiter throttles it.
+      if a query times out, our rate limiter throttles it. Throttled responses do not count
+      towards the error budget.
     |||,
   }),
   sliDefinition.new({

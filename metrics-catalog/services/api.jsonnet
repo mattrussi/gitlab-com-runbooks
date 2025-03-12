@@ -260,11 +260,6 @@ metricsCatalog.serviceDefinition({
       dependsOn: dependOnPatroni.sqlComponents,
     }
   ) + sliLibrary.get('glql').generateServiceLevelIndicator(
-    // glql:unknown signifies that the glql query came from outside the GitLab codebase,
-    // eg, from an API user, or the iGraphQL Explorer. We have no control over these queries and
-    // they could fail for a variety of reasons, including invalid queries, misformed graphql etc.
-    // They should not be included in the SLI.
-    // Invalid queries from the GitLab codebase should be included in the SLI, however.
     railsSelector, {
       useConfidenceLevelForSLIAlerts: '98%',
       serviceAggregation: false,
