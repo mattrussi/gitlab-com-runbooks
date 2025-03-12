@@ -150,7 +150,6 @@ If any of the above are missing the script will alert you and attempt to provisi
 | `RING`            | The ring number (-1 for quarantine rings) | `-1`                      |
 | `TENANT_ID`       | The ID of the tenant to access (cell ID)  | `12345`                   |
 
-
 #### Optional Environment Variables
 
 | Variable               | Description                                                                                  | Default          |
@@ -158,8 +157,6 @@ If any of the above are missing the script will alert you and attempt to provisi
 | `ALLOW_NON_QUARANTINE` | Set to 'true' to allow access to non-quarantine rings                                        | `false`          |
 | `SLEEP_TIME`           | Duration in seconds for the pod to remain alive                                              | `7200` (2 hours) |
 | `ENTITLEMENT_DURATION` | Duration for the PAM entitlement (if requested). Should be at least as long as `$SLEEP_TIME` | `$SLEEP_TIME`    |
-
-
 
 ### Creating a Development Environment
 
@@ -207,7 +204,6 @@ gcloud beta pam grants create \
     --location=global \
     --project="$AMP_PROJECT_ID"
 ```
-
 
 [Instrumentor]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor
 [`cells/tissue`]: https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue
