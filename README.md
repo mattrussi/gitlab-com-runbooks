@@ -511,11 +511,14 @@ You can install most of them using `asdf` tool.
 
 ### Manage your dependencies using `asdf`
 
-Before using `asdf` for the first time, install all the plugins by running:
+Before using `asdf` for the first time, install all the plugins by running.
+
+Simply run:
 
 ```console
-./scripts/install-asdf-plugins.sh
+mise install
 ```
+to install the required plugins.
 
 Running this command will automatically install the versions of each tool, as specified in the `.tool-versions` file.
 
