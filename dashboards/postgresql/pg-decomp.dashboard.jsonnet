@@ -379,7 +379,7 @@ local sourceWritesTupleTables =
         +
         irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"%s"}[1m])) by (instance)
         and on(instance) pg_replication_is_replica==0
-      |||, tableList, tableList, tableList
+      |||, [tableList, tableList, tableList]
       ),
     ),
   );
@@ -397,15 +397,16 @@ local targetWritesTupleTables =
     show=false,
   )
   .addTarget(
-    promQuery.target(
+    promQuery.target(std.format(
       |||
-        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])
+        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])
         +
-        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])
+        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])
         +
-        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])) by (instance)
+        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])) by (instance)
         and on(instance) pg_replication_is_replica==0
-      |||,
+      |||, [tableList, tableList, tableList]
+      ),
     ),
   );
 
@@ -502,10 +503,11 @@ local sourceSeqTupleReadsTable =
     show=false,
   )
   .addTarget(
-    promQuery.target(
+    promQuery.target(std.format(
       |||
-        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"${tableList}"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-      |||,
+        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"%s"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||, [tableList]
+      ),
     ),
   );
 
@@ -522,10 +524,11 @@ local targetSeqTupleReadsTable =
     show=false,
   )
   .addTarget(
-    promQuery.target(
-      |||
-        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"${tableList}"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-      |||,
+    promQuery.target(std.format(
+        |||
+          (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+        |||, [tableList]
+      ),
     ),
   );
 
