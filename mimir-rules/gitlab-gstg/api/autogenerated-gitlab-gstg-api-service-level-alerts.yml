@@ -344,7 +344,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -395,7 +395,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -446,7 +446,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -499,7 +499,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -552,7 +552,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -607,7 +607,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -662,7 +662,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -719,7 +719,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -776,7 +776,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
@@ -817,7 +817,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -860,7 +860,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -903,7 +903,7 @@ groups:
 
         The current possible values for feature_category are: code_review_workflow, not_owned, portfolio_management, team_planning, and wiki.
 
-        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it.
+        Invalid GLQL queries (for example, due to syntax errors) do not count toward the error budget. We specifically monitor ActiveRecord::QueryAborted errors because they indicate timeouts; if a query times out, our rate limiter throttles it. Throttled responses do not count towards the error budget.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
