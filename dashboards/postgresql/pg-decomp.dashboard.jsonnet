@@ -379,7 +379,7 @@ local sourceWritesTupleTables =
         +
         irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"%s"}[1m])) by (instance)
         and on(instance) pg_replication_is_replica==0
-      |||, tableList
+      |||, tableList, tableList, tableList
       ),
     ),
   );
