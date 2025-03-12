@@ -56,9 +56,24 @@ flowchart TD
     CreateBranch --> UpdateCell[Update quarantine ring cell\nwith your branch name as version]
     UpdateCell --> MakeChanges[Make code changes, commit\nand push to remote branch]
     MakeChanges --> WaitBuild[Wait for CI/CD to build\nInstrumentor image from branch]
-    WaitBuild --> RenderDebug[Execute render-debug script\nfor target cell and stage]
+
+    %% Decision point for deployment method
+    WaitBuild --> DeployMethod{Choose deployment\nmethod}
+
+    %% Render-debug path
+    DeployMethod -->|Manual debug| RenderDebug[Execute render-debug script\nfor target cell and stage]
     RenderDebug --> RunStage[Execute stage script\ninside provisioned pod]
-    RunStage --> DevComplete{Is development\ncomplete?}
+
+    %% Pod edit cycle as a self-loop
+    RunStage --> DevComplete
+    RunStage -.-> |Edit files inside pod| RunStage
+
+    %% Alternative path using ringctl
+    DeployMethod -->|ringctl| RingctlDeploy[Execute 'ringctl cell deploy'\nfor target cell]
+
+    %% Both paths converge at development completion check
+    RingctlDeploy --> DevComplete{Is development\ncomplete?}
+
     DevComplete -->|No, more changes needed| MakeChanges
     DevComplete -->|Yes, feature complete| End([End Development])
 ```
@@ -74,10 +89,34 @@ flowchart TD
    2. Commit and push the change to the [`cells/tissue`] repo.
    3. Open a draft MR to ensure your Cell usage is visible.
 4. Make changes in your branch, commit and push to a remote branch.
-5. Wait for your branch to be built into an Instrumentor image
-6. Execute the `render-debug` script for the cell and stage you're targeting
-7. Execute the stage script you are targeting inside the provisioned pod
+   - Alternatively, you can edit the filesystem contents of the connected pod.
+     If taking this approach then ensure you are regularly syncing changes as the pod will be killed when `$SLEEP_TIME` has elapsed, if not before.
+5. Wait for your branch to be built into an Instrumentor image.
+6. Execute the `render-debug` script for the cell and stage you're targeting.
+7. Execute the stage script you are targeting inside the provisioned pod.
 8. Repeat steps 4-7 until development is complete.
+
+### (Alternative) Deploy using `ringctl`
+
+You can also iterate during development by using the `ringctl cell deploy` subcommand.
+
+This will trigger a pipeline run in the Ops [`cells/tissue`] project,
+using the specified `${BRANCH_NAME}` as to apply against a quarantined cell instance.
+
+```bash
+# From the root of the cells/tissue repository
+./ringctl cell deploy -e ${AMP_ENVIRONMENT} ${TENANT_ID} --only-gitlab-upgrade=false -b ${BRANCH_NAME}
+```
+
+This will trigger a full pipeline against the cell, running each
+[Instrumentor] stage in order.  Typically changes will be made in
+smaller iterations against a single stage, and are faster to iterate
+with the `./scripts/render-debug.sh` script, however if changes are
+being made across stages then this method may be prepared.
+
+You may also want to trigger a full pipeline execution before
+concluding development to ensure that all of the stages continue to
+work in order.
 
 ## Best Practices
 
@@ -85,7 +124,8 @@ flowchart TD
 2. **Document all changes** made using the debug environment
 3. **Limit the duration** of debug access to the minimum necessary time
 4. **Sync any manual changes back to IaC** once the immediate issue is resolved
-5. **Coordinate with the team** before accessing non-quarantine rings
+5. **Check if the cell is in use** before entering using `./scripts/render-debug.sh`
+   - Post
 6. **Only use the debug script for `cellsdev`** unless in exceptional circumstances
 7. **Justify your changes** with a valid issue link and description
 
