@@ -20,13 +20,14 @@ failed.
 title: When to use the Cell Infrastructure Development and debugging escalation workflow
 ---
 flowchart TD
-    start[Need to test/debug in a cell environment]
+    start[Need to test/debug/manage infrastructure state
+    in a cell environment]
 
     is_sandbox{Is sandbox
     sufficient?}
 
-    is_quarantine{Is a quarantine
-    ring available?}
+    is_quarantine{Is the cell in a
+    quarantine ring?}
 
     is_urgent{Is this an urgent
     production issue?}
@@ -34,7 +35,7 @@ flowchart TD
     sandbox[Use sandbox environment]
     debug_quarantine[Use debug environment in quarantine ring or breakglass process]
     debug_non_quarantine[Use debug environment with ALLOW_NON_QUARANTINE override]
-    create_mr[Create MR to cells/tissue to update Instrumentor version]
+    use_quarantine[Move the cell to a quarantine ring and use debug environment]
 
     start-->is_sandbox
 
@@ -45,16 +46,22 @@ flowchart TD
     is_quarantine-->|No|is_urgent
 
     is_urgent-->|Yes|debug_non_quarantine
-    is_urgent-->|No|create_mr
+    is_urgent-->|No|use_quarantine
 ```
 
 ## Development flow
 
+> [!note]
+> If using an existing cell in a quarantine ring, follow the below steps.
+> Alternatively you can create a new cell, and place it in the quarantine ring before following these steps.
+> Follow the steps outlined in the [Provision Cell section](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue#provision-cell)
+> of [`cells/tissue`].
+
 ```mermaid
 flowchart TD
     Start([Start Development]) --> CreateBranch[Create feature branch\nin instrumentor repo]
-    CreateBranch --> UpdateCell[Update quarantine ring cell\nwith your branch name as version]
-    UpdateCell --> MakeChanges[Make code changes, commit\nand push to remote branch]
+    CreateBranch --> UpdateCell[Update quarantine ring cell\nwith your branch name as instrumentor_version]
+    UpdateCell --> MakeChanges[Make code changes, commit\nand push to remote Instrumentor branch]
     MakeChanges --> WaitBuild[Wait for CI/CD to build\nInstrumentor image from branch]
 
     %% Decision point for deployment method
@@ -78,6 +85,11 @@ flowchart TD
     DevComplete -->|Yes, feature complete| End([End Development])
 ```
 
+> [!note]
+> The `instrumentor_version` should be [kebab case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case).
+> Image tags in [Instrumentor] use this format, and transform the branch name to match this.
+> For example `no_hooks_gitaly` would become `no-hooks-gitaly`.
+
 1. Pick a Cell to apply your changes to.
    - The cell should be in the quarantine ring.
      This `-1` folder for the environment and is checked in the script.
@@ -88,6 +100,7 @@ flowchart TD
    1. Create a branch for this change.
    2. Commit and push the change to the [`cells/tissue`] repo.
    3. Open a draft MR to ensure your Cell usage is visible.
+   4. (Optional) Trigger a `ringctl cells deploy`.
 4. Make changes in your branch, commit and push to a remote branch.
    - Alternatively, you can edit the filesystem contents of the connected pod.
      If taking this approach then ensure you are regularly syncing changes as the pod will be killed when `$SLEEP_TIME` has elapsed, if not before.
@@ -105,7 +118,7 @@ using the specified `${BRANCH_NAME}` as to apply against a quarantined cell inst
 
 ```bash
 # From the root of the cells/tissue repository
-./ringctl cell deploy -e ${AMP_ENVIRONMENT} ${TENANT_ID} --only-gitlab-upgrade=false -b ${BRANCH_NAME}
+ringctl cell deploy -e ${AMP_ENVIRONMENT} ${TENANT_ID} --only-gitlab-upgrade=false -b ${BRANCH_NAME}
 ```
 
 This will trigger a full pipeline against the cell, running each
