@@ -36,26 +36,52 @@ local panel = import 'grafana/time-series/panel.libsonnet';
       startRow=startRow,
     ),
 
-  generalCounters(startRow)::
-    layout.grid([
-      basic.timeseries(
-        title='Process CPU Time',
-        query='rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}[$__interval])',
-        legendFormat='{{ pod }}',
-        format='percentunit',
-      ),
-      basic.timeseries(
-        title='Resident Memory Usage',
-        query='process_resident_memory_bytes{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}',
-        legendFormat='{{ pod }}',
-        format='bytes',
-      ),
-      basic.timeseries(
-        title='Open File Descriptors',
-        query='process_open_fds{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}',
-        legendFormat='{{ pod }}',
-      ),
-    ], cols=3, rowHeight=10, startRow=startRow),
+  generalCounters(startRow, useTimeSeriesPlugin=false)::
+    layout.grid(
+      if useTimeSeriesPlugin then
+        [
+          panel.timeSeries(
+            title='Process CPU Time',
+            query='rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}[$__interval])',
+            legendFormat='{{ pod }}',
+            format='percentunit',
+          ),
+          panel.timeSeries(
+            title='Resident Memory Usage',
+            query='process_resident_memory_bytes{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}',
+            legendFormat='{{ pod }}',
+            format='bytes',
+          ),
+          panel.timeSeries(
+            title='Open File Descriptors',
+            query='process_open_fds{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}',
+            legendFormat='{{ pod }}',
+          ),
+        ]
+      else
+        [
+          basic.timeseries(
+            title='Process CPU Time',
+            query='rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}[$__interval])',
+            legendFormat='{{ pod }}',
+            format='percentunit',
+          ),
+          basic.timeseries(
+            title='Resident Memory Usage',
+            query='process_resident_memory_bytes{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}',
+            legendFormat='{{ pod }}',
+            format='bytes',
+          ),
+          basic.timeseries(
+            title='Open File Descriptors',
+            query='process_open_fds{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}',
+            legendFormat='{{ pod }}',
+          ),
+        ],
+      cols=3,
+      rowHeight=10,
+      startRow=startRow,
+    ),
 
   averageGeneralCounters(startRow)::
     layout.grid([

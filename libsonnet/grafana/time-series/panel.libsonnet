@@ -470,6 +470,7 @@ local percentageTimeSeries(
   min=null,
   max=null,
   datasource='$PROMETHEUS_DS',
+  format='percentunit',
       ) =
   local formatConfig = {
     query: query,
@@ -486,7 +487,7 @@ local percentageTimeSeries(
     legend_total=false,
     legend_avg=true,
     legend_alignAsTable=true,
-    unit='percentunit',
+    unit=format,
   )
   .addTarget(
     target.prometheus(
@@ -548,6 +549,7 @@ local saturationTimeSeries(
   legend_show=true,
   min=0,
   max=1,
+  format=null,
       ) =
   percentageTimeSeries(
     title=title,
@@ -561,6 +563,7 @@ local saturationTimeSeries(
     legend_show=legend_show,
     min=min,
     max=max,
+    format=format
   );
 
 

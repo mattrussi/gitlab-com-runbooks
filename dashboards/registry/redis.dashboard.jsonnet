@@ -8,6 +8,10 @@ local graphPanel = grafana.graphPanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local statPanel = grafana.statPanel;
 local colorScheme = import 'grafana/color_scheme.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 basic.dashboard(
   'Redis Detail',
@@ -187,87 +191,155 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='RPS (Aggregate)',
-      description='The per-second rate of all single command operations performed on the application side.',
-      query=|||
-        sum (
-          rate(registry_redis_single_commands_count{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
-        )
-      |||,
-      legend_show=false,
-      format='ops'
-    ),
-    graphPanel.new(
-      'RPS (Per Command)',
-      description='The per-second rate of each single command operation performed on the application side.',
-      format='ops',
-      linewidth=1,
-      fill=0,
-      legend_alignAsTable=true,
-      legend_values=true,
-      legend_min=true,
-      legend_max=true,
-      legend_current=true,
-      legend_sort='current',
-      legend_sortDesc=true,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum by (command) (
-            rate(registry_redis_single_commands_count{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
-          )
-        |||,
-        legendFormat='{{ command }}',
-      )
-    ),
-    basic.timeseries(
-      title='Latency (Aggregate)',
-      description='The p90 latency of all single command operations performed on the application side.',
-      query=|||
-        histogram_quantile(
-          0.900000,
-          sum by (le) (
-            rate(registry_redis_single_commands_bucket{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
-          )
-        )
-      |||,
-      legend_show=false,
-      format='s'
-    ),
-    graphPanel.new(
-      'Latency (Per Query)',
-      description='The p90 latency of each single command operation performed on the application side.',
-      format='s',
-      linewidth=1,
-      fill=0,
-      nullPointMode='connected',
-      legend_alignAsTable=true,
-      legend_values=true,
-      legend_min=true,
-      legend_max=true,
-      legend_current=true,
-      legend_sort='current',
-      legend_sortDesc=true,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          histogram_quantile(
-            0.900000,
-            sum by (le, command) (
-              rate(registry_redis_single_commands_bucket{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='RPS (Aggregate)',
+          description='The per-second rate of all single command operations performed on the application side.',
+          query=|||
+            sum (
+              rate(registry_redis_single_commands_count{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
             )
+          |||,
+          legend_show=false,
+          format='ops'
+        ),
+        panel.basic(
+          'RPS (Per Command)',
+          description='The per-second rate of each single command operation performed on the application side.',
+          unit='ops',
+          linewidth=1,
+        )
+        .addTarget(
+          target.prometheus(
+            |||
+              sum by (command) (
+                rate(registry_redis_single_commands_count{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+              )
+            |||,
+            legendFormat='{{ command }}',
           )
-        |||,
-        legendFormat='{{ command }}',
-      )
-    ),
-  ], cols=4, rowHeight=13, startRow=1001),
+        ),
+        panel.timeSeries(
+          title='Latency (Aggregate)',
+          description='The p90 latency of all single command operations performed on the application side.',
+          query=|||
+            histogram_quantile(
+              0.900000,
+              sum by (le) (
+                rate(registry_redis_single_commands_bucket{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+              )
+            )
+          |||,
+          legend_show=false,
+          format='short'
+        ),
+        panel.basic(
+          'Latency (Per Query)',
+          description='The p90 latency of each single command operation performed on the application side.',
+          unit='short',
+          linewidth=1,
+        )
+        .addTarget(
+          target.prometheus(
+            |||
+              histogram_quantile(
+                0.900000,
+                sum by (le, command) (
+                  rate(registry_redis_single_commands_bucket{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+                )
+              )
+            |||,
+            legendFormat='{{ command }}',
+          )
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='RPS (Aggregate)',
+          description='The per-second rate of all single command operations performed on the application side.',
+          query=|||
+            sum (
+              rate(registry_redis_single_commands_count{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+            )
+          |||,
+          legend_show=false,
+          format='ops'
+        ),
+        graphPanel.new(
+          'RPS (Per Command)',
+          description='The per-second rate of each single command operation performed on the application side.',
+          format='ops',
+          linewidth=1,
+          fill=0,
+          legend_alignAsTable=true,
+          legend_values=true,
+          legend_min=true,
+          legend_max=true,
+          legend_current=true,
+          legend_sort='current',
+          legend_sortDesc=true,
+        )
+        .addTarget(
+          promQuery.target(
+            |||
+              sum by (command) (
+                rate(registry_redis_single_commands_count{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+              )
+            |||,
+            legendFormat='{{ command }}',
+          )
+        ),
+        basic.timeseries(
+          title='Latency (Aggregate)',
+          description='The p90 latency of all single command operations performed on the application side.',
+          query=|||
+            histogram_quantile(
+              0.900000,
+              sum by (le) (
+                rate(registry_redis_single_commands_bucket{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+              )
+            )
+          |||,
+          legend_show=false,
+          format='s'
+        ),
+        graphPanel.new(
+          'Latency (Per Query)',
+          description='The p90 latency of each single command operation performed on the application side.',
+          format='s',
+          linewidth=1,
+          fill=0,
+          nullPointMode='connected',
+          legend_alignAsTable=true,
+          legend_values=true,
+          legend_min=true,
+          legend_max=true,
+          legend_current=true,
+          legend_sort='current',
+          legend_sortDesc=true,
+        )
+        .addTarget(
+          promQuery.target(
+            |||
+              histogram_quantile(
+                0.900000,
+                sum by (le, command) (
+                  rate(registry_redis_single_commands_bucket{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval])
+                )
+              )
+            |||,
+            legendFormat='{{ command }}',
+          )
+        ),
+      ],
+    cols=4,
+    rowHeight=13,
+    startRow=1001,
+  ),
 )
-
 .addPanel(
   row.new(title='Connection Pool'),
   gridPos={
@@ -278,83 +350,169 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Hits',
-      description='The number of times a free connection was found in the pool.',
-      yAxisLabel='Count',
-      query='sum(rate(registry_redis_pool_stats_hits{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.timeseries(
-      title='Misses',
-      description='The number of times a free connection was not found in the pool.',
-      yAxisLabel='Count',
-      query='sum(rate(registry_redis_pool_stats_misses{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.timeseries(
-      title='Open',
-      description='The total number of established connections both in use and idle.',
-      yAxisLabel='Connections',
-      query='sum(rate(registry_redis_pool_stats_total_conns{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.timeseries(
-      title='In Use',
-      description='The total number of connections currently in use.',
-      yAxisLabel='Connections',
-      query=|||
-        sum(rate(registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
-        -
-        sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
-      |||,
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.timeseries(
-      title='Idle',
-      description='The number of idle connections in the pool.',
-      yAxisLabel='Connections',
-      query='sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.timeseries(
-      title='Stale',
-      description='The number of stale connections removed from the pool.',
-      yAxisLabel='Connections',
-      query='sum(rate(registry_redis_pool_stats_stale_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.timeseries(
-      title='Timeouts',
-      description='The number of times a wait timeout occurred.',
-      yAxisLabel='Count',
-      query='sum(rate(registry_redis_pool_stats_timeouts{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
-      intervalFactor=5,
-      legend_show=false
-    ),
-    basic.saturationTimeseries(
-      title='Saturation',
-      description='Saturation. Lower is better.',
-      yAxisLabel='Utilization',
-      query=|||
-        (
-          sum (registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
-          -
-          sum (registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
-        )
-        /
-        sum (registry_redis_pool_stats_max_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
-      |||,
-      interval='30s',
-      intervalFactor=3,
-      legend_show=false
-    ),
-  ], cols=4, rowHeight=10, startRow=2001),
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Hits',
+          description='The number of times a free connection was found in the pool.',
+          yAxisLabel='Count',
+          query='sum(rate(registry_redis_pool_stats_hits{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.timeSeries(
+          title='Misses',
+          description='The number of times a free connection was not found in the pool.',
+          yAxisLabel='Count',
+          query='sum(rate(registry_redis_pool_stats_misses{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.timeSeries(
+          title='Open',
+          description='The total number of established connections both in use and idle.',
+          yAxisLabel='Connections',
+          query='sum(rate(registry_redis_pool_stats_total_conns{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.timeSeries(
+          title='In Use',
+          description='The total number of connections currently in use.',
+          yAxisLabel='Connections',
+          query=|||
+            sum(rate(registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
+            -
+            sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
+          |||,
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.timeSeries(
+          title='Idle',
+          description='The number of idle connections in the pool.',
+          yAxisLabel='Connections',
+          query='sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.timeSeries(
+          title='Stale',
+          description='The number of stale connections removed from the pool.',
+          yAxisLabel='Connections',
+          query='sum(rate(registry_redis_pool_stats_stale_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.timeSeries(
+          title='Timeouts',
+          description='The number of times a wait timeout occurred.',
+          yAxisLabel='Count',
+          query='sum(rate(registry_redis_pool_stats_timeouts{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        panel.saturationTimeSeries(
+          title='Saturation',
+          description='Saturation. Lower is better.',
+          yAxisLabel='Utilization',
+          query=|||
+            (
+              sum (registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
+              -
+              sum (registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
+            )
+            /
+            sum (registry_redis_pool_stats_max_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
+          |||,
+          interval='30s',
+          intervalFactor=3,
+          legend_show=false
+        ),
+      ]
+    else
+      [
+        panel.timeSeriesbasic.timeseries(
+          title='Hits',
+          description='The number of times a free connection was found in the pool.',
+          yAxisLabel='Count',
+          query='sum(rate(registry_redis_pool_stats_hits{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.timeseries(
+          title='Misses',
+          description='The number of times a free connection was not found in the pool.',
+          yAxisLabel='Count',
+          query='sum(rate(registry_redis_pool_stats_misses{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.timeseries(
+          title='Open',
+          description='The total number of established connections both in use and idle.',
+          yAxisLabel='Connections',
+          query='sum(rate(registry_redis_pool_stats_total_conns{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.timeseries(
+          title='In Use',
+          description='The total number of connections currently in use.',
+          yAxisLabel='Connections',
+          query=|||
+            sum(rate(registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
+            -
+            sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
+          |||,
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.timeseries(
+          title='Idle',
+          description='The number of idle connections in the pool.',
+          yAxisLabel='Connections',
+          query='sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.timeseries(
+          title='Stale',
+          description='The number of stale connections removed from the pool.',
+          yAxisLabel='Connections',
+          query='sum(rate(registry_redis_pool_stats_stale_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.timeseries(
+          title='Timeouts',
+          description='The number of times a wait timeout occurred.',
+          yAxisLabel='Count',
+          query='sum(rate(registry_redis_pool_stats_timeouts{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+          intervalFactor=5,
+          legend_show=false
+        ),
+        basic.saturationTimeseries(
+          title='Saturation',
+          description='Saturation. Lower is better.',
+          yAxisLabel='Utilization',
+          query=|||
+            (
+              sum (registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
+              -
+              sum (registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
+            )
+            /
+            sum (registry_redis_pool_stats_max_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"})
+          |||,
+          interval='30s',
+          intervalFactor=3,
+          legend_show=false
+        ),
+      ],
+    cols=4,
+    rowHeight=10,
+    startRow=2001,
+  ),
 )
