@@ -55,7 +55,6 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-repo-cache': true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
-    'redis-sessions': true,
     'redis-pubsub': true,
     redis: true,
     patroni: true,

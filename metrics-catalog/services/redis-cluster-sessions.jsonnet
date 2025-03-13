@@ -8,7 +8,7 @@ local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-sessions',
-    railsStorageSelector=redisHelpers.storageSelector('cluster_sessions'),  // TODO switch to sessions after application-side clean up
+    railsStorageSelector=redisHelpers.storageSelector('sessions'),
     descriptiveName='Redis Sessions in Redis Cluster',
     redisCluster=true
   )
@@ -20,15 +20,12 @@ metricsCatalog.serviceDefinition(
     serviceLevelIndicators+: {
       rails_redis_client+: {
         userImpacting: true,
-        severity: 's4',
       },
       primary_server+: {
         userImpacting: true,
-        severity: 's4',
       },
       secondary_servers+: {
         userImpacting: true,
-        severity: 's4',
       },
     },
   }

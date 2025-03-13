@@ -63,7 +63,6 @@
   import 'redis-cluster-shared-state.jsonnet',
   import 'redis-pubsub.jsonnet',
   import 'redis-registry-cache.jsonnet',
-  import 'redis-sessions.jsonnet',
   import 'redis-sidekiq.jsonnet',
   import 'redis-tracechunks.jsonnet',
   import 'redis.jsonnet',
