@@ -192,6 +192,52 @@ local basic(
     },
   };
 
+local apdexTimeSeries(
+  title='Apdex',
+  description='Apdex is a measure of requests that complete within an acceptable threshold duration. Actual threshold vary per service or endpoint. Higher is better.',
+  query='',
+  legendFormat='',
+  yAxisLabel='% Requests w/ Satisfactory Latency',
+  interval='1m',
+  intervalFactor=1,
+  linewidth=2,
+  min=null,
+  legend_show=true,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  local formatConfig = {
+    query: query,
+  };
+  basic(
+    title,
+    description=description,
+    linewidth=linewidth,
+    datasource=datasource,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    legend_show=legend_show,
+    unit='percentunit',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        clamp_min(clamp_max(%(query)s,1),0)
+      ||| % formatConfig,
+      legendFormat=legendFormat,
+      interval=interval,
+      intervalFactor=intervalFactor
+    )
+  )
+  .addYaxis(
+    min=min,
+    max=1,
+    label=yAxisLabel,
+  );
+
 local multiTimeSeries(
   title='Multi timeseries',
   description='',
@@ -564,6 +610,7 @@ local networkTrafficGraph(
 {
   basic: basic,
   timeSeries: timeSeries,
+  apdexTimeSeries: apdexTimeSeries,
   latencyTimeSeries: latencyTimeSeries,
   multiTimeSeries: multiTimeSeries,
   quantileTimeSeries: quantileTimeSeries,
