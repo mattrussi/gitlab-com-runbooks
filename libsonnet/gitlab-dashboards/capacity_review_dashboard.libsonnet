@@ -110,7 +110,7 @@ local tamlandForecastPanel(title, type, saturationComponent, confidenceType, thr
     noValue='No Forecast'
   );
 
-local capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent, startRow) =
+local capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent, startRow, useTimeSeriesPlugin=false) =
   local saturatonComponentInfo = saturationResources[saturationComponent];
 
   local selector = environmentSelectorHash {
@@ -141,7 +141,8 @@ local capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent,
         query=null,
         legendFormat=null,
         selector=selector,
-        overTimeFunction=null
+        overTimeFunction=null,
+        useTimeSeriesPlugin=useTimeSeriesPlugin,
       ),
       grafana.text.new(
         mode='markdown',
@@ -168,6 +169,7 @@ local sortSaturationComponents(saturationComponents) =
 local dashboardsForService(
   type,
   environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
+  useTimeSeriesPlugin=false,
       ) =
   local serviceInfo = metricsCatalog.getService(type);
   local saturationComponents = serviceInfo.applicableSaturationTypes();
@@ -187,7 +189,7 @@ local dashboardsForService(
         std.flattenArrays(
           std.mapWithIndex(
             function(index, saturationComponent)
-              capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent, startRow=index * 100),
+              capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent, startRow=index * 100, useTimeSeriesPlugin=useTimeSeriesPlugin),
             sortSaturationComponents(saturationComponents)
           )
         )

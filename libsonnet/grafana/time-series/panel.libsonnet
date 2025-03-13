@@ -1,5 +1,6 @@
 local override = import './override.libsonnet';
 local target = import './target.libsonnet';
+local colors = import 'colors/colors.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local ts = g.panel.timeSeries;
@@ -311,6 +312,67 @@ local timeSeries(
     thresholdSteps=thresholdSteps,
   );
 
+local quantileQuery(q, query) =
+  |||
+    quantile(%f, %s)
+  ||| % [q, query];
+
+local legendForQuantile(q, legendFormat) =
+  'p%d %s' % [q * 100, legendFormat];
+
+local quantileTimeSeries(
+  query,
+  quantiles=[0.99, 0.95, 0.75, 0.5, 0.25, 0.1],
+  legendFormat,
+  title='Multi timeseries',
+  description='',
+  format='short',
+  interval='1m',
+  intervalFactor=1,
+  yAxisLabel='',
+  legend_show=true,
+  legend_rightSide=false,
+  linewidth=2,
+  max=null,
+      ) =
+  local queries = std.map(
+    function(q) {
+      query: quantileQuery(q, query),
+      legendFormat: legendForQuantile(q, legendFormat),
+    },
+    quantiles
+  );
+
+  local panel = multiTimeSeries(
+    queries=queries,
+    title=title,
+    description=description,
+    format=format,
+    interval=interval,
+    intervalFactor=intervalFactor,
+    yAxisLabel=yAxisLabel,
+    legend_show=legend_show,
+    legend_rightSide=legend_rightSide,
+    linewidth=linewidth,
+    max=max,
+  );
+
+  local quantileGradient = colors.linearGradient(colors.YELLOW, colors.BLUE, std.length(quantiles));
+
+  std.foldl(
+    function(panel, i)
+      local q = quantiles[i];
+      panel.addSeriesOverride({
+        alias: 'p%d %s' % [q * 100, legendFormat],
+        lines: true,
+        linewidth: 1,
+        fill: 1,
+        color: quantileGradient[i].toString(),
+      }),
+    std.range(0, std.length(quantiles) - 1),
+    panel
+  );
+
 local latencyTimeSeries(
   title='Latency',
   description='',
@@ -504,6 +566,7 @@ local networkTrafficGraph(
   timeSeries: timeSeries,
   latencyTimeSeries: latencyTimeSeries,
   multiTimeSeries: multiTimeSeries,
+  quantileTimeSeries: quantileTimeSeries,
   multiQuantileTimeSeries: multiQuantileTimeSeries,
   percentageTimeSeries: percentageTimeSeries,
   queueLengthTimeSeries: queueLengthTimeSeries,
