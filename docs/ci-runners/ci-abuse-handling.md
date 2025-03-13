@@ -22,6 +22,7 @@ For information about how to handle certain types of CI abuse, see the [SIRT run
 
 ## Helpful monitoring links
 
-- [Kibana visualization of started jobs](https://log.gprd.gitlab.net/goto/baca81ec588b366ca0ec68ff6d5e5322)
+- [Kibana visualization of started jobs by project](https://log.gprd.gitlab.net/goto/baca81ec588b366ca0ec68ff6d5e5322)
+- [Kibana visualization of started jobs by username](https://log.gprd.gitlab.net/app/r/s/rLL0H)
 - [CI pending builds](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(ci_pending_builds%7Bfqdn%3D~%22postgres-dr-archive-01-db-gprd%5C%5C.c%5C%5C.gitlab-production%5C%5C.internal%22%2C%20shared_runners%3D%22yes%22%2Chas_minutes%3D~%22yes%22%7D)%20by%20(namespace)%20%3E%20200&g0.tab=0)
 - [GCP "Security Command Center"](https://console.cloud.google.com/security/command-center/findings?view_type=vt_severity_type&organizationId=769164969568&orgonly=true&supportedpurview=organizationId&vt_severity_type=All&columns=category,resourceName,eventTime,createTime,parent,securityMarks.marks)
