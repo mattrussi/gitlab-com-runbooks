@@ -12,6 +12,9 @@ local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 local template = grafana.template;
 local strings = import 'utils/strings.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local overviewDashboardLinks(type) =
   local formatConfig = { type: type };
@@ -185,19 +188,34 @@ local serviceRow(service) =
       colorMode='value',
       intervalFactor=1,
     ),
-    basic.slaTimeseries(
-      title='%s: SLA Trends ' % [service.friendly_name],
-      description='Rolling average SLO adherence for primary services. Higher is better.',
-      yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo:observation_status', '$__interval'),
-      legendFormat='{{ type }}',
-      intervalFactor=1,
-      legend_show=false
-    )
-    .addDataLink(links) + thresholdsValues +
-    {
-      options: { dataLinks: links },
-    },
+    if useTimeSeriesPlugin then
+      panel.slaTimeSeries(
+        title='%s: SLA Trends ' % [service.friendly_name],
+        description='Rolling average SLO adherence for primary services. Higher is better.',
+        yAxisLabel='SLA',
+        query=serviceAvailabilityQuery({ type: service.name }, 'slo:observation_status', '$__interval'),
+        legendFormat='{{ type }}',
+        intervalFactor=1,
+        legend_show=false
+      )
+      .addDataLink(links) + thresholdsValues +
+      {
+        options: { dataLinks: links },
+      }
+    else
+      basic.slaTimeseries(
+        title='%s: SLA Trends ' % [service.friendly_name],
+        description='Rolling average SLO adherence for primary services. Higher is better.',
+        yAxisLabel='SLA',
+        query=serviceAvailabilityQuery({ type: service.name }, 'slo:observation_status', '$__interval'),
+        legendFormat='{{ type }}',
+        intervalFactor=1,
+        legend_show=false
+      )
+      .addDataLink(links) + thresholdsValues +
+      {
+        options: { dataLinks: links },
+      },
   ];
 
 local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices());
@@ -258,17 +276,32 @@ basic.dashboard(
       colorMode='value',
       intervalFactor=1,
     )],
-    [basic.slaTimeseries(
-       title='Overall SLA over time period - gitlab.com',
-       description='Rolling average SLO adherence across all primary services. Higher is better.',
-       yAxisLabel='SLA',
-       query=systemAvailabilityQuery(systemSelector, '$__interval'),
-       legendFormat='gitlab.com SLA',
-       intervalFactor=1,
-       legend_show=false
-     )
-     .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
-     + thresholdsValues],
+    [
+      if useTimeSeriesPlugin then
+        panel.slaTimeSeries(
+          title='Overall SLA over time period - gitlab.com',
+          description='Rolling average SLO adherence across all primary services. Higher is better.',
+          yAxisLabel='SLA',
+          query=systemAvailabilityQuery(systemSelector, '$__interval'),
+          legendFormat='gitlab.com SLA',
+          intervalFactor=1,
+          legend_show=false
+        )
+        .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
+        + thresholdsValues
+      else
+        basic.slaTimeseries(
+          title='Overall SLA over time period - gitlab.com',
+          description='Rolling average SLO adherence across all primary services. Higher is better.',
+          yAxisLabel='SLA',
+          query=systemAvailabilityQuery(systemSelector, '$__interval'),
+          legendFormat='gitlab.com SLA',
+          intervalFactor=1,
+          legend_show=false
+        )
+        .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
+        + thresholdsValues,
+    ],
   ], cellHeights=[3, 2], columnWidths=[4, 4, 16], startRow=1)
 )
 .addPanel(

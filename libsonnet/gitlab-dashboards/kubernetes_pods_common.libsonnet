@@ -16,7 +16,7 @@ local generalGraphPanel(
   description=null,
   linewidth=2,
   sort=0,
-  useTimeSeriesPlugin=false
+  useTimeSeriesPlugin=true
       ) =
   if useTimeSeriesPlugin then
     panel.basic(
@@ -57,7 +57,7 @@ local env_cluster_node_ns = env_cluster_node + ', namespace="$namespace"';
 local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$namespace"';
 
 {
-  version(startRow, deploymentKind='Deployment', useTimeSeriesPlugin=false)::
+  version(startRow, deploymentKind='Deployment', useTimeSeriesPlugin=true)::
     layout.grid(
       if useTimeSeriesPlugin then
         [
@@ -189,7 +189,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
       ),
     ], cols=6, rowHeight=3, startRow=startRow + 1),
 
-  cpu(startRow, deploymentKind='Deployment', useTimeSeriesPlugin=false)::
+  cpu(startRow, deploymentKind='Deployment', useTimeSeriesPlugin=true)::
     layout.grid(
       if useTimeSeriesPlugin then
         [
@@ -376,7 +376,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
         ], cols=1, rowHeight=10, startRow=startRow
     ),
 
-  memory(deploymentKind='Deployment', startRow, container, useTimeSeriesPlugin=false)::
+  memory(deploymentKind='Deployment', startRow, container, useTimeSeriesPlugin=true)::
     layout.grid(
       if useTimeSeriesPlugin then
         [
@@ -538,7 +538,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
       startRow=startRow,
     ),
 
-  network(deploymentKind='Deployment', startRow, useTimeSeriesPlugin=false)::
+  network(deploymentKind='Deployment', startRow, useTimeSeriesPlugin=true)::
     layout.grid(
       if useTimeSeriesPlugin then
         [

@@ -613,6 +613,51 @@ local networkTrafficGraph(
     label='Network utilization',
   );
 
+local slaTimeSeries(
+  title='SLA',
+  description='',
+  query='',
+  legendFormat='',
+  yAxisLabel='SLA',
+  interval='1m',
+  intervalFactor=1,
+  points=false,
+  pointradius=3,
+  stableId=null,
+  legend_show=true,
+  datasource='$PROMETHEUS_DS',
+  thresholdSteps=[],
+      ) =
+  local formatConfig = {
+    query: query,
+  };
+
+  basic(
+    title,
+    description=description,
+    linewidth=2,
+    datasource=datasource,
+    legend_show=legend_show,
+    points=points,
+    pointradius=pointradius,
+    unit='percentunit',
+    thresholdSteps=thresholdSteps,
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        clamp_min(clamp_max(%(query)s,1),0)
+      ||| % formatConfig,
+      legendFormat=legendFormat,
+      interval=interval,
+      intervalFactor=intervalFactor,
+    )
+  )
+  .addYaxis(
+    max=1,
+    label=yAxisLabel,
+  );
+
 {
   basic: basic,
   timeSeries: timeSeries,
@@ -625,4 +670,5 @@ local networkTrafficGraph(
   queueLengthTimeSeries: queueLengthTimeSeries,
   saturationTimeSeries: saturationTimeSeries,
   networkTrafficGraph: networkTrafficGraph,
+  slaTimeSeries: slaTimeSeries,
 }

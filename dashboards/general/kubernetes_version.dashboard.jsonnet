@@ -3,6 +3,10 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local graphPanel = grafana.graphPanel;
 local tablePanel = grafana.tablePanel;
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local masterVersionTablePanel =
   tablePanel.new(
@@ -32,17 +36,29 @@ local masterVersionTablePanel =
   );
 
 local masterVersionPanel =
-  graphPanel.new(
-    'Master Version Over Time',
-    datasource='$PROMETHEUS_DS',
-  )
-  .addTarget(  // Master Version over time
-    promQuery.target(
-      |||
-        count (kubernetes_build_info{environment="$environment", job="apiserver"}) by (gitVersion)
-      |||,
+  if useTimeSeriesPlugin then
+    panel.basic(
+      'Master Version Over Time',
     )
-  );
+    .addTarget(  // Master Version over time
+      target.prometheus(
+        |||
+          count (kubernetes_build_info{environment="$environment", job="apiserver"}) by (gitVersion)
+        |||,
+      )
+    )
+  else
+    graphPanel.new(
+      'Master Version Over Time',
+      datasource='$PROMETHEUS_DS',
+    )
+    .addTarget(  // Master Version over time
+      promQuery.target(
+        |||
+          count (kubernetes_build_info{environment="$environment", job="apiserver"}) by (gitVersion)
+        |||,
+      )
+    );
 
 local nodeVersionsTablePanel =
   tablePanel.new(
@@ -72,17 +88,29 @@ local nodeVersionsTablePanel =
   );
 
 local nodeVersionsPanel =
-  graphPanel.new(
-    'Node Versions Over Time',
-    datasource='$PROMETHEUS_DS',
-  )
-  .addTarget(  // Node Versions over time
-    promQuery.target(
-      |||
-        count (kube_node_info{environment="$environment"}) by (cluster, node, kubelet_version)
-      |||,
+  if useTimeSeriesPlugin then
+    panel.basic(
+      'Node Versions Over Time',
     )
-  );
+    .addTarget(  // Node Versions over time
+      target.prometheus(
+        |||
+          count (kube_node_info{environment="$environment"}) by (cluster, node, kubelet_version)
+        |||,
+      )
+    )
+  else
+    graphPanel.new(
+      'Node Versions Over Time',
+      datasource='$PROMETHEUS_DS',
+    )
+    .addTarget(  // Node Versions over time
+      promQuery.target(
+        |||
+          count (kube_node_info{environment="$environment"}) by (cluster, node, kubelet_version)
+        |||,
+      )
+    );
 
 basic.dashboard(
   'Kubernetes Version Matrix',

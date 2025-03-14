@@ -65,7 +65,7 @@ local nodeLoadForDuration(duration, nodeSelector, useTimeSeriesPlugin=false) =
     );
 
 {
-  nodeMetricsDetailRow(nodeSelector, title='🖥️ Node Metrics', useTimeSeriesPlugin=false)::
+  nodeMetricsDetailRow(nodeSelector, title='🖥️ Node Metrics', useTimeSeriesPlugin=true)::
     local formatConfig = {
       nodeSelector: selectors.serializeHash(nodeSelector),
     };
