@@ -126,6 +126,14 @@ groups:
     expr: "0.7"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_id_sequences
+    expr: "0.5"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_id_sequences
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pg_int4_id
     expr: "0.5"
   - record: slo:max:hard:gitlab_component_saturation:ratio
