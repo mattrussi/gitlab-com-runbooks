@@ -11894,7 +11894,7 @@ groups:
     labels:
       component: workhorse
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: webservice
     record: gitlab_component_service:mapping
@@ -11902,7 +11902,7 @@ groups:
     labels:
       component: workhorse_api
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: webservice
     record: gitlab_component_service:mapping
@@ -11910,7 +11910,7 @@ groups:
     labels:
       component: workhorse_git
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: webservice
     record: gitlab_component_service:mapping

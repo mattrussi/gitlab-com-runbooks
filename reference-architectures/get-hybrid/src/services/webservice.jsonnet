@@ -84,8 +84,8 @@ metricsCatalog.serviceDefinition({
       local workhorseSelector = {
         route_id: {
           ne: [
-           'health',
-           'liveness',
+            'health',
+            'liveness',
           ],
         },
       },
@@ -108,6 +108,7 @@ metricsCatalog.serviceDefinition({
       workhorse: {
         userImpacting: true,
         featureCategory: 'not_owned',
+        serviceAggregation: false,
         description: |||
           Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface.
           Excludes API requests, git requests, health, readiness and liveness requests. Some known slow requests,
@@ -150,6 +151,7 @@ metricsCatalog.serviceDefinition({
       workhorse_api: {
         userImpacting: true,
         featureCategory: 'not_owned',
+        serviceAggregation: false,
         description: |||
           Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
 
@@ -181,6 +183,7 @@ metricsCatalog.serviceDefinition({
 
       workhorse_git: {
         userImpacting: true,
+        serviceAggregation: false,
         featureCategory: 'not_owned',
         description: |||
           Aggregation of git+https requests that pass through workhorse,
