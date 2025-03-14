@@ -114,6 +114,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         selector=workhorseWebSelector {
+          code: { nre: '5..' },
           route: {
             ne: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',

@@ -1940,7 +1940,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md#alerts
@@ -1992,7 +1992,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md#alerts
@@ -2046,7 +2046,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md#alerts
@@ -2100,7 +2100,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md#alerts
