@@ -47,6 +47,7 @@ basic.dashboard(
             sum (increase(tunnel_routing_timeout_connected_recently_total{%s}[$__rate_interval]))
           ||| % selectorString,
           yAxisLabel='requests',
+          legend_show=false,
         ),
         panel.timeSeries(
           title='Routing request timed out for disconnected agents',
@@ -55,6 +56,7 @@ basic.dashboard(
             sum (increase(tunnel_routing_timeout_not_connected_recently_total{%s}[$__rate_interval]))
           ||| % selectorString,
           yAxisLabel='requests',
+          legend_show=false,
         ),
         panel.timeSeries(
           title='OK gRPC calls/second',

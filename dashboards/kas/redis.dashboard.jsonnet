@@ -36,6 +36,7 @@ basic.dashboard(
             format='short',
             interval='1m',
             intervalFactor=2,
+            legend_show=false,
           ),
           panel.timeSeries(
             title='Number of connections',
@@ -46,6 +47,7 @@ basic.dashboard(
               )
             ||| % selectorString,
             intervalFactor=2,
+            legend_show=false,
           ),
           panel.multiTimeSeries(
             title='Total dial attemps and dial successes',
@@ -83,6 +85,7 @@ basic.dashboard(
               )
             ||| % { selector: selectorString },
             intervalFactor=2,
+            legend_show=false,
           ),
         ]
       else
@@ -174,6 +177,7 @@ basic.dashboard(
             ||| % { name: expiringHash.name, selector: selectorString },
             intervalFactor=2,
             linewidth=2,
+            legend_show=false,
           )
           for expiringHash in [
             { name: 'tunnels_by_agent_id', displayName: 'tunnels_by_agent_id' },

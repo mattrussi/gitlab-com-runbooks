@@ -143,6 +143,7 @@ basic.dashboard(
               query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
             },
           ],
+          legend_show=true,
         ),
       ]
     else
@@ -200,6 +201,7 @@ basic.dashboard(
               query: 'sum (rate(cache_misses{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
             },
           ],
+          legend_show=true,
         ),
         panel.timeSeries(
           title='Cache sets by type',

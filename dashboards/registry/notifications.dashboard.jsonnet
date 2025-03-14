@@ -225,6 +225,7 @@ basic.dashboard(
           'Pending events',
           description='The number of events pending to be sent.',
           linewidth=1,
+          legend_show=false,
         )
         .addTarget(
           target.prometheus(
@@ -243,6 +244,7 @@ basic.dashboard(
           description='The per-second rate of response status codes for all events.',
           unit='ops',
           linewidth=1,
+          legend_show=false,
         )
         .addTarget(
           target.prometheus(

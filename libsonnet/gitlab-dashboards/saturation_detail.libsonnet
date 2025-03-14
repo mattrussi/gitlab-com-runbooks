@@ -31,6 +31,7 @@ local maxOverTime(query) =
           description=description,
           linewidth=linewidth,
           unit='percentunit',
+          legend_show=true,
         )
       else
         basic.graphPanel(

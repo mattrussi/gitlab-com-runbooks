@@ -210,6 +210,7 @@ basic.dashboard(
           description='The per-second rate of each single command operation performed on the application side.',
           unit='ops',
           linewidth=1,
+          legend_show=false,
         )
         .addTarget(
           target.prometheus(
