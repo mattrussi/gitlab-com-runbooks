@@ -471,6 +471,7 @@ local percentageTimeSeries(
   max=null,
   datasource='$PROMETHEUS_DS',
   format='percentunit',
+  thresholdSteps=[],
       ) =
   local formatConfig = {
     query: query,
@@ -488,6 +489,8 @@ local percentageTimeSeries(
     legend_avg=true,
     legend_alignAsTable=true,
     unit=format,
+    thresholdMode='percentage',
+    thresholdSteps=thresholdSteps,
   )
   .addTarget(
     target.prometheus(
