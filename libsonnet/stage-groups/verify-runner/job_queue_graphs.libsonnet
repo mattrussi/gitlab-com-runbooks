@@ -1,6 +1,7 @@
 local panels = import './panels.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local durationHistogram(partition=runnersManagerMatching.defaultPartition) = panels.heatmap(
   'Pending job queue duration histogram',
@@ -16,13 +17,11 @@ local durationHistogram(partition=runnersManagerMatching.defaultPartition) = pan
 );
 
 local pendingSize =
-  basic.timeseries(
+  panel.timeSeries(
     title='Pending jobs queue size',
     legendFormat='{{runner_type}}',
     format='short',
     linewidth=2,
-    fill=0,
-    stack=false,
     query=|||
       max by(runner_type) (
         gitlab_ci_current_queue_size{environment=~"$environment", stage=~"$stage"}
@@ -30,45 +29,81 @@ local pendingSize =
     |||,
   );
 
-local acceptableQueuingDurationExceeded(partition=runnersManagerMatching.byShard) =
-  basic.timeseries(
-    title='Acceptable job queuing duration exceeded',
-    legendFormat='{{shard}}',
-    format='short',
-    linewidth=2,
-    fill=0,
-    stack=false,
-    query=runnersManagerMatching.formatQuery(|||
-      sum by (shard) (
-        increase(
-          gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+local acceptableQueuingDurationExceeded(partition=runnersManagerMatching.byShard, useTimeSeriesPlugin=true) =
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Acceptable job queuing duration exceeded',
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      query=runnersManagerMatching.formatQuery(|||
+        sum by (shard) (
+          increase(
+            gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+          )
         )
-      )
-    |||, partition),
-  );
+      |||, partition),
+    )
+  else
+    basic.timeseries(
+      title='Acceptable job queuing duration exceeded',
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      fill=0,
+      stack=false,
+      query=runnersManagerMatching.formatQuery(|||
+        sum by (shard) (
+          increase(
+            gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+          )
+        )
+      |||, partition),
+    );
 
-local queuingFailureRate(partition=runnersManagerMatching.byShard) =
-  basic.timeseries(
-    title='Jobs queuing failure rate',
-    legendFormat='{{shard}}',
-    format='percentunit',
-    linewidth=2,
-    fill=0,
-    stack=false,
-    query=runnersManagerMatching.formatQuery(|||
-      sum by (shard) (
-        rate(
-          gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+local queuingFailureRate(partition=runnersManagerMatching.byShard, useTimeSeriesPlugin=true) =
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Jobs queuing failure rate',
+      legendFormat='{{shard}}',
+      format='percentunit',
+      linewidth=2,
+      query=runnersManagerMatching.formatQuery(|||
+        sum by (shard) (
+          rate(
+            gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+          )
         )
-      )
-      /
-      sum by (shard) (
-        rate(
-          gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+        /
+        sum by (shard) (
+          rate(
+            gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+          )
         )
-      )
-    |||, partition),
-  );
+      |||, partition),
+    )
+  else
+    basic.timeseries(
+      title='Jobs queuing failure rate',
+      legendFormat='{{shard}}',
+      format='percentunit',
+      linewidth=2,
+      fill=0,
+      stack=false,
+      query=runnersManagerMatching.formatQuery(|||
+        sum by (shard) (
+          rate(
+            gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+          )
+        )
+        /
+        sum by (shard) (
+          rate(
+            gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+          )
+        )
+      |||, partition),
+    );
 
 {
   durationHistogram:: durationHistogram,

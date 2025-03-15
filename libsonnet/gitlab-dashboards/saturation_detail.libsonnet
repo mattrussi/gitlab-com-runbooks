@@ -17,7 +17,7 @@ local maxOverTime(query) =
   'max_over_time(%(query)s[$__interval])' % { query: query };
 
 {
-  saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime, useTimeSeriesPlugin=false)::
+  saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime, useTimeSeriesPlugin=true)::
     local formatConfig = {
       component: component,
       query: query,

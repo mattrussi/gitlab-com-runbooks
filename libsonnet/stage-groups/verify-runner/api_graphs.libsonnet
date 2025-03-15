@@ -1,9 +1,9 @@
-local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
 local jobRequestsOnWorkhorse =
-  basic.timeseries(
+  panel.timeSeries(
     '`jobs/request` requests',
     format='ops',
     legendFormat='requests',
@@ -15,14 +15,13 @@ local jobRequestsOnWorkhorse =
   );
 
 local runnerRequests(endpoint, statuses='.*', partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Runner requests for %(endpoint)s [%(statuses)s]' % {
       endpoint: endpoint,
       statuses: statuses,
     },
     format='ops',
     legendFormat='{{status}}',
-    stack=true,
     query=runnersManagerMatching.formatQuery(
       |||
         sum by(status) (

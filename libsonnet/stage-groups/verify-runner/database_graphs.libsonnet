@@ -2,6 +2,7 @@ local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local patroniService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('patroni');
 local panels = import './panels.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local patroniOverview(startRow, rowHeight) =
   keyMetrics.headlineMetricsRow(
@@ -24,7 +25,7 @@ local patroniOverview(startRow, rowHeight) =
   );
 
 local totalDeadTuples =
-  basic.timeseries(
+  panel.timeSeries(
     'Total dead tuples',
     format='short',
     legendFormat='{{relname}}',
@@ -34,7 +35,7 @@ local totalDeadTuples =
   );
 
 local deadTuplesPercentage =
-  basic.timeseries(
+  panel.timeSeries(
     'Dead tuples percentage',
     format='percentunit',
     legendFormat='{{relname}}',
@@ -50,7 +51,7 @@ local deadTuplesPercentage =
   );
 
 local slowQueries =
-  basic.timeseries(
+  panel.timeSeries(
     'Slow queries',
     format='opm',
     legendFormat='{{fqdn}}',
@@ -72,7 +73,7 @@ local bigQueryDuration(runner_type) = panels.heatmap(
       )
     )
   ||| % {
-    runner_type: runner_type
+    runner_type: runner_type,
   },
   description=|||
     The "big query SQL" is the SQL query GitLab uses to retrieve the jobs queue from the database. That query

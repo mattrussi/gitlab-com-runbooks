@@ -1,6 +1,7 @@
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local missingSeriesDashboard(title, metric, basicPanelType='percentageTimeseries') =
   basic.dashboard(
@@ -11,15 +12,14 @@ local missingSeriesDashboard(title, metric, basicPanelType='percentageTimeseries
   .addTemplate(templates.stage)
   .addTemplate(templates.component)
   .addPanels(layout.grid([
-    basic[basicPanelType](
+    panel.timeSeries(
       title=title,
       query=|||
         %(metric)s{environment="$environment", type="$type", stage="$stage", component="$component", monitor!="global"}
       ||| % {
         metric: metric,
       },
-      stableId='missing-series',
-      legendFormat='$component',
+      format='$component',
       linewidth=3,
     ),
   ], cols=1, rowHeight=10, startRow=0))
