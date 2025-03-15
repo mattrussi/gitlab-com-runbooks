@@ -4,8 +4,9 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local template = grafana.template;
 local link = grafana.link;
+local panel = import 'grafana/time-series/panel.libsonnet';
 
-local healthRatioPanel() = basic.timeseries(
+local healthRatioPanel() = panel.timeSeries(
   title='Percentage backends healthy per LB',
   description='Percentage ',
   query=|||

@@ -2,80 +2,148 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local text = grafana.text;
 local basic = import 'grafana/basic.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local algorithmVisualisation =
-  basic.multiTimeseries(
-    title='Autoscaling algorithm',
-    format='short',
-    intervalFactor=5,
-    legend_rightSide=true,
-    queries=[
-      {
-        legendFormat: 'Number of running jobs',
-        query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"})',
-      },
-      {
-        legendFormat: 'Number of {{state}} machines',
-        query: 'sum by (state) (gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
-      },
-      {
-        legendFormat: 'Number of existing machines',
-        query: 'sum(gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
-      },
-      {
-        legendFormat: 'Limit utilization',
-        query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}) / sum(gitlab_runner_limit{instance=~"${runner_manager:pipe}"}) ',
-      },
-    ],
-  )
-  .resetYaxes()
-  .addYaxis(
-    format='short',
-    show=true,
-  )
-  .addYaxis(
-    format='percentunit',
-    show=true,
-  ) + {
-    seriesOverrides+: [
-      {
-        alias: 'Number of running jobs',
-        color: '#ffffff',
-        lineWidth: 5,
-        zindex: -3,
-      },
-      {
-        alias: 'Number of existing machines',
-        color: '#1F60C4',
-        lineWidth: 3,
-      },
-      {
-        alias: 'Number of creating machines',
-        pointradius: 1,
-        points: true,
-      },
-      {
-        alias: 'Number of removing machines',
-        pointradius: 1,
-        points: true,
-      },
-      {
-        alias: 'Number of used machines',
-        lineWidth: 3,
-      },
-      {
-        alias: 'Number of idle machines',
-        lineWidth: 3,
-      },
-      {
-        alias: 'Limit utilization',
-        color: 'rgba(200, 242, 194, 0.85)',
-        fill: 1,
-        yaxis: 2,
-        zindex: -2,
-      },
-    ],
-  };
+  if useTimeSeriesPlugin then
+    panel.multiTimeSeries(
+      title='Autoscaling algorithm',
+      format='short',
+      intervalFactor=5,
+      legend_rightSide=true,
+      queries=[
+        {
+          legendFormat: 'Number of running jobs',
+          query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"})',
+        },
+        {
+          legendFormat: 'Number of {{state}} machines',
+          query: 'sum by (state) (gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
+        },
+        {
+          legendFormat: 'Number of existing machines',
+          query: 'sum(gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
+        },
+        {
+          legendFormat: 'Limit utilization',
+          query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}) / sum(gitlab_runner_limit{instance=~"${runner_manager:pipe}"}) ',
+        },
+      ],
+    ) + {
+      seriesOverrides+: [
+        {
+          alias: 'Number of running jobs',
+          color: '#ffffff',
+          lineWidth: 5,
+          zindex: -3,
+        },
+        {
+          alias: 'Number of existing machines',
+          color: '#1F60C4',
+          lineWidth: 3,
+        },
+        {
+          alias: 'Number of creating machines',
+          pointradius: 1,
+          points: true,
+        },
+        {
+          alias: 'Number of removing machines',
+          pointradius: 1,
+          points: true,
+        },
+        {
+          alias: 'Number of used machines',
+          lineWidth: 3,
+        },
+        {
+          alias: 'Number of idle machines',
+          lineWidth: 3,
+        },
+        {
+          alias: 'Limit utilization',
+          color: 'rgba(200, 242, 194, 0.85)',
+          fill: 1,
+          yaxis: 2,
+          zindex: -2,
+        },
+      ],
+    }
+  else
+    basic.multiTimeseries(
+      title='Autoscaling algorithm',
+      format='short',
+      intervalFactor=5,
+      legend_rightSide=true,
+      queries=[
+        {
+          legendFormat: 'Number of running jobs',
+          query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"})',
+        },
+        {
+          legendFormat: 'Number of {{state}} machines',
+          query: 'sum by (state) (gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
+        },
+        {
+          legendFormat: 'Number of existing machines',
+          query: 'sum(gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
+        },
+        {
+          legendFormat: 'Limit utilization',
+          query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}) / sum(gitlab_runner_limit{instance=~"${runner_manager:pipe}"}) ',
+        },
+      ],
+    )
+    .resetYaxes()
+    .addYaxis(
+      format='short',
+      show=true,
+    )
+    .addYaxis(
+      format='percentunit',
+      show=true,
+    ) + {
+      seriesOverrides+: [
+        {
+          alias: 'Number of running jobs',
+          color: '#ffffff',
+          lineWidth: 5,
+          zindex: -3,
+        },
+        {
+          alias: 'Number of existing machines',
+          color: '#1F60C4',
+          lineWidth: 3,
+        },
+        {
+          alias: 'Number of creating machines',
+          pointradius: 1,
+          points: true,
+        },
+        {
+          alias: 'Number of removing machines',
+          pointradius: 1,
+          points: true,
+        },
+        {
+          alias: 'Number of used machines',
+          lineWidth: 3,
+        },
+        {
+          alias: 'Number of idle machines',
+          lineWidth: 3,
+        },
+        {
+          alias: 'Limit utilization',
+          color: 'rgba(200, 242, 194, 0.85)',
+          fill: 1,
+          yaxis: 2,
+          zindex: -2,
+        },
+      ],
+    };
 
 dashboardHelpers.dashboard(
   'Autoscaling algorithm',

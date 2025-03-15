@@ -12,6 +12,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libsonnet';
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
@@ -20,83 +21,161 @@ local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_
 local gitalyCgroupDashboards = import 'gitlab-dashboards/gitaly/cgroup.libsonnet';
 local gitalyBackupDashboards = import 'gitlab-dashboards/gitaly/backup.libsonnet';
 
+local useTimeSeriesPlugin = true;
+
 local serviceType = 'gitaly';
 
 local inflightGitalyCommandsPerNode(selector) =
-  basic.timeseries(
-    title='Inflight Git Commands on Node',
-    description='Number of Git commands running concurrently per node. Lower is better.',
-    query=|||
-      avg_over_time(gitaly_commands_running{%(selector)s}[$__interval])
-    ||| % { selector: selector },
-    legendFormat='{{ fqdn }}',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Inflight Git Commands on Node',
+      description='Number of Git commands running concurrently per node. Lower is better.',
+      query=|||
+        avg_over_time(gitaly_commands_running{%(selector)s}[$__interval])
+      ||| % { selector: selector },
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    )
+  else
+    basic.timeseries(
+      title='Inflight Git Commands on Node',
+      description='Number of Git commands running concurrently per node. Lower is better.',
+      query=|||
+        avg_over_time(gitaly_commands_running{%(selector)s}[$__interval])
+      ||| % { selector: selector },
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    );
 
 local oomKillsPerNode(selector) =
-  basic.timeseries(
-    title='OOM Kills on Node',
-    description='Number of OOM Kills per server.',
-    query=|||
-      increase(node_vmstat_oom_kill{%(selector)s}[$__interval])
-    ||| % { selector: selector },
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='OOM Kills on Node',
+      description='Number of OOM Kills per server.',
+      query=|||
+        increase(node_vmstat_oom_kill{%(selector)s}[$__interval])
+      ||| % { selector: selector },
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    )
+  else
+    basic.timeseries(
+      title='OOM Kills on Node',
+      description='Number of OOM Kills per server.',
+      query=|||
+        increase(node_vmstat_oom_kill{%(selector)s}[$__interval])
+      ||| % { selector: selector },
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    );
 
 local gitalySpawnTimeoutsPerNode(selector) =
-  basic.timeseries(
-    title='Gitaly Spawn Timeouts per Node',
-    description='Golang uses a global lock on process spawning. In order to control contention on this lock Gitaly uses a safety valve. If a request is unable to obtain the lock within a period, a timeout occurs. These timeouts are serious and should be addressed. Non-zero is bad.',
-    query=|||
-      increase(gitaly_spawn_timeouts_total{%(selector)s}[$__interval])
-    ||| % { selector: selector },
-    legendFormat='{{ fqdn }}',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Gitaly Spawn Timeouts per Node',
+      description='Golang uses a global lock on process spawning. In order to control contention on this lock Gitaly uses a safety valve. If a request is unable to obtain the lock within a period, a timeout occurs. These timeouts are serious and should be addressed. Non-zero is bad.',
+      query=|||
+        increase(gitaly_spawn_timeouts_total{%(selector)s}[$__interval])
+      ||| % { selector: selector },
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    )
+  else
+    basic.timeseries(
+      title='Gitaly Spawn Timeouts per Node',
+      description='Golang uses a global lock on process spawning. In order to control contention on this lock Gitaly uses a safety valve. If a request is unable to obtain the lock within a period, a timeout occurs. These timeouts are serious and should be addressed. Non-zero is bad.',
+      query=|||
+        increase(gitaly_spawn_timeouts_total{%(selector)s}[$__interval])
+      ||| % { selector: selector },
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    );
 
 local gitalySpawnTokenQueueLengthPerNode(selector) =
-  basic.timeseries(
-    title='Gitaly Spawn Token queue length per Node',
-    query=|||
-      sum(gitaly_spawn_token_waiting_length{%(selector)s}) by (fqdn)
-    ||| % { selector: selector },
-    legendFormat='{{ fqdn }}',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Gitaly Spawn Token queue length per Node',
+      query=|||
+        sum(gitaly_spawn_token_waiting_length{%(selector)s}) by (fqdn)
+      ||| % { selector: selector },
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    )
+  else
+    basic.timeseries(
+      title='Gitaly Spawn Token queue length per Node',
+      query=|||
+        sum(gitaly_spawn_token_waiting_length{%(selector)s}) by (fqdn)
+      ||| % { selector: selector },
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    );
 
 local gitalySpawnTokenForkingTimePerNode(selector) =
-  basic.timeseries(
-    title='Gitaly Spawn Token P99 forking time per Node',
-    query=|||
-      histogram_quantile(0.99, sum(rate(gitaly_spawn_forking_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
-    ||| % { selector: selector },
-    format='s',
-    legendFormat='{{ fqdn }}',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Gitaly Spawn Token P99 forking time per Node',
+      query=|||
+        histogram_quantile(0.99, sum(rate(gitaly_spawn_forking_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+      ||| % { selector: selector },
+      format='s',
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    )
+  else
+    basic.timeseries(
+      title='Gitaly Spawn Token P99 forking time per Node',
+      query=|||
+        histogram_quantile(0.99, sum(rate(gitaly_spawn_forking_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+      ||| % { selector: selector },
+      format='s',
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    );
 
 local gitalySpawnTokenWaitingTimePerNode(selector) =
-  basic.timeseries(
-    title='Gitaly Spawn Token P99 waiting time per Node',
-    query=|||
-      histogram_quantile(0.99, sum(rate(gitaly_spawn_waiting_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
-    ||| % { selector: selector },
-    format='s',
-    legendFormat='{{ fqdn }}',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Gitaly Spawn Token P99 waiting time per Node',
+      query=|||
+        histogram_quantile(0.99, sum(rate(gitaly_spawn_waiting_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+      ||| % { selector: selector },
+      format='s',
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    )
+  else
+    basic.timeseries(
+      title='Gitaly Spawn Token P99 waiting time per Node',
+      query=|||
+        histogram_quantile(0.99, sum(rate(gitaly_spawn_waiting_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+      ||| % { selector: selector },
+      format='s',
+      legendFormat='{{ fqdn }}',
+      interval='1m',
+      linewidth=1,
+      legend_show=false,
+    );
 
 local selectorHash = {
   environment: '$environment',
@@ -123,6 +202,7 @@ local headlineRow(startRow=1) =
       showApdex=metricsCatalogServiceInfo.hasApdex(),
       showErrorRatio=metricsCatalogServiceInfo.hasErrorRate(),
       showOpsRate=true,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     );
   layout.splitColumnGrid(columns, [7, 1], startRow=startRow);
 
@@ -140,7 +220,8 @@ basic.dashboard(
     aggregationSet=aggregationSets.nodeComponentSLIs,
     serviceType='gitaly',
     selectorHash=selectorHash,
-    startRow=200
+    startRow=200,
+    useTimeSeriesPlugin=useTimeSeriesPlugin,
   )
 )
 .addPanel(
@@ -151,23 +232,28 @@ basic.dashboard(
     [
       { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'goserver' },
     ],
+    useTimeSeriesPlugin=useTimeSeriesPlugin,
   ), gridPos={ x: 0, y: 2000 }
 )
-.addPanel(nodeMetrics.nodeMetricsDetailRow(selectorHash), gridPos={ x: 0, y: 3000 })
+.addPanel(nodeMetrics.nodeMetricsDetailRow(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin), gridPos={ x: 0, y: 3000 })
 .addPanel(
-  saturationDetail.saturationDetailPanels(selectorHash, components=[
-    'cgroup_memory',
-    'cpu',
-    'disk_space',
-    'disk_sustained_read_iops',
-    'disk_sustained_read_throughput',
-    'disk_sustained_write_iops',
-    'disk_sustained_write_throughput',
-    'memory',
-    'open_fds',
-    'single_node_cpu',
-    'go_memory',
-  ]),
+  saturationDetail.saturationDetailPanels(
+    selectorHash,
+    components=[
+      'cgroup_memory',
+      'cpu',
+      'disk_space',
+      'disk_sustained_read_iops',
+      'disk_sustained_read_throughput',
+      'disk_sustained_write_iops',
+      'disk_sustained_write_throughput',
+      'memory',
+      'open_fds',
+      'single_node_cpu',
+      'go_memory',
+    ],
+    useTimeSeriesPlugin=useTimeSeriesPlugin,
+  ),
   gridPos={ x: 0, y: 4000, w: 24, h: 1 }
 )
 .addPanel(
@@ -211,7 +297,8 @@ basic.dashboard(
         groupname: { re: 'gitaly' },
       },
       aggregationLabels=[],
-      startRow=5201
+      startRow=5201,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={
@@ -231,7 +318,8 @@ basic.dashboard(
         groupname: { re: 'git.*' },
       },
       aggregationLabels=['groupname'],
-      startRow=5301
+      startRow=5301,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={
@@ -248,7 +336,8 @@ basic.dashboard(
       selectorHash,
       includeDetails=false,
       aggregationLabels=['cmd', 'subcmd'],
-      startRow=5501
+      startRow=5501,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={
@@ -265,7 +354,8 @@ basic.dashboard(
       selectorHash,
       includeDetails=false,
       aggregationLabels=['grpc_service', 'grpc_method'],
-      startRow=5601
+      startRow=5601,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={
@@ -281,7 +371,8 @@ basic.dashboard(
     gitalyCommandStats.metricsForNode(
       selectorHash,
       aggregationLabels=['grpc_method', 'cmd', 'subcmd'],
-      startRow=5701
+      startRow=5701,
+      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={
@@ -295,13 +386,13 @@ basic.dashboard(
   row.new(title='gitaly per-RPC metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyAdaptiveLimitDashboards.per_rpc_current_limit(selectorHash, '{{ limit }}'),
-      gitalyPerRPCDashboards.request_rate_by_method(selectorHash),
-      gitalyPerRPCDashboards.request_rate_by_code(selectorHash),
-      gitalyPerRPCDashboards.in_progress_requests(selectorHash),
-      gitalyPerRPCDashboards.queued_requests(selectorHash),
-      gitalyPerRPCDashboards.queueing_time(selectorHash),
-      gitalyPerRPCDashboards.dropped_requests(selectorHash),
+      gitalyAdaptiveLimitDashboards.per_rpc_current_limit(selectorHash, '{{ limit }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPerRPCDashboards.request_rate_by_method(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPerRPCDashboards.request_rate_by_code(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPerRPCDashboards.in_progress_requests(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPerRPCDashboards.queued_requests(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPerRPCDashboards.queueing_time(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPerRPCDashboards.dropped_requests(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
     ], startRow=5802)
   ),
   gridPos={
@@ -315,14 +406,14 @@ basic.dashboard(
   row.new(title='gitaly pack-objects metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selectorHash, '{{ limit }}'),
-      gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by gitaly process'),
-      gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
-      gitalyPackObjectsDashboards.queueing_time(selectorHash, '95th queueing time'),
-      gitalyPackObjectsDashboards.dropped_commands(selectorHash, '{{ reason }}'),
-      gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
-      gitalyPackObjectsDashboards.cache_generated(selectorHash, 'cache generated'),
-      gitalyPackObjectsDashboards.cache_lookup(selectorHash, '{{ result }}'),
+      gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selectorHash, '{{ limit }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by gitaly process', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.queueing_time(selectorHash, '95th queueing time', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.dropped_commands(selectorHash, '{{ reason }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.cache_generated(selectorHash, 'cache generated', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyPackObjectsDashboards.cache_lookup(selectorHash, '{{ result }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
       gitalyPackObjectsDashboards.pack_objects_info(),
     ], startRow=5902)
   ),
@@ -337,15 +428,15 @@ basic.dashboard(
   row.new(title='cgroup', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyCgroupDashboards.CPUUsagePerCGroup(selectorHash),
-      gitalyCgroupDashboards.CPUThrottling(selectorHash),
-      gitalyCgroupDashboards.MemoryUsageBytes('cgroup: Memory usage bytes (parent cgroups)', false, selectorHash),
-      gitalyCgroupDashboards.MemoryUsageBytes('cgroup: Top usage bytes (repository cgroups)', true, selectorHash),
-      gitalyCgroupDashboards.MemoryWorkingSetBytes('cgroup: Memory working set bytes (parent cgroups)', false, selectorHash),
-      gitalyCgroupDashboards.MemoryWorkingSetBytes('cgroup: Top working set bytes (repository cgroups)', true, selectorHash),
-      gitalyCgroupDashboards.MemoryCacheBytes('cgroup: Memory cache bytes (parent cgroups)', false, selectorHash),
-      gitalyCgroupDashboards.MemoryCacheBytes('cgroup: Top cache bytes (repository cgroups)', true, selectorHash),
-      gitalyCgroupDashboards.MemoryFailcnt('cgroup: failcnt', selectorHash),
+      gitalyCgroupDashboards.CPUUsagePerCGroup(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.CPUThrottling(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryUsageBytes('cgroup: Memory usage bytes (parent cgroups)', false, selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryUsageBytes('cgroup: Top usage bytes (repository cgroups)', true, selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryWorkingSetBytes('cgroup: Memory working set bytes (parent cgroups)', false, selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryWorkingSetBytes('cgroup: Top working set bytes (repository cgroups)', true, selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryCacheBytes('cgroup: Memory cache bytes (parent cgroups)', false, selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryCacheBytes('cgroup: Top cache bytes (repository cgroups)', true, selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyCgroupDashboards.MemoryFailcnt('cgroup: failcnt', selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
       oomKillsPerNode(selectorSerialized),
       basic.text(
         title='cgroup runbook',
@@ -373,8 +464,8 @@ basic.dashboard(
   row.new(title='Adaptive limit metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyAdaptiveLimitDashboards.backoff_events(selectorHash, '{{ watcher }}'),
-      gitalyAdaptiveLimitDashboards.watcher_errors(selectorHash, '{{ watcher }}'),
+      gitalyAdaptiveLimitDashboards.backoff_events(selectorHash, '{{ watcher }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyAdaptiveLimitDashboards.watcher_errors(selectorHash, '{{ watcher }}', useTimeSeriesPlugin=useTimeSeriesPlugin),
     ], startRow=7001)
   ),
   gridPos={
@@ -388,10 +479,10 @@ basic.dashboard(
   row.new(title='Server-side backup metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyBackupDashboards.backup_duration(selectorHash),
-      gitalyBackupDashboards.backup_rpc_status(selectorHash),
-      gitalyBackupDashboards.backup_rpc_latency(selectorHash),
-      gitalyBackupDashboards.backup_bundle_upload_rate(selectorHash),
+      gitalyBackupDashboards.backup_duration(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyBackupDashboards.backup_rpc_status(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyBackupDashboards.backup_rpc_latency(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
+      gitalyBackupDashboards.backup_bundle_upload_rate(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin),
     ], startRow=8001)
   ),
   gridPos={

@@ -1,9 +1,9 @@
-local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
 local workerFeedRate(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Worker feed rate',
     legendFormat='{{shard}}',
     format='ops',
@@ -17,7 +17,7 @@ local workerFeedRate(partition=runnersManagerMatching.defaultPartition) =
   );
 
 local workerFeedFailuresRate(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Worker feed failures rate',
     legendFormat='{{shard}}',
     format='ops',
@@ -31,7 +31,7 @@ local workerFeedFailuresRate(partition=runnersManagerMatching.defaultPartition) 
   );
 
 local workerSlots(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Worker slots',
     legendFormat='{{shard}}',
     format='short',
@@ -43,7 +43,7 @@ local workerSlots(partition=runnersManagerMatching.defaultPartition) =
   );
 
 local workerSlotOperationsRate(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Worker slot operations rate',
     legendFormat='{{shard}}',
     format='ops',
@@ -57,7 +57,7 @@ local workerSlotOperationsRate(partition=runnersManagerMatching.defaultPartition
   );
 
 local workerProcessingFailuresRate(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Worker processing failures rate',
     legendFormat='{{shard}}: {{failure_type}}',
     format='ops',
@@ -71,7 +71,7 @@ local workerProcessingFailuresRate(partition=runnersManagerMatching.defaultParti
   );
 
 local workerHealthCheckFailuresRate(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     'Worker health check failures rate',
     legendFormat='{{shard}}: {{runner_name}}',
     format='ops',

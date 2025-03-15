@@ -5,6 +5,9 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
 local row = grafana.row;
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local selector = {
   environment: '$environment',
@@ -27,7 +30,7 @@ local customTimeseriesPanel(
   description='',
   thresholdStyle='off',
   scaleDistribution='linear'
-) = {
+      ) = {
   type: 'timeseries',
   title: title,
   description: description,
@@ -53,18 +56,18 @@ local customTimeseriesPanel(
         // Use a conditional expression for scaleDistribution, here if condition is not satisfied key becomes null which is then ignored.
         [if scaleDistribution == 'log' then 'scaleDistribution']: {
           type: 'log',
-          log: 10
+          log: 10,
         },
         [if scaleDistribution == 'linear' then 'scaleDistribution']: {
-          type: 'linear'
+          type: 'linear',
         },
         axisCenteredZero: false,
         thresholdsStyle: {
-          mode: thresholdStyle
+          mode: thresholdStyle,
         },
       },
       color: {
-        mode: 'palette-classic'
+        mode: 'palette-classic',
       },
       mappings: [],
       thresholds: thresholds,
@@ -81,14 +84,14 @@ local customTimeseriesPanel(
       showLegend: true,
       displayMode: 'list',
       placement: 'bottom',
-      calcs: legendCalcs
+      calcs: legendCalcs,
     },
   },
   targets: [
     {
       datasource: {
         type: 'prometheus',
-        uid: '$PROMETHEUS_DS'
+        uid: '$PROMETHEUS_DS',
       },
       expr: expr,
       format: 'time_series',
@@ -115,36 +118,48 @@ basic.dashboard(
   gridPos={ x: 0, y: 0, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Feature Flags',
-      query=|||
-        sum(rate(gitaly_feature_flag_checks_total{%(selector)s}[$__rate_interval])) by (flag, enabled)
-      ||| % { selector: selectors.serializeHash({ env: '$environment' }) },
-      legendFormat='{{flag}}: {{enabled}}',
-    ),
-    customTimeseriesPanel(
-      title='Success Ratio (SLA)',
-      expr=|||
-        1 - (sum(gitaly:grpc_server_handled_total:error_rate1m{%(selector)s}) without (grpc_code) / gitaly:grpc_server_handled_total:rate1m{%(selector)s})
-      ||| % { selector: selectors.serializeHash(selector) },
-      max=1,
-      unit='percentunit',
-      decimals=2,
-      legendFormat='stage: {{stage}}, shard: {{shard}}',
-      thresholds={
-        mode: 'absolute',
-        steps: [
-          { color: 'red', value: null },
-          { color: 'orange', value: 0.9 },
-          { color: 'transparent', value: 0.999 },
-        ],
-      },
-      thresholdStyle = 'line+area',
-      legendCalcs=['mean', 'min'],
-      description='This graph represents the percentage of requests that succeed.',
-    ),
-  ], cols=1, rowHeight=10, startRow=1)
+  layout.grid(
+    [
+      if useTimeSeriesPlugin then
+        panel.timeSeries(
+          title='Feature Flags',
+          query=|||
+            sum(rate(gitaly_feature_flag_checks_total{%(selector)s}[$__rate_interval])) by (flag, enabled)
+          ||| % { selector: selectors.serializeHash({ env: '$environment' }) },
+          legendFormat='{{flag}}: {{enabled}}',
+        )
+      else
+
+        basic.timeseries(
+          title='Feature Flags',
+          query=|||
+            sum(rate(gitaly_feature_flag_checks_total{%(selector)s}[$__rate_interval])) by (flag, enabled)
+          ||| % { selector: selectors.serializeHash({ env: '$environment' }) },
+          legendFormat='{{flag}}: {{enabled}}',
+        ),
+      customTimeseriesPanel(
+        title='Success Ratio (SLA)',
+        expr=|||
+          1 - (sum(gitaly:grpc_server_handled_total:error_rate1m{%(selector)s}) without (grpc_code) / gitaly:grpc_server_handled_total:rate1m{%(selector)s})
+        ||| % { selector: selectors.serializeHash(selector) },
+        max=1,
+        unit='percentunit',
+        decimals=2,
+        legendFormat='stage: {{stage}}, shard: {{shard}}',
+        thresholds={
+          mode: 'absolute',
+          steps: [
+            { color: 'red', value: null },
+            { color: 'orange', value: 0.9 },
+            { color: 'transparent', value: 0.999 },
+          ],
+        },
+        thresholdStyle='line+area',
+        legendCalcs=['mean', 'min'],
+        description='This graph represents the percentage of requests that succeed.',
+      ),
+    ], cols=1, rowHeight=10, startRow=1
+  )
 )
 .addPanels(
   layout.grid([
@@ -241,13 +256,13 @@ basic.dashboard(
           expr: |||
             sum(rate(grpc_server_handled_total{%(selector)s}[1m]))
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'now'
+          legendFormat: 'now',
         },
         {
           expr: |||
             sum(rate(grpc_server_handled_total{%(selector)s}[1m] offset 1w))
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'last week'
+          legendFormat: 'last week',
         },
       ],
     },

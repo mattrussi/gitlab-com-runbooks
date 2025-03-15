@@ -2,6 +2,7 @@ local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local selector = {
@@ -11,6 +12,8 @@ local selector = {
 };
 
 local selectorString = selectors.serializeHash(selector);
+
+local useTimeSeriesPlugin = true;
 
 basic.dashboard('GraphQL', tags=['type:api', 'detail'])
 .addTemplate(templates.stage)
@@ -28,14 +31,23 @@ basic.dashboard('GraphQL', tags=['type:api', 'detail'])
         - [Architecture blueprint](https://docs.gitlab.com/ee/architecture/blueprints/graphql_api/)
       |||,
     ),
-    basic.timeseries(
-      stableId='request-rate',
-      title='Request Rate',
-      query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
-      legendFormat='{{ action }}',
-      format='ops',
-      yAxisLabel='Requests per Second',
-    ),
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Request Rate',
+        query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
+        legendFormat='{{ action }}',
+        format='ops',
+        yAxisLabel='Requests per Second',
+      )
+    else
+      basic.timeseries(
+        stableId='request-rate',
+        title='Request Rate',
+        query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
+        legendFormat='{{ action }}',
+        format='ops',
+        yAxisLabel='Requests per Second',
+      ),
   ])
 )
 .trailer()

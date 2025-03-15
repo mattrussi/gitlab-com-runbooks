@@ -4,12 +4,16 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
 
 local k8sPodsCommon = import 'gitlab-dashboards/kubernetes_pods_common.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 
 local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$namespace"';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local generalGraphPanel(
   title,
@@ -21,144 +25,261 @@ local generalGraphPanel(
   description=null,
   linewidth=2,
   sort=0,
-      ) = grafana.graphPanel.new(
-  title,
-  linewidth=linewidth,
-  fill=fill,
-  format=format,
-  formatY1=formatY1,
-  formatY2=formatY2,
-  datasource='$PROMETHEUS_DS',
-  description=description,
-  decimals=decimals,
-  sort=sort,
-  legend_show=true,
-  legend_values=true,
-  legend_min=false,
-  legend_max=false,
-  legend_current=true,
-  legend_total=false,
-  legend_avg=false,
-  legend_alignAsTable=true,
-  legend_hideEmpty=false,
-  legend_rightSide=false,
-);
+      ) =
+  if useTimeSeriesPlugin then
+    panel.basic(
+      title,
+      linewidth=linewidth,
+      description=description,
+      legend_min=false,
+      legend_max=false,
+      legend_avg=false,
+      legend_show=true,
+    )
+  else
+    grafana.graphPanel.new(
+      title,
+      linewidth=linewidth,
+      fill=fill,
+      format=format,
+      formatY1=formatY1,
+      formatY2=formatY2,
+      datasource='$PROMETHEUS_DS',
+      description=description,
+      decimals=decimals,
+      sort=sort,
+      legend_show=true,
+      legend_values=true,
+      legend_min=false,
+      legend_max=false,
+      legend_current=true,
+      legend_total=false,
+      legend_avg=false,
+      legend_alignAsTable=true,
+      legend_hideEmpty=false,
+      legend_rightSide=false,
+    );
 
 // clickhouse - pods CPU usage, requests & limits
 local clickhouseCPU(
   title,
   container
-      ) = generalGraphPanel(title)
-          .addTarget(
-  promQuery.target(
-    |||
-      sum(
-          rate(container_cpu_usage_seconds_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
-      ) by (pod)
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='usage: {{ pod }}'
-  )
-)
-          .addTarget(
-  promQuery.target(
-    |||
-      kube_pod_container_resource_limits{%(env_cluster_ns)s, pod=~"cluster-.*", resource="cpu", container="%(container)s"}
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='limit: {{ pod }}'
-  )
-)
-          .addTarget(
-  promQuery.target(
-    |||
-      kube_pod_container_resource_requests{%(env_cluster_ns)s, pod=~"cluster-.*", resource="cpu", container="%(container)s"}
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='request: {{ pod }}'
-  )
-);
+      ) =
+  if useTimeSeriesPlugin then
+    generalGraphPanel(title)
+    .addTarget(
+      target.prometheus(
+        |||
+          sum(
+              rate(container_cpu_usage_seconds_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+          ) by (pod)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='usage: {{ pod }}'
+      )
+    )
+    .addTarget(
+      target.prometheus(
+        |||
+          kube_pod_container_resource_limits{%(env_cluster_ns)s, pod=~"cluster-.*", resource="cpu", container="%(container)s"}
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='limit: {{ pod }}'
+      )
+    )
+    .addTarget(
+      target.prometheus(
+        |||
+          kube_pod_container_resource_requests{%(env_cluster_ns)s, pod=~"cluster-.*", resource="cpu", container="%(container)s"}
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='request: {{ pod }}'
+      )
+    )
+  else
+    generalGraphPanel(title)
+    .addTarget(
+      promQuery.target(
+        |||
+          sum(
+              rate(container_cpu_usage_seconds_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+          ) by (pod)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='usage: {{ pod }}'
+      )
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          kube_pod_container_resource_limits{%(env_cluster_ns)s, pod=~"cluster-.*", resource="cpu", container="%(container)s"}
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='limit: {{ pod }}'
+      )
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          kube_pod_container_resource_requests{%(env_cluster_ns)s, pod=~"cluster-.*", resource="cpu", container="%(container)s"}
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='request: {{ pod }}'
+      )
+    );
 
 // clickhouse - pods CPU throttling%
 local clickhouseCPUThrottling(
   title,
   container,
-      ) = generalGraphPanel(title)
-          .addTarget(
-  promQuery.target(
-    |||
-      100*(
-          sum(
-              rate(container_cpu_cfs_throttled_periods_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
-          ) by (pod)
-          /
-          sum(
-              rate(container_cpu_cfs_periods_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
-          ) by (pod)
+      ) =
+  if useTimeSeriesPlugin then
+    generalGraphPanel(title)
+    .addTarget(
+      target.prometheus(
+        |||
+          100*(
+              sum(
+                  rate(container_cpu_cfs_throttled_periods_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+              ) by (pod)
+              /
+              sum(
+                  rate(container_cpu_cfs_periods_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+              ) by (pod)
+          )
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='{{ pod }}'
       )
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='{{ pod }}'
-  )
-);
+    )
+  else
+    generalGraphPanel(title)
+    .addTarget(
+      promQuery.target(
+        |||
+          100*(
+              sum(
+                  rate(container_cpu_cfs_throttled_periods_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+              ) by (pod)
+              /
+              sum(
+                  rate(container_cpu_cfs_periods_total{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+              ) by (pod)
+          )
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='{{ pod }}'
+      )
+    );
 
 // clickhouse - pods Memory usage, requests & limits
 local clickhouseMemory(
   title,
   container
-      ) = generalGraphPanel(title)
-          .addTarget(
-  promQuery.target(
-    |||
-      sum(
-          rate(container_memory_working_set_bytes{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
-      ) by (pod) / (1024*1024*1024)
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='usage: {{ pod }}'
-  )
-)
-          .addTarget(
-  promQuery.target(
-    |||
-      kube_pod_container_resource_limits{%(env_cluster_ns)s, pod=~"cluster-.*", resource="memory", container="%(container)s"} / (1024*1024*1024)
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='limit: {{ pod }}'
-  )
-)
-          .addTarget(
-  promQuery.target(
-    |||
-      kube_pod_container_resource_requests{%(env_cluster_ns)s, pod=~"cluster-.*", resource="memory", container="%(container)s"} / (1024*1024*1024)
-    ||| % { env_cluster_ns: env_cluster_ns, container: container },
-    legendFormat='request: {{ pod }}'
-  )
-);
+      ) =
+  if useTimeSeriesPlugin then
+    generalGraphPanel(title)
+    .addTarget(
+      target.prometheus(
+        |||
+          sum(
+              rate(container_memory_working_set_bytes{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+          ) by (pod) / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='usage: {{ pod }}'
+      )
+    )
+    .addTarget(
+      target.prometheus(
+        |||
+          kube_pod_container_resource_limits{%(env_cluster_ns)s, pod=~"cluster-.*", resource="memory", container="%(container)s"} / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='limit: {{ pod }}'
+      )
+    )
+    .addTarget(
+      target.prometheus(
+        |||
+          kube_pod_container_resource_requests{%(env_cluster_ns)s, pod=~"cluster-.*", resource="memory", container="%(container)s"} / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='request: {{ pod }}'
+      )
+    )
+  else
+    generalGraphPanel(title)
+    .addTarget(
+      promQuery.target(
+        |||
+          sum(
+              rate(container_memory_working_set_bytes{%(env_cluster_ns)s, pod=~"cluster-.*", container="%(container)s"}[2m])
+          ) by (pod) / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='usage: {{ pod }}'
+      )
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          kube_pod_container_resource_limits{%(env_cluster_ns)s, pod=~"cluster-.*", resource="memory", container="%(container)s"} / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='limit: {{ pod }}'
+      )
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          kube_pod_container_resource_requests{%(env_cluster_ns)s, pod=~"cluster-.*", resource="memory", container="%(container)s"} / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, container: container },
+        legendFormat='request: {{ pod }}'
+      )
+    );
 
 // clickhouse - pods PVC storage usage & capacity
 local clickhousePVCStorage(
   title,
   pvcNameRe,
       ) =
-  generalGraphPanel(
-    title,
-    formatY1='GB',
-  )
-  .addTarget(
-    promQuery.target(
-      |||
-        sum(
-            kubelet_volume_stats_used_bytes{%(env_cluster_ns)s, persistentvolumeclaim=~"%(pvcNameRe)s"}
-        ) by (persistentvolumeclaim) / (1024*1024*1024)
-      ||| % { env_cluster_ns: env_cluster_ns, pvcNameRe: pvcNameRe },
-      legendFormat='used: {{ persistentvolumeclaim }}'
+  if useTimeSeriesPlugin then
+    generalGraphPanel(
+      title,
     )
-  )
-  .addTarget(
-    promQuery.target(
-      |||
-        sum(
-            kubelet_volume_stats_capacity_bytes{%(env_cluster_ns)s, persistentvolumeclaim=~"%(pvcNameRe)s"}
-        ) by (persistentvolumeclaim) / (1024*1024*1024)
-      ||| % { env_cluster_ns: env_cluster_ns, pvcNameRe: pvcNameRe },
-      legendFormat='capacity: {{ persistentvolumeclaim }}'
+    .addTarget(
+      target.prometheus(
+        |||
+          sum(
+              kubelet_volume_stats_used_bytes{%(env_cluster_ns)s, persistentvolumeclaim=~"%(pvcNameRe)s"}
+          ) by (persistentvolumeclaim) / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, pvcNameRe: pvcNameRe },
+        legendFormat='used: {{ persistentvolumeclaim }}'
+      )
     )
-  );
+    .addTarget(
+      target.prometheus(
+        |||
+          sum(
+              kubelet_volume_stats_capacity_bytes{%(env_cluster_ns)s, persistentvolumeclaim=~"%(pvcNameRe)s"}
+          ) by (persistentvolumeclaim) / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, pvcNameRe: pvcNameRe },
+        legendFormat='capacity: {{ persistentvolumeclaim }}'
+      )
+    )
+  else
+    generalGraphPanel(
+      title,
+      formatY1='GB',
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          sum(
+              kubelet_volume_stats_used_bytes{%(env_cluster_ns)s, persistentvolumeclaim=~"%(pvcNameRe)s"}
+          ) by (persistentvolumeclaim) / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, pvcNameRe: pvcNameRe },
+        legendFormat='used: {{ persistentvolumeclaim }}'
+      )
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          sum(
+              kubelet_volume_stats_capacity_bytes{%(env_cluster_ns)s, persistentvolumeclaim=~"%(pvcNameRe)s"}
+          ) by (persistentvolumeclaim) / (1024*1024*1024)
+        ||| % { env_cluster_ns: env_cluster_ns, pvcNameRe: pvcNameRe },
+        legendFormat='capacity: {{ persistentvolumeclaim }}'
+      )
+    );
 
 basic.dashboard(
   'Clickhouse',
@@ -202,26 +323,53 @@ basic.dashboard(
   gridPos={ x: 0, y: 0, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Active Version - clickhouse-server',
-      query=|||
-        count(
-            kube_pod_container_info{%(env_cluster_ns)s, pod=~"cluster-.*", container="clickhouse-server"}
-        ) by (image)
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ image }}',
-    ),
-    basic.timeseries(
-      title='Active Version - clickhouse-keeper',
-      query=|||
-        count(
-            kube_pod_container_info{%(env_cluster_ns)s, pod=~"cluster-.*", container="clickhouse-keeper"}
-        ) by (image)
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ image }}',
-    ),
-  ], cols=2, rowHeight=8, startRow=1)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Active Version - clickhouse-server',
+          query=|||
+            count(
+                kube_pod_container_info{%(env_cluster_ns)s, pod=~"cluster-.*", container="clickhouse-server"}
+            ) by (image)
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ image }}',
+        ),
+        panel.timeSeries(
+          title='Active Version - clickhouse-keeper',
+          query=|||
+            count(
+                kube_pod_container_info{%(env_cluster_ns)s, pod=~"cluster-.*", container="clickhouse-keeper"}
+            ) by (image)
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ image }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Active Version - clickhouse-server',
+          query=|||
+            count(
+                kube_pod_container_info{%(env_cluster_ns)s, pod=~"cluster-.*", container="clickhouse-server"}
+            ) by (image)
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ image }}',
+        ),
+        basic.timeseries(
+          title='Active Version - clickhouse-keeper',
+          query=|||
+            count(
+                kube_pod_container_info{%(env_cluster_ns)s, pod=~"cluster-.*", container="clickhouse-keeper"}
+            ) by (image)
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ image }}',
+        ),
+      ],
+    cols=2,
+    rowHeight=8,
+    startRow=1,
+  )
 )
 .addPanel(
   row.new(title='ClickHouse - CPU'),
@@ -264,20 +412,43 @@ basic.dashboard(
   gridPos={ x: 0, y: 400, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Number of read-only replicas',
-      query=|||
-        ClickHouseMetrics_ReadonlyReplica{%(env_cluster_ns)s}
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ pod }}',
-    ),
-    basic.timeseries(
-      title='Number of detached parts',
-      query=|||
-        ClickHouseAsyncMetrics_NumberOfDetachedParts{%(env_cluster_ns)s}
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ pod }}',
-    ),
-  ], cols=2, rowHeight=12, startRow=401)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Number of read-only replicas',
+          query=|||
+            ClickHouseMetrics_ReadonlyReplica{%(env_cluster_ns)s}
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ pod }}',
+        ),
+        panel.timeSeries(
+          title='Number of detached parts',
+          query=|||
+            ClickHouseAsyncMetrics_NumberOfDetachedParts{%(env_cluster_ns)s}
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ pod }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Number of read-only replicas',
+          query=|||
+            ClickHouseMetrics_ReadonlyReplica{%(env_cluster_ns)s}
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ pod }}',
+        ),
+        basic.timeseries(
+          title='Number of detached parts',
+          query=|||
+            ClickHouseAsyncMetrics_NumberOfDetachedParts{%(env_cluster_ns)s}
+          ||| % { env_cluster_ns: env_cluster_ns },
+          legendFormat='{{ pod }}',
+        ),
+      ],
+    cols=2,
+    rowHeight=12,
+    startRow=401,
+  )
 )

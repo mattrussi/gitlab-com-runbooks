@@ -9,6 +9,11 @@ local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local threshold = import 'grafana/time-series/threshold.libsonnet';
+local override = import 'grafana/time-series/override.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 // Preferred ordering of rows on the SLA dashboard
 local serviceOrdering = [
@@ -110,19 +115,34 @@ local serviceRow(service) =
       'Overall Weight',
       instant=false
     ),
-    basic.slaTimeseries(
-      title='%s: Availability ' % [service.friendly_name],
-      description='Rolling average SLO adherence for primary services. Higher is better.',
-      yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval', 'slo:observation_status'),
-      legendFormat='{{ type }}',
-      interval='1m',
-      legend_show=false
-    )
-    .addDataLink(links) + thresholdsValues +
-    {
-      options: { dataLinks: links },
-    },
+    if useTimeSeriesPlugin then
+      panel.slaTimeSeries(
+        title='%s: Availability ' % [service.friendly_name],
+        description='Rolling average SLO adherence for primary services. Higher is better.',
+        yAxisLabel='SLA',
+        query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval', 'slo:observation_status'),
+        legendFormat='{{ type }}',
+        interval='1m',
+        legend_show=false
+      )
+      .addDataLink(links) + thresholdsValues +
+      {
+        options: { dataLinks: links },
+      }
+    else
+      basic.slaTimeseries(
+        title='%s: Availability ' % [service.friendly_name],
+        description='Rolling average SLO adherence for primary services. Higher is better.',
+        yAxisLabel='SLA',
+        query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval', 'slo:observation_status'),
+        legendFormat='{{ type }}',
+        interval='1m',
+        legend_show=false
+      )
+      .addDataLink(links) + thresholdsValues +
+      {
+        options: { dataLinks: links },
+      },
   ];
 
 local primaryServiceRows = std.map(serviceRow, std.sort(keyServices, keyServiceSorter));
@@ -169,17 +189,32 @@ basic.dashboard(
       decimals=0,
       unit='',
     ),
-    basic.slaTimeseries(
-      title='Availability - gitlab.com',
-      description='Rolling average SLO adherence across all primary services. Higher is better.',
-      yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({ sla_type: '$sla_type' }, 'sla:gitlab:ratio', '$__interval'),
-      legendFormat='gitlab.com SLA',
-      interval='1m',
-      legend_show=false
-    )
-    .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
-    + thresholdsValues,
+    if useTimeSeriesPlugin then
+      panel.slaTimeSeries(
+        title='Availability - gitlab.com',
+        description='Rolling average SLO adherence across all primary services. Higher is better.',
+        yAxisLabel='SLA',
+        query=serviceAvailabilityQuery({ sla_type: '$sla_type' }, 'sla:gitlab:ratio', '$__interval'),
+        legendFormat='gitlab.com SLA',
+        interval='1m',
+        legend_show=false,
+        thresholdSteps=[
+          threshold.errorLevel(metricsConfig.slaTarget),
+        ]
+      )
+      .addSeriesOverride(override.goldenMetric('gitlab.com SLA'))
+    else
+      basic.slaTimeseries(
+        title='Availability - gitlab.com',
+        description='Rolling average SLO adherence across all primary services. Higher is better.',
+        yAxisLabel='SLA',
+        query=serviceAvailabilityQuery({ sla_type: '$sla_type' }, 'sla:gitlab:ratio', '$__interval'),
+        legendFormat='gitlab.com SLA',
+        interval='1m',
+        legend_show=false
+      )
+      .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
+      + thresholdsValues,
   ]], [4, 4, 16], rowHeight=5, startRow=1)
 )
 .addPanel(

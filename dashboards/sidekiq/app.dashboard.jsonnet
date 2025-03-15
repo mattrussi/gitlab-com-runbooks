@@ -6,6 +6,8 @@ local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 
+local useTimeSeriesPlugin = true;
+
 basic.dashboard(
   'Application Info',
   tags=['sidekiq'],
@@ -22,7 +24,6 @@ basic.dashboard(
   )
 )
 .addPanel(
-
   row.new(title='Stackdriver Metrics'),
   gridPos={
     x: 0,
@@ -31,9 +32,8 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.logMessages(startRow=1))
+.addPanels(common.logMessages(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
-
   row.new(title='General Counters'),
   gridPos={
     x: 0,
@@ -42,7 +42,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.generalRubyCounters(startRow=1001))
+.addPanels(common.generalRubyCounters(startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
 + {
   links+: platformLinks.triage +
           platformLinks.services +

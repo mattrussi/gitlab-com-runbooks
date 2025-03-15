@@ -1,5 +1,6 @@
 local override = import './override.libsonnet';
 local target = import './target.libsonnet';
+local colors = import 'colors/colors.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local ts = g.panel.timeSeries;
@@ -191,6 +192,52 @@ local basic(
     },
   };
 
+local apdexTimeSeries(
+  title='Apdex',
+  description='Apdex is a measure of requests that complete within an acceptable threshold duration. Actual threshold vary per service or endpoint. Higher is better.',
+  query='',
+  legendFormat='',
+  yAxisLabel='% Requests w/ Satisfactory Latency',
+  interval='1m',
+  intervalFactor=1,
+  linewidth=2,
+  min=null,
+  legend_show=true,
+  datasource='$PROMETHEUS_DS',
+      ) =
+  local formatConfig = {
+    query: query,
+  };
+  basic(
+    title,
+    description=description,
+    linewidth=linewidth,
+    datasource=datasource,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    legend_show=legend_show,
+    unit='percentunit',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        clamp_min(clamp_max(%(query)s,1),0)
+      ||| % formatConfig,
+      legendFormat=legendFormat,
+      interval=interval,
+      intervalFactor=intervalFactor
+    )
+  )
+  .addYaxis(
+    min=min,
+    max=1,
+    label=yAxisLabel,
+  );
+
 local multiTimeSeries(
   title='Multi timeseries',
   description='',
@@ -311,6 +358,67 @@ local timeSeries(
     thresholdSteps=thresholdSteps,
   );
 
+local quantileQuery(q, query) =
+  |||
+    quantile(%f, %s)
+  ||| % [q, query];
+
+local legendForQuantile(q, legendFormat) =
+  'p%d %s' % [q * 100, legendFormat];
+
+local quantileTimeSeries(
+  query,
+  quantiles=[0.99, 0.95, 0.75, 0.5, 0.25, 0.1],
+  legendFormat,
+  title='Multi timeseries',
+  description='',
+  format='short',
+  interval='1m',
+  intervalFactor=1,
+  yAxisLabel='',
+  legend_show=true,
+  legend_rightSide=false,
+  linewidth=2,
+  max=null,
+      ) =
+  local queries = std.map(
+    function(q) {
+      query: quantileQuery(q, query),
+      legendFormat: legendForQuantile(q, legendFormat),
+    },
+    quantiles
+  );
+
+  local panel = multiTimeSeries(
+    queries=queries,
+    title=title,
+    description=description,
+    format=format,
+    interval=interval,
+    intervalFactor=intervalFactor,
+    yAxisLabel=yAxisLabel,
+    legend_show=legend_show,
+    legend_rightSide=legend_rightSide,
+    linewidth=linewidth,
+    max=max,
+  );
+
+  local quantileGradient = colors.linearGradient(colors.YELLOW, colors.BLUE, std.length(quantiles));
+
+  std.foldl(
+    function(panel, i)
+      local q = quantiles[i];
+      panel.addSeriesOverride({
+        alias: 'p%d %s' % [q * 100, legendFormat],
+        lines: true,
+        linewidth: 1,
+        fill: 1,
+        color: quantileGradient[i].toString(),
+      }),
+    std.range(0, std.length(quantiles) - 1),
+    panel
+  );
+
 local latencyTimeSeries(
   title='Latency',
   description='',
@@ -362,6 +470,8 @@ local percentageTimeSeries(
   min=null,
   max=null,
   datasource='$PROMETHEUS_DS',
+  format='percentunit',
+  thresholdSteps=[],
       ) =
   local formatConfig = {
     query: query,
@@ -378,7 +488,9 @@ local percentageTimeSeries(
     legend_total=false,
     legend_avg=true,
     legend_alignAsTable=true,
-    unit='percentunit',
+    unit=format,
+    thresholdMode='percentage',
+    thresholdSteps=thresholdSteps,
   )
   .addTarget(
     target.prometheus(
@@ -440,6 +552,7 @@ local saturationTimeSeries(
   legend_show=true,
   min=0,
   max=1,
+  format=null,
       ) =
   percentageTimeSeries(
     title=title,
@@ -453,6 +566,7 @@ local saturationTimeSeries(
     legend_show=legend_show,
     min=min,
     max=max,
+    format=format
   );
 
 
@@ -499,14 +613,62 @@ local networkTrafficGraph(
     label='Network utilization',
   );
 
+local slaTimeSeries(
+  title='SLA',
+  description='',
+  query='',
+  legendFormat='',
+  yAxisLabel='SLA',
+  interval='1m',
+  intervalFactor=1,
+  points=false,
+  pointradius=3,
+  stableId=null,
+  legend_show=true,
+  datasource='$PROMETHEUS_DS',
+  thresholdSteps=[],
+      ) =
+  local formatConfig = {
+    query: query,
+  };
+
+  basic(
+    title,
+    description=description,
+    linewidth=2,
+    datasource=datasource,
+    legend_show=legend_show,
+    points=points,
+    pointradius=pointradius,
+    unit='percentunit',
+    thresholdSteps=thresholdSteps,
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        clamp_min(clamp_max(%(query)s,1),0)
+      ||| % formatConfig,
+      legendFormat=legendFormat,
+      interval=interval,
+      intervalFactor=intervalFactor,
+    )
+  )
+  .addYaxis(
+    max=1,
+    label=yAxisLabel,
+  );
+
 {
   basic: basic,
   timeSeries: timeSeries,
+  apdexTimeSeries: apdexTimeSeries,
   latencyTimeSeries: latencyTimeSeries,
   multiTimeSeries: multiTimeSeries,
+  quantileTimeSeries: quantileTimeSeries,
   multiQuantileTimeSeries: multiQuantileTimeSeries,
   percentageTimeSeries: percentageTimeSeries,
   queueLengthTimeSeries: queueLengthTimeSeries,
   saturationTimeSeries: saturationTimeSeries,
   networkTrafficGraph: networkTrafficGraph,
+  slaTimeSeries: slaTimeSeries,
 }

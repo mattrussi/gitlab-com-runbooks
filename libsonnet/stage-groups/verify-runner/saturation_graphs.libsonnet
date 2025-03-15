@@ -16,7 +16,7 @@ local jobSaturationMetrics = {
 
 local aggregatorLegendFormat(aggregator) = '{{ %s }}' % aggregator;
 
-local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=false) =
+local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
   local serializedAggregation = aggregations.serialize(aggregators);
   if useTimeSeriesPlugin then
     panel.timeSeries(

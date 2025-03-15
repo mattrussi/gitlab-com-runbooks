@@ -1,7 +1,7 @@
-local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local pipelineQueues =
-  basic.timeseries(
+  panel.timeSeries(
     'Sidekiq CI and Runner in flight jobs',
     description=|||
       This graph shows the rate of the Sidekiq jobs (related to CI/CD and Runner) that have been enqueued but not yet

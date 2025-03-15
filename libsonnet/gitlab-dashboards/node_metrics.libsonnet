@@ -12,7 +12,7 @@ local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 local override = import 'grafana/time-series/override.libsonnet';
 
-local nodeLoadForDuration(duration, nodeSelector, useTimeSeriesPlugin=false) =
+local nodeLoadForDuration(duration, nodeSelector, useTimeSeriesPlugin=true) =
   assert (duration == 1 || duration == 5 || duration == 15) : 'Load duration needs to be 1, 5 or 15';
   local formatConfigWithDuration = {
     duration: duration,
@@ -65,7 +65,7 @@ local nodeLoadForDuration(duration, nodeSelector, useTimeSeriesPlugin=false) =
     );
 
 {
-  nodeMetricsDetailRow(nodeSelector, title='🖥️ Node Metrics', useTimeSeriesPlugin=false)::
+  nodeMetricsDetailRow(nodeSelector, title='🖥️ Node Metrics', useTimeSeriesPlugin=true)::
     local formatConfig = {
       nodeSelector: selectors.serializeHash(nodeSelector),
     };
