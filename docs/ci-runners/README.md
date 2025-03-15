@@ -307,6 +307,13 @@ Cost factors determine the number of minutes deducted from a user's account base
 
 ---
 
+#### gitlab-ci-macos project
+
+| Network Name | Subnet Name        | CIDR          | Purpose |
+| ------------ | ------------------ | ------------- | ------- |
+| `ci-macos`   | `bastion-ci-macos` | `10.5.1.0/24` | Bastion network |
+| `ci-macos`   | `default`          | `10.5.1.0/24` | Default network for the project; general purpose |
+
 ## Monitoring
 
 ### Purpose
