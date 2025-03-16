@@ -6,6 +6,8 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
+local useTimeSeriesPlugin = true;
+
 basic.dashboard(
   'Pod Info',
   tags=['web-pages'],
@@ -32,7 +34,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.version(startRow=1))
+.addPanels(k8sPodsCommon.version(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
 
   row.new(title='Deployment Info'),
@@ -55,7 +57,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.cpu(startRow=1001))
+.addPanels(k8sPodsCommon.cpu(startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
 
   row.new(title='Memory'),
@@ -66,7 +68,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=2001, container='gitlab-pages'))
+.addPanels(k8sPodsCommon.memory(startRow=2001, container='gitlab-pages', useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
 
   row.new(title='Network'),
@@ -77,7 +79,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.network(startRow=3001))
+.addPanels(k8sPodsCommon.network(startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
 + {
   links+: platformLinks.triage +
           platformLinks.services,

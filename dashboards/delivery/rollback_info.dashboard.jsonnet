@@ -7,6 +7,9 @@ local annotation = grafana.annotation;
 local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local statPanel = grafana.statPanel;
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local environments = [
   {
@@ -129,38 +132,70 @@ basic.dashboard(
       for environment in environments
     ],
     // Column 2: Graph of rollbackable package percentages
-    [
-      graphPanel.new(
-        'Percentage of deployments that could be rolled back per day',
-        description='Percentage of deployments that could have been rolled back per day.',
-        decimals=0,
-        labelY1='Percentage',
-        format='percentunit',
-        legend_current=true,
-        legend_alignAsTable=true,
-        legend_values=true,
-        min=0,
-        max=1
-      )
-      .addTarget(
-        prometheus.target(
-          |||
-            sum(
-              increase(
-                delivery_deployment_can_rollback_total{target_env=~"%(env)s"}[1d]
-              )
-            ) by (target_env)
-            /
-            sum(
-              increase(
-                delivery_deployment_started_total{target_env=~"%(env)s"}[1d]
-              )
-            ) by (target_env)
-          ||| % { env: std.join('|', [env.role for env in environments]) },
-          legendFormat='{{target_env}}',
+    if useTimeSeriesPlugin then
+      [
+        panel.basic(
+          'Percentage of deployments that could be rolled back per day',
+          description='Percentage of deployments that could have been rolled back per day.',
+          unit='percentunit',
+        )
+        .addYaxis(
+          min=0,
+          max=1,
+          label='Percentage',
+        )
+        .addTarget(
+          prometheus.target(
+            |||
+              sum(
+                increase(
+                  delivery_deployment_can_rollback_total{target_env=~"%(env)s"}[1d]
+                )
+              ) by (target_env)
+              /
+              sum(
+                increase(
+                  delivery_deployment_started_total{target_env=~"%(env)s"}[1d]
+                )
+              ) by (target_env)
+            ||| % { env: std.join('|', [env.role for env in environments]) },
+            legendFormat='{{target_env}}',
+          ),
         ),
-      ),
-    ],
+      ]
+    else
+      [
+        graphPanel.new(
+          'Percentage of deployments that could be rolled back per day',
+          description='Percentage of deployments that could have been rolled back per day.',
+          decimals=0,
+          labelY1='Percentage',
+          format='percentunit',
+          legend_current=true,
+          legend_alignAsTable=true,
+          legend_values=true,
+          min=0,
+          max=1
+        )
+        .addTarget(
+          prometheus.target(
+            |||
+              sum(
+                increase(
+                  delivery_deployment_can_rollback_total{target_env=~"%(env)s"}[1d]
+                )
+              ) by (target_env)
+              /
+              sum(
+                increase(
+                  delivery_deployment_started_total{target_env=~"%(env)s"}[1d]
+                )
+              ) by (target_env)
+            ||| % { env: std.join('|', [env.role for env in environments]) },
+            legendFormat='{{target_env}}',
+          ),
+        ),
+      ],
   ], cellHeights=[4 for x in environments], startRow=1)
 )
 
@@ -181,27 +216,47 @@ basic.dashboard(
       for environment in environments
     ],
     // Column 2: Graph of number of rollbacks performed
-    [
-      graphPanel.new(
-        'Number of rollbacks',
-        description='Number of rollbacks performed per day.',
-        decimals=0,
-        legend_current=true,
-        legend_alignAsTable=true,
-        legend_values=true,
-      )
-      .addTarget(
-        prometheus.target(
-          |||
-            sum(
-              increase(
-                delivery_deployment_rollbacks_started_total{target_env=~"%(env)s"}[$__range]
-              )
-            ) by (target_env)
-          ||| % { env: std.join('|', [env.role for env in environments]) },
-          legendFormat='{{target_env}}',
+    if useTimeSeriesPlugin then
+      [
+        panel.basic(
+          'Number of rollbacks',
+          description='Number of rollbacks performed per day.',
+        )
+        .addTarget(
+          prometheus.target(
+            |||
+              sum(
+                increase(
+                  delivery_deployment_rollbacks_started_total{target_env=~"%(env)s"}[$__range]
+                )
+              ) by (target_env)
+            ||| % { env: std.join('|', [env.role for env in environments]) },
+            legendFormat='{{target_env}}',
+          ),
         ),
-      ),
-    ],
+      ]
+    else
+      [
+        graphPanel.new(
+          'Number of rollbacks',
+          description='Number of rollbacks performed per day.',
+          decimals=0,
+          legend_current=true,
+          legend_alignAsTable=true,
+          legend_values=true,
+        )
+        .addTarget(
+          prometheus.target(
+            |||
+              sum(
+                increase(
+                  delivery_deployment_rollbacks_started_total{target_env=~"%(env)s"}[$__range]
+                )
+              ) by (target_env)
+            ||| % { env: std.join('|', [env.role for env in environments]) },
+            legendFormat='{{target_env}}',
+          ),
+        ),
+      ],
   ], cellHeights=[4 for x in environments], startRow=1000)
 )

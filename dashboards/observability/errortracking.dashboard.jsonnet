@@ -6,6 +6,8 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
 
 local selectors = import 'promql/selectors.libsonnet';
 local nodeSelector = {
@@ -18,6 +20,8 @@ local etSelectorSerialized = selectors.serializeHash(etSelector);
 
 local promQuery = import 'grafana/prom_query.libsonnet';
 local graphPanel = grafana.graphPanel;
+local useTimeSeriesPlugin = true;
+
 local generalGraphPanel(
   title,
   fill=0,
@@ -28,28 +32,41 @@ local generalGraphPanel(
   description=null,
   linewidth=2,
   sort=0,
-      ) = graphPanel.new(
-  title,
-  linewidth=linewidth,
-  fill=fill,
-  format=format,
-  formatY1=formatY1,
-  formatY2=formatY2,
-  datasource='$PROMETHEUS_DS',
-  description=description,
-  decimals=decimals,
-  sort=sort,
-  legend_show=true,
-  legend_values=true,
-  legend_min=false,
-  legend_max=true,
-  legend_current=true,
-  legend_total=false,
-  legend_avg=false,
-  legend_alignAsTable=true,
-  legend_hideEmpty=false,
-  legend_rightSide=true,
-);
+      ) =
+  if useTimeSeriesPlugin then
+    panel.basic(
+      title,
+      linewidth=linewidth,
+      unit=format,
+      datasource='$PROMETHEUS_DS',
+      description=description,
+      legend_min=false,
+      legend_avg=false,
+      legend_rightSide=true,
+    )
+  else
+    graphPanel.new(
+      title,
+      linewidth=linewidth,
+      fill=fill,
+      format=format,
+      formatY1=formatY1,
+      formatY2=formatY2,
+      datasource='$PROMETHEUS_DS',
+      description=description,
+      decimals=decimals,
+      sort=sort,
+      legend_show=true,
+      legend_values=true,
+      legend_min=false,
+      legend_max=true,
+      legend_current=true,
+      legend_total=false,
+      legend_avg=false,
+      legend_alignAsTable=true,
+      legend_hideEmpty=false,
+      legend_rightSide=true,
+    );
 
 basic.dashboard(
   'Errortracking API',
@@ -105,31 +122,63 @@ basic.dashboard(
   gridPos={ x: 0, y: 0, w: 24, h: 1 }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Active version',
-      query=|||
-        count(
-            kube_pod_container_info{%(selector)s, pod=~"errortracking-api.*"}
-        ) by (image)
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{ image }}',
-    ),
-    basic.timeseries(
-      title='Up',
-      query=|||
-        up{%(selector)s, job="errortracking-api", endpoint="metrics"}
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{ instance }}',
-    ),
-    basic.timeseries(
-      title='Ready replicas',
-      query=|||
-        kube_statefulset_status_replicas_ready{%(selector)s, statefulset="errortracking-api"}
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{ statefulset }}',
-    ),
-  ], cols=3, rowHeight=10, startRow=1)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Active version',
+          query=|||
+            count(
+                kube_pod_container_info{%(selector)s, pod=~"errortracking-api.*"}
+            ) by (image)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ image }}',
+        ),
+        panel.timeSeries(
+          title='Up',
+          query=|||
+            up{%(selector)s, job="errortracking-api", endpoint="metrics"}
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ instance }}',
+        ),
+        panel.timeSeries(
+          title='Ready replicas',
+          query=|||
+            kube_statefulset_status_replicas_ready{%(selector)s, statefulset="errortracking-api"}
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ statefulset }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Active version',
+          query=|||
+            count(
+                kube_pod_container_info{%(selector)s, pod=~"errortracking-api.*"}
+            ) by (image)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ image }}',
+        ),
+        basic.timeseries(
+          title='Up',
+          query=|||
+            up{%(selector)s, job="errortracking-api", endpoint="metrics"}
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ instance }}',
+        ),
+        basic.timeseries(
+          title='Ready replicas',
+          query=|||
+            kube_statefulset_status_replicas_ready{%(selector)s, statefulset="errortracking-api"}
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ statefulset }}',
+        ),
+      ],
+    cols=3,
+    rowHeight=10,
+    startRow=1,
+  )
 )
 .addPanel(
   row.new(title='Deployment Info'),
@@ -181,208 +230,395 @@ basic.dashboard(
   gridPos={ x: 0, y: 200, w: 24, h: 1 }
 )
 .addPanels(
-  layout.grid([
-    generalGraphPanel('Usage')
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(
-            rate(
-              container_cpu_usage_seconds_total{%(selector)s, pod=~"errortracking-api.*"}[1m]
-            )
-          ) by (pod,node)
-        ||| % { selector: etSelectorSerialized },
-        legendFormat='real: {{ pod }}',
-      )
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(
-            kube_pod_container_resource_requests{%(selector)s, resource="cpu", unit="core", pod=~"errortracking-api.*"}
-          ) by (pod,node)
-        ||| % { selector: etSelectorSerialized },
-        legendFormat='rqst: {{ pod }}',
-      )
-    )
-    .resetYaxes()
-    .addYaxis(format='none', label='cores')
-    .addYaxis(format='short', min=0, max=1, show=false),
-  ], cols=1, rowHeight=10, startRow=201)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        generalGraphPanel(
+          'Usage',
+          format='none',
+        )
+        .addTarget(
+          target.prometheus(
+            |||
+              sum(
+                rate(
+                  container_cpu_usage_seconds_total{%(selector)s, pod=~"errortracking-api.*"}[1m]
+                )
+              ) by (pod,node)
+            ||| % { selector: etSelectorSerialized },
+            legendFormat='real: {{ pod }}',
+          )
+        )
+        .addTarget(
+          target.prometheus(
+            |||
+              sum(
+                kube_pod_container_resource_requests{%(selector)s, resource="cpu", unit="core", pod=~"errortracking-api.*"}
+              ) by (pod,node)
+            ||| % { selector: etSelectorSerialized },
+            legendFormat='rqst: {{ pod }}',
+          )
+        )
+        .addYaxis(label='cores'),
+      ]
+    else
+      [
+        generalGraphPanel('Usage')
+        .addTarget(
+          promQuery.target(
+            |||
+              sum(
+                rate(
+                  container_cpu_usage_seconds_total{%(selector)s, pod=~"errortracking-api.*"}[1m]
+                )
+              ) by (pod,node)
+            ||| % { selector: etSelectorSerialized },
+            legendFormat='real: {{ pod }}',
+          )
+        )
+        .addTarget(
+          promQuery.target(
+            |||
+              sum(
+                kube_pod_container_resource_requests{%(selector)s, resource="cpu", unit="core", pod=~"errortracking-api.*"}
+              ) by (pod,node)
+            ||| % { selector: etSelectorSerialized },
+            legendFormat='rqst: {{ pod }}',
+          )
+        )
+        .resetYaxes()
+        .addYaxis(format='none', label='cores')
+        .addYaxis(format='short', min=0, max=1, show=false),
+      ], cols=1, rowHeight=10, startRow=201
+  )
 )
 .addPanel(
   row.new(title='Memory'),
   gridPos={ x: 0, y: 300, w: 24, h: 1 }
 )
 .addPanels(
-  layout.grid([
-    generalGraphPanel('Usage', format='bytes')
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(
-            container_memory_working_set_bytes{%(selector)s, pod=~"errortracking-api.*", container="errortracking-api"}
-          ) by (pod)
-        ||| % { selector: etSelectorSerialized },
-        legendFormat='real: {{ pod }}',
-      )
-    ),
-  ], cols=1, rowHeight=10, startRow=301)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        generalGraphPanel('Usage', format='bytes')
+        .addTarget(
+          target.prometheus(
+            |||
+              sum(
+                container_memory_working_set_bytes{%(selector)s, pod=~"errortracking-api.*", container="errortracking-api"}
+              ) by (pod)
+            ||| % { selector: etSelectorSerialized },
+            legendFormat='real: {{ pod }}',
+          )
+        ),
+      ]
+    else
+      [
+        generalGraphPanel('Usage', format='bytes')
+        .addTarget(
+          promQuery.target(
+            |||
+              sum(
+                container_memory_working_set_bytes{%(selector)s, pod=~"errortracking-api.*", container="errortracking-api"}
+              ) by (pod)
+            ||| % { selector: etSelectorSerialized },
+            legendFormat='real: {{ pod }}',
+          )
+        ),
+      ],
+    cols=1,
+    rowHeight=10,
+    startRow=301,
+  )
 )
 .addPanel(
   row.new(title='Network'),
   gridPos={ x: 0, y: 400, w: 24, h: 1 }
 )
-.addPanels(k8sPodsCommon.network(startRow=401))
-.addPanels(k8sPodsCommon.network(startRow=401))
+.addPanels(k8sPodsCommon.network(startRow=401, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.network(startRow=401, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
   row.new(title='Requests'),
   gridPos={ x: 0, y: 500, w: 24, h: 1 }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Requests per second by HTTP status',
-      query=|||
-        sum(
-          rate(
-            http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (code) > 0
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='HTTP {{code}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.multiQuantileTimeseries(
-      title='Requests duration by HTTP status',
-      selector='env="$environment", cluster=~"$cluster", pod=~"errortracking-api.*"',
-      legendFormat='HTTP {{code}}',
-      bucketMetric='http_requests_duration_seconds_bucket',
-      aggregators='code',
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Requests per second by path',
-      query=|||
-        sum(
-          rate(
-            http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (path) > 0
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{path}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.multiQuantileTimeseries(
-      title='Requests duration by path',
-      selector='env="$environment", cluster=~"$cluster", pod=~"errortracking-api.*"',
-      legendFormat='{{path}}',
-      bucketMetric='http_requests_duration_seconds_bucket',
-      aggregators='path',
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Response Error Rate by Method and Path',
-      query=|||
-        sum by (method, path) (
-          rate(
-            http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*", code =~ "[4-5].*"}[$__rate_interval]
-          )
-        )
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{ method }} {{ path }}',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-  ], cols=2, rowHeight=10, startRow=601)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Requests per second by HTTP status',
+          query=|||
+            sum(
+              rate(
+                http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (code) > 0
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='HTTP {{code}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+        panel.multiQuantileTimeSeries(
+          title='Requests duration by HTTP status',
+          selector='env="$environment", cluster=~"$cluster", pod=~"errortracking-api.*"',
+          legendFormat='HTTP {{code}}',
+          bucketMetric='http_requests_duration_seconds_bucket',
+          aggregators='code',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Requests per second by path',
+          query=|||
+            sum(
+              rate(
+                http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (path) > 0
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{path}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+        panel.multiQuantileTimeSeries(
+          title='Requests duration by path',
+          selector='env="$environment", cluster=~"$cluster", pod=~"errortracking-api.*"',
+          legendFormat='{{path}}',
+          bucketMetric='http_requests_duration_seconds_bucket',
+          aggregators='path',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Response Error Rate by Method and Path',
+          query=|||
+            sum by (method, path) (
+              rate(
+                http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*", code =~ "[4-5].*"}[$__rate_interval]
+              )
+            )
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ method }} {{ path }}',
+          legend_rightSide=true,
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Requests per second by HTTP status',
+          query=|||
+            sum(
+              rate(
+                http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (code) > 0
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='HTTP {{code}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.multiQuantileTimeseries(
+          title='Requests duration by HTTP status',
+          selector='env="$environment", cluster=~"$cluster", pod=~"errortracking-api.*"',
+          legendFormat='HTTP {{code}}',
+          bucketMetric='http_requests_duration_seconds_bucket',
+          aggregators='code',
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Requests per second by path',
+          query=|||
+            sum(
+              rate(
+                http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (path) > 0
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{path}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.multiQuantileTimeseries(
+          title='Requests duration by path',
+          selector='env="$environment", cluster=~"$cluster", pod=~"errortracking-api.*"',
+          legendFormat='{{path}}',
+          bucketMetric='http_requests_duration_seconds_bucket',
+          aggregators='path',
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Response Error Rate by Method and Path',
+          query=|||
+            sum by (method, path) (
+              rate(
+                http_requests_duration_seconds_count{%(selector)s, pod=~"errortracking-api.*", code =~ "[4-5].*"}[$__rate_interval]
+              )
+            )
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{ method }} {{ path }}',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+      ], cols=2, rowHeight=10, startRow=601
+  )
 )
 .addPanel(
   row.new(title='Project-specific telemetry'),
   gridPos={ x: 0, y: 700, w: 24, h: 1 }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Envelope requests by project ID',
-      query=|||
-        sum(
-          rate(
-            project_envelope_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (projectID)
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{projectID}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Get error requests by project ID',
-      query=|||
-        sum(
-          rate(
-            project_get_error_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (projectID)
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{projectID}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='List errors requests by project ID',
-      query=|||
-        sum(
-          rate(
-            project_list_errors_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (projectID)
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{projectID}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='List events requests by project ID',
-      query=|||
-        sum(
-          rate(
-            project_list_events_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (projectID)
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{projectID}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Store requests by project ID',
-      query=|||
-        sum(
-          rate(
-            project_store_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
-          )
-        ) by (projectID)
-      ||| % { selector: etSelectorSerialized },
-      legendFormat='{{projectID}}',
-      yAxisLabel='req/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-  ], cols=3, rowHeight=10, startRow=701)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Envelope requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_envelope_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Get error requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_get_error_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='List errors requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_list_errors_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='List events requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_list_events_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Store requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_store_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          legend_rightSide=true,
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Envelope requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_envelope_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Get error requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_get_error_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='List errors requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_list_errors_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='List events requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_list_events_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Store requests by project ID',
+          query=|||
+            sum(
+              rate(
+                project_store_total{%(selector)s, pod=~"errortracking-api.*"}[$__rate_interval]
+              )
+            ) by (projectID)
+          ||| % { selector: etSelectorSerialized },
+          legendFormat='{{projectID}}',
+          yAxisLabel='req/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+      ],
+    cols=3,
+    rowHeight=10,
+    startRow=701,
+  )
 )

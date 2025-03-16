@@ -5,11 +5,12 @@ local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
-local forService(
+local forService
+      (
   serviceType,
   environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
+  useTimeSeriesPlugin=true,
       ) =
-
   local serviceInfo = metricsCatalog.getService(serviceType);
 
   {}
@@ -21,6 +22,7 @@ local forService(
           serviceType,
           serviceSLIsAggregationSet=aggregationSets.regionalServiceSLIs,
           componentSLIsAggregationSet=aggregationSets.regionalComponentSLIs,
+          useTimeSeriesPlugin=useTimeSeriesPlugin,
         ),
       }
     else
@@ -29,12 +31,12 @@ local forService(
   +
   (
     if std.length(serviceInfo.kubeResources) > 0 then
-      kubeDashboards.dashboardsForService(serviceType, environmentSelectorHash)
+      kubeDashboards.dashboardsForService(serviceType, environmentSelectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin)
     else
       {}
   )
   +
-  capacityReviewDashboards.dashboardsForService(serviceType, environmentSelectorHash);
+  capacityReviewDashboards.dashboardsForService(serviceType, environmentSelectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin);
 
 {
   forService:: forService,

@@ -176,15 +176,27 @@
       "type": "stat"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Availability over time, higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "SLA",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "showPoints": "never"
+          },
+          "max": 1,
+          "unit": "percentunit"
+        }
+      },
       "gridPos": {
         "h": 5,
         "w": 16,
@@ -192,77 +204,31 @@
         "y": 10
       },
       "id": 5,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "total": false,
-        "values": true
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 3,
-      "points": false,
-      "renderer": "flot",
-      "repeat": null,
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[$__interval]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[$__interval]) * $webservice_weight\n      )\n    )\n    /\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[$__interval]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[$__interval]) * $webservice_weight\n      )\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "Overall SLA",
-          "refId": "A"
+          "legendFormat": "Overall SLA"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Overall GitLab.com SLA over time period",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "SLA",
-          "logBase": 1,
-          "max": 1,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "collapse": false,
@@ -429,15 +395,27 @@
       "type": "stat"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Availability over time, higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "SLA",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "showPoints": "never"
+          },
+          "max": 1,
+          "unit": "percentunit"
+        }
+      },
       "gridPos": {
         "h": 5,
         "w": 16,
@@ -445,77 +423,31 @@
         "y": 15
       },
       "id": 9,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "total": false,
-        "values": true
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 3,
-      "points": false,
-      "renderer": "flot",
-      "repeat": null,
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "webservice SLA",
-          "refId": "A"
+          "legendFormat": "webservice SLA"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "webservice SLA over time period",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "SLA",
-          "logBase": 1,
-          "max": 1,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     },
     {
       "datasource": "$PROMETHEUS_DS",
@@ -663,15 +595,27 @@
       "type": "stat"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$PROMETHEUS_DS",
-      "decimals": 2,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
       "description": "Availability over time, higher is better.",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "SLA",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "showPoints": "never"
+          },
+          "max": 1,
+          "unit": "percentunit"
+        }
+      },
       "gridPos": {
         "h": 5,
         "w": 16,
@@ -679,77 +623,31 @@
         "y": 20
       },
       "id": 12,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "total": false,
-        "values": true
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 3,
-      "points": false,
-      "renderer": "flot",
-      "repeat": null,
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "v11.4.0",
       "targets": [
         {
           "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "registry SLA",
-          "refId": "A"
+          "legendFormat": "registry SLA"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "registry SLA over time period",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "SLA",
-          "logBase": 1,
-          "max": 1,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": 1,
-          "min": 0,
-          "show": false
-        }
-      ]
+      "type": "timeseries"
     }
   ],
   "refresh": "",

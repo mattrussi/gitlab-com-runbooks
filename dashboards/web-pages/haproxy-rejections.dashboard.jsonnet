@@ -4,8 +4,11 @@ local template = grafana.template;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local platformLinks = import 'gitlab-dashboards//platform_links.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local haproxyRejections = 'haproxy_backend_sessions_total{env=~"${environment}", backend=~"deny_https?"}';
+
+local useTimeSeriesPlugin = true;
 
 local rate = function(metric)
   'rate(%s[$__rate_interval])' % metric;
@@ -20,19 +23,32 @@ local dashboardRow = function(title, startRow, panels)
   );
 
 local trafficGraph = function(title, source)
-  basic.timeseries(
-    title=title,
-    legendFormat='{{env}}',
-    format='short',
-    stack=false,
-    interval='',
-    intervalFactor=2,
-    query=|||
-      sum by(backend) (
-        %s
-      )
-    ||| % source,
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title=title,
+      legendFormat='{{env}}',
+      format='short',
+      interval='',
+      query=|||
+        sum by(backend) (
+          %s
+        )
+      ||| % source,
+    )
+  else
+    basic.timeseries(
+      title=title,
+      legendFormat='{{env}}',
+      format='short',
+      stack=false,
+      interval='',
+      intervalFactor=2,
+      query=|||
+        sum by(backend) (
+          %s
+        )
+      ||| % source,
+    );
 
 basic.dashboard(
   'HAProxy rejections due to rate limiting and blocks',

@@ -3,10 +3,13 @@ local template = grafana.template;
 local basic = import 'grafana/basic.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
 local panels = import 'stage-groups/verify-runner//panels.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local filtering_query(metric) =
   'query_result(sum by(instance) (%(metric)s{environment=~"$environment", stage=~"$stage", shard=~"$shard"}) > 0)' % {
-    metric: metric
+    metric: metric,
   };
 
 local dmInstance = template.new(
@@ -69,65 +72,120 @@ local jobsPoportion =
   );
 
 local jobsRunning(partition, variable) =
-  basic.timeseries(
-    title='Jobs running on runners (%s)' % partition,
-    legendFormat='{{shard}}',
-    format='short',
-    linewidth=2,
-    fill=1,
-    stack=true,
-    query=|||
-      sum by(shard) (
-        gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}
-      )
-    ||| % {
-      variable: variable
-    },
-  );
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Jobs running on runners (%s)' % partition,
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      query=|||
+        sum by(shard) (
+          gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}
+        )
+      ||| % {
+        variable: variable,
+      },
+    )
+  else
+    basic.timeseries(
+      title='Jobs running on runners (%s)' % partition,
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      fill=1,
+      stack=true,
+      query=|||
+        sum by(shard) (
+          gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}
+        )
+      ||| % {
+        variable: variable,
+      },
+    );
 
 local jobsStarted(partition, variable) =
-  basic.timeseries(
-    title='Jobs started on runners (%s)' % partition,
-    legendFormat='{{shard}}',
-    format='short',
-    linewidth=2,
-    fill=1,
-    stack=true,
-    query=|||
-      sum by(shard) (
-        increase(
-          gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval]
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Jobs started on runners (%s)' % partition,
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      query=|||
+        sum by(shard) (
+          increase(
+            gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval]
+          )
         )
-      )
-    ||| % {
-      variable: variable
-    },
-  ) + {
-    lines: false,
-    bars: true
-  };
+      ||| % {
+        variable: variable,
+      },
+    ) + {
+      lines: false,
+      bars: true,
+    }
+  else
+    basic.timeseries(
+      title='Jobs started on runners (%s)' % partition,
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      fill=1,
+      stack=true,
+      query=|||
+        sum by(shard) (
+          increase(
+            gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval]
+          )
+        )
+      ||| % {
+        variable: variable,
+      },
+    ) + {
+      lines: false,
+      bars: true,
+    };
 
 local jobsFailed(partition, variable) =
-  basic.timeseries(
-    title='Jobs failed on runners (%s)' % partition,
-    legendFormat='{{shard}}',
-    format='short',
-    linewidth=2,
-    fill=1,
-    stack=true,
-    query=|||
-      sum by(shard) (
-        increase(
-          gitlab_runner_failed_jobs_total{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval]
+  if useTimeSeriesPlugin then
+    panel.timeSeries(
+      title='Jobs failed on runners (%s)' % partition,
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      query=|||
+        sum by(shard) (
+          increase(
+            gitlab_runner_failed_jobs_total{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval]
+          )
         )
-      )
-    ||| % {
-      variable: variable
-    },
-  ) + {
-    lines: false,
-    bars: true
-  };
+      ||| % {
+        variable: variable,
+      },
+    ) + {
+      lines: false,
+      bars: true,
+    }
+  else
+    basic.timeseries(
+      title='Jobs failed on runners (%s)' % partition,
+      legendFormat='{{shard}}',
+      format='short',
+      linewidth=2,
+      fill=1,
+      stack=true,
+      query=|||
+        sum by(shard) (
+          increase(
+            gitlab_runner_failed_jobs_total{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval]
+          )
+        )
+      ||| % {
+        variable: variable,
+      },
+    ) + {
+      lines: false,
+      bars: true,
+    };
 
 local queueDurationHistogram(partition, variable) =
   panels.heatmap(
@@ -137,7 +195,7 @@ local queueDurationHistogram(partition, variable) =
         increase(gitlab_runner_job_queue_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${%(variable)s:pipe}"}[$__rate_interval])
       )
     ||| % {
-      variable: variable
+      variable: variable,
     },
     color_mode='spectrum',
     color_colorScheme='Oranges',

@@ -5,6 +5,9 @@ local row = grafana.row;
 local templates = import 'grafana/templates.libsonnet';
 local template = grafana.template;
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 basic.dashboard(
   'Data Ingestion',
@@ -42,140 +45,254 @@ basic.dashboard(
   gridPos={ x: 0, y: 0, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Metrics',
-      query=|||
-        sum(analytics_events_total_count{env="$environment"}) by (env)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}}',
-    ),
-  ], cols=1, startRow=1)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Metrics',
+          query=|||
+            sum(analytics_events_total_count{env="$environment"}) by (env)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Metrics',
+          query=|||
+            sum(analytics_events_total_count{env="$environment"}) by (env)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}}',
+        ),
+      ],
+    cols=1,
+    startRow=1,
+  )
 )
 .addPanel(
   row.new(title='Number of events ingested per feature'),
   gridPos={ x: 0, y: 100, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Metrics',
-      query=|||
-        sum(analytics_events_total_count{feature_name="metrics", env="$environment"}) by (feature_name)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}}',
-    ),
-    basic.timeseries(
-      title='Traces',
-      query=|||
-        sum(analytics_events_total_count{feature_name="tracing", env="$environment"}) by (feature_name)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}}',
-    ),
-    basic.timeseries(
-      title='Logs',
-      query=|||
-        sum(analytics_events_total_count{feature_name="logging", env="$environment"}) by (feature_name)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}}',
-    ),
-    basic.timeseries(
-      title='Error Tracking',
-      query=|||
-        sum(analytics_events_total_count{feature_name="errortracking", env="$environment"}) by (feature_name)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}}',
-    ),
-  ], cols=2, startRow=101)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Metrics',
+          query=|||
+            sum(analytics_events_total_count{feature_name="metrics", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}}',
+        ),
+        panel.timeSeries(
+          title='Traces',
+          query=|||
+            sum(analytics_events_total_count{feature_name="tracing", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}}',
+        ),
+        panel.timeSeries(
+          title='Logs',
+          query=|||
+            sum(analytics_events_total_count{feature_name="logging", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}}',
+        ),
+        panel.timeSeries(
+          title='Error Tracking',
+          query=|||
+            sum(analytics_events_total_count{feature_name="errortracking", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Metrics',
+          query=|||
+            sum(analytics_events_total_count{feature_name="metrics", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}}',
+        ),
+        basic.timeseries(
+          title='Traces',
+          query=|||
+            sum(analytics_events_total_count{feature_name="tracing", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}}',
+        ),
+        basic.timeseries(
+          title='Logs',
+          query=|||
+            sum(analytics_events_total_count{feature_name="logging", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}}',
+        ),
+        basic.timeseries(
+          title='Error Tracking',
+          query=|||
+            sum(analytics_events_total_count{feature_name="errortracking", env="$environment"}) by (feature_name)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}}',
+        ),
+      ], cols=2, startRow=101
+  )
 )
 .addPanel(
   row.new(title='Top event producers'),
   gridPos={ x: 0, y: 200, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Top 10 by namespace',
-      query=|||
-        topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, namespace_id))
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}} - {{namespace_id}}',
-    ),
-    basic.timeseries(
-      title='Top 10 by project',
-      query=|||
-        topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, project_id))
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{feature_name}} - {{project_id}}',
-    ),
-  ], cols=2, startRow=201)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Top 10 by namespace',
+          query=|||
+            topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, namespace_id))
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}} - {{namespace_id}}',
+        ),
+        panel.timeSeries(
+          title='Top 10 by project',
+          query=|||
+            topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, project_id))
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{feature_name}} - {{project_id}}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Top 10 by namespace',
+          query=|||
+            topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, namespace_id))
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}} - {{namespace_id}}',
+        ),
+        basic.timeseries(
+          title='Top 10 by project',
+          query=|||
+            topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, project_id))
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{feature_name}} - {{project_id}}',
+        ),
+      ], cols=2, startRow=201
+  )
 )
 .addPanel(
   row.new(title='Number of events ingested by project'),
   gridPos={ x: 0, y: 300, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Metrics',
-      query=|||
-        sum(analytics_events_total_count{feature_name="metrics", env="$environment", project_id="$project"}) by (feature_name, project_id)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{project_id}}',
-    ),
-    basic.timeseries(
-      title='Traces',
-      query=|||
-        sum(analytics_events_total_count{feature_name="tracing", env="$environment", project_id="$project"}) by (feature_name, project_id)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{project_id}}',
-    ),
-    basic.timeseries(
-      title='Logs',
-      query=|||
-        sum(analytics_events_total_count{feature_name="logging", env="$environment", project_id="$project"}) by (feature_name, project_id)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{project_id}}',
-    ),
-    basic.timeseries(
-      title='Error Tracking',
-      query=|||
-        sum(analytics_events_total_count{feature_name="errortracking", env="$environment", project_id="$project"}) by (feature_name, project_id)
-      |||,
-      yAxisLabel='count',
-      fill=5,
-      stack=true,
-      legendFormat='{{project_id}}',
-    ),
-  ], cols=4, startRow=301)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Metrics',
+          query=|||
+            sum(analytics_events_total_count{feature_name="metrics", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{project_id}}',
+        ),
+        panel.timeSeries(
+          title='Traces',
+          query=|||
+            sum(analytics_events_total_count{feature_name="tracing", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{project_id}}',
+        ),
+        panel.timeSeries(
+          title='Logs',
+          query=|||
+            sum(analytics_events_total_count{feature_name="logging", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{project_id}}',
+        ),
+        panel.timeSeries(
+          title='Error Tracking',
+          query=|||
+            sum(analytics_events_total_count{feature_name="errortracking", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          legendFormat='{{project_id}}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Metrics',
+          query=|||
+            sum(analytics_events_total_count{feature_name="metrics", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{project_id}}',
+        ),
+        basic.timeseries(
+          title='Traces',
+          query=|||
+            sum(analytics_events_total_count{feature_name="tracing", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{project_id}}',
+        ),
+        basic.timeseries(
+          title='Logs',
+          query=|||
+            sum(analytics_events_total_count{feature_name="logging", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{project_id}}',
+        ),
+        basic.timeseries(
+          title='Error Tracking',
+          query=|||
+            sum(analytics_events_total_count{feature_name="errortracking", env="$environment", project_id="$project"}) by (feature_name, project_id)
+          |||,
+          yAxisLabel='count',
+          fill=5,
+          stack=true,
+          legendFormat='{{project_id}}',
+        ),
+      ], cols=4, startRow=301
+  )
 )

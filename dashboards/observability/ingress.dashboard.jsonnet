@@ -7,6 +7,9 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 basic.dashboard(
   'Ingress',
@@ -68,7 +71,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.version(startRow=1))
+.addPanels(k8sPodsCommon.version(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
   row.new(title='Deployment Info'),
   gridPos={
@@ -89,7 +92,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.cpu(startRow=201))
+.addPanels(k8sPodsCommon.cpu(startRow=201, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
   row.new(title='Memory'),
   gridPos={
@@ -99,7 +102,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=301, container='traefik'))
+.addPanels(k8sPodsCommon.memory(startRow=301, container='traefik', useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
   row.new(title='Network'),
   gridPos={
@@ -109,7 +112,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.network(startRow=401))
+.addPanels(k8sPodsCommon.network(startRow=401, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
   row.new(title='Request Handling Performance'),
   gridPos={
@@ -120,81 +123,157 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Requests per second by HTTP status',
-      query=|||
-        sum(
-          rate(
-            traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
-          )
-        ) by (code) > 0
-      |||,
-      legendFormat='HTTP {{code}}',
-      yAxisLabel='rps',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.multiQuantileTimeseries(
-      title='Requests duration by HTTP status',
-      selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
-      legendFormat='HTTP {{code}}',
-      bucketMetric='traefik_service_request_duration_seconds_bucket',
-      aggregators='code',
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Requests per second by Service',
-      query=|||
-        sum(
-          rate(
-            traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
-          )
-        ) by (service) > 0
-      |||,
-      legendFormat='{{service}}',
-      yAxisLabel='rps',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.multiQuantileTimeseries(
-      title='Requests duration by Service',
-      selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
-      legendFormat='{{service}}',
-      bucketMetric='traefik_service_request_duration_seconds_bucket',
-      aggregators='service',
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Open Connections per Service',
-      query=|||
-        sum(
-          rate(
-            traefik_service_open_connections{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
-          )
-        ) by (service) > 0
-      |||,
-      legendFormat='{{service}}',
-      yAxisLabel='conn/sec',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-    basic.timeseries(
-      title='Error Rate by Service',
-      query=|||
-        sum(
-          rate(
-            traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods", code =~ "[4-5].*"}[$__rate_interval]
-          )
-        ) by (method, service, code) > 0
-      |||,
-      legendFormat='{{ method }} {{ service }} {{code}}',
-      fill=5,
-      stack=true,
-      legend_rightSide=true,
-    ),
-  ], cols=1, rowHeight=10, startRow=601)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Requests per second by HTTP status',
+          query=|||
+            sum(
+              rate(
+                traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+              )
+            ) by (code) > 0
+          |||,
+          legendFormat='HTTP {{code}}',
+          yAxisLabel='rps',
+          legend_rightSide=true,
+        ),
+        panel.multiQuantileTimeSeries(
+          title='Requests duration by HTTP status',
+          selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
+          legendFormat='HTTP {{code}}',
+          bucketMetric='traefik_service_request_duration_seconds_bucket',
+          aggregators='code',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Requests per second by Service',
+          query=|||
+            sum(
+              rate(
+                traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+              )
+            ) by (service) > 0
+          |||,
+          legendFormat='{{service}}',
+          yAxisLabel='rps',
+          legend_rightSide=true,
+        ),
+        panel.multiQuantileTimeSeries(
+          title='Requests duration by Service',
+          selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
+          legendFormat='{{service}}',
+          bucketMetric='traefik_service_request_duration_seconds_bucket',
+          aggregators='service',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Open Connections per Service',
+          query=|||
+            sum(
+              rate(
+                traefik_service_open_connections{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+              )
+            ) by (service) > 0
+          |||,
+          legendFormat='{{service}}',
+          yAxisLabel='conn/sec',
+          legend_rightSide=true,
+        ),
+        panel.timeSeries(
+          title='Error Rate by Service',
+          query=|||
+            sum(
+              rate(
+                traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods", code =~ "[4-5].*"}[$__rate_interval]
+              )
+            ) by (method, service, code) > 0
+          |||,
+          legendFormat='{{ method }} {{ service }} {{code}}',
+          legend_rightSide=true,
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Requests per second by HTTP status',
+          query=|||
+            sum(
+              rate(
+                traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+              )
+            ) by (code) > 0
+          |||,
+          legendFormat='HTTP {{code}}',
+          yAxisLabel='rps',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.multiQuantileTimeseries(
+          title='Requests duration by HTTP status',
+          selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
+          legendFormat='HTTP {{code}}',
+          bucketMetric='traefik_service_request_duration_seconds_bucket',
+          aggregators='code',
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Requests per second by Service',
+          query=|||
+            sum(
+              rate(
+                traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+              )
+            ) by (service) > 0
+          |||,
+          legendFormat='{{service}}',
+          yAxisLabel='rps',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.multiQuantileTimeseries(
+          title='Requests duration by Service',
+          selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
+          legendFormat='{{service}}',
+          bucketMetric='traefik_service_request_duration_seconds_bucket',
+          aggregators='service',
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Open Connections per Service',
+          query=|||
+            sum(
+              rate(
+                traefik_service_open_connections{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+              )
+            ) by (service) > 0
+          |||,
+          legendFormat='{{service}}',
+          yAxisLabel='conn/sec',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+        basic.timeseries(
+          title='Error Rate by Service',
+          query=|||
+            sum(
+              rate(
+                traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods", code =~ "[4-5].*"}[$__rate_interval]
+              )
+            ) by (method, service, code) > 0
+          |||,
+          legendFormat='{{ method }} {{ service }} {{code}}',
+          fill=5,
+          stack=true,
+          legend_rightSide=true,
+        ),
+      ],
+    cols=1,
+    rowHeight=10,
+    startRow=601,
+  )
 )

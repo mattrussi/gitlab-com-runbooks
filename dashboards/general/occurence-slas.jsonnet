@@ -14,4 +14,5 @@ occurenceSLADashboard.dashboard(
   metricsConfig.slaTarget,
   { stage: 'main', environment: '$environment' },
   sortedServices=sortedServices,
+  useTimeSeriesPlugin=true,
 )

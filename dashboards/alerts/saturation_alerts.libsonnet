@@ -51,7 +51,8 @@ local selector = { env: '$environment', type: '$type', stage: { re: '$stage|' } 
     },
 
   saturationDashboardForComponent(
-    component
+    component,
+    useTimeSeriesPlugin=true,
   )::
     local defaultType = saturationResources[component].getDefaultGrafanaType();
 
@@ -63,7 +64,7 @@ local selector = { env: '$environment', type: '$type', stage: { re: '$stage|' } 
       // is resolved.
       dashboardTitle=std.strReplace(component, '_', ' ') + ': Saturation Detail',
       component=component,
-      panel=saturationDetail.componentSaturationPanel(component, selector),
+      panel=saturationDetail.componentSaturationPanel(component, selector, useTimeSeriesPlugin),
       helpPanel=saturationDetail.componentSaturationHelpPanel(component),
       defaultType=defaultType
     ),

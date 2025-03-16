@@ -35,16 +35,27 @@ local selectors = import 'promql/selectors.libsonnet';
   // example, limit="perRPC/gitaly.SmartHTTPService/PostUploadPackWithSidechannel".
   // References:
   // - https://gitlab.com/gitlab-org/gitaly/blob/bcc104f73a97e05ab45e2136fa68af33a5b93304/internal/grpc/middleware/limithandler/middleware.go#L169
-  per_rpc_current_limit(selectorHash, legend)::
-    basic.timeseries(
-      title='Gitaly current per-RPC adaptive limit (visible if adaptiveness is enabled)',
-      query=|||
-        max(gitaly_concurrency_limiting_current_limit{%(selector)s}) by (fqdn, limit)
-      ||| % { selector: selectors.serializeHash(selectorHash { limit: { re: 'perRPC.*' } }) },
-      legendFormat=legend,
-      interval='$__interval',
-      linewidth=1,
-    ),
+  per_rpc_current_limit(selectorHash, legend, useTimeSeriesPlugin=false)::
+    if useTimeSeriesPlugin then
+      panel.timeSeries(
+        title='Gitaly current per-RPC adaptive limit (visible if adaptiveness is enabled)',
+        query=|||
+          max(gitaly_concurrency_limiting_current_limit{%(selector)s}) by (fqdn, limit)
+        ||| % { selector: selectors.serializeHash(selectorHash { limit: { re: 'perRPC.*' } }) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      )
+    else
+      basic.timeseries(
+        title='Gitaly current per-RPC adaptive limit (visible if adaptiveness is enabled)',
+        query=|||
+          max(gitaly_concurrency_limiting_current_limit{%(selector)s}) by (fqdn, limit)
+        ||| % { selector: selectors.serializeHash(selectorHash { limit: { re: 'perRPC.*' } }) },
+        legendFormat=legend,
+        interval='$__interval',
+        linewidth=1,
+      ),
   watcher_errors(selectorHash, legend, useTimeSeriesPlugin=false)::
     if useTimeSeriesPlugin then
       panel.timeSeries(

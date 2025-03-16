@@ -3,7 +3,11 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local baseSelector = {
   monitor: 'global',
@@ -201,20 +205,30 @@ basic.dashboard(
           { color: 'green', value: 0.9995 },
         ]
       ),
-
-      basic
-      .graphPanel(
-        'Teams over budget target',
-        legend_show=false,
-        decimals=0,
-      )
-      .addTarget(
-        promQuery.target(overBudgetThreshold, legendFormat='Target')
-      )
-      .addTarget(
-        promQuery.target(overBudgetQuery, legendFormat='Teams Over Budget'),
-      ),
-
+      if useTimeSeriesPlugin then
+        panel.basic(
+          'Teams over budget target',
+          legend_show=false,
+        )
+        .addTarget(
+          target.prometheus(overBudgetThreshold, legendFormat='Target')
+        )
+        .addTarget(
+          target.prometheus(overBudgetQuery, legendFormat='Teams Over Budget'),
+        )
+      else
+        basic
+        .graphPanel(
+          'Teams over budget target',
+          legend_show=false,
+          decimals=0,
+        )
+        .addTarget(
+          promQuery.target(overBudgetThreshold, legendFormat='Target')
+        )
+        .addTarget(
+          promQuery.target(overBudgetQuery, legendFormat='Teams Over Budget'),
+        ),
     ], cols=2, rowHeight=10, startRow=100
   )
 )

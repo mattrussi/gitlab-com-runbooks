@@ -6,6 +6,9 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+
+local useTimeSeriesPlugin = true;
 
 local collectorSelector = {
   env: '$environment',
@@ -64,218 +67,444 @@ basic.dashboard(
   gridPos={ x: 0, y: 0, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Active Version - otel-collector',
-      query=|||
-        count(
-          kube_pod_container_info{%(selector)s}
-        ) by (image)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ image }}',
-    ),
-    basic.timeseries(
-      title='Up - otel-collector/metrics',
-      query=|||
-        up{%(selector)s, job="otel-collector", endpoint="metrics"}
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Process uptime - otel-collector',
-      query=|||
-        otelcol_process_uptime{%(selector)s}
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Query API uptime',
-      query=|||
-        up{%(selector)s, endpoint="metrics"}
-      ||| % { selector: queryAPISelectorSerialized },
-      legendFormat='{{ container }}',
-    ),
-  ], cols=4, rowHeight=8, startRow=1)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Active Version - otel-collector',
+          query=|||
+            count(
+              kube_pod_container_info{%(selector)s}
+            ) by (image)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ image }}',
+        ),
+        panel.timeSeries(
+          title='Up - otel-collector/metrics',
+          query=|||
+            up{%(selector)s, job="otel-collector", endpoint="metrics"}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Process uptime - otel-collector',
+          query=|||
+            otelcol_process_uptime{%(selector)s}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Query API uptime',
+          query=|||
+            up{%(selector)s, endpoint="metrics"}
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Active Version - otel-collector',
+          query=|||
+            count(
+              kube_pod_container_info{%(selector)s}
+            ) by (image)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ image }}',
+        ),
+        basic.timeseries(
+          title='Up - otel-collector/metrics',
+          query=|||
+            up{%(selector)s, job="otel-collector", endpoint="metrics"}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Process uptime - otel-collector',
+          query=|||
+            otelcol_process_uptime{%(selector)s}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Query API uptime',
+          query=|||
+            up{%(selector)s, endpoint="metrics"}
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+      ],
+    cols=4,
+    rowHeight=8,
+    startRow=1,
+  )
 )
 .addPanel(
   row.new(title='HTTP Receiver'),
   gridPos={ x: 0, y: 100, w: 24, h: 1 }
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Accepted Spans',
-      query=|||
-        sum (
-          rate(otelcol_receiver_accepted_spans{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Refused Spans',
-      query=|||
-        sum (
-          rate(otelcol_receiver_refused_spans{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-  ], cols=2, rowHeight=8, startRow=101)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Accepted Spans',
+          query=|||
+            sum (
+              rate(otelcol_receiver_accepted_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Refused Spans',
+          query=|||
+            sum (
+              rate(otelcol_receiver_refused_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Accepted Spans',
+          query=|||
+            sum (
+              rate(otelcol_receiver_accepted_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Refused Spans',
+          query=|||
+            sum (
+              rate(otelcol_receiver_refused_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+      ],
+    cols=2,
+    rowHeight=8,
+    startRow=101,
+  )
 )
 .addPanel(
   row.new(title='ClickHouse Exporter'),
   gridPos={ x: 0, y: 200, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Spans Received',
-      query=|||
-        sum (
-          rate(custom_spans_received{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Spans Ingested',
-      query=|||
-        sum (
-          rate(custom_spans_ingested{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Traces Total Bytes',
-      query=|||
-        sum (
-          rate(custom_traces_size_bytes{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-  ], cols=3, rowHeight=8, startRow=201)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Spans Received',
+          query=|||
+            sum (
+              rate(custom_spans_received{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Spans Ingested',
+          query=|||
+            sum (
+              rate(custom_spans_ingested{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Traces Total Bytes',
+          query=|||
+            sum (
+              rate(custom_traces_size_bytes{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Spans Received',
+          query=|||
+            sum (
+              rate(custom_spans_received{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Spans Ingested',
+          query=|||
+            sum (
+              rate(custom_spans_ingested{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Traces Total Bytes',
+          query=|||
+            sum (
+              rate(custom_traces_size_bytes{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+      ],
+    cols=3,
+    rowHeight=8,
+    startRow=201,
+  )
 )
 .addPanel(
   row.new(title='Resource Utilisation'),
   gridPos={ x: 0, y: 300, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='CPU - otel-collector (millicores)',
-      query=|||
-        sum(
-          rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
-        ) by (namespace) * 1000
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Memory Usage (max) - otel-collector (GBs)',
-      query=|||
-        max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='CPU - trace-query-api (millicores)',
-      query=|||
-        sum(
-          rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
-        ) * 1000
-      ||| % { selector: queryAPISelectorSerialized },
-      legendFormat='{{ container }}',
-    ),
-    basic.timeseries(
-      title='Memory Usage (max) - trace-query-api (GBs)',
-      query=|||
-        max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
-      ||| % { selector: queryAPISelectorSerialized },
-      legendFormat='{{ container }}'
-    ),
-  ], cols=4, rowHeight=8, startRow=301)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='CPU - otel-collector (millicores)',
+          query=|||
+            sum(
+              rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
+            ) by (namespace) * 1000
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Memory Usage (max) - otel-collector (GBs)',
+          query=|||
+            max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='CPU - trace-query-api (millicores)',
+          query=|||
+            sum(
+              rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
+            ) * 1000
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+        panel.timeSeries(
+          title='Memory Usage (max) - trace-query-api (GBs)',
+          query=|||
+            max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}'
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='CPU - otel-collector (millicores)',
+          query=|||
+            sum(
+              rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
+            ) by (namespace) * 1000
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Memory Usage (max) - otel-collector (GBs)',
+          query=|||
+            max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='CPU - trace-query-api (millicores)',
+          query=|||
+            sum(
+              rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
+            ) * 1000
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+        basic.timeseries(
+          title='Memory Usage (max) - trace-query-api (GBs)',
+          query=|||
+            max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}'
+        ),
+      ],
+    cols=4,
+    rowHeight=8,
+    startRow=301,
+  )
 )
 .addPanel(
   row.new(title='Pipeline Scalability'),
   gridPos={ x: 0, y: 400, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Memory-Limiter Refused Spans',
-      query=|||
-        sum (
-          rate(otelcol_processor_refused_spans{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Exporter Queue Capacity',
-      query=|||
-        otelcol_exporter_queue_capacity{%(selector)s}
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Exporter Queue Size',
-      query=|||
-        otelcol_exporter_queue_size{%(selector)s}
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-    basic.timeseries(
-      title='Exporter Enqueue Failed Spans',
-      query=|||
-        sum (
-          rate(otelcol_exporter_enqueue_failed_spans{%(selector)s}[1m])
-        ) by (namespace)
-      ||| % { selector: collectorSelectorSerialized },
-      legendFormat='{{ namespace }}',
-    ),
-  ], cols=4, rowHeight=8, startRow=401)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Memory-Limiter Refused Spans',
+          query=|||
+            sum (
+              rate(otelcol_processor_refused_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Exporter Queue Capacity',
+          query=|||
+            otelcol_exporter_queue_capacity{%(selector)s}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Exporter Queue Size',
+          query=|||
+            otelcol_exporter_queue_size{%(selector)s}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        panel.timeSeries(
+          title='Exporter Enqueue Failed Spans',
+          query=|||
+            sum (
+              rate(otelcol_exporter_enqueue_failed_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Memory-Limiter Refused Spans',
+          query=|||
+            sum (
+              rate(otelcol_processor_refused_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Exporter Queue Capacity',
+          query=|||
+            otelcol_exporter_queue_capacity{%(selector)s}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Exporter Queue Size',
+          query=|||
+            otelcol_exporter_queue_size{%(selector)s}
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+        basic.timeseries(
+          title='Exporter Enqueue Failed Spans',
+          query=|||
+            sum (
+              rate(otelcol_exporter_enqueue_failed_spans{%(selector)s}[1m])
+            ) by (namespace)
+          ||| % { selector: collectorSelectorSerialized },
+          legendFormat='{{ namespace }}',
+        ),
+      ],
+    cols=4,
+    rowHeight=8,
+    startRow=401,
+  )
 )
 .addPanel(
   row.new(title='Trace Query API'),
   gridPos={ x: 0, y: 500, w: 24, h: 1 },
 )
 .addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Request rate',
-      query=|||
-        sum(
-          rate(http_requests_total{%(selector)s}[1m])
-        ) by (path, code)
-      ||| % { selector: queryAPISelectorSerialized },
-      legendFormat='{{ container }}',
-    ),
-    basic.timeseries(
-      title='95th percentile Request Latency',
-      query=|||
-        histogram_quantile(
-          0.95,
-          sum(
-            rate(http_requests_duration_seconds_bucket{%(selector)s}[1m])
-          ) by (le)
-        )
-      ||| % { selector: queryAPISelectorSerialized },
-      legendFormat='{{ container }}',
-    ),
-    basic.timeseries(
-      title='95th percentile Response Size',
-      query=|||
-        histogram_quantile(
-          0.95,
-          sum(
-            rate(http_response_size_bucket{%(selector)s}[1m])
-          ) by (le)
-        )
-      ||| % { selector: queryAPISelectorSerialized },
-      legendFormat='{{ container }}',
-    ),
-  ], cols=3, rowHeight=8, startRow=501)
+  layout.grid(
+    if useTimeSeriesPlugin then
+      [
+        panel.timeSeries(
+          title='Request rate',
+          query=|||
+            sum(
+              rate(http_requests_total{%(selector)s}[1m])
+            ) by (path, code)
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+        panel.timeSeries(
+          title='95th percentile Request Latency',
+          query=|||
+            histogram_quantile(
+              0.95,
+              sum(
+                rate(http_requests_duration_seconds_bucket{%(selector)s}[1m])
+              ) by (le)
+            )
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+        panel.timeSeries(
+          title='95th percentile Response Size',
+          query=|||
+            histogram_quantile(
+              0.95,
+              sum(
+                rate(http_response_size_bucket{%(selector)s}[1m])
+              ) by (le)
+            )
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+      ]
+    else
+      [
+        basic.timeseries(
+          title='Request rate',
+          query=|||
+            sum(
+              rate(http_requests_total{%(selector)s}[1m])
+            ) by (path, code)
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+        basic.timeseries(
+          title='95th percentile Request Latency',
+          query=|||
+            histogram_quantile(
+              0.95,
+              sum(
+                rate(http_requests_duration_seconds_bucket{%(selector)s}[1m])
+              ) by (le)
+            )
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+        basic.timeseries(
+          title='95th percentile Response Size',
+          query=|||
+            histogram_quantile(
+              0.95,
+              sum(
+                rate(http_response_size_bucket{%(selector)s}[1m])
+              ) by (le)
+            )
+          ||| % { selector: queryAPISelectorSerialized },
+          legendFormat='{{ container }}',
+        ),
+      ],
+    cols=3,
+    rowHeight=8,
+    startRow=501,
+  )
 )

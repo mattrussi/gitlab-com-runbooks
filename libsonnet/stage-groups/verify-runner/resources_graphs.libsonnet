@@ -1,41 +1,36 @@
 local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
 local memoryUsage(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Memory usage by instance',
     legendFormat='{{instance}}',
     format='percentunit',
     linewidth=2,
-    fill=0,
-    stack=false,
     query=runnersManagerMatching.formatQuery(|||
       instance:node_memory_utilization:ratio{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
     |||, partition),
   );
 
 local cpuUsage(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     title='CPU usage by instance',
     legendFormat='{{instance}}',
     format='percentunit',
     linewidth=2,
-    fill=0,
-    stack=false,
     query=runnersManagerMatching.formatQuery(|||
       instance:node_cpu_utilization:ratio{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
     |||, partition),
   );
 
 local fdsUsage(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     title='File Descriptiors usage by instance',
     legendFormat='{{instance}}',
     format='percentunit',
     linewidth=2,
-    fill=0,
-    stack=false,
     query=runnersManagerMatching.formatQuery(|||
       process_open_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner"}
       /
@@ -44,25 +39,21 @@ local fdsUsage(partition=runnersManagerMatching.defaultPartition) =
   );
 
 local diskAvailable(partition=runnersManagerMatching.defaultPartition) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Disk available by instance and device',
     legendFormat='{{instance}} - {{device}}',
     format='percentunit',
     linewidth=2,
-    fill=0,
-    stack=false,
     query=runnersManagerMatching.formatQuery(|||
       instance:node_filesystem_avail:ratio{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,fstype="ext4"}
     |||, partition),
   );
 
 local iopsUtilization(partition=runnersManagerMatching.defaultPartition) =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     title='IOPS',
     format='ops',
     linewidth=2,
-    fill=0,
-    stack=false,
     queries=[
       {
         legendFormat: '{{instance}} - writes',
@@ -87,12 +78,10 @@ local iopsUtilization(partition=runnersManagerMatching.defaultPartition) =
   };
 
 local networkUtilization(partition=runnersManagerMatching.defaultPartition) =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     title='Network Utilization',
     format='bps',
     linewidth=2,
-    fill=0,
-    stack=false,
     queries=[
       {
         legendFormat: '{{instance}} - sent',

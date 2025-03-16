@@ -5,6 +5,8 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
+local useTimeSeriesPlugin = true;
+
 basic.dashboard(
   'Pod Info',
   tags=['container registry', 'docker', 'registry'],
@@ -22,7 +24,6 @@ basic.dashboard(
   )
 )
 .addPanel(
-
   row.new(title='Container Registry Version'),
   gridPos={
     x: 0,
@@ -31,9 +32,8 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.version(startRow=1))
+.addPanels(k8sPodsCommon.version(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
-
   row.new(title='Deployment Info'),
   gridPos={
     x: 0,
@@ -45,7 +45,6 @@ basic.dashboard(
 .addPanels(k8sPodsCommon.deployment(startRow=501))
 .addPanels(k8sPodsCommon.status(startRow=502))
 .addPanel(
-
   row.new(title='CPU'),
   gridPos={
     x: 0,
@@ -54,9 +53,8 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.cpu(startRow=1001))
+.addPanels(k8sPodsCommon.cpu(startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
-
   row.new(title='Memory'),
   gridPos={
     x: 0,
@@ -65,9 +63,8 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=2001, container='registry'))
+.addPanels(k8sPodsCommon.memory(startRow=2001, container='registry', useTimeSeriesPlugin=useTimeSeriesPlugin))
 .addPanel(
-
   row.new(title='Network'),
   gridPos={
     x: 0,
@@ -76,4 +73,4 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.network(startRow=3001))
+.addPanels(k8sPodsCommon.network(startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))

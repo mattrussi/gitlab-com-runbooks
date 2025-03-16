@@ -62,6 +62,15 @@ local capacityComponentColors = {
     dashLength: 4,
     nullPointMode: 'connected',
   },
+  sloViolation:: {
+    alias: '/ SLO violation$/',
+    color: '#00000088',
+    dashes: true,
+    legend: false,
+    fill: true,
+    dashLength: 1,
+    hideTooltip: true,
+  },
   networkReceive:: {
     alias: '/receive .*/',
     transform: 'negative-Y',

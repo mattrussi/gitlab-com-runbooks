@@ -1,12 +1,10 @@
-local basic = import 'grafana/basic.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
 
 local longPollingRequestStateCounter =
-  basic.timeseries(
+  panel.timeSeries(
     'Workhorse long polling - request statuses',
     legendFormat='{{status}}',
     format='short',
-    stack=true,
-    fill=1,
     query=|||
       sum by (status) (
         increase(gitlab_workhorse_builds_register_handler_requests{environment=~"$environment",stage=~"$stage"}[$__rate_interval])
@@ -15,12 +13,10 @@ local longPollingRequestStateCounter =
   );
 
 local longPollingOpenRequests =
-  basic.timeseries(
+  panel.timeSeries(
     'Workhorse long polling - open requests',
     legendFormat='{{state}}',
     format='short',
-    stack=true,
-    fill=1,
     query=|||
       sum by (state) (
         gitlab_workhorse_builds_register_handler_open{environment=~"$environment",stage=~"$stage"}
@@ -29,7 +25,7 @@ local longPollingOpenRequests =
   );
 
 local queueingErrors =
-  basic.timeseries(
+  panel.timeSeries(
     'Workhorse queueing errors',
     legendFormat='{{type}}',
     format='ops',
@@ -43,7 +39,7 @@ local queueingErrors =
   );
 
 local queueingHandledRequests =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     'Workhorse queueing - handled requests',
     queries=[
       {
@@ -66,7 +62,7 @@ local queueingHandledRequests =
   );
 
 local queueingQueuedRequests =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     'Workhorse queueing - queued requests',
     queries=[
       {
@@ -103,7 +99,7 @@ local queueingTime =
         )
       ||| % percentile,
     };
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     'Workhorse queueing time',
     format='s',
     queries=[
