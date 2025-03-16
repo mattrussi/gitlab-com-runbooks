@@ -2,9 +2,9 @@ local grafana = import 'grafonnet/grafana.libsonnet';
 local basic = import 'runbooks/libsonnet/grafana/basic.libsonnet';
 local layout = import 'runbooks/libsonnet/grafana/layout.libsonnet';
 
-local runnerPanels = import './panels/runner.libsonnet';
 local fluentdPanels = import './panels/fluentd.libsonnet';
 local replicationPanels = import './panels/replications.libsonnet';
+local runnerPanels = import './panels/runner.libsonnet';
 
 
 local row = grafana.row;
@@ -19,7 +19,7 @@ local row = grafana.row;
   _replicationPanels:: replicationPanels.new($._config.replicationSelector),
 
   grafanaDashboards+:: {
-    'logging.json':
+    'hosted-runners-logging.json':
       basic.dashboard(
         title='%s Logging' % $._config.dashboardName,
         tags=$._config.dashboardTags,
@@ -34,7 +34,7 @@ local row = grafana.row;
           rowTitle='Hosted Runner(s) Logging Overview',
           serviceType='hosted-runners-logging',
           metricsCatalogServiceInfo=$._config.gitlabMetricsConfig.monitoredServices[1],
-          selectorHash={component:"usage_logs"},
+          selectorHash={ component: 'usage_logs' },
           showSaturationCell=false
         )
       ).addPanel(
@@ -58,6 +58,6 @@ local row = grafana.row;
         $._replicationPanels.latency($._config.replicationSelector),
         $._replicationPanels.bytesPending($._config.replicationSelector),
         $._replicationPanels.operationsFailed($._config.replicationSelector),
-      ], cols=4, rowHeight=8, startRow=2001))
-  }
+      ], cols=4, rowHeight=8, startRow=2001)),
+  },
 }
