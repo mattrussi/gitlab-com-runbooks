@@ -248,7 +248,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -261,7 +261,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -274,7 +274,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -287,7 +287,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -300,7 +300,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -314,7 +314,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -328,7 +328,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -342,7 +342,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -356,7 +356,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -370,7 +370,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
@@ -625,7 +625,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -638,7 +638,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -651,7 +651,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -664,7 +664,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -677,7 +677,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -691,7 +691,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -705,7 +705,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -719,7 +719,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -733,7 +733,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -747,7 +747,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
@@ -1002,7 +1002,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1015,7 +1015,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1028,7 +1028,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1041,7 +1041,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1054,7 +1054,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1068,7 +1068,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1082,7 +1082,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1096,7 +1096,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1110,7 +1110,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
@@ -1124,7 +1124,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h

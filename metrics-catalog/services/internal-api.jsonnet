@@ -85,7 +85,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector=workhorseSelector + healthCheckSelector,
+        selector=workhorseSelector + healthCheckSelector + { code: { nre: '5..' } },
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),

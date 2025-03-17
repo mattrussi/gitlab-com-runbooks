@@ -7528,7 +7528,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7713,7 +7713,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7801,7 +7801,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"1\",route_id!=\"\"}[$__interval])\n  )\n  +\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route_id!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"1\",route_id!=\"\"}[$__interval])\n  )\n  +\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"10\",route_id!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8239,7 +8239,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8415,7 +8415,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8494,7 +8494,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8923,7 +8923,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id=\"git_info_refs\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id=\"git_info_refs\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -9099,7 +9099,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -9178,7 +9178,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,

@@ -615,11 +615,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
       )
       /
@@ -632,7 +632,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -1304,11 +1304,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
       )
       /
@@ -1321,7 +1321,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -1993,11 +1993,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
       )
       /
@@ -2010,7 +2010,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
