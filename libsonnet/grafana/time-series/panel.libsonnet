@@ -251,6 +251,7 @@ local multiTimeSeries(
   legend_show=true,
   legend_rightSide=false,
   linewidth=2,
+  fill=0,
   min=0,
   max=null,
   lines=true,
@@ -262,6 +263,7 @@ local multiTimeSeries(
     title,
     description=description,
     linewidth=linewidth,
+    fill=fill,
     legend_rightSide=legend_rightSide,
     legend_show=legend_show,
     legend_min=true,
@@ -334,6 +336,7 @@ local timeSeries(
   legend_show=true,
   legend_rightSide=false,
   linewidth=2,
+  fill=0,
   min=0,
   max=null,
   lines=true,
@@ -352,6 +355,7 @@ local timeSeries(
     legend_show=legend_show,
     legend_rightSide=legend_rightSide,
     linewidth=linewidth,
+    fill=fill,
     min=min,
     max=max,
     lines=lines,
@@ -473,6 +477,7 @@ local percentageTimeSeries(
   max=null,
   datasource='$PROMETHEUS_DS',
   format='percentunit',
+  fill=0,
   thresholdSteps=[],
       ) =
   local formatConfig = {
@@ -491,6 +496,7 @@ local percentageTimeSeries(
     legend_avg=true,
     legend_alignAsTable=true,
     unit=format,
+    fill=fill,
     thresholdMode='percentage',
     thresholdSteps=thresholdSteps,
   )

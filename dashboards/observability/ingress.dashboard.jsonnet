@@ -137,6 +137,7 @@ basic.dashboard(
           |||,
           legendFormat='HTTP {{code}}',
           yAxisLabel='rps',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.multiQuantileTimeSeries(
@@ -158,6 +159,7 @@ basic.dashboard(
           |||,
           legendFormat='{{service}}',
           yAxisLabel='rps',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.multiQuantileTimeSeries(
@@ -179,6 +181,7 @@ basic.dashboard(
           |||,
           legendFormat='{{service}}',
           yAxisLabel='conn/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.timeSeries(
@@ -191,6 +194,7 @@ basic.dashboard(
             ) by (method, service, code) > 0
           |||,
           legendFormat='{{ method }} {{ service }} {{code}}',
+          fill=50,
           legend_rightSide=true,
         ),
       ]

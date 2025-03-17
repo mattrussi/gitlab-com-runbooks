@@ -40,6 +40,7 @@ local vmOperationsRate(partition=runnersManagerMatching.defaultPartition, useTim
       'Autoscaled VM operations rate',
       legendFormat='{{shard}}: {{action}}',
       format='ops',
+      fill=10,
       query=runnersManagerMatching.formatQuery(|||
         sum by (shard, action) (
           increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}[$__rate_interval])

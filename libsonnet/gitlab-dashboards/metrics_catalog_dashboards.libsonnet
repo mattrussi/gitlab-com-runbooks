@@ -398,6 +398,7 @@ local sliDetailErrorRatePanel(
                         legendFormat=aggregationSet.legendFormat % { sliName: sliName },
                         intervalFactor=1,
                         linewidth=1,
+                        fill=40,
                       )
                       .addSeriesOverride(override.negativeY)
                     else
