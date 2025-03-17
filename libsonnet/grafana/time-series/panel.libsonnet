@@ -23,6 +23,7 @@ local basic(
   lines=true,
   unit=null,
   drawStyle='line',
+  fill=0,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -56,6 +57,7 @@ local basic(
   ts.datasource.withUid(datasource) +
   ts.fieldConfig.defaults.custom.withAxisGridShow(lines) +
   ts.fieldConfig.defaults.custom.withDrawStyle(drawStyle) +
+  ts.fieldConfig.defaults.custom.withFillOpacity(fill) +
   ts.fieldConfig.defaults.custom.withLineWidth(linewidth) +
   ts.fieldConfig.defaults.custom.withPointSize(pointradius) +
   ts.fieldConfig.defaults.custom.withShowPoints(showPoints) +
