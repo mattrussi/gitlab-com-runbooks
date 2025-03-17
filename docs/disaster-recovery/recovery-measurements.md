@@ -78,12 +78,14 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | VM Provision Time | Bootstrap time | Notes |
 | ---- | ----------- | -------- | ---- | ----- |
+| 2025-03-17 | GSTG | 00:09:00 | 00:23:50 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19428) |
 | 2024-08-14 | GSTG | 00:14:40 | 00:13:15 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18356) |
 
 ### Gameday Zonal Outage DR Process Time
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
+| 2025-03-17 | GSTG | 01:22:00 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/19428) |
 | 2024-10-10 | GSTG | 01:30:00 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18662). First time run by a non-Ops team member |
 | 2024-08-14 | GSTG | 00:53:00 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18356) |
 
