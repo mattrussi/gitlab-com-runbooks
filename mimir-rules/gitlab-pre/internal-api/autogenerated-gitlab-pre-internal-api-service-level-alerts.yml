@@ -584,7 +584,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md#alerts
@@ -636,7 +636,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md#alerts
@@ -690,7 +690,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md#alerts
@@ -744,7 +744,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md#alerts

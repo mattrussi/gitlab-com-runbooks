@@ -150,6 +150,7 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         // Note, using `|||` avoids having to double-escape the backslashes in the selector query
         selector=baseSelector {
+          code: { nre: '5..' },
           route: {
             ne: [
               '\\\\A/api/v4/jobs/request\\\\z',

@@ -84,8 +84,8 @@ metricsCatalog.serviceDefinition({
       local workhorseSelector = {
         route_id: {
           ne: [
-           'health',
-           'liveness',
+            'health',
+            'liveness',
           ],
         },
       },
@@ -104,10 +104,12 @@ metricsCatalog.serviceDefinition({
       local nonAPIWorkhorseSelector = workhorseSelector { route_id+: { nre+: apiRoutes, noneOf: gitRouteRegexps } },
       local apiWorkhorseSelector = workhorseSelector { route_id+: { re+: apiRoutes } },
       local gitWorkhorseSelector = { route_id: { oneOf: gitRouteRegexps } },
+      local workhorseApdexSelector = { code: { nre: '5..' } },
 
       workhorse: {
         userImpacting: true,
         featureCategory: 'not_owned',
+        serviceAggregation: false,
         description: |||
           Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface.
           Excludes API requests, git requests, health, readiness and liveness requests. Some known slow requests,
@@ -116,7 +118,7 @@ metricsCatalog.serviceDefinition({
 
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-          selector=nonAPIWorkhorseSelector {
+          selector=nonAPIWorkhorseSelector + workhorseApdexSelector {
             // In addition to excluding all git and API traffic, exclude
             // these routes from apdex as they have variable durations
             route_id+: {
@@ -150,6 +152,7 @@ metricsCatalog.serviceDefinition({
       workhorse_api: {
         userImpacting: true,
         featureCategory: 'not_owned',
+        serviceAggregation: false,
         description: |||
           Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
 
@@ -158,7 +161,7 @@ metricsCatalog.serviceDefinition({
 
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-          selector=apiWorkhorseSelector,
+          selector=apiWorkhorseSelector + workhorseApdexSelector,
           satisfiedThreshold=10
         ),
 
@@ -181,6 +184,7 @@ metricsCatalog.serviceDefinition({
 
       workhorse_git: {
         userImpacting: true,
+        serviceAggregation: false,
         featureCategory: 'not_owned',
         description: |||
           Aggregation of git+https requests that pass through workhorse,
@@ -192,7 +196,7 @@ metricsCatalog.serviceDefinition({
 
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-          selector={
+          selector=workhorseApdexSelector {
             // We only use the info-refs endpoint, not long-duration clone endpoints
             route_id: ['git_info_refs'],
           },
