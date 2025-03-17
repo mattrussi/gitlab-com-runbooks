@@ -50,7 +50,8 @@ Some relevant dashboards:
 3. [Postgres single query performance analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_03)
 4. [Postgres wait events analysis](https://dashboards.gitlab.net/d/postgres-ai-NEW_postgres_ai_04)
 
-See also: 
+See also:
+
 1. [Runbook "High-level performance analysis and troubleshooting of a Postgres node"](./single-node-high-level.md)
 2. [Runbook "SQL query analysis and optimization for Postgres"](./query-analysis.md)
 3. [Runbook "Postgres wait events analysis (a.k.a. Active Session History; ASH dashboard)"](./wait-events-analisys.md)
