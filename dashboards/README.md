@@ -32,6 +32,7 @@ Follow the guidelines for setting up your development environment with `asdf` an
 
 * Ensure that you install `asdf` and plugins for `go-jsonnet` and `jsonnet-bundler`.
 * Update vendor dependencies with `jb install`.
+* Some people have found they couldn't use ./test-dashboard.sh to create dashboards until they had installed and setup the [1Password CLI tool](https://developer.1password.com/docs/cli/get-started/)
 
 ## Obtain the Grafana Playground API Key
 
@@ -65,6 +66,8 @@ Once this has been deployed, local edits can be tested as described above.
 1. `./test-dashboard.sh -D $dashboard_path` will echo the dashboard JSON for pasting into Grafana.
 
 **Note that the playground and the snapshots are transient. By default, the snapshots will be deleted after 24 hours and the links will expire. Do not include links to playground dashboards in the handbook or other permanent content.**
+
+If ./test-dashboard.sh is failing with a 403 error, try installing and setting up the [1Password CLI tool](https://developer.1password.com/docs/cli/get-started/)
 
 ## Generating dashboards
 
