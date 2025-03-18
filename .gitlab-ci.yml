@@ -273,6 +273,8 @@ ensure-generated-content-up-to-date:
   extends:
     - .default-job
     - .jsonnet-cache
+  variables:
+    GL_JSONNET_CACHE_SKIP: true
   stage: test
   needs: []
   rules:
