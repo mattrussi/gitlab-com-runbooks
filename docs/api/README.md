@@ -20,6 +20,8 @@
 
 * [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
 * [Cells DNS](../cells/dns.md)
+* [Cell Provisioning and De-Provisioning](../cells/provisioning.md)
+* [Cell Provisioning and De-Provisioning Guide](../cells/temp.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/ci-runner-networking.md](../ci-runners/ci-runner-networking.md)
 * [Shared CI Runner Timeouts](../ci-runners/ci-runner-timeouts.md)
