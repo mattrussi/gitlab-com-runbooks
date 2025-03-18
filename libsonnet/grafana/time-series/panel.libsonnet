@@ -20,7 +20,6 @@ local basic(
   legend_rightSide=false,
   points=false,
   pointradius=5,
-  lines=true,
   unit=null,
   drawStyle='line',
   fill=0,
@@ -55,7 +54,7 @@ local basic(
   ts.new(title) +
   ts.datasource.withType(datasourceType) +
   ts.datasource.withUid(datasource) +
-  ts.fieldConfig.defaults.custom.withAxisGridShow(lines) +
+  ts.fieldConfig.defaults.custom.withAxisGridShow(true) +
   ts.fieldConfig.defaults.custom.withDrawStyle(drawStyle) +
   ts.fieldConfig.defaults.custom.withFillOpacity(fill) +
   ts.fieldConfig.defaults.custom.withLineWidth(linewidth) +
@@ -186,6 +185,11 @@ local basic(
               id: 'custom.transform',
               value: override.transform,
             },
+          if std.objectHas(override, 'drawStyle') then
+            {
+              id: 'custom.drawStyle',
+              value: override.drawStyle,
+            },
         ]),
       }),
 
@@ -254,8 +258,8 @@ local multiTimeSeries(
   fill=0,
   min=0,
   max=null,
-  lines=true,
   datasource='$PROMETHEUS_DS',
+  drawStyle='line',
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -272,8 +276,8 @@ local multiTimeSeries(
     legend_total=false,
     legend_avg=true,
     legend_alignAsTable=true,
-    lines=lines,
     unit=format,
+    drawStyle=drawStyle,
     thresholdMode=thresholdMode,
     thresholdSteps=thresholdSteps,
   );
@@ -339,8 +343,8 @@ local timeSeries(
   fill=0,
   min=0,
   max=null,
-  lines=true,
   datasource='$PROMETHEUS_DS',
+  drawStyle='line',
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -358,8 +362,8 @@ local timeSeries(
     fill=fill,
     min=min,
     max=max,
-    lines=lines,
     datasource=datasource,
+    drawStyle=drawStyle,
     thresholdMode=thresholdMode,
     thresholdSteps=thresholdSteps,
   );

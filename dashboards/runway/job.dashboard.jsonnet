@@ -58,6 +58,7 @@ basic.dashboard(
             )
           ||| % formatConfig,
           intervalFactor=2,
+          drawStyle='bars',
         ),
         panel.timeSeries(
           title='Completed task attempts',
@@ -71,6 +72,7 @@ basic.dashboard(
             )
           ||| % formatConfig,
           intervalFactor=2,
+          drawStyle='bars',
         ),
         panel.timeSeries(
           title='Running executions',
@@ -82,6 +84,7 @@ basic.dashboard(
             )
           ||| % formatConfig,
           intervalFactor=2,
+          drawStyle='bars',
         ),
         panel.timeSeries(
           title='Running task attempts',
@@ -93,6 +96,7 @@ basic.dashboard(
             )
           ||| % formatConfig,
           intervalFactor=2,
+          drawStyle='bars',
         ),
         panel.timeSeries(
           title='Runway Service Billable Container Instance Time',
@@ -105,6 +109,7 @@ basic.dashboard(
           ||| % formatConfig,
           legendFormat='{{service_name}}',
           intervalFactor=2,
+          drawStyle='bars',
         ),
         panel.percentageTimeSeries(
           title='Runway Service CPU Utilization',

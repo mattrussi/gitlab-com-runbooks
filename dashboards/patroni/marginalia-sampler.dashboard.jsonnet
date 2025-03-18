@@ -80,7 +80,7 @@ basic.dashboard(
           |||,
           interval='1m',
           linewidth=1,
-          lines=false,
+          drawStyle='bars',
         ),
         panel.timeSeries(
           title='Aggregated By Endpoint',
@@ -93,7 +93,7 @@ basic.dashboard(
           |||,
           interval='1m',
           linewidth=1,
-          lines=false,
+          drawStyle='bars',
         ),
         panel.timeSeries(
           title='Aggregated By State and Wait Event Type',

@@ -61,6 +61,7 @@ local startedJobsGraph(aggregators=[], partition=runnersManagerMatching.defaultP
     |||, partition),
     aggregators,
   ) + {
+    drawStyle: 'bars',
     lines: false,
     bars: true,
     targets+: [{
@@ -75,6 +76,7 @@ local startedJobsGraph(aggregators=[], partition=runnersManagerMatching.defaultP
       legendFormat: 'avg',
     }],
     seriesOverrides+: [{
+      drawStyle: 'lines',
       alias: 'avg',
       bars: false,
       color: '#ff0000ff',
@@ -131,14 +133,13 @@ local finishedJobsMinutesIncreaseGraph(partition=runnersManagerMatching.defaultP
       format='short',
       interval='',
       intervalFactor=5,
+      drawStyle='bars',
       query=runnersManagerMatching.formatQuery(|||
         sum by(shard) (
           increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
         )/60
       |||, partition),
     ) + {
-      lines: false,
-      bars: true,
       targets+: [{
         expr: runnersManagerMatching.formatQuery(|||
           avg (
@@ -152,12 +153,10 @@ local finishedJobsMinutesIncreaseGraph(partition=runnersManagerMatching.defaultP
       }],
       seriesOverrides+: [{
         alias: 'avg',
-        bars: false,
+        drawStyle: 'lines',
         color: '#ff0000ff',
         fill: 0,
-        lines: true,
         linewidth: 2,
-        stack: false,
         zindex: 3,
       }],
     }
