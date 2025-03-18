@@ -189,6 +189,7 @@
             "axisLabel": "SLA",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 3,
             "showPoints": "never"
@@ -408,6 +409,7 @@
             "axisLabel": "SLA",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 3,
             "showPoints": "never"
@@ -608,6 +610,7 @@
             "axisLabel": "SLA",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 3,
             "showPoints": "never"

@@ -31,6 +31,7 @@ local generalGraphPanel(
       legend_min=false,
       legend_rightSide=true,
       unit=format,
+      fill=fill * 10,
     )
   else
     graphPanel.new(

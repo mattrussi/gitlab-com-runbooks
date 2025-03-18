@@ -77,6 +77,7 @@ local jobsRunning(partition, variable) =
       title='Jobs running on runners (%s)' % partition,
       legendFormat='{{shard}}',
       format='short',
+      fill=10,
       linewidth=2,
       query=|||
         sum by(shard) (
@@ -110,6 +111,7 @@ local jobsStarted(partition, variable) =
       legendFormat='{{shard}}',
       format='short',
       linewidth=2,
+      fill=10,
       query=|||
         sum by(shard) (
           increase(
@@ -152,6 +154,7 @@ local jobsFailed(partition, variable) =
       legendFormat='{{shard}}',
       format='short',
       linewidth=2,
+      fill=10,
       query=|||
         sum by(shard) (
           increase(

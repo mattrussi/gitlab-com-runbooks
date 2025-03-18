@@ -139,6 +139,7 @@
             "axisLabel": "Saturation %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 1,
             "pointSize": 5,
             "showPoints": "never"
@@ -258,6 +259,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -532,6 +534,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -806,6 +809,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -1080,6 +1084,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -1354,6 +1359,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -1628,6 +1634,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -1902,6 +1909,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -2176,6 +2184,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"

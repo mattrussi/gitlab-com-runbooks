@@ -356,6 +356,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='HTTP {{code}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.multiQuantileTimeSeries(
@@ -377,6 +378,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{path}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.multiQuantileTimeSeries(
@@ -397,6 +399,7 @@ basic.dashboard(
             )
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{ method }} {{ path }}',
+          fill=50,
           legend_rightSide=true,
         ),
       ]
@@ -484,6 +487,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{projectID}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.timeSeries(
@@ -497,6 +501,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{projectID}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.timeSeries(
@@ -510,6 +515,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{projectID}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.timeSeries(
@@ -523,6 +529,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{projectID}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
         panel.timeSeries(
@@ -536,6 +543,7 @@ basic.dashboard(
           ||| % { selector: etSelectorSerialized },
           legendFormat='{{projectID}}',
           yAxisLabel='req/sec',
+          fill=50,
           legend_rightSide=true,
         ),
       ]

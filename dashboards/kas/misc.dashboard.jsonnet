@@ -248,6 +248,7 @@ basic.dashboard(
             yAxisLabel='pods',
             legend_show=false,
             linewidth=1,
+            fill=30,
           ),
         ]
       else

@@ -54,6 +54,7 @@ basic.dashboard(
             sum(analytics_events_total_count{env="$environment"}) by (env)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}}',
         ),
       ]
@@ -88,6 +89,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="metrics", env="$environment"}) by (feature_name)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}}',
         ),
         panel.timeSeries(
@@ -96,6 +98,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="tracing", env="$environment"}) by (feature_name)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}}',
         ),
         panel.timeSeries(
@@ -104,6 +107,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="logging", env="$environment"}) by (feature_name)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}}',
         ),
         panel.timeSeries(
@@ -112,6 +116,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="errortracking", env="$environment"}) by (feature_name)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}}',
         ),
       ]
@@ -174,6 +179,7 @@ basic.dashboard(
             topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, namespace_id))
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}} - {{namespace_id}}',
         ),
         panel.timeSeries(
@@ -182,6 +188,7 @@ basic.dashboard(
             topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, project_id))
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{feature_name}} - {{project_id}}',
         ),
       ]
@@ -224,6 +231,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="metrics", env="$environment", project_id="$project"}) by (feature_name, project_id)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{project_id}}',
         ),
         panel.timeSeries(
@@ -232,6 +240,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="tracing", env="$environment", project_id="$project"}) by (feature_name, project_id)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{project_id}}',
         ),
         panel.timeSeries(
@@ -240,6 +249,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="logging", env="$environment", project_id="$project"}) by (feature_name, project_id)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{project_id}}',
         ),
         panel.timeSeries(
@@ -248,6 +258,7 @@ basic.dashboard(
             sum(analytics_events_total_count{feature_name="errortracking", env="$environment", project_id="$project"}) by (feature_name, project_id)
           |||,
           yAxisLabel='count',
+          fill=50,
           legendFormat='{{project_id}}',
         ),
       ]

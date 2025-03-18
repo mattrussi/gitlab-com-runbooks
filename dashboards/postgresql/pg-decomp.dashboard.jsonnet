@@ -6,6 +6,8 @@ local panels = import 'gitlab-dashboards/panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
 
 local tableList = '(dast_pre_scan_verification_steps|dast_pre_scan_verifications|dast_profile_schedules|dast_profiles|dast_profiles_pipelines|dast_profiles_tags|dast_scanner_profiles|dast_scanner_profiles_builds|dast_site_profile_secret_variables|dast_site_profiles|dast_site_profiles_builds|dast_site_tokens|dast_site_validations|dast_sites|dependency_list_export_parts|dependency_list_exports|group_security_exclusions|project_security_exclusions|project_security_statistics|sbom_component_versions|sbom_components|sbom_occurrences|sbom_occurrences_vulnerabilities|sbom_source_packages|sbom_sources|security_findings|security_scans|vulnerabilities|vulnerability_archive_exports|vulnerability_archived_records|vulnerability_archives|vulnerability_export_parts|vulnerability_exports|vulnerability_external_issue_links|vulnerability_feedback|vulnerability_finding_evidences|vulnerability_finding_links|vulnerability_finding_signatures|vulnerability_findings_remediations|vulnerability_flags|vulnerability_historical_statistics|vulnerability_identifiers|vulnerability_issue_links|vulnerability_merge_request_links|vulnerability_namespace_historical_statistics|vulnerability_occurrence_identifiers|vulnerability_occurrences|vulnerability_reads|vulnerability_remediations|vulnerability_representation_information|vulnerability_scanners|vulnerability_severity_overrides|vulnerability_state_transitions|vulnerability_statistics|vulnerability_user_mentions)';
 
@@ -36,19 +38,15 @@ local versionTemplate = grafana.template.new(
 );
 
 local logicalReplicationLag =
-  panels.generalGraphPanel('Logical replication lag (all slots in $environment)', fill=10, decimals=1, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='bytes',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    'Logical replication lag (all slots in $environment)',
+    legend_min=false,
+    legend_current=false,
+    unit='bytes',
+    fill=100,
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(pg_replication_slots_confirmed_flush_lsn_bytes{env="$environment", slot_type="logical"}) by (fqdn, slot_type, slot_name)
       |||,
@@ -69,19 +67,14 @@ local clusterRight =
   panels.generalTextPanel('Cluster on the right', content='🎯 Target cluster: ${dst_cluster} ', transparent=true);
 
 local replicationLagSourceSeconds =
-  panels.generalGraphPanel('🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in seconds', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='seconds',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in seconds',
+    legend_min=false,
+    legend_current=false,
+    unit='seconds',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${src_cluster}-v${version}.*"}) by (fqdn)
       |||,
@@ -89,19 +82,14 @@ local replicationLagSourceSeconds =
   );
 
 local replicationLagTargetSeconds =
-  panels.generalGraphPanel('🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in seconds', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='seconds',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in seconds',
+    legend_min=false,
+    legend_current=false,
+    unit='seconds',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}) by (fqdn)
       |||,
@@ -109,19 +97,14 @@ local replicationLagTargetSeconds =
   );
 
 local replicationLagSourceBytes =
-  panels.generalGraphPanel('🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in bytes', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='bytes',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in bytes',
+    legend_min=false,
+    legend_current=false,
+    unit='bytes',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}) by (fqdn)
       |||,
@@ -129,19 +112,14 @@ local replicationLagSourceBytes =
   );
 
 local replicationLagTargetBytes =
-  panels.generalGraphPanel('🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in bytes', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='bytes',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in bytes',
+    legend_min=false,
+    legend_current=false,
+    unit='bytes',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}) by (fqdn)
       |||,
@@ -149,19 +127,15 @@ local replicationLagTargetBytes =
   );
 
 local sourceLeaderTPSCommits =
-  panels.generalGraphPanel('🏹 🥇 Source leader TPS (commits) ✅', fill=10, decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/sec',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 🥇 Source leader TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
+    fill=100,
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
       |||,
@@ -169,19 +143,15 @@ local sourceLeaderTPSCommits =
   );
 
 local targetLeaderTPSCommits =
-  panels.generalGraphPanel('🎯 🥇 Target leader TPS (commits) ✅', fill=10, decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/sec',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 🥇 Target leader TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
+    fill=100,
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
       |||,
@@ -189,19 +159,14 @@ local targetLeaderTPSCommits =
   );
 
 local sourceStandbysTPSCommits =
-  panels.generalGraphPanel('🏹 👥 Source standbys TPS (commits) ✅', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/sec',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 👥 Source standbys TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -209,19 +174,14 @@ local sourceStandbysTPSCommits =
   );
 
 local targetStandbysTPSCommits =
-  panels.generalGraphPanel('🎯 👥 Target standbys TPS (commits) ✅', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/sec',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 👥 Target standbys TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -229,19 +189,14 @@ local targetStandbysTPSCommits =
   );
 
 local sourceLeaderRollbackTPSErrors =
-  panels.generalGraphPanel('🏹 🥇 Source leader rollback TPS – ERRORS ❌', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='err/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 🥇 Source leader rollback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
       |||,
@@ -249,19 +204,14 @@ local sourceLeaderRollbackTPSErrors =
   );
 
 local targetLeaderRollbackTPSErrors =
-  panels.generalGraphPanel('🎯 🥇 Target leader rollback TPS – ERRORS ❌', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='err/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 🥇 Target leader rollback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
       |||,
@@ -269,19 +219,15 @@ local targetLeaderRollbackTPSErrors =
   );
 
 local sourceStandbysRollbackTPSErrors =
-  panels.generalGraphPanel('🏹 👥 Source standbys roolback TPS – ERRORS ❌', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='err/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 👥 Source standbys roolback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
+
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -289,19 +235,14 @@ local sourceStandbysRollbackTPSErrors =
   );
 
 local targetStandbysRollbackTPSErrors =
-  panels.generalGraphPanel('🎯 👥 Target standbys rollback TPS – ERRORS ❌', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='err/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 👥 Target standbys rollback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -309,19 +250,14 @@ local targetStandbysRollbackTPSErrors =
   );
 
 local sourceWritesTuple =
-  panels.generalGraphPanel('🏹 Source writes (tuple ins/upd/del)', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 Source writes (tuple ins/upd/del)',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])
         +
@@ -334,19 +270,14 @@ local sourceWritesTuple =
   );
 
 local targetWritesTuple =
-  panels.generalGraphPanel('🎯 Target writes (tuple ins/upd/del)', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 Target writes (tuple ins/upd/del)',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])
         +
@@ -359,19 +290,14 @@ local targetWritesTuple =
   );
 
 local sourceWritesTupleTables =
-  panels.generalGraphPanel('🏹 Source writes (tuple ins/upd/del) for Decomp Tables', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 Source writes (tuple ins/upd/del) for Decomp Tables',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       std.format(
         |||
           sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"%s"}[1m])
@@ -387,19 +313,14 @@ local sourceWritesTupleTables =
   );
 
 local targetWritesTupleTables =
-  panels.generalGraphPanel('🎯 Target writes (tuple ins/upd/del) for Decomp Tables', decimals=2, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 Target writes (tuple ins/upd/del) for Decomp Tables',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       std.format(
         |||
           sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])
@@ -414,19 +335,14 @@ local targetWritesTupleTables =
   );
 
 local sourceIndexTupleFetches =
-  panels.generalGraphPanel('🏹 Source index tuple fetches', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 Source index tuple fetches',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -434,19 +350,14 @@ local sourceIndexTupleFetches =
   );
 
 local targetIndexTupleFetches =
-  panels.generalGraphPanel('🎯 Target index tuple fetches', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 Target index tuple fetches',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -454,19 +365,14 @@ local targetIndexTupleFetches =
   );
 
 local sourceIndexTupleFetchesTables =
-  panels.generalGraphPanel('🏹 Source index tuple fetches for Decomp Tables', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 Source index tuple fetches for Decomp Tables',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       std.format(
         |||
           (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"%s"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
@@ -476,19 +382,14 @@ local sourceIndexTupleFetchesTables =
   );
 
 local targetIndexTupleFetchesTables =
-  panels.generalGraphPanel('🎯 Target index tuple fetches for Decomp Tables', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 Target index tuple fetches for Decomp Tables',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       std.format(
         |||
           (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
@@ -498,19 +399,14 @@ local targetIndexTupleFetchesTables =
   );
 
 local sourceSeqTupleReads =
-  panels.generalGraphPanel('🏹 Source seq tuple reads', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 Source seq tuple reads',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -518,19 +414,14 @@ local sourceSeqTupleReads =
   );
 
 local targetSeqTupleReads =
-  panels.generalGraphPanel('🎯 Target seq tuple reads', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 Target seq tuple reads',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       |||
         (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
       |||,
@@ -538,19 +429,14 @@ local targetSeqTupleReads =
   );
 
 local sourceSeqTupleReadsTable =
-  panels.generalGraphPanel('🏹 Source seq tuple reads for Decomp Tables', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🏹 Source seq tuple reads for Decomp Tables',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       std.format(
         |||
           (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${src_cluster}-v${version}|patroni-${src_cluster}-[0-9]+).*", relname=~"%s"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
@@ -560,19 +446,14 @@ local sourceSeqTupleReadsTable =
   );
 
 local targetSeqTupleReadsTable =
-  panels.generalGraphPanel('🎯 Target seq tuple reads for Decomp Tables', decimals=3, legend_show=true, legend_min=false, legend_current=false)
-  .resetYaxes()
-  .addYaxis(
-    format='ops/s',
-  )
-  .addYaxis(
-    format='short',
-    max=1,
-    min=0,
-    show=false,
+  panel.basic(
+    '🎯 Target seq tuple reads for Decomp Tables',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       std.format(
         |||
           (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${dst_cluster}-v${version}-.*", relname=~"%s"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1

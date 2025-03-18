@@ -14,6 +14,7 @@ local aggregationTimeSeries(title, query, aggregators=[], useTimeSeriesPlugin=tr
       title=(title % serializedAggregation),
       legendFormat=aggregatorsLegendFormat(aggregators),
       linewidth=2,
+      fill=10,
       query=(query % serializedAggregation),
     )
   else
