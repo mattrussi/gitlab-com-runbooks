@@ -97,42 +97,6 @@ KAS --> REDIS: Store/Read info about `agentk` connections
    * Tracking connected `agentk` agents to kas.
    * Other information.
 
-## Ingress Architecture
-
-THIS SECTION IS OUT OF DATE due to <https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2591>.
-
-The first layer in front of KAS is Cloudflare, but currently it is only used in raw tcp mode (not as a HTTPS proxy). This is done this way for simplicity around TLS setup (as we use Google managed certificates) and because KAS will migrate to GRPC, which needs additional testing with cloudflare (cloudflare GRPC support is in beta). It however is likely we will further change and evolve the cloudflare configuration in the future.
-
-After cloudflare KAS uses it's own [GKE Ingress](https://cloud.google.com/kubernetes-engine/docs/concepts/ingress), currently running in HTTP1.1 with websockets. This is instead of using haproxy, and is on an entirely separate domain at <https://kas.gitlab.co>. The reason for such isolation is because `kas` is focussed on long-lived connections (living indefinitely, always trying to remain connected). We didn't want to have `kas` connections tying up the same ingress resources that the rest of Gitlab uses (haproxy, ingress-nginx, etc). On top of this, it simplifies the deployment stack and gives us access to a number of features we can leverage including
-
-* [Google Managed Certificate](https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs) for <https://kas.gitlab.com>, deployed and managed by a Kubernetes CRD in the [gitlab-extras helm release](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab-extras/values.yaml.gotmpl#L3-10)
-
-* We configure the GKE Ingress (which is implemented by a GCP HTTPS Load Balancer) to use a custom HTTP healthcheck, as the readiness and liveness endpoints for `kas` live on a different port than the port used to serve traffic (due to the nature of websockets/grpc). It is also part of the [gitlab-extras helm release](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab-extras/values.yaml.gotmpl#L12-22)
-
-* We also leverage [container native load balancing](https://cloud.google.com/kubernetes-engine/docs/concepts/container-native-load-balancing) to allow the GCP Load Balancer to map endpoints and route traffic **directly to the pods via their individual pod IPs**. This bypasses the usual mechanism of mapping endpoints as nodes, requiring a service being exposed as a `NodePort`, and utilising `kube-proxy` to configure `iptables` rules to route traffic in an even matter. This overall provides a much simpler network topology, with less hops. A Kubernetes `service` object is still needed for GKE/GCP to sync the endpoint list to the HTTPS load balancer, but the `ClusterIP` (or indeed any IP) of the `service` object is not actually used.
-
-* [Google Cloud Armor](https://cloud.google.com/armor) to basically firewall/restrict the KAS GKE Ingress from only being externally accessible by cloudflare
-
-Looking at the settings on the `BackendConfig` object for the GKE ingress, as well as the [default settings for GCP Loadbalancers](https://cloud.google.com/load-balancing/docs/https) ( [see also](https://cloud.google.com/load-balancing/docs/https#timeouts_and_retries) ), we can determine the following current settings are set
-
-* The loadbalancer will determine the health of a pod (which is directly a loadbalancer backend) by polling port 8181 with URI `/liveness` every 5 seconds, with a timeout of 3 seconds
-
-* The current implementation of the liveness check simply returns a HTTP 200 OK, so is only reliable for basic determination of a pods health.
-
-* Between the load balancer and the backends (pods) there is a HTTP keepalive timeout of 600 seconds which cannot be adjusted.
-
-* Between the load balancer and the backends (pods) there is a configurable timeout which we set quite high as the connections are websockets. We currently set that to 30 minutes and 30 seconds.
-
-* The clients have been configured to have a graceful timeout of 120 minutes, after which they will close and re-open a connection.
-  See `agent.listen.max_connection_age` in <https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/pkg/kascfg/kascfg_defaults.yaml>.
-
-* The clients have been configured to have a keep-alive ping of 55 seconds (just under 1 minute)
-
-* Google documentation does not reveal any maximum connection limit for their Load Balancers, only that it's limited by the capacity of your backend service (I think suggesting they can probably scale them
-much higher than we can scale our infra)
-
-As kas is behind both cloudflare and a GCP HTTPS Loadbalancer, the pods should see the `X-Forwarded-For` Header with all relevant IP addresses regardless of network path. If set by cloudflare, GCP will gracefully append its own data to it as documented [here](https://cloud.google.com/load-balancing/docs/https#x-forwarded-for_header)
-
 ## Agent, KAS, and Rails Architecture
 
 See <https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md#high-level-architecture>
