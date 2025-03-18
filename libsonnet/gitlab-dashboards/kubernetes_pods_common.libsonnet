@@ -545,6 +545,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
           generalGraphPanel(
             'All processes network I/O',
             format='Bps',
+            fill=10,
             useTimeSeriesPlugin=useTimeSeriesPlugin,
           )
           .addTarget(

@@ -141,6 +141,7 @@ basic.dashboard(
     panel.basic(
       'Service Deployment Health',
       description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
+      fill=100,
     )
     .addTarget(
       prometheus.target(
@@ -199,6 +200,7 @@ basic.dashboard(
     panel.basic(
       'Component Deployment Health',
       description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
+      fill=100,
     )
     .addTarget(
       prometheus.target(

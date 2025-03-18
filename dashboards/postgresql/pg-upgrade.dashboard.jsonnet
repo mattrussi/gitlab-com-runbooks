@@ -46,6 +46,7 @@ local logicalReplicationLag =
       legend_min=false,
       legend_current=false,
       unit='bytes',
+      fill=100,
     )
     .addTarget(
       target.prometheus(
@@ -269,6 +270,7 @@ local sourceLeaderTPSCommits =
       legend_min=false,
       legend_current=false,
       unit='ops/sec',
+      fill=100,
     )
     .addTarget(
       target.prometheus(
@@ -311,6 +313,7 @@ local targetLeaderTPSCommits =
       legend_min=false,
       legend_current=false,
       unit='ops/sec',
+      fill=100,
     )
     .addTarget(
       target.prometheus(

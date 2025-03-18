@@ -139,6 +139,7 @@
             "axisLabel": "Apdex %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -612,6 +613,7 @@
             "axisLabel": "Error %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -1085,6 +1087,7 @@
             "axisLabel": "Operations per Second",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -1320,6 +1323,7 @@
             "axisLabel": "Saturation %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 1,
             "pointSize": 5,
             "showPoints": "never"
@@ -1404,6 +1408,7 @@
             "axisLabel": "Error %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -1891,6 +1896,7 @@
             "axisLabel": "Operations per Second",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -2037,6 +2043,7 @@
             "axisLabel": "Apdex %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -2532,6 +2539,7 @@
             "axisLabel": "Error %",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -3019,6 +3027,7 @@
             "axisLabel": "Operations per Second",
             "axisPlacement": "left",
             "drawStyle": "line",
+            "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
             "showPoints": "never"
@@ -3176,6 +3185,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3231,6 +3241,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3286,6 +3297,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3341,6 +3353,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3416,6 +3429,7 @@
                 "axisLabel": "Duration",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3482,6 +3496,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3537,6 +3552,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3592,6 +3608,7 @@
                 "axisLabel": "Duration",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3658,6 +3675,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3713,6 +3731,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3768,6 +3787,7 @@
                 "axisLabel": "Duration",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3834,6 +3854,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3889,6 +3910,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -3944,6 +3966,7 @@
                 "axisLabel": "Duration",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4010,6 +4033,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4065,6 +4089,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4120,6 +4145,7 @@
                 "axisLabel": "Duration",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4186,6 +4212,7 @@
                 "axisLabel": "Errors",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4241,6 +4268,7 @@
                 "axisLabel": "Requests per Second",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4316,6 +4344,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
@@ -4590,6 +4619,7 @@
                 "axisLabel": "Saturation %",
                 "axisPlacement": "left",
                 "drawStyle": "line",
+                "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
                 "showPoints": "never"
