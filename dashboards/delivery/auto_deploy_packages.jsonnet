@@ -114,6 +114,7 @@ basic.dashboard(
     panel.basic(
       'Active coordinated pipelines',
       description='Number of deployments pipelines that are running, scheduled, or manual',
+      stack=true,
     )
     .addTarget(
       prometheus.target(

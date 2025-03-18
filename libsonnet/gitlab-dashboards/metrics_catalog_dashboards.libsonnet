@@ -399,6 +399,7 @@ local sliDetailErrorRatePanel(
                         intervalFactor=1,
                         linewidth=1,
                         fill=40,
+                        stack=true,
                       )
                       .addSeriesOverride(override.negativeY)
                     else

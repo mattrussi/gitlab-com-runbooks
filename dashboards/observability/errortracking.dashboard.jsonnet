@@ -358,6 +358,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.multiQuantileTimeSeries(
           title='Requests duration by HTTP status',
@@ -380,6 +381,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.multiQuantileTimeSeries(
           title='Requests duration by path',
@@ -401,6 +403,7 @@ basic.dashboard(
           legendFormat='{{ method }} {{ path }}',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
       ]
     else
@@ -489,6 +492,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.timeSeries(
           title='Get error requests by project ID',
@@ -503,6 +507,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.timeSeries(
           title='List errors requests by project ID',
@@ -517,6 +522,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.timeSeries(
           title='List events requests by project ID',
@@ -531,6 +537,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.timeSeries(
           title='Store requests by project ID',
@@ -545,6 +552,7 @@ basic.dashboard(
           yAxisLabel='req/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
       ]
     else

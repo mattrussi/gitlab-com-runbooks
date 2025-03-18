@@ -78,6 +78,7 @@ local jobsRunning(partition, variable) =
       legendFormat='{{shard}}',
       format='short',
       fill=10,
+      stack=true,
       linewidth=2,
       query=|||
         sum by(shard) (
@@ -112,6 +113,8 @@ local jobsStarted(partition, variable) =
       format='short',
       linewidth=2,
       fill=10,
+      drawStyle='bars',
+      stack=true,
       query=|||
         sum by(shard) (
           increase(
@@ -121,10 +124,7 @@ local jobsStarted(partition, variable) =
       ||| % {
         variable: variable,
       },
-    ) + {
-      lines: false,
-      bars: true,
-    }
+    )
   else
     basic.timeseries(
       title='Jobs started on runners (%s)' % partition,
@@ -164,10 +164,7 @@ local jobsFailed(partition, variable) =
       ||| % {
         variable: variable,
       },
-    ) + {
-      lines: false,
-      bars: true,
-    }
+    )
   else
     basic.timeseries(
       title='Jobs failed on runners (%s)' % partition,

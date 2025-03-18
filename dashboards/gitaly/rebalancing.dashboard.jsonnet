@@ -15,7 +15,7 @@ local balanceChart(title, description, format, legendFormat, query) =
     panel.basic(
       title,
       description=description,
-      lines=false,
+      drawStyle='bars',
       unit=format,
       legend_show=false,
     )

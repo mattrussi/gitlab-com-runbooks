@@ -20,10 +20,10 @@ local basic(
   legend_rightSide=false,
   points=false,
   pointradius=5,
-  lines=true,
   unit=null,
   drawStyle='line',
   fill=0,
+  stack=false,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -51,16 +51,24 @@ local basic(
     'always'
   else
     'never';
+  local stackingMode = if stack then
+    'normal'
+  else
+    'none';
 
   ts.new(title) +
   ts.datasource.withType(datasourceType) +
   ts.datasource.withUid(datasource) +
-  ts.fieldConfig.defaults.custom.withAxisGridShow(lines) +
+  ts.fieldConfig.defaults.custom.withAxisGridShow(true) +
   ts.fieldConfig.defaults.custom.withDrawStyle(drawStyle) +
   ts.fieldConfig.defaults.custom.withFillOpacity(fill) +
   ts.fieldConfig.defaults.custom.withLineWidth(linewidth) +
   ts.fieldConfig.defaults.custom.withPointSize(pointradius) +
   ts.fieldConfig.defaults.custom.withShowPoints(showPoints) +
+  ts.fieldConfig.defaults.custom.withStacking({
+    group: 'A',
+    mode: stackingMode,
+  }) +
   ts.options.legend.withDisplayMode(legendDisplayMode) +
   ts.options.legend.withCalcs(legendCalcs) +
   ts.options.legend.withShowLegend(legend_show) +
@@ -186,6 +194,19 @@ local basic(
               id: 'custom.transform',
               value: override.transform,
             },
+          if std.objectHas(override, 'drawStyle') then
+            {
+              id: 'custom.drawStyle',
+              value: override.drawStyle,
+            },
+          if std.objectHas(override, 'stack') && override.stack == true then
+            {
+              id: 'custom.stacking',
+              value: {
+                group: 'A',
+                mode: 'normal',
+              },
+            },
         ]),
       }),
 
@@ -254,8 +275,9 @@ local multiTimeSeries(
   fill=0,
   min=0,
   max=null,
-  lines=true,
   datasource='$PROMETHEUS_DS',
+  drawStyle='line',
+  stack=false,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -272,8 +294,9 @@ local multiTimeSeries(
     legend_total=false,
     legend_avg=true,
     legend_alignAsTable=true,
-    lines=lines,
     unit=format,
+    drawStyle=drawStyle,
+    stack=stack,
     thresholdMode=thresholdMode,
     thresholdSteps=thresholdSteps,
   );
@@ -339,8 +362,9 @@ local timeSeries(
   fill=0,
   min=0,
   max=null,
-  lines=true,
   datasource='$PROMETHEUS_DS',
+  drawStyle='line',
+  stack=false,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -358,8 +382,9 @@ local timeSeries(
     fill=fill,
     min=min,
     max=max,
-    lines=lines,
     datasource=datasource,
+    drawStyle=drawStyle,
+    stack=stack,
     thresholdMode=thresholdMode,
     thresholdSteps=thresholdSteps,
   );
@@ -478,6 +503,7 @@ local percentageTimeSeries(
   datasource='$PROMETHEUS_DS',
   format='percentunit',
   fill=0,
+  stack=false,
   thresholdSteps=[],
       ) =
   local formatConfig = {
@@ -497,6 +523,7 @@ local percentageTimeSeries(
     legend_alignAsTable=true,
     unit=format,
     fill=fill,
+    stack=stack,
     thresholdMode='percentage',
     thresholdSteps=thresholdSteps,
   )

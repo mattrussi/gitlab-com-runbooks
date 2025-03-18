@@ -22,6 +22,7 @@ local runnerRequests(endpoint, statuses='.*', partition=runnersManagerMatching.d
     },
     format='ops',
     legendFormat='{{status}}',
+    drawStyle='bars',
     query=runnersManagerMatching.formatQuery(
       |||
         sum by(status) (
@@ -36,10 +37,7 @@ local runnerRequests(endpoint, statuses='.*', partition=runnersManagerMatching.d
         statuses: statuses,
       },
     ),
-  ) + {
-    lines: false,
-    bars: true,
-  };
+  );
 
 {
   jobRequestsOnWorkhorse:: jobRequestsOnWorkhorse,

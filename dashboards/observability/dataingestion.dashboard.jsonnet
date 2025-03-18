@@ -56,6 +56,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}}',
+          stack=true,
         ),
       ]
     else
@@ -91,6 +92,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Traces',
@@ -100,6 +102,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Logs',
@@ -109,6 +112,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Error Tracking',
@@ -118,6 +122,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}}',
+          stack=true,
         ),
       ]
     else
@@ -181,6 +186,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}} - {{namespace_id}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Top 10 by project',
@@ -190,6 +196,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{feature_name}} - {{project_id}}',
+          stack=true,
         ),
       ]
     else
@@ -233,6 +240,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{project_id}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Traces',
@@ -242,6 +250,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{project_id}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Logs',
@@ -251,6 +260,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{project_id}}',
+          stack=true,
         ),
         panel.timeSeries(
           title='Error Tracking',
@@ -260,6 +270,7 @@ basic.dashboard(
           yAxisLabel='count',
           fill=50,
           legendFormat='{{project_id}}',
+          stack=true,
         ),
       ]
     else

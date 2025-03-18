@@ -139,6 +139,7 @@ basic.dashboard(
           yAxisLabel='rps',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.multiQuantileTimeSeries(
           title='Requests duration by HTTP status',
@@ -161,6 +162,7 @@ basic.dashboard(
           yAxisLabel='rps',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.multiQuantileTimeSeries(
           title='Requests duration by Service',
@@ -183,6 +185,7 @@ basic.dashboard(
           yAxisLabel='conn/sec',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
         panel.timeSeries(
           title='Error Rate by Service',
@@ -196,6 +199,7 @@ basic.dashboard(
           legendFormat='{{ method }} {{ service }} {{code}}',
           fill=50,
           legend_rightSide=true,
+          stack=true,
         ),
       ]
     else
