@@ -21,7 +21,7 @@
    ```
 
   <details>
-  <summary> Example Run </sumamry>
+  <summary> Example Run </summary>
 
   ```bash
   ringctl cell provision --dry-run --ring 0 --amp_environment cellsdev --cell_id 134
