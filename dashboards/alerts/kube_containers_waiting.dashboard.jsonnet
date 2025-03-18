@@ -32,6 +32,7 @@ basic.dashboard(
         |||,
         legendFormat='{{reason}}',
         linewidth=2,
+        stack=true,
       )
       .addTarget(
         target.prometheus(

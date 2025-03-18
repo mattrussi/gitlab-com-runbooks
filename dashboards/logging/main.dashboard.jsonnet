@@ -24,6 +24,7 @@ serviceDashboard.overview('logging')
             unit='short',
             legend_show=false,
             drawStyle='bars',
+            stack=true,
           )
           .addTarget(
             target.prometheus(

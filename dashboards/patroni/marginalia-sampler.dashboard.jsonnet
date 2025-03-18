@@ -81,6 +81,7 @@ basic.dashboard(
           interval='1m',
           linewidth=1,
           drawStyle='bars',
+          stack=true,
         ),
         panel.timeSeries(
           title='Aggregated By Endpoint',
@@ -94,6 +95,7 @@ basic.dashboard(
           interval='1m',
           linewidth=1,
           drawStyle='bars',
+          stack=true,
         ),
         panel.timeSeries(
           title='Aggregated By State and Wait Event Type',

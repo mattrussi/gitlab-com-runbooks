@@ -142,7 +142,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "links": [
             {
@@ -616,7 +620,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "links": [
             {
@@ -1090,7 +1098,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "min": 0
         },
@@ -1326,7 +1338,11 @@
             "fillOpacity": 0,
             "lineWidth": 1,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "max": 1,
           "unit": "percentunit"
@@ -1411,7 +1427,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "links": [
             {
@@ -1907,7 +1927,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "links": [
             {
@@ -2395,7 +2419,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 5,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "min": 0
         },
@@ -2553,7 +2581,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "min": 0.01,
               "unit": "s"
@@ -2629,7 +2661,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "min": 0,
               "unit": "short"
@@ -2685,7 +2721,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "min": 0,
               "unit": "short"
@@ -2741,7 +2781,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "min": 0.01,
               "unit": "s"
@@ -2817,7 +2861,11 @@
                 "fillOpacity": 40,
                 "lineWidth": 1,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "normal"
+                }
               },
               "unit": "percentunit"
             },
@@ -2886,7 +2934,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "min": 0,
               "unit": "short"
@@ -2942,7 +2994,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 2,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "min": 0,
               "unit": "short"
@@ -3018,7 +3074,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "max": 1,
               "unit": "percentunit"
@@ -3293,7 +3353,11 @@
                 "fillOpacity": 0,
                 "lineWidth": 1,
                 "pointSize": 5,
-                "showPoints": "never"
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
               },
               "max": 1,
               "unit": "percentunit"

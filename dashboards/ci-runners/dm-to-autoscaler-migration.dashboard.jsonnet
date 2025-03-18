@@ -78,6 +78,7 @@ local jobsRunning(partition, variable) =
       legendFormat='{{shard}}',
       format='short',
       fill=10,
+      stack=true,
       linewidth=2,
       query=|||
         sum by(shard) (
@@ -113,6 +114,7 @@ local jobsStarted(partition, variable) =
       linewidth=2,
       fill=10,
       drawStyle='bars',
+      stack=true,
       query=|||
         sum by(shard) (
           increase(
@@ -153,7 +155,6 @@ local jobsFailed(partition, variable) =
       format='short',
       linewidth=2,
       fill=10,
-      drawStyle='bars',
       query=|||
         sum by(shard) (
           increase(

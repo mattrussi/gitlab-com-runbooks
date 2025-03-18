@@ -15,6 +15,7 @@ local aggregationTimeSeries(title, query, aggregators=[], useTimeSeriesPlugin=tr
       legendFormat=aggregatorsLegendFormat(aggregators),
       linewidth=2,
       fill=10,
+      stack=true,
       query=(query % serializedAggregation),
     )
   else
@@ -134,6 +135,7 @@ local finishedJobsMinutesIncreaseGraph(partition=runnersManagerMatching.defaultP
       interval='',
       intervalFactor=5,
       drawStyle='bars',
+      stack=true,
       query=runnersManagerMatching.formatQuery(|||
         sum by(shard) (
           increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])

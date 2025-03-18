@@ -192,7 +192,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 3,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "max": 1,
           "unit": "percentunit"
@@ -412,7 +416,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 3,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "max": 1,
           "unit": "percentunit"
@@ -613,7 +621,11 @@
             "fillOpacity": 0,
             "lineWidth": 2,
             "pointSize": 3,
-            "showPoints": "never"
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
           },
           "max": 1,
           "unit": "percentunit"
