@@ -371,6 +371,7 @@ local sliDetailErrorRatePanel(
             layout.singleRow(
               std.prune(
                 [
+                  // todo
                   if sli.hasHistogramApdex() then
                     sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sliName + ' Latency - ' + aggregationSet.title,
@@ -385,6 +386,7 @@ local sliDetailErrorRatePanel(
                   else
                     null,
 
+                  // todo
                   if misc.isPresent(aggregationSet.aggregationLabels) && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
                     if useTimeSeriesPlugin then
                       panel.percentageTimeSeries(

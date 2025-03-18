@@ -10,6 +10,10 @@ local capacityComponentColors = {
   memory: '#E0B301',
 };
 
+// lines: are not used and should be removed.
+// zindex: is not used and should be removed.
+// spaceLength: is not used and should be removed.
+
 {
   upper:: {
     alias: 'upper normal',
