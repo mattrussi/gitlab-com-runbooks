@@ -21,10 +21,10 @@ serviceDashboard.overview('logging')
         [
           panel.basic(
             title='PubSub subscriptions Undelivered Messages',
-            lines=false,
             unit='short',
             legend_show=false,
             drawStyle='bars',
+            stack=true,
           )
           .addTarget(
             target.prometheus(

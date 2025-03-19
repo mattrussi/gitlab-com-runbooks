@@ -66,7 +66,6 @@ basic.dashboard(
           interval='1m',
           linewidth=1,
           legend_show=true,
-          lines=true
         ),
         panel.timeSeries(
           title='Concurrency limits',

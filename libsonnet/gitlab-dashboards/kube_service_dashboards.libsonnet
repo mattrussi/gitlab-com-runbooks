@@ -329,6 +329,7 @@ local rowsForContainer(container, deployment, selectorHash, useTimeSeriesPlugin=
           legend_rightSide=false,
           linewidth=0,
           fill=60,
+          stack=true,
         )
         .addSeriesOverride({
           alias: 'CrashLoopBackOff',
@@ -375,6 +376,7 @@ local rowsForContainer(container, deployment, selectorHash, useTimeSeriesPlugin=
           legend_rightSide=false,
           linewidth=0,
           fill=60,
+          stack=true,
         )
         .addSeriesOverride({
           alias: 'Completed',
