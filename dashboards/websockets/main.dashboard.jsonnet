@@ -25,6 +25,7 @@ serviceDashboard.overview('websockets')
       if useTimeSeriesPlugin then
         panel.timeSeries(
           title='ActionCable Active Connections',
+          stableId='action_cable_active_connections',
           yAxisLabel='Connections',
           description=|||
             Number of ActionCable connections active at the time of sampling.
@@ -80,6 +81,7 @@ serviceDashboard.overview('websockets')
             gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="websockets"}
           |||,
           legendFormat='Sessions',
+          stableId='workhorse-sessions',
         )
       else
         basic.timeseries(

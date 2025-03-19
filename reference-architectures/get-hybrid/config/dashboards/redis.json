@@ -384,7 +384,7 @@
         "x": 0,
         "y": 1
       },
-      "id": 3,
+      "id": 3833589948,
       "options": {
         "legend": {
           "calcs": [
@@ -399,6 +399,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-redis-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"redis\"}[$__interval])\n",
@@ -902,7 +903,7 @@
         "x": 8,
         "y": 1
       },
-      "id": 5,
+      "id": 318223678,
       "options": {
         "legend": {
           "calcs": [
@@ -917,6 +918,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-redis-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"redis\"}[$__interval])\n,\n  1\n)\n",
@@ -1393,7 +1395,7 @@
         "x": 16,
         "y": 1
       },
-      "id": 7,
+      "id": 2521729619,
       "options": {
         "legend": {
           "calcs": [
@@ -1408,6 +1410,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-redis-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"redis\"}[$__interval])\n",
@@ -1604,7 +1607,7 @@
         "x": 0,
         "y": 21
       },
-      "id": 9,
+      "id": 175328272,
       "options": {
         "legend": {
           "calcs": [
@@ -1619,6 +1622,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-primary_server-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"primary_server\",type=\"redis\"}[$__interval])\n",
@@ -1925,7 +1929,7 @@
         "x": 0,
         "y": 31
       },
-      "id": 11,
+      "id": 2248986914,
       "options": {
         "legend": {
           "calcs": [
@@ -1940,6 +1944,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-rails_redis_client-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n",
@@ -2457,7 +2462,7 @@
         "x": 6,
         "y": 31
       },
-      "id": 13,
+      "id": 487497488,
       "options": {
         "legend": {
           "calcs": [
@@ -2472,6 +2477,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-rails_redis_client-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n,\n  1\n)\n",
@@ -2867,7 +2873,7 @@
         "x": 12,
         "y": 31
       },
-      "id": 15,
+      "id": 3147312091,
       "options": {
         "legend": {
           "calcs": [
@@ -2882,6 +2888,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-rails_redis_client-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"rails_redis_client\",type=\"redis\"}[$__interval])\n",
@@ -3188,7 +3195,7 @@
         "x": 0,
         "y": 41
       },
-      "id": 17,
+      "id": 4221579207,
       "options": {
         "legend": {
           "calcs": [
@@ -3203,6 +3210,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-redis-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"redis\",type=\"redis\"}[$__interval])\n",
@@ -3598,7 +3606,7 @@
         "x": 12,
         "y": 41
       },
-      "id": 19,
+      "id": 3565255509,
       "options": {
         "legend": {
           "calcs": [
@@ -3613,6 +3621,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-redis-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"redis\",type=\"redis\"}[$__interval])\n",

@@ -33,6 +33,7 @@ basic.dashboard(
         legendFormat='{{reason}}',
         linewidth=2,
         stack=true,
+        stableId='containers-waiting',
       )
       .addTarget(
         target.prometheus(

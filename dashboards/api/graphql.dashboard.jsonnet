@@ -33,6 +33,7 @@ basic.dashboard('GraphQL', tags=['type:api', 'detail'])
     ),
     if useTimeSeriesPlugin then
       panel.timeSeries(
+        stableId='request-rate',
         title='Request Rate',
         query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
         legendFormat='{{ action }}',

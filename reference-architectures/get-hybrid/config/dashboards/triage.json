@@ -351,7 +351,7 @@
         "x": 0,
         "y": 1101
       },
-      "id": 4,
+      "id": 690904570,
       "options": {
         "legend": {
           "calcs": [
@@ -366,6 +366,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitlab-shellservice-gitlab-shell-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"gitlab-shell\"}[$__interval])\n",
@@ -869,7 +870,7 @@
         "x": 5,
         "y": 1101
       },
-      "id": 6,
+      "id": 3043487758,
       "options": {
         "legend": {
           "calcs": [
@@ -884,6 +885,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitlab-shellservice-gitlab-shell-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"gitlab-shell\"}[$__interval])\n,\n  1\n)\n",
@@ -1360,7 +1362,7 @@
         "x": 10,
         "y": 1101
       },
-      "id": 8,
+      "id": 2751514846,
       "options": {
         "legend": {
           "calcs": [
@@ -1375,6 +1377,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitlab-shellservice-gitlab-shell-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"gitlab-shell\"}[$__interval])\n",
@@ -1483,7 +1486,7 @@
         "x": 15,
         "y": 1101
       },
-      "id": 9,
+      "id": 91681108,
       "links": [
         {
           "title": "gitlab-shell Service | kube_container_cpu_limit resource Dashboard",
@@ -1508,6 +1511,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitlab-shellservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"gitlab-shell\"}[$__interval]\n  )\n) by (component)\n",
@@ -1820,7 +1824,7 @@
         "x": 0,
         "y": 1901
       },
-      "id": 12,
+      "id": 1020364880,
       "options": {
         "legend": {
           "calcs": [
@@ -1835,6 +1839,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "registryservice-registry-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"registry\"}[$__interval])\n",
@@ -2338,7 +2343,7 @@
         "x": 5,
         "y": 1901
       },
-      "id": 14,
+      "id": 3392065145,
       "options": {
         "legend": {
           "calcs": [
@@ -2353,6 +2358,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "registryservice-registry-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"registry\"}[$__interval])\n,\n  1\n)\n",
@@ -2829,7 +2835,7 @@
         "x": 10,
         "y": 1901
       },
-      "id": 16,
+      "id": 750584801,
       "options": {
         "legend": {
           "calcs": [
@@ -2844,6 +2850,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "registryservice-registry-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"registry\"}[$__interval])\n",
@@ -2952,7 +2959,7 @@
         "x": 15,
         "y": 1901
       },
-      "id": 17,
+      "id": 1808812872,
       "links": [
         {
           "title": "registry Service | kube_container_cpu_limit resource Dashboard",
@@ -2977,6 +2984,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "registryservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"registry\"}[$__interval]\n  )\n) by (component)\n",
@@ -3289,7 +3297,7 @@
         "x": 0,
         "y": 2701
       },
-      "id": 20,
+      "id": 3725127254,
       "options": {
         "legend": {
           "calcs": [
@@ -3304,6 +3312,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sidekiqservice-sidekiq-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"sidekiq\"}[$__interval])\n",
@@ -3807,7 +3816,7 @@
         "x": 5,
         "y": 2701
       },
-      "id": 22,
+      "id": 2740455213,
       "options": {
         "legend": {
           "calcs": [
@@ -3822,6 +3831,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sidekiqservice-sidekiq-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
@@ -4298,7 +4308,7 @@
         "x": 10,
         "y": 2701
       },
-      "id": 24,
+      "id": 365480900,
       "options": {
         "legend": {
           "calcs": [
@@ -4313,6 +4323,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sidekiqservice-sidekiq-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"sidekiq\"}[$__interval])\n",
@@ -4421,7 +4432,7 @@
         "x": 15,
         "y": 2701
       },
-      "id": 25,
+      "id": 1954725218,
       "links": [
         {
           "title": "sidekiq Service | kube_container_cpu_limit resource Dashboard",
@@ -4446,6 +4457,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sidekiqservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"sidekiq\"}[$__interval]\n  )\n) by (component)\n",
@@ -4758,7 +4770,7 @@
         "x": 0,
         "y": 3501
       },
-      "id": 28,
+      "id": 2821070550,
       "options": {
         "legend": {
           "calcs": [
@@ -4773,6 +4785,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "webserviceservice-webservice-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"webservice\"}[$__interval])\n",
@@ -5276,7 +5289,7 @@
         "x": 5,
         "y": 3501
       },
-      "id": 30,
+      "id": 2793174379,
       "options": {
         "legend": {
           "calcs": [
@@ -5291,6 +5304,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "webserviceservice-webservice-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -5767,7 +5781,7 @@
         "x": 10,
         "y": 3501
       },
-      "id": 32,
+      "id": 1244022200,
       "options": {
         "legend": {
           "calcs": [
@@ -5782,6 +5796,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "webserviceservice-webservice-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"webservice\"}[$__interval])\n",
@@ -5890,7 +5905,7 @@
         "x": 15,
         "y": 3501
       },
-      "id": 33,
+      "id": 3156200393,
       "links": [
         {
           "title": "webservice Service | kube_container_cpu_limit resource Dashboard",
@@ -5919,6 +5934,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "webserviceservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"webservice\"}[$__interval]\n  )\n) by (component)\n",
@@ -6231,7 +6247,7 @@
         "x": 0,
         "y": 4301
       },
-      "id": 36,
+      "id": 3032091142,
       "options": {
         "legend": {
           "calcs": [
@@ -6246,6 +6262,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitalyservice-gitaly-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"gitaly\"}[$__interval])\n",
@@ -6749,7 +6766,7 @@
         "x": 5,
         "y": 4301
       },
-      "id": 38,
+      "id": 1775121435,
       "options": {
         "legend": {
           "calcs": [
@@ -6764,6 +6781,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitalyservice-gitaly-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"gitaly\"}[$__interval])\n,\n  1\n)\n",
@@ -7240,7 +7258,7 @@
         "x": 10,
         "y": 4301
       },
-      "id": 40,
+      "id": 2407688615,
       "options": {
         "legend": {
           "calcs": [
@@ -7255,6 +7273,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitalyservice-gitaly-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"gitaly\"}[$__interval])\n",
@@ -7363,7 +7382,7 @@
         "x": 15,
         "y": 4301
       },
-      "id": 41,
+      "id": 3608557538,
       "links": [
         {
           "title": "gitaly Service | cpu resource Dashboard",
@@ -7412,6 +7431,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "gitalyservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"gitaly\"}[$__interval]\n  )\n) by (component)\n",
@@ -7724,7 +7744,7 @@
         "x": 0,
         "y": 5101
       },
-      "id": 44,
+      "id": 1462485464,
       "options": {
         "legend": {
           "calcs": [
@@ -7739,6 +7759,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "praefectservice-praefect-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"praefect\"}[$__interval])\n",
@@ -8242,7 +8263,7 @@
         "x": 5,
         "y": 5101
       },
-      "id": 46,
+      "id": 4217231753,
       "options": {
         "legend": {
           "calcs": [
@@ -8257,6 +8278,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "praefectservice-praefect-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"praefect\"}[$__interval])\n,\n  1\n)\n",
@@ -8733,7 +8755,7 @@
         "x": 10,
         "y": 5101
       },
-      "id": 48,
+      "id": 3420507204,
       "options": {
         "legend": {
           "calcs": [
@@ -8748,6 +8770,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "praefectservice-praefect-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"praefect\"}[$__interval])\n",
@@ -8856,7 +8879,7 @@
         "x": 15,
         "y": 5101
       },
-      "id": 49,
+      "id": 1588309641,
       "links": [
         {
           "title": "praefect Service | cpu resource Dashboard",
@@ -8905,6 +8928,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "praefectservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"praefect\"}[$__interval]\n  )\n) by (component)\n",
@@ -9033,7 +9057,7 @@
         "x": 0,
         "y": 5901
       },
-      "id": 52,
+      "id": 2120645664,
       "links": [
         {
           "title": "consul Service | cpu resource Dashboard",
@@ -9082,6 +9106,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "consulservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"consul\"}[$__interval]\n  )\n) by (component)\n",
@@ -9394,7 +9419,7 @@
         "x": 0,
         "y": 6201
       },
-      "id": 55,
+      "id": 565830247,
       "options": {
         "legend": {
           "calcs": [
@@ -9409,6 +9434,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "kubeservice-kube-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"kube\"}[$__interval])\n",
@@ -9912,7 +9938,7 @@
         "x": 5,
         "y": 6201
       },
-      "id": 57,
+      "id": 2367610790,
       "options": {
         "legend": {
           "calcs": [
@@ -9927,6 +9953,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "kubeservice-kube-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"kube\"}[$__interval])\n,\n  1\n)\n",
@@ -10403,7 +10430,7 @@
         "x": 10,
         "y": 6201
       },
-      "id": 59,
+      "id": 1486468311,
       "options": {
         "legend": {
           "calcs": [
@@ -10418,6 +10445,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "kubeservice-kube-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"kube\"}[$__interval])\n",
@@ -10526,7 +10554,7 @@
         "x": 15,
         "y": 6201
       },
-      "id": 60,
+      "id": 997892881,
       "links": [
         {
           "title": "kube Service | kube_persistent_volume_claim_disk_space resource Dashboard",
@@ -10555,6 +10583,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "kubeservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"kube\"}[$__interval]\n  )\n) by (component)\n",
@@ -10867,7 +10896,7 @@
         "x": 0,
         "y": 7001
       },
-      "id": 63,
+      "id": 1687045714,
       "options": {
         "legend": {
           "calcs": [
@@ -10882,6 +10911,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "redisservice-redis-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"redis\"}[$__interval])\n",
@@ -11385,7 +11415,7 @@
         "x": 5,
         "y": 7001
       },
-      "id": 65,
+      "id": 1610594720,
       "options": {
         "legend": {
           "calcs": [
@@ -11400,6 +11430,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "redisservice-redis-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"redis\"}[$__interval])\n,\n  1\n)\n",
@@ -11876,7 +11907,7 @@
         "x": 10,
         "y": 7001
       },
-      "id": 67,
+      "id": 3662484424,
       "options": {
         "legend": {
           "calcs": [
@@ -11891,6 +11922,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "redisservice-redis-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"redis\"}[$__interval])\n",
@@ -11999,7 +12031,7 @@
         "x": 15,
         "y": 7001
       },
-      "id": 68,
+      "id": 2136086171,
       "options": {
         "legend": {
           "calcs": [
@@ -12014,6 +12046,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "redisservice-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"redis\"}[$__interval]\n  )\n) by (component)\n",

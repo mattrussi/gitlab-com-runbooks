@@ -82,6 +82,7 @@ basic.dashboard(
     if useTimeSeriesPlugin then
       [
         panel.percentageTimeSeries(
+          stableId='acceptance-rate',
           title='Acceptance Rate / sec',
           query=|||
             sum by(lang) (
@@ -114,6 +115,7 @@ basic.dashboard(
           unit='percent',
         ),
         panel.timeSeries(
+          stableId='request-language',
           title='Request Language / sec',
           query=|||
             sum by(lang, symbol) (
@@ -142,6 +144,7 @@ basic.dashboard(
           unit='percent',
         ),
         panel.timeSeries(
+          stableId='request-extension',
           title='Request Extension / sec',
           query=|||
             sum by(extension) (
@@ -170,6 +173,7 @@ basic.dashboard(
           unit='percent',
         ),
         panel.timeSeries(
+          stableId='request-symbol',
           title='Request Symbol / sec',
           query=|||
             sum by(lang) (

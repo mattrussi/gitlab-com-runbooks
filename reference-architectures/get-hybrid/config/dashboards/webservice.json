@@ -384,7 +384,7 @@
         "x": 0,
         "y": 1
       },
-      "id": 3,
+      "id": 2472992903,
       "options": {
         "legend": {
           "calcs": [
@@ -399,6 +399,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-webservice-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"webservice\"}[$__interval])\n",
@@ -902,7 +903,7 @@
         "x": 6,
         "y": 1
       },
-      "id": 5,
+      "id": 1986258045,
       "options": {
         "legend": {
           "calcs": [
@@ -917,6 +918,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-webservice-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -1393,7 +1395,7 @@
         "x": 12,
         "y": 1
       },
-      "id": 7,
+      "id": 3557202357,
       "options": {
         "legend": {
           "calcs": [
@@ -1408,6 +1410,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-webservice-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"webservice\"}[$__interval])\n",
@@ -1516,7 +1519,7 @@
         "x": 18,
         "y": 1
       },
-      "id": 8,
+      "id": 1217942947,
       "links": [
         {
           "title": "webservice Service | kube_container_cpu_limit resource Dashboard",
@@ -1545,6 +1548,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"webservice\"}[$__interval]\n  )\n) by (component)\n",
@@ -1850,7 +1854,7 @@
         "x": 0,
         "y": 21
       },
-      "id": 10,
+      "id": 3837080777,
       "options": {
         "legend": {
           "calcs": [
@@ -1865,6 +1869,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-graphql_query-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n",
@@ -2382,7 +2387,7 @@
         "x": 6,
         "y": 21
       },
-      "id": 12,
+      "id": 1966600567,
       "options": {
         "legend": {
           "calcs": [
@@ -2397,6 +2402,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-graphql_query-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -2792,7 +2798,7 @@
         "x": 12,
         "y": 21
       },
-      "id": 14,
+      "id": 1872300215,
       "options": {
         "legend": {
           "calcs": [
@@ -2807,6 +2813,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-graphql_query-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n",
@@ -3113,7 +3120,7 @@
         "x": 0,
         "y": 31
       },
-      "id": 16,
+      "id": 561966508,
       "options": {
         "legend": {
           "calcs": [
@@ -3128,6 +3135,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-puma-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n",
@@ -3645,7 +3653,7 @@
         "x": 6,
         "y": 31
       },
-      "id": 18,
+      "id": 2425637513,
       "options": {
         "legend": {
           "calcs": [
@@ -3660,6 +3668,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-puma-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -4055,7 +4064,7 @@
         "x": 12,
         "y": 31
       },
-      "id": 20,
+      "id": 110019945,
       "options": {
         "legend": {
           "calcs": [
@@ -4070,6 +4079,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-puma-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n",
@@ -4376,7 +4386,7 @@
         "x": 0,
         "y": 41
       },
-      "id": 22,
+      "id": 2586818196,
       "options": {
         "legend": {
           "calcs": [
@@ -4391,6 +4401,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n",
@@ -4908,7 +4919,7 @@
         "x": 6,
         "y": 41
       },
-      "id": 24,
+      "id": 2047984749,
       "options": {
         "legend": {
           "calcs": [
@@ -4923,6 +4934,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -5318,7 +5330,7 @@
         "x": 12,
         "y": 41
       },
-      "id": 26,
+      "id": 831392945,
       "options": {
         "legend": {
           "calcs": [
@@ -5333,6 +5345,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n",
@@ -5639,7 +5652,7 @@
         "x": 0,
         "y": 51
       },
-      "id": 28,
+      "id": 1061500963,
       "options": {
         "legend": {
           "calcs": [
@@ -5654,6 +5667,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse_api-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"workhorse_api\",type=\"webservice\"}[$__interval])\n",
@@ -6171,7 +6185,7 @@
         "x": 6,
         "y": 51
       },
-      "id": 30,
+      "id": 1957610638,
       "options": {
         "legend": {
           "calcs": [
@@ -6186,6 +6200,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse_api-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"workhorse_api\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -6581,7 +6596,7 @@
         "x": 12,
         "y": 51
       },
-      "id": 32,
+      "id": 3800674929,
       "options": {
         "legend": {
           "calcs": [
@@ -6596,6 +6611,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse_api-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"workhorse_api\",type=\"webservice\"}[$__interval])\n",
@@ -6902,7 +6918,7 @@
         "x": 0,
         "y": 61
       },
-      "id": 34,
+      "id": 3264851214,
       "options": {
         "legend": {
           "calcs": [
@@ -6917,6 +6933,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse_git-apdex",
       "targets": [
         {
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"workhorse_git\",type=\"webservice\"}[$__interval])\n",
@@ -7434,7 +7451,7 @@
         "x": 6,
         "y": 61
       },
-      "id": 36,
+      "id": 769712142,
       "options": {
         "legend": {
           "calcs": [
@@ -7449,6 +7466,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse_git-error-rate",
       "targets": [
         {
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"workhorse_git\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
@@ -7844,7 +7862,7 @@
         "x": 12,
         "y": 61
       },
-      "id": 38,
+      "id": 3915518396,
       "options": {
         "legend": {
           "calcs": [
@@ -7859,6 +7877,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "sli-workhorse_git-ops-rate",
       "targets": [
         {
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"workhorse_git\",type=\"webservice\"}[$__interval])\n",

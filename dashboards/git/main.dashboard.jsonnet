@@ -31,6 +31,7 @@ serviceDashboard.overview('git')
             gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="git"}
           |||,
           legendFormat='Sessions',
+          stableId='workhorse-sessions',
         ),
       ]
     else

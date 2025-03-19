@@ -7,6 +7,7 @@ local utilizationRatesPanel(
   serviceType,
   selectorHash,
   compact=false,
+  stableId=stableId,
   linewidth=if compact then 1 else 2,
       ) =
   local hasShardSelector = std.objectHas(selectorHash, 'shard');
@@ -27,6 +28,7 @@ local utilizationRatesPanel(
     legend_show=!compact,
     linewidth=linewidth,
     unit='percentunit',
+    stableId=stableId,
   )
   .addTarget(  // Primary metric
     target.prometheus(

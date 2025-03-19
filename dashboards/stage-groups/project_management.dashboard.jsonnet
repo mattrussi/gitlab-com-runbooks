@@ -9,6 +9,7 @@ local useTimeSeriesPlugin = true;
 local actionCableActiveConnections() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
+      stableId='action_cable_active_connections',
       title='ActionCable Active Connections',
       yAxisLabel='Connections',
       description=|||
@@ -45,6 +46,7 @@ local actionCableActiveConnections() =
 local serviceDeskReceivedEmails =
   if useTimeSeriesPlugin then
     panel.timeSeries(
+      stableId='service_desk_received_emails',
       title='Service Desk Received Emails',
       yAxisLabel='Emails',
       description=|||
@@ -85,6 +87,7 @@ local serviceDeskReceivedEmails =
 local serviceDeskThankYouEmails =
   if useTimeSeriesPlugin then
     panel.timeSeries(
+      stableId='service_desk_thank_you_email',
       title='Service Desk Outgoing Emails (New Issue)',
       yAxisLabel='Emails',
       description=|||
@@ -125,6 +128,7 @@ local serviceDeskThankYouEmails =
 local serviceDeskNewNoteEmails =
   if useTimeSeriesPlugin then
     panel.timeSeries(
+      stableId='service_desk_new_note_email',
       title='Service Desk Outgoing Emails (New Comment)',
       yAxisLabel='Emails',
       description=|||
@@ -165,6 +169,7 @@ local serviceDeskNewNoteEmails =
 local emailReceiverErrors =
   if useTimeSeriesPlugin then
     panel.timeSeries(
+      stableId='email_receiver_error',
       title='All Email Receiver Errors (not only Service Desk)',
       yAxisLabel='Errors',
       description=|||

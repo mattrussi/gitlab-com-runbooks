@@ -200,7 +200,7 @@
         "x": 0,
         "y": 1
       },
-      "id": 3,
+      "id": 1217942947,
       "links": [
         {
           "title": "consul Service | cpu resource Dashboard",
@@ -249,6 +249,7 @@
         }
       },
       "pluginVersion": "v11.4.0",
+      "stableId": "service-utilization",
       "targets": [
         {
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"consul\"}[$__interval]\n  )\n) by (component)\n",

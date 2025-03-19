@@ -22,6 +22,7 @@ local bigQueryDuration(percentiles=[50, 90, 99], useTimeSeriesPlugin=false) =
     };
   if useTimeSeriesPlugin then
     panel.multiTimeSeries(
+      stableId='builds-queue-big-query-duration',
       title='Duration of the builds queue retrieval using the big query SQL',
       format='s',
       queries=[
