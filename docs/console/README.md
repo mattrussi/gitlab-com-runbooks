@@ -22,6 +22,7 @@
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [Set up bastions for Release managers](../bastions/rm-bastion-access.md)
 * [Breakglass](../cells/breakglass.md)
+* [Cell Provisioning and De-Provisioning](../cells/provisioning.md)
 * [AWS Managed Certificates](../certificates/aws.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)

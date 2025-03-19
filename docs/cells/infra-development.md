@@ -54,8 +54,7 @@ flowchart TD
 > [!note]
 > If using an existing cell in a quarantine ring, follow the below steps.
 > Alternatively you can create a new cell, and place it in the quarantine ring before following these steps.
-> Follow the steps outlined in the [Provision Cell section](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue#provision-cell)
-> of [`cells/tissue`].
+> Follow the steps outlined in the [Provision Cell section](./provisioning.md#how-to-de-provision-a-cell).
 
 ```mermaid
 flowchart TD
