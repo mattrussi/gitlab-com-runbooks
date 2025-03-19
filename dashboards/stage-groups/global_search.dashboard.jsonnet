@@ -14,6 +14,7 @@ local elasticQueueSize(title, metric) =
     panel.timeSeries(
       title=title,
       yAxisLabel='Documents in queue',
+      stableId='global-search-queue-size-%s' % std.asciiLower(title),
       description=|||
         The number of records waiting to be synced to Elasticsearch for Global Search. These jobs are created when projects are imported or when Elasticsearch is enabled for a group in order to backfill all project data to the index. These are picked up in batches every minute. Lower is better but the batching every minute means it will not usually stay at 0. Occasional spikes are expected but sustained steady growth over a long period of time may indicate that ElasticIndexBulkCronWorker or ElasticIndexInitialBulkCronWorker is not keeping up. It may also indicate that indexing is paused in `Admin > Settings > Advanced Search`. Indexing may have been deliberately paused for maintenance.
       |||,
@@ -39,6 +40,7 @@ local searchTotalRate(title, request_type, search_type) =
     panel.timeSeries(
       title=title,
       yAxisLabel='Global Search Request Rate',
+      stableId='global-search-total-rate-%s-%s' % [std.asciiLower(request_type), std.asciiLower(search_type)],
       description=|||
         The number of Global Search search requests made during the given interval.
       |||,
@@ -64,6 +66,7 @@ local searchErrorRate(title, request_type, search_type) =
     panel.timeSeries(
       title=title,
       yAxisLabel='Global Search Errors',
+      stableId='global-search-error-rate-%s-%s' % [std.asciiLower(request_type), std.asciiLower(search_type)],
       description=|||
         The number of Global Search search requests that result in an erroneous status code or
         raise an error during the search request.

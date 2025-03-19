@@ -255,6 +255,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
         ),
         buildsQueueGraphs.bigQueryDuration(useTimeSeriesPlugin=useTimeSeriesPlugin),
         panel.multiTimeSeries(
+          stableId='builds-queue-size',
           title='Size of the builds queue per runner type',
           queries=[{
             query: |||
@@ -305,6 +306,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
         ),
         panel.multiTimeSeries(
           title='Depth of the builds queue per queuing result',
+          stableId='builds-queue-depth',
           queries=[{
             query: |||
               histogram_quantile(
@@ -547,6 +549,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           yAxisLabel='Rate per second',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-creation-duration',
           title='Duration of the pipeline creation chain',
           queries=[{
             query: |||
@@ -597,6 +600,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-creation-step-duration-p50',
           title='Duration of each pipeline creation step (p50)',
           queries=[{
             query: |||
@@ -610,6 +614,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-creation-step-duration-p90',
           title='Duration of each pipeline creation step (p90)',
           queries=[{
             query: |||
@@ -623,6 +628,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-creation-step-duration-p99',
           title='Duration of each pipeline creation step (p99)',
           queries=[{
             query: |||
@@ -636,6 +642,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-scoped-variables-duration-p50',
           title='Duration of scoped variables calculation (p50)',
           queries=[{
             query: |||
@@ -649,6 +656,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-scoped-variables-duration-p90',
           title='Duration of scoped variables calculation(p90)',
           queries=[{
             query: |||
@@ -662,6 +670,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-scoped-variables-duration-p99',
           title='Duration of scoped variables calculation (p99)',
           queries=[{
             query: |||
@@ -675,6 +684,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
           format='short',
         ),
         panel.multiTimeSeries(
+          stableId='pipeline-size',
           title='Pipeline size by pipeline source',
           queries=[{
             query: |||

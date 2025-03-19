@@ -14,6 +14,7 @@ local timeseriesGraph(title, query) =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title=title,
+      stableId='gitlab-zoekt-%s' % std.asciiLower(title),
       query=query,
     )
   else
@@ -29,6 +30,7 @@ local searchRate() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title=title,
+      stableId='gitlab-zoekt-%s' % std.asciiLower(title),
       legendFormat='{{container}}',
       query=|||
         rate(zoekt_search_requests_total{env="$environment"}[5m])
@@ -53,6 +55,7 @@ local errorRate() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title=title,
+      stableId='gitlab-zoekt-%s' % std.asciiLower(title),
       legendFormat='{{container}}',
       query=|||
         rate(zoekt_search_failed_total{env="$environment"}[5m])
@@ -74,6 +77,7 @@ local searchesPercentile(percentile) =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title=title,
+      stableId='gitlab-zoekt-%s' % std.asciiLower(title),
       yAxisLabel='seconds',
       legendFormat='{{container}}',
       query=|||
@@ -98,6 +102,7 @@ local diskUtilization() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title=title,
+      stableId='gitlab-zoekt-%s' % std.asciiLower(title),
       yAxisLabel='% utilization',
       legendFormat='{{persistentvolumeclaim}}',
       query=|||
@@ -159,6 +164,7 @@ local memoryUsage() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title=title,
+      stableId='gitlab-zoekt-%s' % std.asciiLower(title),
       query=|||
         sum(proc_metrics_memory_map_current_count{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)
       |||,

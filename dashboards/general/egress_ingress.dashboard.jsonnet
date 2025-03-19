@@ -30,6 +30,7 @@ local generalGraphPanel(
       legend_show=false,
       legend_min=false,
       legend_rightSide=true,
+      legend_hideEmpty=false,
       unit=format,
       fill=fill * 10,
     )

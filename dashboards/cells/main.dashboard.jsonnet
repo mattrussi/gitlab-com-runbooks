@@ -101,6 +101,7 @@ basic.dashboard(
     if useTimeSeriesPlugin then
       [
         panel.multiTimeSeries(
+          stableId='pingdom_latency_over_time',
           title='Pingdom Latency over time (P999)',
           description='This graph shows the Pingdom response times measured from the endpoints',
           datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -125,6 +126,7 @@ basic.dashboard(
           ],
         ),
         panel.multiTimeSeries(
+          stableId='cloudflare_latency_over_time',
           title='Cloudflare Latency over time (P999)',
           description='This graph shows the Cloudflare induced latency, the CloudFlare defintion of this metric: https://developers.cloudflare.com/workers/observability/metrics-and-analytics/#cpu-time-per-execution',
           datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -325,6 +327,7 @@ basic.dashboard(
         ),
         if useTimeSeriesPlugin then
           panel.timeSeries(
+            stableId='pingdom_response_time',
             title='Pingdom Response Time',
             description='We currently do not have a threshold defined for pingdom metrics so using the request urgency thresholds to provide scaling: https://docs.gitlab.com/ee/development/application_slis/rails_request.html#how-to-adjust-the-urgency',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -427,6 +430,7 @@ basic.dashboard(
       if useTimeSeriesPlugin then
         [
           panel.timeSeries(
+            stableId='pingdom_outages',
             title='Pingdom Outages',
             description='Monitoring Outages for Pingdom service',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -436,6 +440,7 @@ basic.dashboard(
             legendFormat='outages',
           ),
           panel.timeSeries(
+            stableId='pingdom_slo_budget',
             title='SLO Error Budget',
             description='Monitoring SLO Error budget for Pingdom service',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -453,6 +458,7 @@ basic.dashboard(
             )
           ),
           panel.timeSeries(
+            stableId='pingdom_rate_limit',
             title='Pingdom API Rate Limit',
             description='Number of requests left for the Pingdom rate limit',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -548,6 +554,7 @@ basic.dashboard(
             ],
           ),
           panel.timeSeries(
+            stableId='cloudflare-cpu-latency',
             description='CloudFlare definition: https://developers.cloudflare.com/workers/observability/metrics-and-analytics/#cpu-time-per-execution',
             title='CPU Latency',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -562,6 +569,7 @@ basic.dashboard(
             ],
           ),
           panel.timeSeries(
+            stableId='cloudflare-cpu-headroom',
             title='Worker CPU headroom',
             description='Headroom calculation: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/http_routing_service/#analysis',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -572,6 +580,7 @@ basic.dashboard(
             format='µs',
           ),
           panel.timeSeries(
+            stableId='cloudflare-bandwidth-consumed',
             title='Bandwidth consumed',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
             query=|||
@@ -581,6 +590,7 @@ basic.dashboard(
             format='bytes',
           ),
           panel.timeSeries(
+            stableId='cloudflare-Requests',
             title='Requests',
             description='Cloudflare definition: https://developers.cloudflare.com/workers/observability/metrics-and-analytics/#requests',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -594,6 +604,7 @@ basic.dashboard(
             ],
           ),
           panel.timeSeries(
+            stableId='cloudflare-duration',
             description='CloudFlare definition: https://developers.cloudflare.com/workers/observability/metrics-and-analytics/#execution-duration-gb-seconds',
             title='Worker Duration',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -604,6 +615,7 @@ basic.dashboard(
             format='GBs',
           ),
           panel.timeSeries(
+            stableId='cloudflare-worker-errors',
             title='CloudFlare Worker errors',
             description='CloudFlare documentation on request statuses: https://developers.cloudflare.com/workers/observability/metrics-and-analytics/#invocation-statuses',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
@@ -613,6 +625,7 @@ basic.dashboard(
             legendFormat='rate of change',
           ),
           panel.timeSeries(
+            stableId='cloudflare-requests_by_region',
             title='Requests by Region',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
             query=|||
@@ -621,6 +634,7 @@ basic.dashboard(
             legendFormat='{{ region }}',
           ),
           panel.timeSeries(
+            stableId='cloudflare-requests_by_country',
             title='Requests by country',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
             query=|||
@@ -629,6 +643,7 @@ basic.dashboard(
             legendFormat='{{ country }}',
           ),
           panel.timeSeries(
+            stableId='cloudflare-sli_aggregations',
             title='SLI aggregation: Request status (5m rate)',
             datasource=mimirHelper.mimirDatasource('gitlab-ops'),
             query=|||

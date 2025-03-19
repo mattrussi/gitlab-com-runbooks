@@ -18,12 +18,14 @@ local basic(
   legend_avg=true,
   legend_alignAsTable=true,
   legend_rightSide=false,
+  legend_hideEmpty=true,
   points=false,
   pointradius=5,
   unit=null,
   drawStyle='line',
   fill=0,
   stack=false,
+  stableId=null,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -73,6 +75,49 @@ local basic(
   ts.options.legend.withCalcs(legendCalcs) +
   ts.options.legend.withShowLegend(legend_show) +
   ts.options.legend.withPlacement(legendPlacement) +
+  (if legend_hideEmpty == true then
+     ts.standardOptions.withOverridesMixin({
+       matcher: {
+         id: 'byValue',
+         options: {
+           op: 'gte',
+           reducer: 'allIsNull',
+           value: 0,
+         },
+       },
+       properties: [
+         {
+           id: 'custom.hideFrom',
+           value: {
+             legend: true,
+             tooltip: false,
+             viz: false,
+           },
+         },
+       ],
+     }) +
+     ts.standardOptions.withOverridesMixin({
+       matcher: {
+         id: 'byValue',
+         options: {
+           op: 'gte',
+           reducer: 'allIsZero',
+           value: 0,
+         },
+       },
+       properties: [
+         {
+           id: 'custom.hideFrom',
+           value: {
+             legend: true,
+             tooltip: false,
+             viz: false,
+           },
+         },
+       ],
+     })
+   else
+     {}) +
   ts.panelOptions.withDescription(description) +
   ts.standardOptions.withUnit(unit) +
   (if std.length(thresholdSteps) > 0 then
@@ -95,6 +140,12 @@ local basic(
        else
          thresholdSteps
      )
+   else
+     {}) +
+  (if stableId != null then
+     {
+       stableId: stableId,
+     }
    else
      {})
   {
@@ -227,6 +278,7 @@ local apdexTimeSeries(
   min=null,
   legend_show=true,
   datasource='$PROMETHEUS_DS',
+  stableId=null,
       ) =
   local formatConfig = {
     query: query,
@@ -244,6 +296,7 @@ local apdexTimeSeries(
     legend_alignAsTable=true,
     legend_show=legend_show,
     unit='percentunit',
+    stableId=stableId,
   )
   .addTarget(
     target.prometheus(
@@ -278,11 +331,13 @@ local multiTimeSeries(
   datasource='$PROMETHEUS_DS',
   drawStyle='line',
   stack=false,
+  stableId=null,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
   local panel = basic(
     title,
+    stableId=stableId,
     description=description,
     linewidth=linewidth,
     fill=fill,
@@ -365,6 +420,7 @@ local timeSeries(
   datasource='$PROMETHEUS_DS',
   drawStyle='line',
   stack=false,
+  stableId=null,
   thresholdMode='absolute',
   thresholdSteps=[],
       ) =
@@ -385,6 +441,7 @@ local timeSeries(
     datasource=datasource,
     drawStyle=drawStyle,
     stack=stack,
+    stableId=stableId,
     thresholdMode=thresholdMode,
     thresholdSteps=thresholdSteps,
   );
@@ -504,6 +561,7 @@ local percentageTimeSeries(
   format='percentunit',
   fill=0,
   stack=false,
+  stableId=null,
   thresholdSteps=[],
       ) =
   local formatConfig = {
@@ -524,6 +582,7 @@ local percentageTimeSeries(
     unit=format,
     fill=fill,
     stack=stack,
+    stableId=stableId,
     thresholdMode='percentage',
     thresholdSteps=thresholdSteps,
   )
@@ -554,6 +613,7 @@ local queueLengthTimeSeries(
   yAxisLabel='Queue Length',
   linewidth=2,
   datasource='$PROMETHEUS_DS',
+  stableId=null,
       ) =
   basic(
     title,
@@ -568,6 +628,7 @@ local queueLengthTimeSeries(
     legend_avg=true,
     legend_alignAsTable=true,
     unit=format,
+    stableId=stableId,
   )
   .addTarget(target.prometheus(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
   .addYaxis(

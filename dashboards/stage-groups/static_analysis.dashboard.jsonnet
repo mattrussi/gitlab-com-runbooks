@@ -12,6 +12,7 @@ local sastArtifactBuildsCompleted() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title='SAST Artifact Builds Completed',
+      stableId='sast_artifact_builds_completed',
       yAxisLabel='Count',
       description=|||
         Number of CI Builds completed with SAST report artifacts
@@ -48,6 +49,7 @@ local secretDetectionArtifactBuildsCompleted() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title='Secret Detection Artifact Builds Completed',
+      stableId='secret_detection_artifact_builds_completed',
       yAxisLabel='Count',
       description=|||
         Number of CI Builds completed with Secret Detection report artifacts
@@ -85,6 +87,7 @@ local codeQualityArtifactBuildsCompleted() =
   if useTimeSeriesPlugin then
     panel.timeSeries(
       title='Code Quality Artifact Builds Completed',
+      stableId='code_quality_artifact_builds_completed',
       yAxisLabel='Count',
       description=|||
         Number of CI Builds completed with Code Quality report artifacts
