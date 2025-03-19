@@ -988,6 +988,61 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_btree_bloat",env="gprd",type="patroni-ci"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_btree_bloat"}
+  - alert: component_saturation_slo_out_of_bounds:pg_id_sequences
+    for: 5m
+    annotations:
+      title: The Postgres IDs sequence capacity resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres IDs sequence capacity resource:
+
+        This measures all ID column's sequence capacity, each cell gets it's sequence range from the topology service and it's critically important that we do not reach saturation on these ID columns as GitLab (particular instance/cell) will stop to work otherwise.
+
+        This tracks both int4 (in legacy cell) and int8 IDs.
+      grafana_dashboard_id: alerts-sat_pg_id_sequences
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_id_sequences?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1800927931"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment,fully_qualified_sequencename,shard,stage,tier,type) (
+          clamp_min(
+            clamp_max(
+              max by (environment,fully_qualified_sequencename,shard,stage,tier,type) (
+                gitlab_pg_sequences_current_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} / gitlab_pg_sequences_max_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment,fully_qualified_sequencename,shard,stage,tier,type) (
+          clamp_min(
+            clamp_max(
+              max by (environment,fully_qualified_sequencename,shard,stage,tier,type) (
+                gitlab_pg_sequences_current_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} / gitlab_pg_sequences_max_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_id_sequences",env="gprd",type="patroni-ci"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_id_sequences"}
   - alert: component_saturation_slo_out_of_bounds:pg_int4_id
     for: 5m
     annotations:
