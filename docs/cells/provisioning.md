@@ -91,23 +91,23 @@
 
 4. **Trigger the Instrumentor Stages for cell provisioning:**
 
-  ```bash
+   ```bash
    ./ringctl cell deploy -e <cellsdev|cellsprod> <tenant_id> --only-gitlab-upgrade=false
    ```
 
-  > [!note]
-  > This command will output a link to the cell pipeline which you can use to track the deployment progress.
-  > The pipeline will run all the Instrumentor stages to create your cell.
+   > [!note]
+   > This command will output a link to the cell pipeline which you can use to track the deployment progress.
+   > The pipeline will run all the Instrumentor stages to create your cell.
 
-  > [!warning]
-  > The `prepare` stage might fail on the initial run with an error like:
-  >
-  > ```
-  > Error when reading or editing KMSKeyRing "projects/cell-c01jp4m0711mwrhb8j/locations/us-east1/keyRings/gld-single-region": googleapi: Error 403: Google Cloud KMS API has not been used in project 9065488916 before or it is disabled. Enable it by visiting <https://console.developers.google.com/apis/api/cloudkms.googleapis.com/overview?project=9065488916> then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
-  > ```
-  >
-  > This is expected as the cell project was just created and Google is still enabling the API.
-  > Retry the job after approximately 10 minutes to resolve this issue.
+   > [!warning]
+   > The `prepare` stage might fail on the initial run with an error like:
+   >
+   > ```
+   > Error when reading or editing KMSKeyRing "projects/cell-c01jp4m0711mwrhb8j/locations/us-east1/keyRings/gld-single-region": googleapi: Error 403: Google Cloud KMS API has not been used in project 9065488916 before or it is disabled. Enable it by visiting <https://console.developers.google.com/apis/api/cloudkms.googleapis.com/overview?project=9065488916> then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+   > ```
+   >
+   > This is expected as the cell project was just created and Google is still enabling the API.
+   > Retry the job after approximately 10 minutes to resolve this issue.
 
 5. **Access your new cell:**
    - Once the pipeline completes successfully, access your cell through the domain specified in the `managed_domain` field of the `TENANT_MODEL`
