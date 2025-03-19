@@ -247,6 +247,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_id_sequences
+    expr: |
+      max by(env,environment,shard,stage,tier,type) (
+        clamp_min(
+          clamp_max(
+            max by (env,environment,fully_qualified_sequencename,shard,stage,tier,type) (
+              gitlab_pg_sequences_current_value{env="pre",type="patroni"} / gitlab_pg_sequences_max_value{env="pre",type="patroni"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pg_int4_id
     expr: |
       max by(env,environment,shard,stage,tier,type) (
