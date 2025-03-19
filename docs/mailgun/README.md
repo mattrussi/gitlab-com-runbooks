@@ -17,7 +17,6 @@
 ## Troubleshooting Pointers
 
 * [Cell Provisioning and De-Provisioning](../cells/provisioning.md)
-* [Cell Provisioning and De-Provisioning Guide](../cells/temp.md)
 * [How GitLab.com uses Mailgun](mailgun.md)
 * [Mailgun Events](mailgunevents.md)
 * [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)

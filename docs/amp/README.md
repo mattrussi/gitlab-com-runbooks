@@ -21,7 +21,6 @@
 * [Cells DNS](../cells/dns.md)
 * [../cells/infra-development.md](../cells/infra-development.md)
 * [Cell Provisioning and De-Provisioning](../cells/provisioning.md)
-* [Cell Provisioning and De-Provisioning Guide](../cells/temp.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
