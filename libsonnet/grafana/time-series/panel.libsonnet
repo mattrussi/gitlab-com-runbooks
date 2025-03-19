@@ -18,6 +18,7 @@ local basic(
   legend_avg=true,
   legend_alignAsTable=true,
   legend_rightSide=false,
+  legend_hideEmpty=true,
   points=false,
   pointradius=5,
   unit=null,
@@ -73,6 +74,49 @@ local basic(
   ts.options.legend.withCalcs(legendCalcs) +
   ts.options.legend.withShowLegend(legend_show) +
   ts.options.legend.withPlacement(legendPlacement) +
+  (if legend_hideEmpty == true then
+     ts.standardOptions.withOverridesMixin({
+       matcher: {
+         id: 'byValue',
+         options: {
+           op: 'gte',
+           reducer: 'allIsNull',
+           value: 0,
+         },
+       },
+       properties: [
+         {
+           id: 'custom.hideFrom',
+           value: {
+             legend: true,
+             tooltip: false,
+             viz: false,
+           },
+         },
+       ],
+     }) +
+     ts.standardOptions.withOverridesMixin({
+       matcher: {
+         id: 'byValue',
+         options: {
+           op: 'gte',
+           reducer: 'allIsZero',
+           value: 0,
+         },
+       },
+       properties: [
+         {
+           id: 'custom.hideFrom',
+           value: {
+             legend: true,
+             tooltip: false,
+             viz: false,
+           },
+         },
+       ],
+     })
+   else
+     {}) +
   ts.panelOptions.withDescription(description) +
   ts.standardOptions.withUnit(unit) +
   (if std.length(thresholdSteps) > 0 then
