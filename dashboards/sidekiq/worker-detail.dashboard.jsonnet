@@ -224,7 +224,7 @@ basic.dashboard(
         lowUrgencySLO: sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
         urgentSLO: sidekiqHelpers.slos.urgent.queueingDurationSeconds,
       },
-      '{{ worker }}',
+      legendFormat='{{ worker }}',
       unit='s',
     ),
     basic.statPanel(
@@ -242,10 +242,19 @@ basic.dashboard(
         lowUrgencySLO: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
         urgentSLO: sidekiqHelpers.slos.urgent.executionDurationSeconds,
       },
-      '{{ worker }}',
+      legendFormat='{{ worker }}',
       unit='s',
     ),
-  ], cols=7, rowHeight=4)
+    basic.labelStat(
+      title='Stage Group',
+      color='light-green',
+      query=|||
+        application_sli_aggregation:sidekiq_execution:ops:rate_1h{env="$environment", worker=~"$worker"} *
+        on (feature_category) group_left(stage_group) gitlab:feature_category:stage_group:mapping * 0
+      |||,
+      legendFormat='{{ stage_group }}',
+    ),
+  ], cols=8, rowHeight=4)
   +
   [row.new(title='🌡 Worker Key Metrics') { gridPos: { x: 0, y: 100, w: 24, h: 1 } }]
   +

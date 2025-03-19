@@ -929,12 +929,14 @@ local validateTags(tags) =
     title,
     color,
     legendFormat,
+    datasource='$PROMETHEUS_DS',
     links=[],
     stableId=null,
   )::
     statPanel.new(
       title,
       allValues=false,
+      datasource=datasource,
       reducerFunction='lastNotNull',
       graphMode='none',
       colorMode='background',
