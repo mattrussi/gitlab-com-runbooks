@@ -32,6 +32,7 @@ local maxOverTime(query) =
           linewidth=linewidth,
           unit='percentunit',
           legend_show=true,
+          stableId='saturation-' + component,
         )
       else
         basic.graphPanel(

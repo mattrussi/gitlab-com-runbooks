@@ -330,6 +330,7 @@ local rowsForContainer(container, deployment, selectorHash, useTimeSeriesPlugin=
           linewidth=0,
           fill=60,
           stack=true,
+          stableId='container-terminations-%(container)s-%(deployment)s' % formatConfig,
         )
         .addSeriesOverride({
           alias: 'CrashLoopBackOff',
@@ -377,6 +378,7 @@ local rowsForContainer(container, deployment, selectorHash, useTimeSeriesPlugin=
           linewidth=0,
           fill=60,
           stack=true,
+          stableId='container-waiting-%(container)s-%(deployment)s' % formatConfig,
         )
         .addSeriesOverride({
           alias: 'Completed',

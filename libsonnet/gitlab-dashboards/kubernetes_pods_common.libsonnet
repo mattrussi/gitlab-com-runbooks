@@ -27,6 +27,7 @@ local generalGraphPanel(
       legend_min=false,
       legend_avg=false,
       legend_rightSide=true,
+      legend_hideEmpty=false,
     )
   else
     graphPanel.new(

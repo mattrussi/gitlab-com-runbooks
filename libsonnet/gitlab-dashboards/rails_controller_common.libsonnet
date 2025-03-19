@@ -64,6 +64,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
         if useTimeSeriesPlugin then
           [
             panel.timeSeries(
+              stableId='request-rate',
               title='Request Rate',
               query='sum by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
               legendFormat='{{ action }}',
@@ -71,6 +72,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               yAxisLabel='Requests per Second',
             ).addDataLink(elasticsearchLogSearchDataLink(webserviceType)),
             panel.multiTimeSeries(
+              stableId='latency',
               title='Latency',
               queries=[
                 {
@@ -135,6 +137,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
         if useTimeSeriesPlugin then
           [
             panel.multiTimeSeries(
+              stableId='total-sql-queries-rate',
               title='Total SQL Queries Rate',
               format='ops',
               queries=[
@@ -171,6 +174,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               ]
             ),
             panel.timeSeries(
+              stableId='sql-requests-per-controller-request',
               title='SQL Requests per Controller Request',
               query=|||
                 sum by (action) (
@@ -186,6 +190,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               legendFormat='{{ action }}',
             ),
             panel.timeSeries(
+              stableId='sql-latency-per-controller-request',
               title='SQL Latency per Controller Request',
               query=|||
                 sum by (controller, action) (avg_over_time(controller_action:gitlab_sql_duration_seconds_sum:rate1m{%(selector)s}[$__interval]))
@@ -196,6 +201,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               format='short'
             ),
             panel.timeSeries(
+              stableId='sql-latency-per-sql-request',
               title='SQL Latency per SQL Request',
               query=|||
                 sum by (action) (
@@ -301,6 +307,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
         if useTimeSeriesPlugin then
           [
             panel.timeSeries(
+              stableId='sql-transaction-per-controller-request',
               title='SQL Transactions per Controller Request',
               query=|||
                 sum by (action) (
@@ -310,6 +317,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               legendFormat='{{ action }}',
             ),
             panel.timeSeries(
+              stableId='avg-duration-per-sql-transaction',
               title='Average Duration per SQL Transaction',
               query=|||
                 sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (action)
@@ -351,6 +359,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
       layout.rowGrid('Cache', [
         if useTimeSeriesPlugin then
           panel.timeSeries(
+            stableId='cache-operations',
             title='Cache Operations',
             query=|||
               sum by (action, operation) (
@@ -385,6 +394,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
         if useTimeSeriesPlugin then
           [
             panel.timeSeries(
+              stableId='external-http',
               title='External HTTP calls',
               query=|||
                 sum by (controller, action, code) (
@@ -395,6 +405,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               format='ops',
             ),
             panel.multiTimeSeries(
+              stableId='external-http-latency',
               title='External HTTP Latency per call',
               queries=[{
                 query: |||

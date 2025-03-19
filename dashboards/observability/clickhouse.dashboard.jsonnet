@@ -35,6 +35,7 @@ local generalGraphPanel(
       legend_max=false,
       legend_avg=false,
       legend_show=true,
+      legend_hideEmpty=false,
     )
   else
     grafana.graphPanel.new(

@@ -10,6 +10,7 @@ local generalPanel(
   description=null,
   linewidth=3,
   legend_show=true,
+  stableId,
       ) =
   panel.basic(
     title,
@@ -17,6 +18,7 @@ local generalPanel(
     description=if description == null then defaultApdexDescription else description,
     legend_show=legend_show,
     unit='percentunit',
+    stableId=stableId,
   )
   .addSeriesOverride(override.degradationSlo)
   .addSeriesOverride(override.outageSlo)
@@ -26,6 +28,7 @@ local genericApdexPanel(
   title,
   description=null,
   compact=false,
+  stableId,
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
@@ -40,6 +43,7 @@ local genericApdexPanel(
     description=description,
     legend_show=if legend_show == null then !compact else legend_show,
     linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
+    stableId=stableId,
   )
   .addTarget(  // Primary metric (worst case)
     target.prometheus(
@@ -72,6 +76,7 @@ local apdexPanel(
   aggregationSet,
   selectorHash,
   description=null,
+  stableId,
   legendFormat=null,
   compact=false,
   sort='increasing',
@@ -86,6 +91,7 @@ local apdexPanel(
     title,
     description=description,
     compact=compact,
+    stableId=stableId,
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
     legendFormat=legendFormat,
     linewidth=if expectMultipleSeries then 1 else 2,

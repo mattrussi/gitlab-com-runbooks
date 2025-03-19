@@ -9,6 +9,7 @@ local genericErrorPanel(
   title,
   description=null,
   compact=false,
+  stableId,
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
@@ -22,6 +23,7 @@ local genericErrorPanel(
     linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
     description=if description == null then defaultErrorRatioDescription else description,
     legend_show=if legend_show == null then !compact else legend_show,
+    stableId=stableId,
     unit='percentunit',
   )
   .addSeriesOverride(override.degradationSlo)
@@ -57,6 +59,7 @@ local errorRatioPanel(
   sli=null,  // SLI can be null if this panel is not being used for an SLI
   aggregationSet,
   selectorHash,
+  stableId,
   legendFormat=null,
   compact=false,
   includeLastWeek=true,
@@ -70,6 +73,7 @@ local errorRatioPanel(
     genericErrorPanel(
       title,
       compact=compact,
+      stableId=stableId,
       primaryQueryExpr=sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
       legendFormat=legendFormat,
       linewidth=if expectMultipleSeries then 1 else 2,

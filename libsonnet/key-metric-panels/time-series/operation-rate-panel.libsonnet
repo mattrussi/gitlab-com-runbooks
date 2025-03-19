@@ -9,6 +9,7 @@ local genericOperationRatePanel(
   title,
   description=null,
   compact=false,
+  stableId,
   linewidth=null,
   legend_show=null,
       ) =
@@ -17,7 +18,7 @@ local genericOperationRatePanel(
     linewidth=if linewidth == null then if compact then 1 else 2 else linewidth,
     description=if description == null then defaultOperationRateDescription else description,
     legend_show=if legend_show == null then !compact else legend_show,
-
+    stableId=stableId,
   )
   .addYaxis(
     min=0,
@@ -29,6 +30,7 @@ local operationRatePanel(
   title,
   aggregationSet,
   selectorHash,
+  stableId,
   legendFormat=null,
   compact=false,
   includePredictions=false,
@@ -41,6 +43,7 @@ local operationRatePanel(
     genericOperationRatePanel(
       title,
       compact=compact,
+      stableId=stableId,
       linewidth=if expectMultipleSeries then 1 else 2
     )
     .addTarget(  // Primary metric

@@ -262,6 +262,7 @@ basic.dashboard(
     if useTimeSeriesPlugin then
       [
         panel.apdexTimeSeries(
+          stableId='queue-apdex',
           title='Queue Apdex',
           description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
           query=|||
@@ -285,6 +286,7 @@ basic.dashboard(
           targetBlank: true,
         }),
         panel.apdexTimeSeries(
+          stableId='execution-apdex',
           title='Execution Apdex',
           description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
           query=|||
@@ -308,6 +310,7 @@ basic.dashboard(
           targetBlank: true,
         }),
         panel.timeSeries(
+          stableId='request-rate',
           title='Execution Rate (RPS)',
           description='Jobs executed per second',
           query=|||
@@ -325,6 +328,7 @@ basic.dashboard(
           targetBlank: true,
         }),
         panel.percentageTimeSeries(
+          stableId='error-ratio',
           title='Error Ratio',
           description='Percentage of jobs that fail with an error. Lower is better.',
           query=|||
@@ -464,6 +468,7 @@ basic.dashboard(
         enqueueCountTimeseries('Jobs Enqueued', aggregators='worker', legendFormat='{{ worker }}'),
         enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, worker', legendFormat='{{ worker }} - {{ type }}'),
         panel.timeSeries(
+          stableId='enqueued-by-scheduling-type',
           title='Jobs Enqueued by Schedule',
           description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
           query=|||
@@ -474,6 +479,7 @@ basic.dashboard(
           legendFormat='{{ queue }} - {{ scheduling }}',
         ),
         panel.queueLengthTimeSeries(
+          stableId='queue-length',
           title='Queue length',
           description='The number of unstarted jobs in a queue (capped at 1000 at scrape time for performance reasons)',
           query=|||
@@ -596,6 +602,7 @@ basic.dashboard(
     if useTimeSeriesPlugin then
       [
         panel.multiTimeSeries(
+          stableId='total-sql-queries-rate',
           title='Total SQL Queries Rate',
           format='ops',
           queries=[
@@ -632,6 +639,7 @@ basic.dashboard(
           ]
         ),
         panel.timeSeries(
+          stableId='sql-transaction',
           title='SQL Transactions Rate',
           query=|||
             sum by (endpoint_id) (
@@ -641,6 +649,7 @@ basic.dashboard(
           legendFormat='{{ endpoint_id }}',
         ),
         panel.multiTimeSeries(
+          stableId='sql-transaction-holding-duration',
           title='SQL Transaction Holding Duration',
           format='s',
           queries=[
@@ -738,6 +747,7 @@ basic.dashboard(
   layout.rowGrid('Skipped Jobs', [
     if useTimeSeriesPlugin then
       panel.timeSeries(
+        stableId='jobs-skipped',
         title='Rate of Jobs Skipped',
         description='Jobs skipped (dropped/deferred) intentionally via feature flag `drop_sidekiq_jobs_<worker_name>` or `run_sidekiq_jobs_<worker_name>`',
         query=|||
