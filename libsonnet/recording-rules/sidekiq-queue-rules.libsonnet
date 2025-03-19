@@ -1,14 +1,9 @@
 local alerts = import 'alerts/alerts.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local jobsSlos = import 'recording-rules/sidekiq-jobs-slos.libsonnet';
 local minimumOpRate = import 'slo-alerts/minimum-op-rate.libsonnet';
 local serviceLevelAlerts = import 'slo-alerts/service-level-alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
-
-/* TODO: having some sort of criticality label on sidekiq jobs would allow us to
-   define different criticality labels for each worker. For now we need to use
-   a fixed value, which also needs to be a lower-common-denominator */
-local fixedApdexThreshold = 0.90;
-local fixedErrorRateThreshold = 0.10;
 
 local minimumSamplesForMonitoringApdex = 200; /* We don't really care if something runs only very infrequently, but is slow */
 
@@ -273,7 +268,7 @@ local sidekiqAlerts(registry, extraSelector) =
         opsRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringApdex),
-        apdexThreshold: fixedApdexThreshold,
+        apdexThreshold: jobsSlos.apdexThreshold(),
       },
       'for': '1h',
       labels: {
@@ -329,7 +324,7 @@ local sidekiqAlerts(registry, extraSelector) =
         opsRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringErrors),
-        errorThreshold: fixedErrorRateThreshold,
+        errorThreshold: jobsSlos.errorRateThreshold(),
       },
       'for': '1h',
       labels: {
