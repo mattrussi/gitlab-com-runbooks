@@ -72,8 +72,8 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: std.flattenArrays([
         [
-          toolingLinks.cloudflareWorker.logs.live(scriptName='gitlab-web-ide-vscode-%s' % environment),
-          toolingLinks.cloudflareWorker.logs.historical(scriptName='gitlab-web-ide-vscode-%s' % environment),
+          toolingLinks.cloudflareWorker.logs.live(scriptName='gitlab-web-ide-%s' % environment),
+          toolingLinks.cloudflareWorker.logs.historical(scriptName='gitlab-web-ide-%s' % environment),
         ]
         for environment in [
           'production',
