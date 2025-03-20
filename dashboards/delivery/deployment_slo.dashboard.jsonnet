@@ -3,7 +3,6 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prometheus = grafana.prometheus;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
