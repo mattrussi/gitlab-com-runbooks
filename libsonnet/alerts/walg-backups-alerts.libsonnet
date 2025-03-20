@@ -44,26 +44,6 @@ function(tenant, selector)
             ||| % { selector: envSelector },
           },
 
-          // walgBackupDelayed
-          alerts.processAlertRule({
-            alert: 'walgBackupDelayed',
-            expr: '(gitlab_com:last_walg_backup_age_in_seconds{type!="patroni-embedding",  %(selector)s} >= 60 * 15)' % { selector: envSelector },
-            'for': '5m',
-            labels: {
-              severity: 's3',
-              alert_type: 'symptom',
-              incident_project: 'gitlab.com/gitlab-com/gl-infra/production',
-            },
-            annotations: {
-              title: 'Last WAL was archived "{{ .Value | humanizeDuration }}" ago for env "{{ $labels.environment }}."',
-              description: 'WAL-G wal-push archiving WALs to GCS might be not working. Please follow the runbook to review the problem.',
-              runbook: 'docs/patroni/postgresql-backups-wale-walg.md',
-              grafana_min_zoom_hours: '4',
-              grafana_variables: 'environment',
-              grafana_datasource_id: tenant,
-            },
-          }),
-
           // walgBaseBackupDelayed
           alerts.processAlertRule({
             alert: 'walgBaseBackupDelayed',
