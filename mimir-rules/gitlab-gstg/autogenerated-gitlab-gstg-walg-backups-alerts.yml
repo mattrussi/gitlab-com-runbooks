@@ -25,24 +25,6 @@ groups:
   - record: gitlab_com:last_walg_failed_basebackup_age_in_hours
     expr: |
       min(time() - label_replace(push_time_seconds{exported_job="walg-basebackup", env="gstg", exported_type=~".*patroni.*"}, "type", "$1", "exported_type", "(.*)")) by (environment,type) / 3600
-  - alert: walgBackupDelayed
-    for: 5m
-    annotations:
-      title: Last WAL was archived "{{ .Value | humanizeDuration }}" ago for env "{{
-        $labels.environment }}."
-      description: WAL-G wal-push archiving WALs to GCS might be not working. Please
-        follow the runbook to review the problem.
-      grafana_datasource_id: mimir-gitlab-gstg
-      grafana_min_zoom_hours: "4"
-      grafana_variables: environment
-      runbook: docs/patroni/postgresql-backups-wale-walg.md
-    labels:
-      alert_type: symptom
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
-      severity: s3
-    expr: (gitlab_com:last_walg_backup_age_in_seconds{type!="patroni-embedding",  env="gstg"}
-      >= 60 * 15) or (gitlab_com:last_walg_backup_age_in_seconds{type="patroni-embedding",
-      env="gstg"} >= 60 * 60)
   - alert: walgBaseBackupDelayed
     for: 5m
     annotations:
