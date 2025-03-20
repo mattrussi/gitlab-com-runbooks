@@ -58,27 +58,27 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Start([Start Development]) --> CreateBranch[Create feature branch\nin instrumentor repo]
-    CreateBranch --> UpdateCell[Update quarantine ring cell\nwith your branch name as instrumentor_version]
-    UpdateCell --> MakeChanges[Make code changes, commit\nand push to remote Instrumentor branch]
-    MakeChanges --> WaitBuild[Wait for CI/CD to build\nInstrumentor image from branch]
+    Start([Start Development]) --> CreateBranch[Create feature branch in instrumentor repo]
+    CreateBranch --> UpdateCell[Update/Provision a quarantine ring cell with your branch name as instrumentor_version]
+    UpdateCell --> MakeChanges[Make code changes, commit and push to remote Instrumentor branch]
+    MakeChanges --> WaitBuild[Wait for CI/CD to build Instrumentor image from branch]
 
     %% Decision point for deployment method
-    WaitBuild --> DeployMethod{Choose deployment\nmethod}
+    WaitBuild --> DeployMethod{Choose deployment method}
 
     %% Render-debug path
-    DeployMethod -->|Manual debug| RenderDebug[Execute render-debug script\nfor target cell and stage]
-    RenderDebug --> RunStage[Execute stage script\ninside provisioned pod]
+    DeployMethod -->|Manual debug| RenderDebug[Execute render-debug script for target cell and stage]
+    RenderDebug --> RunStage[Execute stage script inside provisioned pod]
 
     %% Pod edit cycle as a self-loop
     RunStage --> DevComplete
     RunStage -.-> |Edit files inside pod| RunStage
 
     %% Alternative path using ringctl
-    DeployMethod -->|ringctl| RingctlDeploy[Execute 'ringctl cell deploy'\nfor target cell]
+    DeployMethod -->|ringctl| RingctlDeploy[Execute 'ringctl cell deploy' for target cell]
 
     %% Both paths converge at development completion check
-    RingctlDeploy --> DevComplete{Is development\ncomplete?}
+    RingctlDeploy --> DevComplete{Is development complete?}
 
     DevComplete -->|No, more changes needed| MakeChanges
     DevComplete -->|Yes, feature complete| End([End Development])
@@ -89,46 +89,19 @@ flowchart TD
 > Image tags in [Instrumentor] use this format, and transform the branch name to match this.
 > For example `no_hooks_gitaly` would become `no-hooks-gitaly`.
 
-1. Pick a Cell to apply your changes to.
-   - The cell should be in the quarantine ring.
+1. Create a branch with your changes in [Instrumentor].
+   - Wait for the CI jobs in Instrumentor to build the images.
+2. [Provision a new Cell]((./provisioning.md#how-to-de-provision-a-cell)) to with your Instrumentor changes.
+   - Make sure to place the new cell in the quarantine ring.
      This `-1` folder for the environment and is checked in the script.
-   - The cell should not be in use for development by any other team members.
-     Check in the [`cells/tissue`] repository for any open MRs targeting the Cell.
-2. Create a branch for your change in [Instrumentor].
-3. Update your quarantine ring cell to use your branch name as a version.
-   1. Create a branch for this change.
-   2. Commit and push the change to the [`cells/tissue`] repo.
-   3. Open a draft MR to ensure your Cell usage is visible.
-   4. (Optional) Trigger a `ringctl cells deploy`.
-4. Make changes in your branch, commit and push to a remote branch.
+   - Make sure to use your `branch name`(in kebab case) as `instrumentor_version` in your cell.
+3. For iteration make changes in your branch, commit and push to a remote branch.
    - Alternatively, you can edit the filesystem contents of the connected pod.
      If taking this approach then ensure you are regularly syncing changes as the pod will be killed when `$SLEEP_TIME` has elapsed, if not before.
-5. Wait for your branch to be built into an Instrumentor image.
-6. Execute the `render-debug` script for the cell and stage you're targeting.
-7. Execute the stage script you are targeting inside the provisioned pod.
-8. Repeat steps 4-7 until development is complete.
-
-### (Alternative) Deploy using `ringctl`
-
-You can also iterate during development by using the `ringctl cell deploy` subcommand.
-
-This will trigger a pipeline run in the Ops [`cells/tissue`] project,
-using the specified `${BRANCH_NAME}` as to apply against a quarantined cell instance.
-
-```bash
-# From the root of the cells/tissue repository
-ringctl cell deploy -e ${AMP_ENVIRONMENT} ${TENANT_ID} --only-gitlab-upgrade=false -b ${BRANCH_NAME}
-```
-
-This will trigger a full pipeline against the cell, running each
-[Instrumentor] stage in order.  Typically changes will be made in
-smaller iterations against a single stage, and are faster to iterate
-with the `./scripts/render-debug.sh` script, however if changes are
-being made across stages then this method may be prepared.
-
-You may also want to trigger a full pipeline execution before
-concluding development to ensure that all of the stages continue to
-work in order.
+4. Wait for your branch to be built into an Instrumentor image.
+5. Execute the `render-debug` script for the cell and stage you're targeting.
+6. Execute the stage script you are targeting inside the provisioned pod.
+7. Repeat steps 4-7 until development is complete.
 
 ## Best Practices
 
