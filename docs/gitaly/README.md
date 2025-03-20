@@ -53,7 +53,7 @@
 * [Adding new storage capacity](new-storage.md)
 * [GitLab Storage Re-balancing](storage-rebalancing.md)
 * [Managing GitLab Storage Shards (Gitaly)](storage-sharding.md)
-* [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
+* [`kas` Disable Integrations](../kas/kas-disable-integrations.md)
 * [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
