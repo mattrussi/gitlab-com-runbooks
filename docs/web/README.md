@@ -46,7 +46,7 @@
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
-* [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [`kas` Basic Troubleshooting](../kas/kas-basic-troubleshooting.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [GKE/Kubernetes Administration](../kube/kube-administration.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)

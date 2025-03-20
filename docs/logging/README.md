@@ -33,7 +33,7 @@
 * [../hosted-runners/runner_system_failure.md](../hosted-runners/runner_system_failure.md)
 * [HTTP Router Worker Logs](../http-router/logging.md)
 * [GitLab Production Onboarding for Incident.io](../incident-io-onboard/incident-management.md)
-* [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [`kas` Basic Troubleshooting](../kas/kas-basic-troubleshooting.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
 * [Scaling Elastic Cloud Clusters](scaling.md)
