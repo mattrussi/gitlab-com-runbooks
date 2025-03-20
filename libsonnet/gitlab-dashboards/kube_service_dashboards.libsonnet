@@ -19,7 +19,7 @@ local linksForService(type) =
     platformLinks.kubenetesDetail(type),
   ];
 
-local panelsForDeployment(serviceType, deployment, selectorHash, useTimeSeriesPlugin=false) =
+local panelsForDeployment(serviceType, deployment, selectorHash) =
   local deploymentSelectorHash = selectorHash {
     type: serviceType,
     deployment: deployment,
@@ -36,118 +36,62 @@ local panelsForDeployment(serviceType, deployment, selectorHash, useTimeSeriesPl
     containerSelector: selectors.serializeHash(containerSelectorHash),
   };
 
-  if useTimeSeriesPlugin then
-    [
-      panel.timeSeries(
-        title='%(deployment)s Deployment: CPU' % formatConfig,
-        query=|||
-          sum by(cluster) (
-            rate(
-              container_cpu_usage_seconds_total:labeled{
-                %(containerSelector)s
-              }[$__rate_interval]
-            )
-          )
-        ||| % formatConfig,
-        format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
-        linewidth=1,
-        legendFormat='{{ cluster }}',
-        intervalFactor=2,
-      ),
-      panel.timeSeries(
-        title='%(deployment)s Deployment: Memory' % formatConfig,
-        query=|||
-          sum by(cluster) (
-            container_memory_working_set_bytes:labeled{
+  [
+    panel.timeSeries(
+      title='%(deployment)s Deployment: CPU' % formatConfig,
+      query=|||
+        sum by(cluster) (
+          rate(
+            container_cpu_usage_seconds_total:labeled{
               %(containerSelector)s
-            }
+            }[$__rate_interval]
           )
-        ||| % formatConfig,
-        format='bytes',
-        linewidth=1,
-        legendFormat='{{ cluster }}',
-      ),
-      panel.networkTrafficGraph(
-        title='%(deployment)s Deployment: Network IO' % formatConfig,
-        sendQuery=|||
-          sum by(cluster) (
-            rate(
-              container_network_transmit_bytes_total:labeled{
-                %(deploymentSelector)s
-              }[$__rate_interval]
-            )
+        )
+      ||| % formatConfig,
+      format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
+      linewidth=1,
+      legendFormat='{{ cluster }}',
+      intervalFactor=2,
+    ),
+    panel.timeSeries(
+      title='%(deployment)s Deployment: Memory' % formatConfig,
+      query=|||
+        sum by(cluster) (
+          container_memory_working_set_bytes:labeled{
+            %(containerSelector)s
+          }
+        )
+      ||| % formatConfig,
+      format='bytes',
+      linewidth=1,
+      legendFormat='{{ cluster }}',
+    ),
+    panel.networkTrafficGraph(
+      title='%(deployment)s Deployment: Network IO' % formatConfig,
+      sendQuery=|||
+        sum by(cluster) (
+          rate(
+            container_network_transmit_bytes_total:labeled{
+              %(deploymentSelector)s
+            }[$__rate_interval]
           )
-        ||| % formatConfig,
-        receiveQuery=|||
-          sum by(cluster) (
-            rate(
-              container_network_receive_bytes_total:labeled{
-                %(deploymentSelector)s
-              }[$__rate_interval]
-            )
+        )
+      ||| % formatConfig,
+      receiveQuery=|||
+        sum by(cluster) (
+          rate(
+            container_network_receive_bytes_total:labeled{
+              %(deploymentSelector)s
+            }[$__rate_interval]
           )
-        ||| % formatConfig,
-        legendFormat='{{ cluster }}',
-        intervalFactor=2,
-      ),
-    ]
-  else
-    [
-      basic.timeseries(
-        title='%(deployment)s Deployment: CPU' % formatConfig,
-        query=|||
-          sum by(cluster) (
-            rate(
-              container_cpu_usage_seconds_total:labeled{
-                %(containerSelector)s
-              }[$__rate_interval]
-            )
-          )
-        ||| % formatConfig,
-        format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
-        linewidth=1,
-        legendFormat='{{ cluster }}',
-        intervalFactor=2,
-      ),
-      basic.timeseries(
-        title='%(deployment)s Deployment: Memory' % formatConfig,
-        query=|||
-          sum by(cluster) (
-            container_memory_working_set_bytes:labeled{
-              %(containerSelector)s
-            }
-          )
-        ||| % formatConfig,
-        format='bytes',
-        linewidth=1,
-        legendFormat='{{ cluster }}',
-      ),
-      basic.networkTrafficGraph(
-        title='%(deployment)s Deployment: Network IO' % formatConfig,
-        sendQuery=|||
-          sum by(cluster) (
-            rate(
-              container_network_transmit_bytes_total:labeled{
-                %(deploymentSelector)s
-              }[$__rate_interval]
-            )
-          )
-        ||| % formatConfig,
-        receiveQuery=|||
-          sum by(cluster) (
-            rate(
-              container_network_receive_bytes_total:labeled{
-                %(deploymentSelector)s
-              }[$__rate_interval]
-            )
-          )
-        ||| % formatConfig,
-        legendFormat='{{ cluster }}',
-        intervalFactor=2,
-      ),
-    ];
+        )
+      ||| % formatConfig,
+      legendFormat='{{ cluster }}',
+      intervalFactor=2,
+    ),
+  ];
 
-local panelsForRequestsUtilization(serviceType, selectorHash, useTimeSeriesPlugin=false) =
+local panelsForRequestsUtilization(serviceType, selectorHash) =
   local nodeSelectorHash = selectorHash {
     type: serviceType,
   };
@@ -157,90 +101,48 @@ local panelsForRequestsUtilization(serviceType, selectorHash, useTimeSeriesPlugi
     nodeSelector: selectors.serializeHash(nodeSelectorHash),
   };
 
-  if useTimeSeriesPlugin then
-    [
-      panel.timeSeries(
-        title='Node CPU Requests Utilization' % formatConfig,
-        description=|||
-          Ratio of requested CPU resources from allocatable resources.
-          Ideally we have requests utilization close to 100%. Values are
-          below 100% typically because pods do not fit well on nodes or
-          because we might be bound by memory requests already.
-        |||,
-        query=|||
-          sum by (node) (
-            kube_pod_container_resource_requests{resource="cpu", unit="core"}
-          )
-          / on (node) group_left()
-          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
-        ||| % formatConfig,
-        format='percentunit',
-        linewidth=1,
-        legendFormat='{{ node }}',
-      ),
-      panel.timeSeries(
-        title='Node Memory Requests Utilization' % formatConfig,
-        description=|||
-          Ratio of requested Memory resources from allocatable resources.
-          Ideally we have requests utilization close to 100%. Values are
-          below 100% typically because pods do not fit well on nodes or
-          because we might be bound by CPU requests already.
-        |||,
-        query=|||
-          sum by (node) (
-            kube_pod_container_resource_requests{resource="memory", unit="byte"}
-          )
-          / on (node) group_left()
-          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
-        ||| % formatConfig,
-        format='percentunit',
-        linewidth=1,
-        legendFormat='{{ node }}',
-      ),
-    ]
-  else
-    [
-      basic.timeseries(
-        title='Node CPU Requests Utilization' % formatConfig,
-        description=|||
-          Ratio of requested CPU resources from allocatable resources.
-          Ideally we have requests utilization close to 100%. Values are
-          below 100% typically because pods do not fit well on nodes or
-          because we might be bound by memory requests already.
-        |||,
-        query=|||
-          sum by (node) (
-            kube_pod_container_resource_requests{resource="cpu", unit="core"}
-          )
-          / on (node) group_left()
-          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
-        ||| % formatConfig,
-        format='percentunit',
-        linewidth=1,
-        legendFormat='{{ node }}',
-      ),
-      basic.timeseries(
-        title='Node Memory Requests Utilization' % formatConfig,
-        description=|||
-          Ratio of requested Memory resources from allocatable resources.
-          Ideally we have requests utilization close to 100%. Values are
-          below 100% typically because pods do not fit well on nodes or
-          because we might be bound by CPU requests already.
-        |||,
-        query=|||
-          sum by (node) (
-            kube_pod_container_resource_requests{resource="memory", unit="byte"}
-          )
-          / on (node) group_left()
-          kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
-        ||| % formatConfig,
-        format='percentunit',
-        linewidth=1,
-        legendFormat='{{ node }}',
-      ),
-    ];
+  [
+    panel.timeSeries(
+      title='Node CPU Requests Utilization' % formatConfig,
+      description=|||
+        Ratio of requested CPU resources from allocatable resources.
+        Ideally we have requests utilization close to 100%. Values are
+        below 100% typically because pods do not fit well on nodes or
+        because we might be bound by memory requests already.
+      |||,
+      query=|||
+        sum by (node) (
+          kube_pod_container_resource_requests{resource="cpu", unit="core"}
+        )
+        / on (node) group_left()
+        kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
+      ||| % formatConfig,
+      format='percentunit',
+      linewidth=1,
+      legendFormat='{{ node }}',
+    ),
+    panel.timeSeries(
+      title='Node Memory Requests Utilization' % formatConfig,
+      description=|||
+        Ratio of requested Memory resources from allocatable resources.
+        Ideally we have requests utilization close to 100%. Values are
+        below 100% typically because pods do not fit well on nodes or
+        because we might be bound by CPU requests already.
+      |||,
+      query=|||
+        sum by (node) (
+          kube_pod_container_resource_requests{resource="memory", unit="byte"}
+        )
+        / on (node) group_left()
+        kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
+      ||| % formatConfig,
+      format='percentunit',
+      linewidth=1,
+      legendFormat='{{ node }}',
+    ),
+  ];
 
-local rowsForContainer(container, deployment, selectorHash, useTimeSeriesPlugin=false) =
+local rowsForContainer(container, deployment, selectorHash) =
   local containerSelectorHash = selectorHash {
     deployment: deployment,
     container: container,
@@ -253,263 +155,133 @@ local rowsForContainer(container, deployment, selectorHash, useTimeSeriesPlugin=
   };
   [
     /* First row */
-    if useTimeSeriesPlugin then
-      [
-        panel.quantileTimeSeries(
-          title='%(container)s container/%(deployment)s deployment - CPU' % formatConfig,
-          query=|||
-            rate(
-              container_cpu_usage_seconds_total:labeled{
-                %(containerSelector)s
-               }[$__rate_interval]
-             )
-          ||| % formatConfig,
-          format='percentunit',
-          linewidth=1,
-          legendFormat='%s Container CPU' % [container],
-          intervalFactor=2,
-        ),
-        panel.quantileTimeSeries(
-          title='%(container)s container/%(deployment)s deployment - Memory' % formatConfig,
-          query=|||
-            container_memory_working_set_bytes:labeled{
+    [
+      panel.quantileTimeSeries(
+        title='%(container)s container/%(deployment)s deployment - CPU' % formatConfig,
+        query=|||
+          rate(
+            container_cpu_usage_seconds_total:labeled{
               %(containerSelector)s
-             }
-          ||| % formatConfig,
-          format='bytes',
-          linewidth=1,
-          legendFormat='%s Container Memory' % [container],
-        ),
-      ]
-    else
-      [
-        quantilePanel.timeseries(
-          title='%(container)s container/%(deployment)s deployment - CPU' % formatConfig,
-          query=|||
-            rate(
-              container_cpu_usage_seconds_total:labeled{
-                %(containerSelector)s
-               }[$__rate_interval]
-             )
-          ||| % formatConfig,
-          format='percentunit',
-          linewidth=1,
-          legendFormat='%s Container CPU' % [container],
-          intervalFactor=2,
-        ),
-        quantilePanel.timeseries(
-          title='%(container)s container/%(deployment)s deployment - Memory' % formatConfig,
-          query=|||
-            container_memory_working_set_bytes:labeled{
-              %(containerSelector)s
-             }
-          ||| % formatConfig,
-          format='bytes',
-          linewidth=1,
-          legendFormat='%s Container Memory' % [container],
-        ),
-      ],
-    /* Second row */
-    if useTimeSeriesPlugin then
-      [
-        panel.timeSeries(
-          title='%(container)s container/%(deployment)s deployment - Container Waiting Reasons' % formatConfig,
-          description='Why are containers waiting?',
-          query=|||
-            sum by (reason) (max_over_time(kube_pod_container_status_waiting_reason:labeled{
-              %(containerSelector)s
-            }[10m]))
-          ||| % formatConfig,
-          legendFormat='{{ reason }}',
-          format='short',
-          interval='1m',
-          intervalFactor=1,
-          yAxisLabel='Containers Terminated',
-          legend_show=true,
-          legend_rightSide=false,
-          linewidth=0,
-          fill=60,
-          stack=true,
-          stableId='container-terminations-%(container)s-%(deployment)s' % formatConfig,
-        )
-        .addSeriesOverride({
-          alias: 'CrashLoopBackOff',
-          color: 'purple',
-        })
-        .addSeriesOverride({
-          alias: 'CreateContainerConfigError',
-          color: 'yellow',
-        })
-        .addSeriesOverride({
-          alias: 'CreateContainerError',
-          color: 'orange',
-        })
-        .addSeriesOverride({
-          alias: 'ErrImagePull',
-          color: 'red',
-        })
-        .addSeriesOverride({
-          alias: 'ImagePullBackOff',
-          color: '#FA6400',  // dark orange
-        })
-        .addSeriesOverride({
-          alias: 'InvalidImageName',
-          color: '#C4162A',  // dark red
-        })
-        .addSeriesOverride({
-          alias: 'ContainerCreating',
-          color: 'blue',
-        }),
-        panel.timeSeries(
-          title='%(container)s container/%(deployment)s deployment - Container Terminations' % formatConfig,
-          description='Why are containers terminating?',
-          query=|||
-            sum by (reason) (max_over_time(kube_pod_container_status_terminated_reason:labeled{
-              %(containerSelector)s
-            }[10m]))
-          ||| % formatConfig,
-          legendFormat='{{ reason }}',
-          format='short',
-          interval='1m',
-          intervalFactor=1,
-          yAxisLabel='Containers Terminated',
-          legend_show=true,
-          legend_rightSide=false,
-          linewidth=0,
-          fill=60,
-          stack=true,
-          stableId='container-waiting-%(container)s-%(deployment)s' % formatConfig,
-        )
-        .addSeriesOverride({
-          alias: 'Completed',
-          color: 'blue',
-        })
-        .addSeriesOverride({
-          alias: 'ContainerCannotRun',
-          color: 'yellow',
-        })
-        .addSeriesOverride({
-          alias: 'DeadlineExceeded',
-          color: 'orange',
-        })
-        .addSeriesOverride({
-          alias: 'Error',
-          color: 'red',
-        })
-        .addSeriesOverride({
-          alias: 'Evicted',
-          color: '#FA6400',  // dark orange
-        })
-        .addSeriesOverride({
-          alias: 'OOMKilled',
-          color: '#C4162A',  // dark red
-        }),
-      ]
-    else
-      [
-        basic.timeseries(
-          title='%(container)s container/%(deployment)s deployment - Container Waiting Reasons' % formatConfig,
-          description='Why are containers waiting?',
-          query=|||
-            sum by (reason) (max_over_time(kube_pod_container_status_waiting_reason:labeled{
-              %(containerSelector)s
-            }[10m]))
-          ||| % formatConfig,
-          legendFormat='{{ reason }}',
-          format='short',
-          interval='1m',
-          intervalFactor=1,
-          yAxisLabel='Containers Terminated',
-          sort='decreasing',
-          legend_show=true,
-          legend_rightSide=false,
-          linewidth=0,
-          fill=60,
-          stack=true,
-          decimals=0,
-          stableId='container-terminations-%(container)s-%(deployment)s' % formatConfig,
-        )
-        .addSeriesOverride({
-          alias: 'CrashLoopBackOff',
-          color: 'purple',
-        })
-        .addSeriesOverride({
-          alias: 'CreateContainerConfigError',
-          color: 'yellow',
-        })
-        .addSeriesOverride({
-          alias: 'CreateContainerError',
-          color: 'orange',
-        })
-        .addSeriesOverride({
-          alias: 'ErrImagePull',
-          color: 'red',
-        })
-        .addSeriesOverride({
-          alias: 'ImagePullBackOff',
-          color: '#FA6400',  // dark orange
-        })
-        .addSeriesOverride({
-          alias: 'InvalidImageName',
-          color: '#C4162A',  // dark red
-        })
-        .addSeriesOverride({
-          alias: 'ContainerCreating',
-          color: 'blue',
-        }),
-        basic.timeseries(
-          title='%(container)s container/%(deployment)s deployment - Container Terminations' % formatConfig,
-          description='Why are containers terminating?',
-          query=|||
-            sum by (reason) (max_over_time(kube_pod_container_status_terminated_reason:labeled{
-              %(containerSelector)s
-            }[10m]))
-          ||| % formatConfig,
-          legendFormat='{{ reason }}',
-          format='short',
-          interval='1m',
-          intervalFactor=1,
-          yAxisLabel='Containers Terminated',
-          sort='decreasing',
-          legend_show=true,
-          legend_rightSide=false,
-          linewidth=0,
-          fill=6,
-          stack=true,
-          decimals=0,
-          stableId='container-waiting-%(container)s-%(deployment)s' % formatConfig,
-        )
-        .addSeriesOverride({
-          alias: 'Completed',
-          color: 'blue',
-        })
-        .addSeriesOverride({
-          alias: 'ContainerCannotRun',
-          color: 'yellow',
-        })
-        .addSeriesOverride({
-          alias: 'DeadlineExceeded',
-          color: 'orange',
-        })
-        .addSeriesOverride({
-          alias: 'Error',
-          color: 'red',
-        })
-        .addSeriesOverride({
-          alias: 'Evicted',
-          color: '#FA6400',  // dark orange
-        })
-        .addSeriesOverride({
-          alias: 'OOMKilled',
-          color: '#C4162A',  // dark red
-        }),
-      ],
+             }[$__rate_interval]
+           )
+        ||| % formatConfig,
+        format='percentunit',
+        linewidth=1,
+        legendFormat='%s Container CPU' % [container],
+        intervalFactor=2,
+      ),
+      panel.quantileTimeSeries(
+        title='%(container)s container/%(deployment)s deployment - Memory' % formatConfig,
+        query=|||
+          container_memory_working_set_bytes:labeled{
+            %(containerSelector)s
+           }
+        ||| % formatConfig,
+        format='bytes',
+        linewidth=1,
+        legendFormat='%s Container Memory' % [container],
+      ),
+    ],
+    /* second row */
+    [
+      panel.timeSeries(
+        title='%(container)s container/%(deployment)s deployment - Container Waiting Reasons' % formatConfig,
+        description='Why are containers waiting?',
+        query=|||
+          sum by (reason) (max_over_time(kube_pod_container_status_waiting_reason:labeled{
+            %(containerSelector)s
+          }[10m]))
+        ||| % formatConfig,
+        legendFormat='{{ reason }}',
+        format='short',
+        interval='1m',
+        intervalFactor=1,
+        yAxisLabel='Containers Terminated',
+        legend_show=true,
+        legend_rightSide=false,
+        linewidth=0,
+        fill=60,
+        stack=true,
+        stableId='container-terminations-%(container)s-%(deployment)s' % formatConfig,
+      )
+      .addSeriesOverride({
+        alias: 'CrashLoopBackOff',
+        color: 'purple',
+      })
+      .addSeriesOverride({
+        alias: 'CreateContainerConfigError',
+        color: 'yellow',
+      })
+      .addSeriesOverride({
+        alias: 'CreateContainerError',
+        color: 'orange',
+      })
+      .addSeriesOverride({
+        alias: 'ErrImagePull',
+        color: 'red',
+      })
+      .addSeriesOverride({
+        alias: 'ImagePullBackOff',
+        color: '#FA6400',  // dark orange
+      })
+      .addSeriesOverride({
+        alias: 'InvalidImageName',
+        color: '#C4162A',  // dark red
+      })
+      .addSeriesOverride({
+        alias: 'ContainerCreating',
+        color: 'blue',
+      }),
+      panel.timeSeries(
+        title='%(container)s container/%(deployment)s deployment - Container Terminations' % formatConfig,
+        description='Why are containers terminating?',
+        query=|||
+          sum by (reason) (max_over_time(kube_pod_container_status_terminated_reason:labeled{
+            %(containerSelector)s
+          }[10m]))
+        ||| % formatConfig,
+        legendFormat='{{ reason }}',
+        format='short',
+        interval='1m',
+        intervalFactor=1,
+        yAxisLabel='Containers Terminated',
+        legend_show=true,
+        legend_rightSide=false,
+        linewidth=0,
+        fill=60,
+        stack=true,
+        stableId='container-waiting-%(container)s-%(deployment)s' % formatConfig,
+      )
+      .addSeriesOverride({
+        alias: 'Completed',
+        color: 'blue',
+      })
+      .addSeriesOverride({
+        alias: 'ContainerCannotRun',
+        color: 'yellow',
+      })
+      .addSeriesOverride({
+        alias: 'DeadlineExceeded',
+        color: 'orange',
+      })
+      .addSeriesOverride({
+        alias: 'Error',
+        color: 'red',
+      })
+      .addSeriesOverride({
+        alias: 'Evicted',
+        color: '#FA6400',  // dark orange
+      })
+      .addSeriesOverride({
+        alias: 'OOMKilled',
+        color: '#C4162A',  // dark red
+      }),
+    ],
   ];
 
 local dashboardsForService(
   type,
   environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
-  useTimeSeriesPlugin=false,
       ) =
   local serviceInfo = metricsCatalog.getService(type);
   local serviceHasDedicatedKubeNodePool = serviceInfo.hasDedicatedKubeNodePool();
@@ -537,7 +309,7 @@ local dashboardsForService(
               ]
               +
               std.flatMap(
-                function(container) rowsForContainer(container, deployment, selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+                function(container) rowsForContainer(container, deployment, selector),
                 serviceInfo.kubeResources[deployment].containers
               ),
             deployments
@@ -567,14 +339,14 @@ local dashboardsForService(
               ]
               +
               [
-                panelsForDeployment(type, deployment, selector, useTimeSeriesPlugin=useTimeSeriesPlugin),
+                panelsForDeployment(type, deployment, selector),
               ],
             deployments
           )
           +
           (
             if serviceHasDedicatedKubeNodePool then
-              [panelsForRequestsUtilization(type, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)]
+              [panelsForRequestsUtilization(type, selector)]
             else
               []
           ),
@@ -587,7 +359,7 @@ local dashboardsForService(
       },
   };
 
-local deploymentOverview(type, selector, startRow=1, useTimeSeriesPlugin=false) =
+local deploymentOverview(type, selector, startRow=1) =
   local serviceInfo = metricsCatalog.getService(type);
   local deployments = std.objectFields(serviceInfo.kubeResources);
   local serviceHasDedicatedKubeNodePool = serviceInfo.hasDedicatedKubeNodePool();
@@ -609,12 +381,12 @@ local deploymentOverview(type, selector, startRow=1, useTimeSeriesPlugin=false) 
             panel {
               links: links,
             },
-          panelsForDeployment(type, deployment, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)
+          panelsForDeployment(type, deployment, selector)
         ),
       deployments
     ) + (
       if serviceHasDedicatedKubeNodePool then
-        [panelsForRequestsUtilization(type, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)]
+        [panelsForRequestsUtilization(type, selector)]
       else
         []
     ),

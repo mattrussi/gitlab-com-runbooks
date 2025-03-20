@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local runwayPostgresCommon = import 'gitlab-dashboards/runway_postgres_common_graphs.libsonnet';
 
-runwayPostgresCommon.runwayPostgresDashboard('runway-db-example', useTimeSeriesPlugin=true)
+runwayPostgresCommon.runwayPostgresDashboard('runway-db-example')
 .overviewTrailer()

@@ -13,11 +13,8 @@ local githubObjectTypes = [
 
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
-
-local useTimeSeriesPlugin = true;
 
 local rate(operation, objectType) =
   ('rate(github_importer_%s_%s{env="$environment"}[$__interval])' % [operation, objectType]);
@@ -26,162 +23,81 @@ local sum(metric) =
   ('(sum(%s) or vector(0))' % metric);
 
 local projectsCountGraph() =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      datasource='$PROMETHEUS_DS',
-      title='Projects successfully imported',
-      legend_min=false,
-      legend_max=false,
-      legend_current=false,
-      legend_total=true
+  panel.basic(
+    datasource='$PROMETHEUS_DS',
+    title='Projects successfully imported',
+    legend_min=false,
+    legend_max=false,
+    legend_current=false,
+    legend_total=true
+  )
+  .addTarget(
+    target.prometheus(
+      sum('github_importer_imported_projects_total'),
+      legendFormat='Projects successfully imported'
     )
-    .addTarget(
-      target.prometheus(
-        sum('github_importer_imported_projects_total'),
-        legendFormat='Projects successfully imported'
-      )
-    )
-  else
-    basic.graphPanel(
-      datasource='$PROMETHEUS_DS',
-      title='Projects successfully imported',
-      decimals=0,
-      legend_min=false,
-      legend_max=false,
-      legend_current=false,
-      legend_total=true
-    )
-    .addTarget(
-      promQuery.target(
-        sum('github_importer_imported_projects_total'),
-        legendFormat='Projects successfully imported'
-      )
-    );
+  );
 
 local durationGraph() =
-  if useTimeSeriesPlugin then
-    panel.multiTimeSeries(
-      title='Import Duration',
-      description='Lower is better.',
-      format='short',
-      yAxisLabel='Duration',
-      queries=std.map(
-        function(p)
-          {
-            query: 'histogram_quantile(%(p)s, %(sum)s)' % {
-              p: std.format('%.2f', p / 100),
-              sum: ('sum(%s) by (le, environment)' % rate('total', 'duration_seconds_bucket')),
-            },
-            legendFormat: 'p%s' % p,
+  panel.multiTimeSeries(
+    title='Import Duration',
+    description='Lower is better.',
+    format='short',
+    yAxisLabel='Duration',
+    queries=std.map(
+      function(p)
+        {
+          query: 'histogram_quantile(%(p)s, %(sum)s)' % {
+            p: std.format('%.2f', p / 100),
+            sum: ('sum(%s) by (le, environment)' % rate('total', 'duration_seconds_bucket')),
           },
-        [50, 90, 95, 99]
-      )
+          legendFormat: 'p%s' % p,
+        },
+      [50, 90, 95, 99]
     )
-  else
-    basic.multiTimeseries(
-      title='Import Duration',
-      description='Lower is better.',
-      format='s',
-      yAxisLabel='Duration',
-      legend_show=true,
-      queries=std.map(
-        function(p)
-          {
-            query: 'histogram_quantile(%(p)s, %(sum)s)' % {
-              p: std.format('%.2f', p / 100),
-              sum: ('sum(%s) by (le, environment)' % rate('total', 'duration_seconds_bucket')),
-            },
-            legendFormat: 'p%s' % p,
-          },
-        [50, 90, 95, 99]
-      )
-    );
+  );
 
 local objectCounterGraph(title, queries) =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      title=title,
-      legend_min=false,
-      legend_max=false,
-      legend_current=false,
-      legend_total=true
+  panel.basic(
+    title=title,
+    legend_min=false,
+    legend_max=false,
+    legend_current=false,
+    legend_total=true
+  )
+  .addTarget(
+    target.prometheus(
+      queries.fetched.query,
+      legendFormat=queries.fetched.title
     )
-    .addTarget(
-      target.prometheus(
-        queries.fetched.query,
-        legendFormat=queries.fetched.title
-      )
+  )
+  .addTarget(
+    target.prometheus(
+      queries.imported.query,
+      legendFormat=queries.imported.title
     )
-    .addTarget(
-      target.prometheus(
-        queries.imported.query,
-        legendFormat=queries.imported.title
-      )
+  )
+  .addTarget(
+    target.prometheus(
+      '(((%(fetched)s) - (%(imported)s)) * 3600) or vector(0)' % {
+        fetched: queries.fetched.value,
+        imported: queries.imported.value,
+      },
+      legendFormat='diff'
     )
-    .addTarget(
-      target.prometheus(
-        '(((%(fetched)s) - (%(imported)s)) * 3600) or vector(0)' % {
-          fetched: queries.fetched.value,
-          imported: queries.imported.value,
-        },
-        legendFormat='diff'
-      )
-    )
-    .addSeriesOverride({
-      alias: '/fetched.*/',
-      color: '#3274D9',
-    })
-    .addSeriesOverride({
-      alias: '/imported.*/',
-      color: '#37872D',
-    })
-    .addSeriesOverride({
-      alias: 'diff',
-      color: '#E02F44',
-    })
-  else
-    basic.graphPanel(
-      datasource='$PROMETHEUS_DS',
-      title=title,
-      decimals=0,
-      legend_min=false,
-      legend_max=false,
-      legend_current=false,
-      legend_total=true
-    )
-    .addTarget(
-      promQuery.target(
-        queries.fetched.query,
-        legendFormat=queries.fetched.title
-      )
-    )
-    .addTarget(
-      promQuery.target(
-        queries.imported.query,
-        legendFormat=queries.imported.title
-      )
-    )
-    .addTarget(
-      promQuery.target(
-        '(((%(fetched)s) - (%(imported)s)) * 3600) or vector(0)' % {
-          fetched: queries.fetched.value,
-          imported: queries.imported.value,
-        },
-        legendFormat='diff'
-      )
-    )
-    .addSeriesOverride({
-      alias: '/fetched.*/',
-      color: '#3274D9',
-    })
-    .addSeriesOverride({
-      alias: '/imported.*/',
-      color: '#37872D',
-    })
-    .addSeriesOverride({
-      alias: 'diff',
-      color: '#E02F44',
-    });
+  )
+  .addSeriesOverride({
+    alias: '/fetched.*/',
+    color: '#3274D9',
+  })
+  .addSeriesOverride({
+    alias: '/imported.*/',
+    color: '#37872D',
+  })
+  .addSeriesOverride({
+    alias: 'diff',
+    color: '#E02F44',
+  });
 
 local githubObjectCounter(objectType) =
   objectCounterGraph(objectType, {

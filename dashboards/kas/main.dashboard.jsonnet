@@ -2,10 +2,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local row = grafana.row;
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
-
-local useTimeSeriesPlugin = true;
 
 serviceDashboard.overview('kas')
 .addPanel(
@@ -19,42 +16,26 @@ serviceDashboard.overview('kas')
 )
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.multiTimeSeries(
-          title='Number of connected agents and agentk Pods',
-          queries=[
-            {
-              legendFormat: 'Number of connected agentk Pods',
-              query: 'sum(grpc_server_requests_in_flight{type="kas", stage="$stage", env="$environment", grpc_service="gitlab.agent.agent_configuration.rpc.AgentConfiguration", grpc_method="GetConfiguration"})',
-            },
-            {
-              legendFormat: 'Number of connected agents',
-              query: 'avg(connected_agents_count{type="kas", stage="$stage", env="$environment"})',
-            },
-          ],
-          yAxisLabel='count',
-          legend_show=true,
-        ),
-      ]
-    else
-      [
-        basic.multiTimeseries(
-          title='Number of connected agents and agentk Pods',
-          queries=[
-            {
-              legendFormat: 'Number of connected agentk Pods',
-              query: 'sum(grpc_server_requests_in_flight{type="kas", stage="$stage", env="$environment", grpc_service="gitlab.agent.agent_configuration.rpc.AgentConfiguration", grpc_method="GetConfiguration"})',
-            },
-            {
-              legendFormat: 'Number of connected agents',
-              query: 'avg(connected_agents_count{type="kas", stage="$stage", env="$environment"})',
-            },
-          ],
-          yAxisLabel='count',
-          legend_show=true,
-        ),
-      ], cols=1, rowHeight=10, startRow=1001
+    [
+      panel.multiTimeSeries(
+        title='Number of connected agents and agentk Pods',
+        queries=[
+          {
+            legendFormat: 'Number of connected agentk Pods',
+            query: 'sum(grpc_server_requests_in_flight{type="kas", stage="$stage", env="$environment", grpc_service="gitlab.agent.agent_configuration.rpc.AgentConfiguration", grpc_method="GetConfiguration"})',
+          },
+          {
+            legendFormat: 'Number of connected agents',
+            query: 'avg(connected_agents_count{type="kas", stage="$stage", env="$environment"})',
+          },
+        ],
+        yAxisLabel='count',
+        legend_show=true,
+      ),
+    ],
+    cols=1,
+    rowHeight=10,
+    startRow=1001,
   )
 )
 .overviewTrailer()

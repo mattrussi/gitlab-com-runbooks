@@ -5,14 +5,11 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local annotation = grafana.annotation;
-local graphPanel = grafana.graphPanel;
 local statPanel = grafana.statPanel;
 local textPanel = grafana.text;
 local row = grafana.row;
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
-
-local useTimeSeriesPlugin = true;
 
 local environments = [
   {
@@ -98,40 +95,24 @@ local packageVersion(environment) =
   );
 
 local environmentPressurePanel(environment) =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '%s Auto-deploy pressure' % [environment.icon],
-      legend_show=false,
+  panel.basic(
+    '%s Auto-deploy pressure' % [environment.icon],
+    legend_show=false,
+  )
+  .addYaxis(
+    min=0,
+    label='Commits',
+  )
+  .addSeriesOverride({
+    alias: 'Commits',
+    color: 'semi-dark-purple',
+  })
+  .addTarget(
+    prometheus.target(
+      'delivery_auto_deploy_pressure{job="delivery-metrics", role="%(role)s"}' % { role: environment.id },
+      legendFormat='Commits',
     )
-    .addYaxis(
-      min=0,
-      label='Commits',
-    )
-    .addSeriesOverride({
-      alias: 'Commits',
-      color: 'semi-dark-purple',
-    })
-    .addTarget(
-      prometheus.target(
-        'delivery_auto_deploy_pressure{job="delivery-metrics", role="%(role)s"}' % { role: environment.id },
-        legendFormat='Commits',
-      )
-    )
-  else
-    graphPanel.new(
-      '%s Auto-deploy pressure' % [environment.icon],
-      aliasColors={ Commits: 'semi-dark-purple' },
-      decimals=0,
-      labelY1='Commits',
-      legend_show=false,
-      min=0,
-    )
-    .addTarget(
-      prometheus.target(
-        'delivery_auto_deploy_pressure{job="delivery-metrics", role="%(role)s"}' % { role: environment.id },
-        legendFormat='Commits',
-      )
-    );
+  );
 
 // Stat panel used by top-level Auto-deploy Pressure
 local
@@ -421,71 +402,37 @@ basic.dashboard(
   )
 )
 .addPanel(
-  if useTimeSeriesPlugin then
-    panel.basic(
-      'Auto-build pressure for auto-deploy projects',
-      description='Number of commits not included in an auto-deploy package for projects whose versions are bumped by release-tools',
+  panel.basic(
+    'Auto-build pressure for auto-deploy projects',
+    description='Number of commits not included in an auto-deploy package for projects whose versions are bumped by release-tools',
+  )
+  .addYaxis(
+    min=0,
+    label='Commits',
+  )
+  .addTarget(
+    prometheus.target(
+      'sum(delivery_auto_build_pressure{project_name=~"%(projects)s"})' % { projects: buildPressureProjects },
+      legendFormat='sum',
     )
-    .addYaxis(
-      min=0,
-      label='Commits',
-    )
-    .addTarget(
-      prometheus.target(
-        'sum(delivery_auto_build_pressure{project_name=~"%(projects)s"})' % { projects: buildPressureProjects },
-        legendFormat='sum',
-      )
-    )
-  else
-    graphPanel.new(
-      'Auto-build pressure for auto-deploy projects',
-      description='Number of commits not included in an auto-deploy package for projects whose versions are bumped by release-tools',
-      decimals=0,
-      labelY1='Commits',
-      legend_values=true,
-      legend_current=true,
-      legend_alignAsTable=true,
-      min=0,
-    )
-    .addTarget(
-      prometheus.target(
-        'sum(delivery_auto_build_pressure{project_name=~"%(projects)s"})' % { projects: buildPressureProjects },
-        legendFormat='sum',
-      )
-    ), gridPos={ x: 50, y: 2000, w: 12, h: 10 }
+  ),
+  gridPos={ x: 50, y: 2000, w: 12, h: 10 }
 )
 .addPanel(
-  if useTimeSeriesPlugin then
-    panel.basic(
-      'Auto-build pressure for all projects',
-      description='Number of commits (in all projects) not included in an auto-deploy package',
+  panel.basic(
+    'Auto-build pressure for all projects',
+    description='Number of commits (in all projects) not included in an auto-deploy package',
+  )
+  .addYaxis(
+    min=0,
+    label='Commits',
+  )
+  .addTarget(
+    prometheus.target(
+      'max(delivery_auto_build_pressure) by (project_name)',
+      legendFormat='{{project_name}}',
     )
-    .addYaxis(
-      min=0,
-      label='Commits',
-    )
-    .addTarget(
-      prometheus.target(
-        'max(delivery_auto_build_pressure) by (project_name)',
-        legendFormat='{{project_name}}',
-      )
-    )
-  else
-    graphPanel.new(
-      'Auto-build pressure for all projects',
-      description='Number of commits (in all projects) not included in an auto-deploy package',
-      decimals=0,
-      labelY1='Commits',
-      legend_values=true,
-      legend_current=true,
-      legend_alignAsTable=true,
-      min=0,
-    )
-    .addTarget(
-      prometheus.target(
-        'max(delivery_auto_build_pressure) by (project_name)',
-        legendFormat='{{project_name}}',
-      )
-    ), gridPos={ x: 50, y: 4000, w: 12, h: 10 }
+  ),
+  gridPos={ x: 50, y: 4000, w: 12, h: 10 }
 )
 .trailer()

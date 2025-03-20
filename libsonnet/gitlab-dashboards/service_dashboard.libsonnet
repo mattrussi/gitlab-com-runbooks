@@ -42,7 +42,6 @@ local headlineMetricsRow(
   selectorHash,
   showSaturationCell,
   stableIdPrefix='',
-  useTimeSeriesPlugin=false,
       ) =
   local hasApdex = metricsCatalogServiceInfo.hasApdex();
   local hasErrorRate = metricsCatalogServiceInfo.hasErrorRate();
@@ -62,7 +61,6 @@ local headlineMetricsRow(
     showSaturationCell=showSaturationCell,
     compact=false,
     rowHeight=10,
-    useTimeSeriesPlugin=useTimeSeriesPlugin,
   );
 
 local overviewDashboard(
@@ -79,7 +77,6 @@ local overviewDashboard(
   showProvisioningDetails=true,
   showSystemDiagrams=true,
   expectMultipleSeries=false,
-  useTimeSeriesPlugin=true,
       ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
@@ -114,7 +111,6 @@ local overviewDashboard(
         metricsCatalogServiceInfo=metricsCatalogServiceInfo,
         selectorHash=selectorHash,
         showSaturationCell=std.length(saturationComponents) > 0,
-        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     .addPanels(
@@ -126,16 +122,15 @@ local overviewDashboard(
         selectorHash=selectorHash,
         expectMultipleSeries=expectMultipleSeries,
         shardAggregationSet=std.get(aggregationSets, 'shardComponentSLIs'),
-        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
     )
     .addPanels(
-      metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=200, useTimeSeriesPlugin=useTimeSeriesPlugin)
+      metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=200)
     )
     .addPanelsIf(
       showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().vms == true,
       [
-        nodeMetrics.nodeMetricsDetailRow(selectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin) {
+        nodeMetrics.nodeMetricsDetailRow(selectorHash) {
           gridPos: {
             x: 0,
             y: 300,
@@ -149,7 +144,7 @@ local overviewDashboard(
       showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().kubernetes == true,
       [
         row.new(title='☸️ Kubernetes Overview', collapse=true)
-        .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin)) +
+        .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1)) +
         { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
       ]
     )
@@ -158,7 +153,7 @@ local overviewDashboard(
       [
         // saturationSelector is env + type + stage
         local saturationSelector = saturationEnvironmentSelectorHash + stageLabels + { type: type };
-        saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents, useTimeSeriesPlugin=useTimeSeriesPlugin)
+        saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
         { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
       ]
     );

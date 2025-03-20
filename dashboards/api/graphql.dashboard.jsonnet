@@ -13,8 +13,6 @@ local selector = {
 
 local selectorString = selectors.serializeHash(selector);
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard('GraphQL', tags=['type:api', 'detail'])
 .addTemplate(templates.stage)
 .addPanels(
@@ -31,24 +29,14 @@ basic.dashboard('GraphQL', tags=['type:api', 'detail'])
         - [Architecture blueprint](https://docs.gitlab.com/ee/architecture/blueprints/graphql_api/)
       |||,
     ),
-    if useTimeSeriesPlugin then
-      panel.timeSeries(
-        stableId='request-rate',
-        title='Request Rate',
-        query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
-        legendFormat='{{ action }}',
-        format='ops',
-        yAxisLabel='Requests per Second',
-      )
-    else
-      basic.timeseries(
-        stableId='request-rate',
-        title='Request Rate',
-        query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
-        legendFormat='{{ action }}',
-        format='ops',
-        yAxisLabel='Requests per Second',
-      ),
+    panel.timeSeries(
+      stableId='request-rate',
+      title='Request Rate',
+      query='sum(avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
+      legendFormat='{{ action }}',
+      format='ops',
+      yAxisLabel='Requests per Second',
+    ),
   ])
 )
 .trailer()

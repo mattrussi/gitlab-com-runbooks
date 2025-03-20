@@ -9,102 +9,52 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 serviceDashboard.overview('logging')
 .overviewTrailer()
 .addPanel(
   row.new(title='PubSub Subscriptions Details', collapse=true)
   .addPanels(
     layout.grid(
-      if useTimeSeriesPlugin then
-        [
-          panel.basic(
-            title='PubSub subscriptions Undelivered Messages',
-            unit='short',
-            legend_show=false,
-            drawStyle='bars',
-            stack=true,
+      [
+        panel.basic(
+          title='PubSub subscriptions Undelivered Messages',
+          unit='short',
+          legend_show=false,
+          drawStyle='bars',
+          stack=true,
+        )
+        .addTarget(
+          target.prometheus(
+            |||
+              max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{environment="$environment"}[$__interval])) by (subscription_id)
+            |||,
+            legendFormat='{{ subscription_id }}',
+            interval='1m',
+            intervalFactor=3,
           )
-          .addTarget(
-            target.prometheus(
-              |||
-                max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{environment="$environment"}[$__interval])) by (subscription_id)
-              |||,
-              legendFormat='{{ subscription_id }}',
-              interval='1m',
-              intervalFactor=3,
-            )
-          ),
-          panel.timeSeries(
-            title='PubSub subscriptions Oldest Unacked Messages',
-            legend_show=false,
-            query=|||
-              max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{environment="$environment"}[$__interval])) by (subscription_id)
-            |||,
-            format='short',
-            legendFormat='{{ subscription_id }}',
-          ),
-          panel.timeSeries(
-            title='PubSub subscriptions Oldest Retained Acked Messages',
-            legend_show=false,
-            query=|||
-              max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_retained_acked_message_age{environment="$environment"}[$__interval])) by (subscription_id)
-            |||,
-            format='short',
-            legendFormat='{{ subscription_id }}',
-          ),
-        ]
-      else
-        [
-          graphPanel.new(
-            'PubSub subscriptions Undelivered Messages',
-            bars=true,
-            lines=false,
-            stack=true,
-            format='short',
-            decimals=0,
-            sort='decreasing',
-            legend_show=false,
-            legend_rightSide=true,
-            legend_alignAsTable=true,
-            legend_values=true,
-            legend_min=true,
-            legend_max=true,
-            legend_current=true,
-            legend_total=false,
-            legend_avg=true,
-            datasource='$PROMETHEUS_DS',
-          )
-          .addTarget(
-            promQuery.target(
-              |||
-                max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_num_undelivered_messages{environment="$environment"}[$__interval])) by (subscription_id)
-              |||,
-              legendFormat='{{ subscription_id }}',
-              interval='1m',
-              intervalFactor=3,
-            )
-          ),
-          basic.timeseries(
-            title='PubSub subscriptions Oldest Unacked Messages',
-            legend_show=false,
-            query=|||
-              max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{environment="$environment"}[$__interval])) by (subscription_id)
-            |||,
-            format='s',
-            legendFormat='{{ subscription_id }}',
-          ),
-          basic.timeseries(
-            title='PubSub subscriptions Oldest Retained Acked Messages',
-            legend_show=false,
-            query=|||
-              max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_retained_acked_message_age{environment="$environment"}[$__interval])) by (subscription_id)
-            |||,
-            format='s',
-            legendFormat='{{ subscription_id }}',
-          ),
-        ], cols=3, rowHeight=10, startRow=1000
+        ),
+        panel.timeSeries(
+          title='PubSub subscriptions Oldest Unacked Messages',
+          legend_show=false,
+          query=|||
+            max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age{environment="$environment"}[$__interval])) by (subscription_id)
+          |||,
+          format='short',
+          legendFormat='{{ subscription_id }}',
+        ),
+        panel.timeSeries(
+          title='PubSub subscriptions Oldest Retained Acked Messages',
+          legend_show=false,
+          query=|||
+            max(max_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_retained_acked_message_age{environment="$environment"}[$__interval])) by (subscription_id)
+          |||,
+          format='short',
+          legendFormat='{{ subscription_id }}',
+        ),
+      ],
+      cols=3,
+      rowHeight=10,
+      startRow=1000,
     ),
   ),
   gridPos={
@@ -123,7 +73,6 @@ serviceDashboard.overview('logging')
         env: '$environment',
         groupname: 'fluentd',
       },
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={

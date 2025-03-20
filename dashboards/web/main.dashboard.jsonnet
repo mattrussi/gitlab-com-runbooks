@@ -5,8 +5,6 @@ local row = grafana.row;
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 serviceDashboard.overview('web')
 .addPanel(
   row.new(title='Workhorse'),
@@ -17,7 +15,7 @@ serviceDashboard.overview('web')
     h: 1,
   }
 )
-.addPanels(workhorseCommon.workhorsePanels(serviceType='web', serviceStage='$stage', startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(workhorseCommon.workhorsePanels(serviceType='web', serviceStage='$stage', startRow=1001))
 .addPanel(
   row.new(title='Rails'),
   gridPos={
@@ -27,7 +25,7 @@ serviceDashboard.overview('web')
     h: 1,
   }
 )
-.addPanels(railsCommon.railsPanels(serviceType='web', serviceStage='$stage', startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(railsCommon.railsPanels(serviceType='web', serviceStage='$stage', startRow=3001))
 .addPanel(
   row.new(title='puma parent processes', collapse=true)
   .addPanels(
@@ -41,7 +39,6 @@ serviceDashboard.overview('web')
         stage: '$stage',
       },
       startRow=1,
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={
@@ -64,7 +61,6 @@ serviceDashboard.overview('web')
         stage: '$stage',
       },
       startRow=1,
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={

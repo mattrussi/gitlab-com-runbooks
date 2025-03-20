@@ -7,8 +7,6 @@ local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local baseSelector = {
   monitor: 'global',
   environment: '$environment',
@@ -205,31 +203,20 @@ basic.dashboard(
           { color: 'green', value: 0.9995 },
         ]
       ),
-      if useTimeSeriesPlugin then
-        panel.basic(
-          'Teams over budget target',
-          legend_show=false,
-        )
-        .addTarget(
-          target.prometheus(overBudgetThreshold, legendFormat='Target')
-        )
-        .addTarget(
-          target.prometheus(overBudgetQuery, legendFormat='Teams Over Budget'),
-        )
-      else
-        basic
-        .graphPanel(
-          'Teams over budget target',
-          legend_show=false,
-          decimals=0,
-        )
-        .addTarget(
-          promQuery.target(overBudgetThreshold, legendFormat='Target')
-        )
-        .addTarget(
-          promQuery.target(overBudgetQuery, legendFormat='Teams Over Budget'),
-        ),
-    ], cols=2, rowHeight=10, startRow=100
+      panel.basic(
+        'Teams over budget target',
+        legend_show=false,
+      )
+      .addTarget(
+        target.prometheus(overBudgetThreshold, legendFormat='Target')
+      )
+      .addTarget(
+        target.prometheus(overBudgetQuery, legendFormat='Teams Over Budget'),
+      ),
+    ],
+    cols=2,
+    rowHeight=10,
+    startRow=100,
   )
 )
 .addPanels(

@@ -4,8 +4,6 @@ local workhorseCommon = import 'gitlab-dashboards/workhorse_common_graphs.libson
 local row = grafana.row;
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 serviceDashboard.overview('api')
 .addPanel(
   row.new(title='Workhorse'),
@@ -16,7 +14,7 @@ serviceDashboard.overview('api')
     h: 1,
   }
 )
-.addPanels(workhorseCommon.workhorsePanels(serviceType='api', serviceStage='$stage', startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(workhorseCommon.workhorsePanels(serviceType='api', serviceStage='$stage', startRow=1001))
 .addPanel(
   row.new(title='Rails'),
   gridPos={
@@ -26,5 +24,5 @@ serviceDashboard.overview('api')
     h: 1,
   }
 )
-.addPanels(railsCommon.railsPanels(serviceType='api', serviceStage='$stage', startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(railsCommon.railsPanels(serviceType='api', serviceStage='$stage', startRow=3001))
 .overviewTrailer()

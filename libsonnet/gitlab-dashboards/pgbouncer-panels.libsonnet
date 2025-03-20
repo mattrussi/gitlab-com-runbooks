@@ -6,7 +6,6 @@ local serviceDashboard = import './service_dashboard.libsonnet';
 local pgbouncer(
   type='pgbouncer',
   user='gitlab',
-  useTimeSeriesPlugin=false,
       ) =
   serviceDashboard.overview(type)
   .addPanel(
@@ -18,7 +17,7 @@ local pgbouncer(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.workloadStats(type, startRow=2000, useTimeSeriesPlugin=useTimeSeriesPlugin))
+  .addPanels(pgbouncerCommonGraphs.workloadStats(type, startRow=2000))
   .addPanel(
     row.new(title='pgbouncer Connection Pooling'),
     gridPos={
@@ -28,7 +27,7 @@ local pgbouncer(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, user, 3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, user, 3001))
   .addPanel(
     row.new(title='pgbouncer Network'),
     gridPos={
@@ -38,7 +37,7 @@ local pgbouncer(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.networkStats(type, 4001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+  .addPanels(pgbouncerCommonGraphs.networkStats(type, 4001))
   .addPanel(
     row.new(title='pgbouncer Client Transaction Utilisation'),
     gridPos={
