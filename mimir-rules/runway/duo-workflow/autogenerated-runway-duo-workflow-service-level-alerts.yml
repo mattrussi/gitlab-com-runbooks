@@ -4,115 +4,13 @@ groups:
 - name: 'Service Component Alerts: duo-workflow'
   interval: 1m
   rules:
-  - alert: DuoWorkflowServiceRunwayIngressApdexSLOViolation
+  - alert: DuoWorkflowServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      title: The runway_ingress SLI of the duo-workflow service (`{{ $labels.stage
-        }}` stage) has an apdex violating SLO
+      title: The server SLI of the duo-workflow service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
-        Application load balancer serving ingress HTTP requests for the Runway service.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/duo-workflow-main/duo-workflow-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-runway
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3996186971"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,le) (
-            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="duo-workflow"}[5m])
-          )
-        )
-      runbook: docs/duo-workflow/README.md#alerts
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      rules_domain: general
-      severity: s4
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_apdex:ratio_1h{component="runway_ingress",monitor="global",type="duo-workflow"}
-          < (1 - 14.4 * 0.001000)
-        )
-        and on (env,environment,tier,type,stage,component)
-        (
-          gitlab_component_apdex:ratio_5m{component="runway_ingress",monitor="global",type="duo-workflow"}
-          < (1 - 14.4 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="runway_ingress",monitor="global",type="duo-workflow"}) >= 1
-      )
-  - alert: DuoWorkflowServiceRunwayIngressApdexSLOViolation
-    for: 2m
-    annotations:
-      title: The runway_ingress SLI of the duo-workflow service (`{{ $labels.stage
-        }}` stage) has an apdex violating SLO
-      description: |
-        Application load balancer serving ingress HTTP requests for the Runway service.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/duo-workflow-main/duo-workflow-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-runway
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3996186971"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,le) (
-            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="duo-workflow"}[5m])
-          )
-        )
-      runbook: docs/duo-workflow/README.md#alerts
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      rules_domain: general
-      severity: s4
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_apdex:ratio_6h{component="runway_ingress",monitor="global",type="duo-workflow"}
-          < (1 - 6 * 0.001000)
-        )
-        and on (env,environment,tier,type,stage,component)
-        (
-          gitlab_component_apdex:ratio_30m{component="runway_ingress",monitor="global",type="duo-workflow"}
-          < (1 - 6 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="runway_ingress",monitor="global",type="duo-workflow"}) >= 0.16667
-      )
-  - alert: DuoWorkflowServiceRunwayIngressErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The runway_ingress SLI of the duo-workflow service (`{{ $labels.stage
-        }}` stage) has an error rate violating SLO
-      description: |
-        Application load balancer serving ingress HTTP requests for the Runway service.
+        This SLI monitors all Duo Workflow GRPC requests. GRPC failures which are considered to be the "server's fault" are counted as errors.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
@@ -120,20 +18,21 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3451331792"
+      grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="duo-workflow"}[5m]) / 60
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"OK",stage="{{ $labels.stage }}",type="duo-workflow"}[5m])
         )
       runbook: docs/duo-workflow/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: duo_workflow
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -141,26 +40,26 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="runway_ingress",monitor="global",type="duo-workflow"}
+          gitlab_component_errors:ratio_1h{component="server",monitor="global",type="duo-workflow"}
           > (14.4 * 0.001000)
         )
         and on (env,environment,tier,type,stage,component)
         (
-          gitlab_component_errors:ratio_5m{component="runway_ingress",monitor="global",type="duo-workflow"}
+          gitlab_component_errors:ratio_5m{component="server",monitor="global",type="duo-workflow"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="runway_ingress",monitor="global",type="duo-workflow"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="duo-workflow"}) >= 1
       )
-  - alert: DuoWorkflowServiceRunwayIngressErrorSLOViolation
+  - alert: DuoWorkflowServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      title: The runway_ingress SLI of the duo-workflow service (`{{ $labels.stage
-        }}` stage) has an error rate violating SLO
+      title: The server SLI of the duo-workflow service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
-        Application load balancer serving ingress HTTP requests for the Runway service.
+        This SLI monitors all Duo Workflow GRPC requests. GRPC failures which are considered to be the "server's fault" are counted as errors.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
@@ -168,20 +67,21 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3451331792"
+      grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="duo-workflow"}[5m]) / 60
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"OK",stage="{{ $labels.stage }}",type="duo-workflow"}[5m])
         )
       runbook: docs/duo-workflow/README.md#alerts
     labels:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: duo_workflow
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -189,26 +89,26 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="runway_ingress",monitor="global",type="duo-workflow"}
+          gitlab_component_errors:ratio_6h{component="server",monitor="global",type="duo-workflow"}
           > (6 * 0.001000)
         )
         and on (env,environment,tier,type,stage,component)
         (
-          gitlab_component_errors:ratio_30m{component="runway_ingress",monitor="global",type="duo-workflow"}
+          gitlab_component_errors:ratio_30m{component="server",monitor="global",type="duo-workflow"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="runway_ingress",monitor="global",type="duo-workflow"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="duo-workflow"}) >= 0.16667
       )
-  - alert: DuoWorkflowServiceRunwayIngressTrafficCessation
+  - alert: DuoWorkflowServiceServerTrafficCessation
     for: 5m
     annotations:
-      title: The runway_ingress SLI of the duo-workflow service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30m
+      title: The server SLI of the duo-workflow service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
       description: |
-        Application load balancer serving ingress HTTP requests for the Runway service.
+        This SLI monitors all Duo Workflow GRPC requests. GRPC failures which are considered to be the "server's fault" are counted as errors.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
@@ -216,34 +116,35 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1866380853"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="duo-workflow"}[5m]) / 60
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="duo-workflow"}[5m])
         )
       runbook: docs/duo-workflow/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: not_owned
+      feature_category: duo_workflow
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="runway_ingress",monitor="global",stage="main",type="duo-workflow"} == 0
+      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="duo-workflow"} == 0
       and
-      gitlab_component_ops:rate_30m{component="runway_ingress",monitor="global",stage="main",type="duo-workflow"} offset 1h >= 0.16666666666666666
-  - alert: DuoWorkflowServiceRunwayIngressTrafficAbsent
+      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="duo-workflow"} offset 1h >= 0.16666666666666666
+  - alert: DuoWorkflowServiceServerTrafficAbsent
     for: 30m
     annotations:
-      title: The runway_ingress SLI of the duo-workflow service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30m
+      title: The server SLI of the duo-workflow service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
       description: |
-        Application load balancer serving ingress HTTP requests for the Runway service.
+        This SLI monitors all Duo Workflow GRPC requests. GRPC failures which are considered to be the "server's fault" are counted as errors.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -253,192 +154,25 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1866380853"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="duo-workflow"}[5m]) / 60
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="duo-workflow"}[5m])
         )
       runbook: docs/duo-workflow/README.md#alerts
     labels:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: not_owned
+      feature_category: duo_workflow
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="runway_ingress",monitor="global",stage="main",type="duo-workflow"} offset 1h
+      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="duo-workflow"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="runway_ingress",monitor="global",stage="main",type="duo-workflow"}
-  - alert: DuoWorkflowServiceRunwayLbErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The runway_lb SLI of the duo-workflow service (`{{ $labels.stage }}`
-        stage) has an error rate violating SLO
-      description: |
-        External load balancer serving global HTTP requests for the Runway service.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/duo-workflow-main/duo-workflow-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-runway
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "812057818"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="duo-workflow-url-map"}[5m])
-        )
-      runbook: docs/duo-workflow/README.md#alerts
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      rules_domain: general
-      severity: s4
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_1h{component="runway_lb",monitor="global",type="duo-workflow"}
-          > (14.4 * 0.001000)
-        )
-        and on (env,environment,tier,type,stage,component)
-        (
-          gitlab_component_errors:ratio_5m{component="runway_lb",monitor="global",type="duo-workflow"}
-          > (14.4 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="runway_lb",monitor="global",type="duo-workflow"}) >= 1
-      )
-  - alert: DuoWorkflowServiceRunwayLbErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The runway_lb SLI of the duo-workflow service (`{{ $labels.stage }}`
-        stage) has an error rate violating SLO
-      description: |
-        External load balancer serving global HTTP requests for the Runway service.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/duo-workflow-main/duo-workflow-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-runway
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "812057818"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="duo-workflow-url-map"}[5m])
-        )
-      runbook: docs/duo-workflow/README.md#alerts
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      rules_domain: general
-      severity: s4
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_6h{component="runway_lb",monitor="global",type="duo-workflow"}
-          > (6 * 0.001000)
-        )
-        and on (env,environment,tier,type,stage,component)
-        (
-          gitlab_component_errors:ratio_30m{component="runway_lb",monitor="global",type="duo-workflow"}
-          > (6 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="runway_lb",monitor="global",type="duo-workflow"}) >= 0.16667
-      )
-  - alert: DuoWorkflowServiceRunwayLbTrafficCessation
-    for: 5m
-    annotations:
-      title: The runway_lb SLI of the duo-workflow service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30m
-      description: |
-        External load balancer serving global HTTP requests for the Runway service.
-
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
-      grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/duo-workflow-main/duo-workflow-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-runway
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1782139780"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="duo-workflow-url-map"}[5m])
-        )
-      runbook: docs/duo-workflow/README.md#alerts
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: not_owned
-      rules_domain: general
-      severity: s4
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_30m{component="runway_lb",monitor="global",stage="main",type="duo-workflow"} == 0
-      and
-      gitlab_component_ops:rate_30m{component="runway_lb",monitor="global",stage="main",type="duo-workflow"} offset 1h >= 0.16666666666666666
-  - alert: DuoWorkflowServiceRunwayLbTrafficAbsent
-    for: 30m
-    annotations:
-      title: The runway_lb SLI of the duo-workflow service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30m
-      description: |
-        External load balancer serving global HTTP requests for the Runway service.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-      grafana_dashboard_id: duo-workflow-main/duo-workflow-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/duo-workflow-main/duo-workflow-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-runway
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1782139780"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="duo-workflow-url-map"}[5m])
-        )
-      runbook: docs/duo-workflow/README.md#alerts
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: not_owned
-      rules_domain: general
-      severity: s4
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_5m{component="runway_lb",monitor="global",stage="main",type="duo-workflow"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{component="runway_lb",monitor="global",stage="main",type="duo-workflow"}
+      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="duo-workflow"}
