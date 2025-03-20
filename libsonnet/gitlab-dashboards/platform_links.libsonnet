@@ -33,7 +33,6 @@ local getSaturationDetailLink(service, component) =
         'service overview',
       ],
       asDropdown=true,
-      includeVars=true,
       keepTime=true,
       type='dashboards',
     ),
