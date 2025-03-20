@@ -110,7 +110,6 @@ flowchart TD
 3. **Limit the duration** of debug access to the minimum necessary time
 4. **Sync any manual changes back to IaC** once the immediate issue is resolved
 5. **Check if the cell is in use** before entering using `./scripts/render-debug.sh`
-   - Post
 6. **Only use the debug script for `cellsdev`** unless in exceptional circumstances
 7. **Justify your changes** with a valid issue link and description
 

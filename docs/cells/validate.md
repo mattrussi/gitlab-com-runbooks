@@ -6,6 +6,9 @@ When making changes to the [Instrumentor], it's important to validate these chan
 
 Additionally, you may need to test your changes alongside supporting services in our Cells Organization, such as the `HTTP Router` and `Topology Service`.
 
+> [!note]
+> This process is specifically for validating that changes work within Cells Infrastructure and **does NOT** replace the review requirements for the [Instrumentor] tool itself. The sandbox and testing in CI of [Instrumentor] must still be maintained to validate changes for the Dedicated product and PubSec.
+
 ## How to create a Cell with your Instrumentor Changes
 
 **Step 1: Create and Submit Your Changes**
