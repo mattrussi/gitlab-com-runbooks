@@ -169,16 +169,16 @@ local sidekiqAlerts(registry, extraSelector) =
       },
     },
     {
+      local worker = 'Ai::RepositoryXray::ScanDependenciesWorker',
+
       alert: 'ScanDependenciesWorkerHighErrorRate',
       expr: |||
         sum by (env, worker) (
-          application_sli_aggregation:sidekiq_execution:error:rate_5m{
-            worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
-            %(selector)s
-          }
-        ) > 0.001
+          application_sli_aggregation:sidekiq_execution:error:rate_5m{%(selector)s}
+        ) > %(errorRateThreshold)s
       ||| % {
-        selector: selectors.serializeHash(extraSelector),
+        selector: selectors.serializeHash(extraSelector { worker: worker }),
+        errorRateThreshold: jobsSlos.errorRateThreshold(worker=worker),
       },
       'for': '5m',
       labels: {
@@ -303,13 +303,13 @@ local sidekiqAlerts(registry, extraSelector) =
             %(errorRate1h)s{%(selector)s}
             /
             %(opsRate1h)s{%(selector)s}
-          ) > %(errorThreshold)s
+          ) > %(errorThreshold1h)s
           and
           (
             %(errorRate5m)s{%(selector)s}
             /
             %(opsRate5m)s{%(selector)s}
-          ) > %(errorThreshold)s
+          ) > %(errorThreshold5m)s
         )
         and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
         (
@@ -319,12 +319,15 @@ local sidekiqAlerts(registry, extraSelector) =
         )
       ||| % {
         errorRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '1h'),
-        opsRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
+        local opsRate1h = registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
+        opsRate1h: opsRate1h,
         errorRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
-        opsRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+        local opsRate5m = registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+        opsRate5m: opsRate5m,
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringErrors),
-        errorThreshold: jobsSlos.errorRateThreshold(),
+        errorThreshold1h: jobsSlos.customErrorRateQuery(opsRate1h),
+        errorThreshold5m: jobsSlos.customErrorRateQuery(opsRate5m),
       },
       'for': '1h',
       labels: {

@@ -139,10 +139,7 @@ groups:
       team: code_creation
     expr: |
       sum by (env, worker) (
-        application_sli_aggregation:sidekiq_execution:error:rate_5m{
-          worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
-          env="gprd"
-        }
+        application_sli_aggregation:sidekiq_execution:error:rate_5m{env="gprd",worker="Ai::RepositoryXray::ScanDependenciesWorker"}
       ) > 0.001
   - alert: SidekiqJobsDeferredByDBHealthCheck
     for: 2h
@@ -253,13 +250,27 @@ groups:
           sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h{env="gprd"}
           /
           sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h{env="gprd"}
-        ) > 0.10000000000000001
+        ) > on(worker) group_left() (
+          label_replace(vector(0.001), "worker", "Ai::RepositoryXray::ScanDependenciesWorker", "", "")
+          or
+          sum by(worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h) * 0 + 0.10000000000000001
+          unless on(worker)
+          label_replace(vector(0.001), "worker", "Ai::RepositoryXray::ScanDependenciesWorker", "", "")
+      )
+
         and
         (
           sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m{env="gprd"}
           /
           sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m{env="gprd"}
-        ) > 0.10000000000000001
+        ) > on(worker) group_left() (
+          label_replace(vector(0.001), "worker", "Ai::RepositoryXray::ScanDependenciesWorker", "", "")
+          or
+          sum by(worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m) * 0 + 0.10000000000000001
+          unless on(worker)
+          label_replace(vector(0.001), "worker", "Ai::RepositoryXray::ScanDependenciesWorker", "", "")
+      )
+
       )
       and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
       (

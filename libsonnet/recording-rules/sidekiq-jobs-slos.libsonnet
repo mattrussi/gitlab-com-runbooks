@@ -16,7 +16,33 @@ local errorRateThreshold = function(worker=null)
   local thresholds = std.get(customThresholdsPerWorker, std.toString(worker), {});
   std.get(thresholds, 'errorRate', fixedErrorRateThreshold);
 
+local workerErrorRate(worker) =
+  'label_replace(vector(%(threshold)s), "worker", "%(worker)s", "", "")' % {
+    worker: worker,
+    threshold: customThresholdsPerWorker[worker].errorRate,
+  };
+
+local customErrorRateQuery(promQL) =
+  local customThresholdsAsTimeSeries = [
+    workerErrorRate(worker)
+    for worker in std.objectFields(customThresholdsPerWorker)
+  ];
+  |||
+    on(worker) group_left() (
+        %(customThresholds)s
+        or
+        sum by(worker) (%(query)s) * 0 + %(fixedErrorRateThreshold)s
+        unless on(worker)
+        %(customThresholds)s
+    )
+  ||| % {
+    query: promQL,
+    customThresholds: std.join('\nor\n', customThresholdsAsTimeSeries),
+    fixedErrorRateThreshold: fixedErrorRateThreshold,
+  };
+
 {
   apdexThreshold: apdexThreshold,
   errorRateThreshold: errorRateThreshold,
+  customErrorRateQuery: customErrorRateQuery,
 }
