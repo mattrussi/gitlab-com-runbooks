@@ -15,6 +15,7 @@
   import 'cloudflare.jsonnet',
   import 'consul.jsonnet',
   import 'customersdot.jsonnet',
+  import 'duo-workflow.jsonnet',
   import 'errortracking.jsonnet',
   import 'ext-pvs.jsonnet',
   import 'external-dns.jsonnet',
