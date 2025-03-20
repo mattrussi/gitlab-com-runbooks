@@ -6,6 +6,6 @@ local patroniService = metricsCatalog.getService('patroni');
 separateMimirRecordingFiles(
   function(service, selector, extraArgs, tenant)
     {
-      'walg-backups-alerts': std.manifestYamlDoc(walgBackupsAlerts(tenant, selector)),
+      'walg-backups-alerts': std.manifestYamlDoc(walgBackupsAlerts(tenant,selector)),
     },
 )

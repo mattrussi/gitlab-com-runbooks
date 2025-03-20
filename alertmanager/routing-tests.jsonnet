@@ -489,15 +489,15 @@ generateTests([
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web' },
     receivers: [
       'feed_alerts_staging',
-      'blackhole',
-    ],
+      'blackhole'
+      ],
   },
   {
     name: 'slo_alert=yes, env=gstg type=web, aggregation=regional_component should go to blackhole',
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web', aggregation: 'regional_component' },
     receivers: [
-      'blackhole',
-    ],
+      'blackhole'
+      ],
   },
   {
     name: 'slo_alert=yes, env=gprd, team=ai_model_validation should go to g_mlops-alerts',

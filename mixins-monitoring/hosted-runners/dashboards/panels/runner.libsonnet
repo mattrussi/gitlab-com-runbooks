@@ -1,7 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local heatmapPanel = grafana.heatmapPanel;
@@ -27,7 +27,7 @@ local headlineMetricsRow(
     selectorHash=selectorHashWithExtras,
     stableIdPrefix='',
     showApdex=hasApdex,
-    legendFormatPrefix='{{component}} - {{shard}}',
+    legendFormatPrefix="{{component}} - {{shard}}",
     showErrorRatio=hasErrorRate,
     showOpsRate=hasRequestRate,
     showSaturationCell=showSaturationCell,
@@ -745,5 +745,5 @@ local pollingError() =
   provisionerInstanceLifeDuration:: provisionerInstanceLifeDuration,
   statusPanel:: statusPanel,
   pollingRPS:: pollingRPS,
-  pollingError:: pollingError,
+  pollingError:: pollingError
 }

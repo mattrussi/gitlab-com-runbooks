@@ -67,5 +67,5 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       apdexConfidenceRatio: 'gitlab_component_shard_apdex:confidence:ratio_%s',
       errorConfidenceRatio: 'gitlab_component_shard_errors:confidence:ratio_%s',
     },
-  }),
+  })
 }

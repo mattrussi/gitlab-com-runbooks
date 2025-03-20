@@ -6,7 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'consul',
   tier: 'sv',
-  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
 
   monitoringThresholds: {
     apdexScore: 0.999,
