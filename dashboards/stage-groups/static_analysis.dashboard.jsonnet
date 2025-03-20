@@ -1,4 +1,3 @@
-local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
@@ -6,119 +5,59 @@ local panel = import 'grafana/time-series/panel.libsonnet';
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local sastArtifactBuildsCompleted() =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title='SAST Artifact Builds Completed',
-      stableId='sast_artifact_builds_completed',
-      yAxisLabel='Count',
-      description=|||
-        Number of CI Builds completed with SAST report artifacts
-      |||,
-      query=|||
-        sum by (status) (
-          increase(
-            artifact_report_sast_builds_completed_total{
-              env="$environment"
-            }[$__interval])
-        )
-      |||,
-    )
-  else
-    basic.timeseries(
-      stableId='sast_artifact_builds_completed',
-      title='SAST Artifact Builds Completed',
-      decimals=2,
-      yAxisLabel='Count',
-      description=|||
-        Number of CI Builds completed with SAST report artifacts
-      |||,
-      query=|||
-        sum by (status) (
-          increase(
-            artifact_report_sast_builds_completed_total{
-              env="$environment"
-            }[$__interval])
-        )
-      |||,
-    );
+  panel.timeSeries(
+    title='SAST Artifact Builds Completed',
+    stableId='sast_artifact_builds_completed',
+    yAxisLabel='Count',
+    description=|||
+      Number of CI Builds completed with SAST report artifacts
+    |||,
+    query=|||
+      sum by (status) (
+        increase(
+          artifact_report_sast_builds_completed_total{
+            env="$environment"
+          }[$__interval])
+      )
+    |||,
+  );
 
 local secretDetectionArtifactBuildsCompleted() =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title='Secret Detection Artifact Builds Completed',
-      stableId='secret_detection_artifact_builds_completed',
-      yAxisLabel='Count',
-      description=|||
-        Number of CI Builds completed with Secret Detection report artifacts
-      |||,
-      query=|||
-        sum by (status) (
-          increase(
-            artifact_report_secret_detection_builds_completed_total{
-              env="$environment"
-            }[$__interval])
-        )
-      |||,
-    )
-  else
-    basic.timeseries(
-      stableId='secret_detection_artifact_builds_completed',
-      title='Secret Detection Artifact Builds Completed',
-      decimals=2,
-      yAxisLabel='Count',
-      description=|||
-        Number of CI Builds completed with Secret Detection report artifacts
-      |||,
-      query=|||
-        sum by (status) (
-          increase(
-            artifact_report_secret_detection_builds_completed_total{
-              env="$environment"
-            }[$__interval])
-        )
-      |||,
-    );
-
+  panel.timeSeries(
+    title='Secret Detection Artifact Builds Completed',
+    stableId='secret_detection_artifact_builds_completed',
+    yAxisLabel='Count',
+    description=|||
+      Number of CI Builds completed with Secret Detection report artifacts
+    |||,
+    query=|||
+      sum by (status) (
+        increase(
+          artifact_report_secret_detection_builds_completed_total{
+            env="$environment"
+          }[$__interval])
+      )
+    |||,
+  );
 
 local codeQualityArtifactBuildsCompleted() =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title='Code Quality Artifact Builds Completed',
-      stableId='code_quality_artifact_builds_completed',
-      yAxisLabel='Count',
-      description=|||
-        Number of CI Builds completed with Code Quality report artifacts
-      |||,
-      query=|||
-        sum by (status) (
-          increase(
-            artifact_report_codequality_builds_completed_total{
-              env="$environment"
-            }[$__interval])
-        )
-      |||,
-    )
-  else
-    basic.timeseries(
-      stableId='code_quality_artifact_builds_completed',
-      title='Code Quality Artifact Builds Completed',
-      decimals=2,
-      yAxisLabel='Count',
-      description=|||
-        Number of CI Builds completed with Code Quality report artifacts
-      |||,
-      query=|||
-        sum by (status) (
-          increase(
-            artifact_report_codequality_builds_completed_total{
-              env="$environment"
-            }[$__interval])
-        )
-      |||,
-    );
+  panel.timeSeries(
+    title='Code Quality Artifact Builds Completed',
+    stableId='code_quality_artifact_builds_completed',
+    yAxisLabel='Count',
+    description=|||
+      Number of CI Builds completed with Code Quality report artifacts
+    |||,
+    query=|||
+      sum by (status) (
+        increase(
+          artifact_report_codequality_builds_completed_total{
+            env="$environment"
+          }[$__interval])
+      )
+    |||,
+  );
 
 stageGroupDashboards
 .dashboard('static_analysis')

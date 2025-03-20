@@ -5,8 +5,6 @@ local prometheus = grafana.prometheus;
 local graphPanel = grafana.graphPanel;
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local explainer = |||
   This dashboard shows information about [delivery-metrics](https://gitlab.com/gitlab-org/release-tools/-/tree/master/metrics) deployment.
 
@@ -57,370 +55,156 @@ basic.dashboard(
 // memory
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        // process memory
-        panel.basic(
-          'process memory',
-          unit='bytes',
+    [
+      // process memory
+      panel.basic(
+        'process memory',
+        unit='bytes',
+      )
+      .addTarget(
+        prometheus.target(
+          'process_resident_memory_bytes{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}} - resident'
         )
-        .addTarget(
-          prometheus.target(
-            'process_resident_memory_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - resident'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'process_virtual_memory_bytes{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}} - virtual'
         )
-        .addTarget(
-          prometheus.target(
-            'process_virtual_memory_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - virtual'
-          )
-        ),
-        panel.basic(
-          'process memory deriv',
-          unit='bytes',
+      ),
+      panel.basic(
+        'process memory deriv',
+        unit='bytes',
+      )
+      .addTarget(
+        prometheus.target(
+          'rate(process_resident_memory_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}} - resident'
         )
-        .addTarget(
-          prometheus.target(
-            'rate(process_resident_memory_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - resident'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'deriv(process_virtual_memory_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}} - virtual'
         )
-        .addTarget(
-          prometheus.target(
-            'deriv(process_virtual_memory_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - virtual'
-          )
-        ),
-        // memstats
-        panel.basic(
-          'go memestat',
-          unit='bytes',
+      ),
+      // memstats
+      panel.basic(
+        'go memestat',
+        unit='bytes',
+      )
+      .addTarget(
+        prometheus.target(
+          'go_memstats_alloc_bytes{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}} - bytes allocated'
         )
-        .addTarget(
-          prometheus.target(
-            'go_memstats_alloc_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - bytes allocated'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'rate(go_memstats_alloc_bytes_total{namespace="delivery",service="delivery-metrics"}[30s])',
+          legendFormat='{{pod}} - alloc rate'
         )
-        .addTarget(
-          prometheus.target(
-            'rate(go_memstats_alloc_bytes_total{namespace="delivery",service="delivery-metrics"}[30s])',
-            legendFormat='{{pod}} - alloc rate'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'go_memstats_stack_inuse_bytes{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}} - stack inuse'
         )
-        .addTarget(
-          prometheus.target(
-            'go_memstats_stack_inuse_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - stack inuse'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'go_memstats_heap_inuse_bytes{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}} - heap inuse'
         )
-        .addTarget(
-          prometheus.target(
-            'go_memstats_heap_inuse_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - heap inuse'
-          )
-        ),
-        panel.basic(
-          'go memstats deriv',
-          unit='bytes',
+      ),
+      panel.basic(
+        'go memstats deriv',
+        unit='bytes',
+      )
+      .addTarget(
+        prometheus.target(
+          'deriv(go_memstats_alloc_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}} - bytes allocated'
         )
-        .addTarget(
-          prometheus.target(
-            'deriv(go_memstats_alloc_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - bytes allocated'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'rate(go_memstats_alloc_bytes_total{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}} - alloc rate'
         )
-        .addTarget(
-          prometheus.target(
-            'rate(go_memstats_alloc_bytes_total{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - alloc rate'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'deriv(go_memstats_stack_inuse_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}} - stack inuse'
         )
-        .addTarget(
-          prometheus.target(
-            'deriv(go_memstats_stack_inuse_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - stack inuse'
-          )
+      )
+      .addTarget(
+        prometheus.target(
+          'deriv(go_memstats_heap_inuse_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}} - heap inuse'
         )
-        .addTarget(
-          prometheus.target(
-            'deriv(go_memstats_heap_inuse_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - heap inuse'
-          )
-        ),
-      ]
-    else
-      [
-        // process memory
-        graphPanel.new(
-          'process memory',
-          formatY1='bytes',
-          formatY2='short',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'process_resident_memory_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - resident'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'process_virtual_memory_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - virtual'
-          )
-        ),
-
-        graphPanel.new(
-          'process memory deriv',
-          formatY1='bytes',
-          formatY2='short',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'rate(process_resident_memory_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - resident'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'deriv(process_virtual_memory_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - virtual'
-          )
-        ),
-
-
-        // memstats
-        graphPanel.new(
-          'go memestat',
-          formatY1='bytes',
-          formatY2='Bps',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'go_memstats_alloc_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - bytes allocated'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'rate(go_memstats_alloc_bytes_total{namespace="delivery",service="delivery-metrics"}[30s])',
-            legendFormat='{{pod}} - alloc rate'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'go_memstats_stack_inuse_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - stack inuse'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'go_memstats_heap_inuse_bytes{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}} - heap inuse'
-          )
-        ),
-
-        graphPanel.new(
-          'go memstats deriv',
-          formatY1='bytes',
-          formatY2='Bps',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'deriv(go_memstats_alloc_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - bytes allocated'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'rate(go_memstats_alloc_bytes_total{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - alloc rate'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'deriv(go_memstats_stack_inuse_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - stack inuse'
-          )
-        )
-        .addTarget(
-          prometheus.target(
-            'deriv(go_memstats_heap_inuse_bytes{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}} - heap inuse'
-          )
-        ),
-      ], startRow=200,
+      ),
+    ], startRow=200,
   ),
 )
 
 // open FDS
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.basic(
-          'open fds',
-          unit='short',
+    [
+      panel.basic(
+        'open fds',
+        unit='short',
+      )
+      .addTarget(
+        prometheus.target(
+          'process_open_fds{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}}'
         )
-        .addTarget(
-          prometheus.target(
-            'process_open_fds{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}}'
-          )
-        ),
-        panel.basic(
-          'open fds deriv',
-          unit='short',
+      ),
+      panel.basic(
+        'open fds deriv',
+        unit='short',
+      )
+      .addTarget(
+        prometheus.target(
+          'deriv(process_open_fds{namespace="delivery",service="delivery-metrics"}[$__interval])',
+          legendFormat='{{pod}}'
         )
-        .addTarget(
-          prometheus.target(
-            'deriv(process_open_fds{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}}'
-          )
-        ),
-      ]
-    else
-      [
-        graphPanel.new(
-          'open fds',
-          formatY1='short',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'process_open_fds{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}}'
-          )
-        ),
-
-        graphPanel.new(
-          'open fds deriv',
-          formatY1='short',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'deriv(process_open_fds{namespace="delivery",service="delivery-metrics"}[$__interval])',
-            legendFormat='{{pod}}'
-          )
-        ),
-
-
-      ], startRow=300,
+      ),
+    ], startRow=300,
   ),
 )
 
 
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        // gorutines
-        panel.basic(
-          'gorountines',
-          unit='short',
+    [
+      // gorutines
+      panel.basic(
+        'gorountines',
+        unit='short',
+      )
+      .addTarget(
+        prometheus.target(
+          'go_goroutines{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}}'
         )
-        .addTarget(
-          prometheus.target(
-            'go_goroutines{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}}'
-          )
-        ),
-        // garbage collection
-        panel.basic(
-          'GC duration quintile',
-          unit='short',
+      ),
+      // garbage collection
+      panel.basic(
+        'GC duration quintile',
+        unit='short',
+      )
+      .addTarget(
+        prometheus.target(
+          'go_gc_duration_seconds{namespace="delivery",service="delivery-metrics"}',
+          legendFormat='{{pod}}'
         )
-        .addTarget(
-          prometheus.target(
-            'go_gc_duration_seconds{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}}'
-          )
-        ),
-      ]
-    else
-      [
-        // gorutines
-        graphPanel.new(
-          'gorountines',
-          formatY1='s',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'go_goroutines{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}}'
-          )
-        ),
-
-        // garbage collection
-        graphPanel.new(
-          'GC duration quintile',
-          formatY1='short',
-
-          legend_values=true,
-          legend_max=true,
-          legend_min=false,
-          legend_avg=true,
-          legend_current=true,
-          legend_alignAsTable=true,
-        )
-        .addTarget(
-          prometheus.target(
-            'go_gc_duration_seconds{namespace="delivery",service="delivery-metrics"}',
-            legendFormat='{{pod}}'
-          )
-        ),
-
-
-      ], startRow=400,
+      ),
+    ], startRow=400,
   ),
 )
 

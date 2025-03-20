@@ -7,27 +7,16 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local aggregatorLegendFormat(aggregator) = '{{ %s }}' % aggregator;
 local aggregatorsLegendFormat(aggregators) = '%s' % std.join(' - ', std.map(aggregatorLegendFormat, aggregators));
 
-local aggregationTimeSeries(title, query, aggregators=[], useTimeSeriesPlugin=true) =
+local aggregationTimeSeries(title, query, aggregators=[]) =
   local serializedAggregation = aggregations.serialize(aggregators);
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=(title % serializedAggregation),
-      legendFormat=aggregatorsLegendFormat(aggregators),
-      linewidth=2,
-      fill=10,
-      stack=true,
-      query=(query % serializedAggregation),
-    )
-  else
-    basic.timeseries(
-      title=(title % serializedAggregation),
-      legendFormat=aggregatorsLegendFormat(aggregators),
-      format='short',
-      linewidth=2,
-      fill=1,
-      stack=true,
-      query=(query % serializedAggregation),
-    );
+  panel.timeSeries(
+    title=(title % serializedAggregation),
+    legendFormat=aggregatorsLegendFormat(aggregators),
+    linewidth=2,
+    fill=10,
+    stack=true,
+    query=(query % serializedAggregation),
+  );
 
 local runningJobsGraph(aggregators=[], partition=runnersManagerMatching.defaultPartition) =
   aggregationTimeSeries(
@@ -126,80 +115,41 @@ local finishedJobsDurationHistogram(partition=runnersManagerMatching.defaultPart
     intervalFactor=1,
   );
 
-local finishedJobsMinutesIncreaseGraph(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title='Finished job minutes increase',
-      legendFormat='{{shard}}',
-      format='short',
-      interval='',
-      intervalFactor=5,
-      drawStyle='bars',
-      stack=true,
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
+local finishedJobsMinutesIncreaseGraph(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    title='Finished job minutes increase',
+    legendFormat='{{shard}}',
+    format='short',
+    interval='',
+    intervalFactor=5,
+    drawStyle='bars',
+    stack=true,
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
+      )/60
+    |||, partition),
+  ) + {
+    targets+: [{
+      expr: runnersManagerMatching.formatQuery(|||
+        avg (
           increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
         )/60
       |||, partition),
-    ) + {
-      targets+: [{
-        expr: runnersManagerMatching.formatQuery(|||
-          avg (
-            increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
-          )/60
-        |||, partition),
-        format: 'time_series',
-        interval: '',
-        intervalFactor: 10,
-        legendFormat: 'avg',
-      }],
-      seriesOverrides+: [{
-        alias: 'avg',
-        drawStyle: 'lines',
-        color: '#ff0000ff',
-        fill: 0,
-        linewidth: 2,
-        zindex: 3,
-      }],
-    }
-  else
-    basic.timeseries(
-      title='Finished job minutes increase',
-      legendFormat='{{shard}}',
-      format='short',
-      stack=true,
-      interval='',
-      intervalFactor=5,
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
-        )/60
-      |||, partition),
-    ) + {
-      lines: false,
-      bars: true,
-      targets+: [{
-        expr: runnersManagerMatching.formatQuery(|||
-          avg (
-            increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
-          )/60
-        |||, partition),
-        format: 'time_series',
-        interval: '',
-        intervalFactor: 10,
-        legendFormat: 'avg',
-      }],
-      seriesOverrides+: [{
-        alias: 'avg',
-        bars: false,
-        color: '#ff0000ff',
-        fill: 0,
-        lines: true,
-        linewidth: 2,
-        stack: false,
-        zindex: 3,
-      }],
-    };
+      format: 'time_series',
+      interval: '',
+      intervalFactor: 10,
+      legendFormat: 'avg',
+    }],
+    seriesOverrides+: [{
+      alias: 'avg',
+      drawStyle: 'lines',
+      color: '#ff0000ff',
+      fill: 0,
+      linewidth: 2,
+      zindex: 3,
+    }],
+  };
 
 local finishedJobsMinutesIncreaseCounter(partition=runnersManagerMatching.defaultPartition) =
   basic.statPanel(

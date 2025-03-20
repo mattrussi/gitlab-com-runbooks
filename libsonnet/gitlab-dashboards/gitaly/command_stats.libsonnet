@@ -1,5 +1,4 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
@@ -21,7 +20,7 @@ local detailsMessage = |||
 |||;
 
 {
-  metricsForNode(selectorHash, includeDetails=true, aggregationLabels=['fqdn'], startRow=1, useTimeSeriesPlugin=false)::
+  metricsForNode(selectorHash, includeDetails=true, aggregationLabels=['fqdn'], startRow=1)::
     local formatConfig = {
       selector: selectors.serializeHash(selectorHash),
       aggregationLabels: std.join(', ', aggregationLabels),
@@ -30,150 +29,81 @@ local detailsMessage = |||
     local legendFormat = std.join(' ', ['{{ ' + i + '}}' for i in aggregationLabels]);
 
     layout.grid(
-      if useTimeSeriesPlugin then
-        [
-          panel.timeSeries(
-            title='CPU Time',
-            description='Seconds of CPU time consumed by gitaly child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_cpu_seconds_total{%(selector)s}[$__interval]
-                )
+      [
+        panel.timeSeries(
+          title='CPU Time',
+          description='Seconds of CPU time consumed by gitaly child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption.',
+          query=|||
+            sum by(%(aggregationLabels)s) (
+              rate(
+                gitaly_command_cpu_seconds_total{%(selector)s}[$__interval]
               )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            format='s',
-            legend_show=false,
-            linewidth=1
-          ),
-          panel.timeSeries(
-            title='Context switches',
-            description='Context switches incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_context_switches_total{%(selector)s}[$__interval]
-                )
+            )
+          ||| % formatConfig,
+          legendFormat=legendFormat,
+          interval='1m',
+          intervalFactor=1,
+          format='s',
+          legend_show=false,
+          linewidth=1
+        ),
+        panel.timeSeries(
+          title='Context switches',
+          description='Context switches incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption.',
+          query=|||
+            sum by(%(aggregationLabels)s) (
+              rate(
+                gitaly_command_context_switches_total{%(selector)s}[$__interval]
               )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            legend_show=false,
-            linewidth=1
-          ),
-          panel.timeSeries(
-            title='Minor page faults',
-            description='Minor page faults incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption. The number of page faults serviced without any I/O activity; here I/O activity is avoided by "reclaiming" a page frame from the list of pages awaiting reallocation.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_minor_page_faults_total{%(selector)s}[$__interval]
-                )
+            )
+          ||| % formatConfig,
+          legendFormat=legendFormat,
+          interval='1m',
+          intervalFactor=1,
+          legend_show=false,
+          linewidth=1
+        ),
+        panel.timeSeries(
+          title='Minor page faults',
+          description='Minor page faults incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption. The number of page faults serviced without any I/O activity; here I/O activity is avoided by "reclaiming" a page frame from the list of pages awaiting reallocation.',
+          query=|||
+            sum by(%(aggregationLabels)s) (
+              rate(
+                gitaly_command_minor_page_faults_total{%(selector)s}[$__interval]
               )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            legend_show=false,
-            linewidth=1
-          ),
-          panel.timeSeries(
-            title='Major page faults',
-            description='Major page faults incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption. The number of page faults serviced that required I/O activity.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_major_page_faults_total{%(selector)s}[$__interval]
-                )
+            )
+          ||| % formatConfig,
+          legendFormat=legendFormat,
+          interval='1m',
+          intervalFactor=1,
+          legend_show=false,
+          linewidth=1
+        ),
+        panel.timeSeries(
+          title='Major page faults',
+          description='Major page faults incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption. The number of page faults serviced that required I/O activity.',
+          query=|||
+            sum by(%(aggregationLabels)s) (
+              rate(
+                gitaly_command_major_page_faults_total{%(selector)s}[$__interval]
               )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            legend_show=false,
-            linewidth=1
-          ),
-        ]
-      else
-        [
-          basic.timeseries(
-            title='CPU Time',
-            description='Seconds of CPU time consumed by gitaly child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_cpu_seconds_total{%(selector)s}[$__interval]
-                )
-              )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            format='s',
-            legend_show=false,
-            linewidth=1
-          ),
-          basic.timeseries(
-            title='Context switches',
-            description='Context switches incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_context_switches_total{%(selector)s}[$__interval]
-                )
-              )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            legend_show=false,
-            linewidth=1
-          ),
-          basic.timeseries(
-            title='Minor page faults',
-            description='Minor page faults incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption. The number of page faults serviced without any I/O activity; here I/O activity is avoided by "reclaiming" a page frame from the list of pages awaiting reallocation.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_minor_page_faults_total{%(selector)s}[$__interval]
-                )
-              )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            legend_show=false,
-            linewidth=1
-          ),
-          basic.timeseries(
-            title='Major page faults',
-            description='Major page faults incurred by child processes, per second. These are accounted once the process exits, so the reporting may occur later than the resource consumption. The number of page faults serviced that required I/O activity.',
-            query=|||
-              sum by(%(aggregationLabels)s) (
-                rate(
-                  gitaly_command_major_page_faults_total{%(selector)s}[$__interval]
-                )
-              )
-            ||| % formatConfig,
-            legendFormat=legendFormat,
-            interval='1m',
-            intervalFactor=1,
-            legend_show=false,
-            linewidth=1
-          ),
-        ] + (
-          if includeDetails then
-            [grafana.text.new(
-              title='Details',
-              mode='markdown',
-              content=detailsMessage,
-            )]
-          else
-            []
-        ), startRow=startRow
+            )
+          ||| % formatConfig,
+          legendFormat=legendFormat,
+          interval='1m',
+          intervalFactor=1,
+          legend_show=false,
+          linewidth=1
+        ),
+      ] + (
+        if includeDetails then
+          [grafana.text.new(
+            title='Details',
+            mode='markdown',
+            content=detailsMessage,
+          )]
+        else
+          []
+      ), startRow=startRow
     ),
 }

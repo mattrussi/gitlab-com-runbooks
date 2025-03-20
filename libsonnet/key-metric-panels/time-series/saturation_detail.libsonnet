@@ -6,7 +6,7 @@ local selectors = import 'promql/selectors.libsonnet';
 local maxOverTime(query) =
   'max_over_time(%(query)s[$__interval])' % { query: query };
 
-local saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime, useTimeSeriesPlugin=false) =
+local saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime) =
   local formatConfig = {
     component: component,
     query: query,

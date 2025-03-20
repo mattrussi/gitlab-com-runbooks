@@ -1,148 +1,77 @@
 local panels = import './panels.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
-local provisionerInstancesSaturation(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Fleeting instances saturation',
-      legendFormat='{{shard}}',
-      format='percentunit',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_provisioner_instances{state=~"running|deleting", environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-        /
-        sum by(shard) (
-          fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Fleeting instances saturation',
-      legendFormat='{{shard}}',
-      format='percentunit',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_provisioner_instances{state=~"running|deleting", environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-        /
-        sum by(shard) (
-          fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local provisionerInstancesSaturation(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Fleeting instances saturation',
+    legendFormat='{{shard}}',
+    format='percentunit',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        fleeting_provisioner_instances{state=~"running|deleting", environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+      /
+      sum by(shard) (
+        fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
-local provisionerInstancesStates(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Fleeting instances states',
-      legendFormat='{{shard}}: {{state}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, state) (
-          fleeting_provisioner_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Fleeting instances states',
-      legendFormat='{{shard}}: {{state}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, state) (
-          fleeting_provisioner_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local provisionerInstancesStates(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Fleeting instances states',
+    legendFormat='{{shard}}: {{state}}',
+    format='short',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, state) (
+        fleeting_provisioner_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
-local provisionerMissedUpdates(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Fleeting missed updates rate',
-      legendFormat='{{shard}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          rate(
-            fleeting_provisioner_missed_updates_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
+local provisionerMissedUpdates(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Fleeting missed updates rate',
+    legendFormat='{{shard}}',
+    format='ops',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        rate(
+          fleeting_provisioner_missed_updates_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
         )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Fleeting missed updates rate',
-      legendFormat='{{shard}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          rate(
-            fleeting_provisioner_missed_updates_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
-        )
-      |||, partition),
-    );
+      )
+    |||, partition),
+  );
 
-local provisionerInstanceOperationsRate(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Fleeting instance operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_provisioner_instance_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
+local provisionerInstanceOperationsRate(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Fleeting instance operations rate',
+    legendFormat='{{shard}}: {{operation}}',
+    format='ops',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, operation) (
+        rate(
+          fleeting_provisioner_instance_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
         )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Fleeting instance operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_provisioner_instance_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
-        )
-      |||, partition),
-    );
+      )
+    |||, partition),
+  );
 
-local provisionerInternalOperationsRate(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Fleeting internal operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_provisioner_internal_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
+local provisionerInternalOperationsRate(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Fleeting internal operations rate',
+    legendFormat='{{shard}}: {{operation}}',
+    format='ops',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, operation) (
+        rate(
+          fleeting_provisioner_internal_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
         )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Fleeting internal operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_provisioner_internal_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
-        )
-      |||, partition),
-    );
+      )
+    |||, partition),
+  );
 
 local provisionerCreationTiming(partition=runnersManagerMatching.defaultPartition) =
   panels.heatmap(
@@ -208,117 +137,61 @@ local provisionerInstanceLifeDuration(partition=runnersManagerMatching.defaultPa
     intervalFactor=2,
   );
 
-local taskscalerTasksSaturation(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Taskscaler tasks saturation',
-      legendFormat='{{shard}}',
-      format='percentunit',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s, state!~"idle|reserved"}
-        )
-        /
-        sum by(shard) (
-          fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-          *
-          fleeting_taskscaler_max_tasks_per_instance{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Taskscaler tasks saturation',
-      legendFormat='{{shard}}',
-      format='percentunit',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s, state!~"idle|reserved"}
-        )
-        /
-        sum by(shard) (
-          fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-          *
-          fleeting_taskscaler_max_tasks_per_instance{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local taskscalerTasksSaturation(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Taskscaler tasks saturation',
+    legendFormat='{{shard}}',
+    format='percentunit',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s, state!~"idle|reserved"}
+      )
+      /
+      sum by(shard) (
+        fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+        *
+        fleeting_taskscaler_max_tasks_per_instance{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
-local taskscalerMaxUseCountPerInstance(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Taskscaler max use count per instance',
-      legendFormat='{{shard}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_taskscaler_max_use_count_per_instance{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Taskscaler max use count per instance',
-      legendFormat='{{shard}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_taskscaler_max_use_count_per_instance{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local taskscalerMaxUseCountPerInstance(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Taskscaler max use count per instance',
+    legendFormat='{{shard}}',
+    format='short',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        fleeting_taskscaler_max_use_count_per_instance{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
-local taskscalerOperationsRate(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Taskscaler operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_taskscaler_task_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
+local taskscalerOperationsRate(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Taskscaler operations rate',
+    legendFormat='{{shard}}: {{operation}}',
+    format='ops',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, operation) (
+        rate(
+          fleeting_taskscaler_task_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
         )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Taskscaler operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_taskscaler_task_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
-        )
-      |||, partition),
-    );
+      )
+    |||, partition),
+  );
 
-local taskscalerTasks(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Taskscaler tasks',
-      legendFormat='{{shard}}: {{state}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, state) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Taskscaler tasks',
-      legendFormat='{{shard}}: {{state}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, state) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local taskscalerTasks(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Taskscaler tasks',
+    legendFormat='{{shard}}: {{state}}',
+    format='short',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, state) (
+        fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
 local taskscalerInstanceReadinessTiming(partition=runnersManagerMatching.defaultPartition) =
   panels.heatmap(
@@ -336,59 +209,32 @@ local taskscalerInstanceReadinessTiming(partition=runnersManagerMatching.default
     intervalFactor=2,
   );
 
-local taskscalerScaleOperationsRate(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Taskscaler scale operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
+local taskscalerScaleOperationsRate(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Taskscaler scale operations rate',
+    legendFormat='{{shard}}: {{operation}}',
+    format='ops',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, operation) (
+        rate(
+          fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
         )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Taskscaler scale operations rate',
-      legendFormat='{{shard}}: {{operation}}',
-      format='ops',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, operation) (
-          rate(
-            fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
-          )
-        )
-      |||, partition),
-    );
+      )
+    |||, partition),
+  );
 
-local taskscalerDesiredInstances(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Taskscaler desired instances',
-      legendFormat='{{shard}}',
-      format='short',
-      min=null,
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_taskscaler_desired_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Taskscaler desired instances',
-      legendFormat='{{shard}}',
-      format='short',
-      min=null,
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard) (
-          fleeting_taskscaler_desired_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local taskscalerDesiredInstances(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Taskscaler desired instances',
+    legendFormat='{{shard}}',
+    format='short',
+    min=null,
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        fleeting_taskscaler_desired_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
 {
   provisionerInstancesSaturation:: provisionerInstancesSaturation,

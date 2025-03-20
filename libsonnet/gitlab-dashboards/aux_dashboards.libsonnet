@@ -9,7 +9,6 @@ local forService
       (
   serviceType,
   environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
-  useTimeSeriesPlugin=true,
       ) =
   local serviceInfo = metricsCatalog.getService(serviceType);
 
@@ -22,7 +21,6 @@ local forService
           serviceType,
           serviceSLIsAggregationSet=aggregationSets.regionalServiceSLIs,
           componentSLIsAggregationSet=aggregationSets.regionalComponentSLIs,
-          useTimeSeriesPlugin=useTimeSeriesPlugin,
         ),
       }
     else
@@ -31,12 +29,12 @@ local forService
   +
   (
     if std.length(serviceInfo.kubeResources) > 0 then
-      kubeDashboards.dashboardsForService(serviceType, environmentSelectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin)
+      kubeDashboards.dashboardsForService(serviceType, environmentSelectorHash)
     else
       {}
   )
   +
-  capacityReviewDashboards.dashboardsForService(serviceType, environmentSelectorHash, useTimeSeriesPlugin=useTimeSeriesPlugin);
+  capacityReviewDashboards.dashboardsForService(serviceType, environmentSelectorHash);
 
 {
   forService:: forService,

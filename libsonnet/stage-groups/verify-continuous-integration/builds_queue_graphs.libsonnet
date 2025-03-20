@@ -1,7 +1,6 @@
-local basic = import 'grafana/basic.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local bigQueryDuration(percentiles=[50, 90, 99], useTimeSeriesPlugin=false) =
+local bigQueryDuration(percentiles=[50, 90, 99]) =
   local histogramQuery(percentile) =
     {
       query: |||
@@ -20,30 +19,17 @@ local bigQueryDuration(percentiles=[50, 90, 99], useTimeSeriesPlugin=false) =
       ||| % percentile,
       legendFormat: '{{ runner_type }} - p%d' % percentile,
     };
-  if useTimeSeriesPlugin then
-    panel.multiTimeSeries(
-      stableId='builds-queue-big-query-duration',
-      title='Duration of the builds queue retrieval using the big query SQL',
-      format='s',
-      queries=[
-        (
-          histogramQuery(percentile)
-        )
-        for percentile in percentiles
-      ],
-    )
-  else
-    basic.multiTimeseries(
-      stableId='builds-queue-big-query-duration',
-      title='Duration of the builds queue retrieval using the big query SQL',
-      format='s',
-      queries=[
-        (
-          histogramQuery(percentile)
-        )
-        for percentile in percentiles
-      ],
-    );
+  panel.multiTimeSeries(
+    stableId='builds-queue-big-query-duration',
+    title='Duration of the builds queue retrieval using the big query SQL',
+    format='s',
+    queries=[
+      (
+        histogramQuery(percentile)
+      )
+      for percentile in percentiles
+    ],
+  );
 
 {
   bigQueryDuration:: bigQueryDuration,

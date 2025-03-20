@@ -2,76 +2,39 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local graphPanel = grafana.graphPanel;
 local link = grafana.link;
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local balanceChart(title, description, format, legendFormat, query) =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      title,
-      description=description,
-      drawStyle='bars',
-      unit=format,
-      legend_show=false,
+  panel.basic(
+    title,
+    description=description,
+    drawStyle='bars',
+    unit=format,
+    legend_show=false,
+  )
+  .addSeriesOverride({
+    alias: '//',
+    color: '#73BF69',
+  })
+  .addTarget(
+    target.prometheus(
+      query,
+      instant=true,
+      legendFormat=legendFormat,
     )
-    .addSeriesOverride({
-      alias: '//',
-      color: '#73BF69',
-    })
-    .addTarget(
-      target.prometheus(
-        query,
-        instant=true,
-        legendFormat=legendFormat,
-      )
-    )
-    .addYaxis(
-      min=0,
-      max=null,
-    ) + {
-      tooltip: {
-        shared: false,
-        sort: 0,
-        value_type: 'individual',
-      },
-    }
-  else
-    graphPanel.new(
-      title,
-      description=description,
-      min=0,
-      max=null,
-      x_axis_mode='series',
-      x_axis_values='current',
-      lines=false,
-      points=false,
-      bars=true,
-      format=format,
-      legend_show=false,
-      value_type='individual'
-    )
-    .addSeriesOverride({
-      alias: '//',
-      color: '#73BF69',
-    })
-    .addTarget(
-      promQuery.target(
-        query,
-        instant=true,
-        legendFormat=legendFormat,
-      )
-    ) + {
-      tooltip: {
-        shared: false,
-        sort: 0,
-        value_type: 'individual',
-      },
-    };
+  )
+  .addYaxis(
+    min=0,
+    max=null,
+  ) + {
+    tooltip: {
+      shared: false,
+      sort: 0,
+      value_type: 'individual',
+    },
+  };
 
 basic.dashboard(
   'Rebalance Dashboard',

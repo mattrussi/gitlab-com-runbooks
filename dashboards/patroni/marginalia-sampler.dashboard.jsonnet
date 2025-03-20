@@ -5,8 +5,6 @@ local layout = import 'grafana/layout.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local template = grafana.template;
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Marginalia Sampler',
   tags=['type:patroni'],
@@ -69,93 +67,46 @@ basic.dashboard(
 ))
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.timeSeries(
-          title='Unaggregated Series',
-          query=|||
-            topk(10,
+    [
+      panel.timeSeries(
+        title='Unaggregated Series',
+        query=|||
+          topk(10,
+            avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
+          )
+        |||,
+        interval='1m',
+        linewidth=1,
+        drawStyle='bars',
+        stack=true,
+      ),
+      panel.timeSeries(
+        title='Aggregated By Endpoint',
+        query=|||
+          topk(10,
+            sum by (endpoint) (
               avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
             )
-          |||,
-          interval='1m',
-          linewidth=1,
-          drawStyle='bars',
-          stack=true,
-        ),
-        panel.timeSeries(
-          title='Aggregated By Endpoint',
-          query=|||
-            topk(10,
-              sum by (endpoint) (
-                avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
-              )
-            )
-          |||,
-          interval='1m',
-          linewidth=1,
-          drawStyle='bars',
-          stack=true,
-        ),
-        panel.timeSeries(
-          title='Aggregated By State and Wait Event Type',
-          query=|||
-            topk(10,
-              sum by (state, wait_event_type) (
-                avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
-              )
-            )
-          |||,
-          interval='1m',
-          linewidth=1,
-        ),
-      ]
-    else
-      [
-        basic.timeseries(
-          title='Unaggregated Series',
-          query=|||
-            topk(10,
+          )
+        |||,
+        interval='1m',
+        linewidth=1,
+        drawStyle='bars',
+        stack=true,
+      ),
+      panel.timeSeries(
+        title='Aggregated By State and Wait Event Type',
+        query=|||
+          topk(10,
+            sum by (state, wait_event_type) (
               avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
             )
-          |||,
-          interval='1m',
-          linewidth=1,
-          legend_show=true,
-          lines=false,
-          bars=true,
-          stack=true
-        ),
-        basic.timeseries(
-          title='Aggregated By Endpoint',
-          query=|||
-            topk(10,
-              sum by (endpoint) (
-                avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
-              )
-            )
-          |||,
-          interval='1m',
-          linewidth=1,
-          legend_show=true,
-          lines=false,
-          bars=true,
-          stack=true
-        ),
-        basic.timeseries(
-          title='Aggregated By State and Wait Event Type',
-          query=|||
-            topk(10,
-              sum by (state, wait_event_type) (
-                avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
-              )
-            )
-          |||,
-          interval='1m',
-          linewidth=1,
-          legend_show=true,
-        ),
-      ],
+          )
+        |||,
+        interval='1m',
+        linewidth=1,
+      ),
+    ],
     cols=1,
   )
 )

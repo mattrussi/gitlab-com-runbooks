@@ -1,13 +1,10 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
 local row = grafana.row;
 local panel = import 'grafana/time-series/panel.libsonnet';
-
-local useTimeSeriesPlugin = true;
 
 local selector = {
   environment: '$environment',
@@ -120,23 +117,13 @@ basic.dashboard(
 .addPanels(
   layout.grid(
     [
-      if useTimeSeriesPlugin then
-        panel.timeSeries(
-          title='Feature Flags',
-          query=|||
-            sum(rate(gitaly_feature_flag_checks_total{%(selector)s}[$__rate_interval])) by (flag, enabled)
-          ||| % { selector: selectors.serializeHash({ env: '$environment' }) },
-          legendFormat='{{flag}}: {{enabled}}',
-        )
-      else
-
-        basic.timeseries(
-          title='Feature Flags',
-          query=|||
-            sum(rate(gitaly_feature_flag_checks_total{%(selector)s}[$__rate_interval])) by (flag, enabled)
-          ||| % { selector: selectors.serializeHash({ env: '$environment' }) },
-          legendFormat='{{flag}}: {{enabled}}',
-        ),
+      panel.timeSeries(
+        title='Feature Flags',
+        query=|||
+          sum(rate(gitaly_feature_flag_checks_total{%(selector)s}[$__rate_interval])) by (flag, enabled)
+        ||| % { selector: selectors.serializeHash({ env: '$environment' }) },
+        legendFormat='{{flag}}: {{enabled}}',
+      ),
       customTimeseriesPanel(
         title='Success Ratio (SLA)',
         expr=|||

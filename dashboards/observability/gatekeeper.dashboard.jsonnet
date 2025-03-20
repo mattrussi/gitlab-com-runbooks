@@ -9,8 +9,6 @@ local layout = import 'grafana/layout.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Gatekeeper',
   tags=[
@@ -72,7 +70,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.version(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.version(startRow=1))
 .addPanel(
   row.new(title='Deployment Info'),
   gridPos={
@@ -93,7 +91,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.cpu(startRow=201, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.cpu(startRow=201))
 .addPanel(
   row.new(title='Memory'),
   gridPos={
@@ -103,7 +101,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=301, container='gatekeeper', useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.memory(startRow=301, container='gatekeeper'))
 .addPanel(
   row.new(title='Network'),
   gridPos={
@@ -113,7 +111,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.network(startRow=401, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.network(startRow=401))
 .addPanel(
   row.new(title='Login statistics'),
   gridPos={
@@ -125,48 +123,26 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.multiTimeSeries(
-          title='Logins',
-          queries=[
-            {
-              legendFormat: 'failures',
-              query: 'sum(rate(login_failures{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'starts',
-              query: 'sum(rate(login_starts{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'successes',
-              query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-          ],
-          legend_show=true,
-        ),
-      ]
-    else
-      [
-        basic.multiTimeseries(
-          title='Logins',
-          queries=[
-            {
-              legendFormat: 'failures',
-              query: 'sum(rate(login_failures{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'starts',
-              query: 'sum(rate(login_starts{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'successes',
-              query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-          ],
-          legend_show=true,
-        ),
-      ],
+    [
+      panel.multiTimeSeries(
+        title='Logins',
+        queries=[
+          {
+            legendFormat: 'failures',
+            query: 'sum(rate(login_failures{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+          },
+          {
+            legendFormat: 'starts',
+            query: 'sum(rate(login_starts{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+          },
+          {
+            legendFormat: 'successes',
+            query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+          },
+        ],
+        legend_show=true,
+      ),
+    ],
     cols=1,
     rowHeight=10,
     startRow=501,
@@ -183,110 +159,57 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.multiTimeSeries(
-          title='Logins',
-          queries=[
-            {
-              legendFormat: 'get - {{object_type}}',
-              query: 'sum by(object_type) (rate(cache_gets{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'hits',
-              query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'misses',
-              query: 'sum (rate(cache_misses{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-          ],
-          legend_show=true,
-        ),
-        panel.timeSeries(
-          title='Cache sets by type',
-          query='sum by(object_type) (rate(cache_sets{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          legendFormat='{{object_type}}',
-        ),
-        basic.heatmap(
-          title='Redis GET time',
-          query='sum by(le) (increase(cache_get_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Redis SET time',
-          query='sum by(le) (increase(cache_set_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Redis Master PING time',
-          query='sum by(le) (increase(master_ping_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
-        panel.timeSeries(
-          title='Redis Master failovers',
-          query='sum (rate(master_failovers{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          legendFormat='{{object_type}}',
-        ),
-      ]
-    else
-      [
-        basic.multiTimeseries(
-          title='Logins',
-          queries=[
-            {
-              legendFormat: 'get - {{object_type}}',
-              query: 'sum by(object_type) (rate(cache_gets{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'hits',
-              query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-            {
-              legendFormat: 'misses',
-              query: 'sum (rate(cache_misses{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-            },
-          ],
-          legend_show=true,
-        ),
-        basic.timeseries(
-          title='Cache sets by type',
-          query='sum by(object_type) (rate(cache_sets{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          legendFormat='{{object_type}}',
-        ),
-        basic.heatmap(
-          title='Redis GET time',
-          query='sum by(le) (increase(cache_get_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Redis SET time',
-          query='sum by(le) (increase(cache_set_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Redis Master PING time',
-          query='sum by(le) (increase(master_ping_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
-        basic.timeseries(
-          title='Redis Master failovers',
-          query='sum (rate(master_failovers{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          legendFormat='{{object_type}}',
-        ),
-      ],
+    [
+      panel.multiTimeSeries(
+        title='Logins',
+        queries=[
+          {
+            legendFormat: 'get - {{object_type}}',
+            query: 'sum by(object_type) (rate(cache_gets{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+          },
+          {
+            legendFormat: 'hits',
+            query: 'sum(rate(login_successes{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+          },
+          {
+            legendFormat: 'misses',
+            query: 'sum (rate(cache_misses{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+          },
+        ],
+        legend_show=true,
+      ),
+      panel.timeSeries(
+        title='Cache sets by type',
+        query='sum by(object_type) (rate(cache_sets{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+        legendFormat='{{object_type}}',
+      ),
+      basic.heatmap(
+        title='Redis GET time',
+        query='sum by(le) (increase(cache_get_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+        dataFormat='tsbuckets',
+        color_cardColor='#ff0000',
+        legendFormat='__auto',
+      ),
+      basic.heatmap(
+        title='Redis SET time',
+        query='sum by(le) (increase(cache_set_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+        dataFormat='tsbuckets',
+        color_cardColor='#ff0000',
+        legendFormat='__auto',
+      ),
+      basic.heatmap(
+        title='Redis Master PING time',
+        query='sum by(le) (increase(master_ping_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+        dataFormat='tsbuckets',
+        color_cardColor='#ff0000',
+        legendFormat='__auto',
+      ),
+      panel.timeSeries(
+        title='Redis Master failovers',
+        query='sum (rate(master_failovers{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+        legendFormat='{{object_type}}',
+      ),
+    ],
     cols=2,
     rowHeight=10,
     startRow=601,
@@ -303,24 +226,14 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.timeSeries(
-          title='Requests total',
-          query='sum by(uri, method, code) (rate(gin_uri_request_total{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          legendFormat='{{method}} {{ uri }} - {{code}}',
-          legend_rightSide=true,
-        ),
-      ]
-    else
-      [
-        basic.timeseries(
-          title='Requests total',
-          query='sum by(uri, method, code) (rate(gin_uri_request_total{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
-          legendFormat='{{method}} {{ uri }} - {{code}}',
-          legend_rightSide=true,
-        ),
-      ],
+    [
+      panel.timeSeries(
+        title='Requests total',
+        query='sum by(uri, method, code) (rate(gin_uri_request_total{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+        legendFormat='{{method}} {{ uri }} - {{code}}',
+        legend_rightSide=true,
+      ),
+    ],
     cols=1,
     rowHeight=10,
     startRow=701,

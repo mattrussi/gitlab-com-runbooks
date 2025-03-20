@@ -3,8 +3,6 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Application Demand Indicators',
   tags=['general'],
@@ -28,52 +26,28 @@ basic.dashboard(
   ], cols=1, rowHeight=4, startRow=100)
   +
   layout.grid([
-    if useTimeSeriesPlugin then
-      panel.timeSeries(
-        title='Sidekiq - average operations per week',
-        query=|||
-          (sum by (env) (avg_over_time(gitlab_service_ops:rate{type="sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
-           or
-           sum by (env) (avg_over_time(gitlab_service_ops:rate{type="sidekiq", stage="main", env="gprd", monitor!="global"}[1w]))
-           ) * 86400 * 7
-        |||,
-        legendFormat='{{env}}'
-      )
-    else
-      basic.timeseries(
-        title='Sidekiq - average operations per week',
-        query=|||
-          (sum by (env) (avg_over_time(gitlab_service_ops:rate{type="sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
-           or
-           sum by (env) (avg_over_time(gitlab_service_ops:rate{type="sidekiq", stage="main", env="gprd", monitor!="global"}[1w]))
-           ) * 86400 * 7
-        |||,
-        legendFormat='{{env}}'
-      ),
+    panel.timeSeries(
+      title='Sidekiq - average operations per week',
+      query=|||
+        (sum by (env) (avg_over_time(gitlab_service_ops:rate{type="sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
+         or
+         sum by (env) (avg_over_time(gitlab_service_ops:rate{type="sidekiq", stage="main", env="gprd", monitor!="global"}[1w]))
+         ) * 86400 * 7
+      |||,
+      legendFormat='{{env}}'
+    ),
   ], cols=1, rowHeight=12, startRow=100)
   +
   layout.grid([
-    if useTimeSeriesPlugin then
-      panel.timeSeries(
-        title='Redis - average operations per week',
-        query=|||
-          (sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis|redis-cluster-cache|redis-sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
-          or
-          sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis(-cluster-cache|-sidekiq)?", stage="main", env="gprd", monitor!="global"}[1w]))
-          ) * 86400 * 7
-        |||,
-        legendFormat='{{env}} - {{type}}'
-      )
-    else
-      basic.timeseries(
-        title='Redis - average operations per week',
-        query=|||
-          (sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis|redis-cluster-cache|redis-sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
-          or
-          sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis(-cluster-cache|-sidekiq)?", stage="main", env="gprd", monitor!="global"}[1w]))
-          ) * 86400 * 7
-        |||,
-        legendFormat='{{env}} - {{type}}'
-      ),
+    panel.timeSeries(
+      title='Redis - average operations per week',
+      query=|||
+        (sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis|redis-cluster-cache|redis-sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
+        or
+        sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis(-cluster-cache|-sidekiq)?", stage="main", env="gprd", monitor!="global"}[1w]))
+        ) * 86400 * 7
+      |||,
+      legendFormat='{{env}} - {{type}}'
+    ),
   ], cols=1, rowHeight=12, startRow=100)
 )

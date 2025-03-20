@@ -18,8 +18,6 @@ local recordingRuleRegistry = (import 'gitlab-metrics-config.libsonnet').recordi
 local panel = import 'grafana/time-series/panel.libsonnet';
 local override = import 'grafana/time-series/override.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local selector = {
   environment: '$environment',
   type: 'sidekiq',
@@ -41,106 +39,55 @@ local recordingRuleRateQuery(recordingRule, selector, aggregator) =
   };
 
 local enqueueCountTimeseries(title, aggregators, legendFormat) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      query=recordingRuleRateQuery(
-        recordingRuleRegistry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '5m'),
-        'environment="$environment", queue=~"$queue", monitor="global"',
-        aggregators
-      ),
-      legendFormat=legendFormat,
-    )
-  else
-    basic.timeseries(
-      title=title,
-      query=recordingRuleRateQuery(
-        recordingRuleRegistry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '5m'),
-        'environment="$environment", queue=~"$queue", monitor="global"',
-        aggregators
-      ),
-      legendFormat=legendFormat,
-    );
+  panel.timeSeries(
+    title=title,
+    query=recordingRuleRateQuery(
+      recordingRuleRegistry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '5m'),
+      'environment="$environment", queue=~"$queue", monitor="global"',
+      aggregators
+    ),
+    legendFormat=legendFormat,
+  );
 
 local rpsTimeseries(title, aggregators, legendFormat) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      query=recordingRuleRateQuery(
-        recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
-        'environment="$environment", queue=~"$queue"',
-        aggregators
-      ),
-      legendFormat=legendFormat,
-    )
-  else
-    basic.timeseries(
-      title=title,
-      query=recordingRuleRateQuery(
-        recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
-        'environment="$environment", queue=~"$queue"',
-        aggregators
-      ),
-      legendFormat=legendFormat,
-    );
+  panel.timeSeries(
+    title=title,
+    query=recordingRuleRateQuery(
+      recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      'environment="$environment", queue=~"$queue"',
+      aggregators
+    ),
+    legendFormat=legendFormat,
+  );
 
 local errorRateTimeseries(title, aggregators, legendFormat) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      query=recordingRuleRateQuery(
-        recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
-        'environment="$environment", queue=~"$queue"',
-        aggregators
-      ),
-      legendFormat=legendFormat,
-    )
-  else
-    basic.timeseries(
-      title=title,
-      query=recordingRuleRateQuery(
-        recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
-        'environment="$environment", queue=~"$queue"',
-        aggregators
-      ),
-      legendFormat=legendFormat,
-    );
+  panel.timeSeries(
+    title=title,
+    query=recordingRuleRateQuery(
+      recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
+      'environment="$environment", queue=~"$queue"',
+      aggregators
+    ),
+    legendFormat=legendFormat,
+  );
 
 local avgResourceUsageTimeSeries(title, metricName) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      query=|||
-        sum by (queue) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
-        /
-        sum by (queue) (
-          rate(sidekiq_jobs_completion_count{%(selector)s}[$__interval])
-        )
-      ||| % {
-        selector: selectors.serializeHash(selector),
-        metricName: metricName,
-      },
-      legendFormat='{{ queue }}',
-      format='short',
-      yAxisLabel='Duration',
-    )
-  else
-    basic.timeseries(
-      title=title,
-      query=|||
-        sum by (queue) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
-        /
-        sum by (queue) (
-          rate(sidekiq_jobs_completion_count{%(selector)s}[$__interval])
-        )
-      ||| % {
-        selector: selectors.serializeHash(selector),
-        metricName: metricName,
-      },
-      legendFormat='{{ queue }}',
-      format='s',
-      yAxisLabel='Duration',
-    );
+  panel.timeSeries(
+    title=title,
+    query=|||
+      sum by (queue) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
+      /
+      sum by (queue) (
+        rate(sidekiq_jobs_completion_count{%(selector)s}[$__interval])
+      )
+    ||| % {
+      selector: selectors.serializeHash(selector),
+      metricName: metricName,
+    },
+    legendFormat='{{ queue }}',
+    format='short',
+    yAxisLabel='Duration',
+  );
 
 local elasticFilters = [matching.matchFilter('json.stage.keyword', '$stage')];
 local elasticQueries = ['json.queue.keyword:${queue:lucene}'];
@@ -271,287 +218,148 @@ basic.dashboard(
   [row.new(title='🌡 Queue Key Metrics') { gridPos: { x: 0, y: 100, w: 24, h: 1 } }]
   +
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.apdexTimeSeries(
-          stableId='queue-apdex',
-          title='Queue Apdex',
-          description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
-          query=|||
-            sum by (queue) (
-              %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
-            )
-            /
-            sum by (queue) (
-              %(apdexWeight)s{environment="$environment",queue=~"$queue"}
-            )
-          ||| % {
-            apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_success_total', '5m'),
-            apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_total', '5m'),
-          },
-          yAxisLabel='% Jobs within Max Queuing Duration SLO',
-          legendFormat='{{ queue }} queue apdex',
-          legend_show=true,
-        )
-        .addSeriesOverride(override.goldenMetric('/.* queue apdex$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.queueing_duration_s'),
-          title: 'ElasticSearch: queue latency visualization',
-          targetBlank: true,
-        }),
-        panel.apdexTimeSeries(
-          stableId='execution-apdex',
-          title='Execution Apdex',
-          description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
-          query=|||
-            sum by (queue) (
-              %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
-            )
-            /
-            sum by (queue) (
-              %(apdexWeight)s{environment="$environment",queue=~"$queue"}
-            )
-          ||| % {
-            apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '5m'),
-            apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '5m'),
-          },
-          yAxisLabel='% Jobs within Max Execution Duration SLO',
-          legendFormat='{{ queue }} execution apdex',
-          legend_show=true,
-        )
-        .addSeriesOverride(override.goldenMetric('/.* execution apdex$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.duration_s'),
-          title: 'ElasticSearch: execution latency visualization',
-          targetBlank: true,
-        }),
-        panel.timeSeries(
-          stableId='request-rate',
-          title='Execution Rate (RPS)',
-          description='Jobs executed per second',
-          query=|||
-            sum by (queue) (%(metric)s{environment="$environment", queue=~"$queue"})
-          ||| % {
-            metric: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
-          },
-          legendFormat='{{ queue }} rps',
-          format='ops',
-          yAxisLabel='Jobs per Second',
-        )
-        .addSeriesOverride(override.goldenMetric('/.* rps$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLineCountVizURL('sidekiq', elasticFilters, elasticQueries),
-          title: 'ElasticSearch: RPS visualization',
-          targetBlank: true,
-        }),
-        panel.percentageTimeSeries(
-          stableId='error-ratio',
-          title='Error Ratio',
-          description='Percentage of jobs that fail with an error. Lower is better.',
-          query=|||
-            sum by (queue) (
-              (%(errorRate)s{environment="$environment", queue=~"$queue"} >= 0)
-            )
-            /
-            sum by (queue) (
-              (%(opsRate)s{environment="$environment", queue=~"$queue"} >= 0)
-            )
-          ||| % {
-            errorRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
-            opsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
-          },
-          legendFormat='{{ queue }} error ratio',
-          yAxisLabel='Error Percentage',
-          legend_show=true,
-        )
-        .addSeriesOverride(override.goldenMetric('/.* error ratio$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLineCountVizURL(
-            'sidekiq',
-            elasticFilters + [matching.matchFilter('json.job_status', 'fail')],
-            elasticQueries
-          ),
-          title: 'ElasticSearch: errors visualization',
-          targetBlank: true,
-        }),
-      ]
-    else
-      [
-        basic.apdexTimeseries(
-          stableId='queue-apdex',
-          title='Queue Apdex',
-          description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
-          query=|||
-            sum by (queue) (
-              %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
-            )
-            /
-            sum by (queue) (
-              %(apdexWeight)s{environment="$environment",queue=~"$queue"}
-            )
-          ||| % {
-            apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_success_total', '5m'),
-            apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_total', '5m'),
-          },
-          yAxisLabel='% Jobs within Max Queuing Duration SLO',
-          legendFormat='{{ queue }} queue apdex',
-          legend_show=true,
-        )
-        .addSeriesOverride(seriesOverrides.goldenMetric('/.* queue apdex$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.queueing_duration_s'),
-          title: 'ElasticSearch: queue latency visualization',
-          targetBlank: true,
-        }),
-        basic.apdexTimeseries(
-          stableId='execution-apdex',
-          title='Execution Apdex',
-          description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
-          query=|||
-            sum by (queue) (
-              %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
-            )
-            /
-            sum by (queue) (
-              %(apdexWeight)s{environment="$environment",queue=~"$queue"}
-            )
-          ||| % {
-            apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '5m'),
-            apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '5m'),
-          },
-          yAxisLabel='% Jobs within Max Execution Duration SLO',
-          legendFormat='{{ queue }} execution apdex',
-          legend_show=true,
-        )
-        .addSeriesOverride(seriesOverrides.goldenMetric('/.* execution apdex$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.duration_s'),
-          title: 'ElasticSearch: execution latency visualization',
-          targetBlank: true,
-        }),
-
-        basic.timeseries(
-          stableId='request-rate',
-          title='Execution Rate (RPS)',
-          description='Jobs executed per second',
-          query=|||
-            sum by (queue) (%(metric)s{environment="$environment", queue=~"$queue"})
-          ||| % {
-            metric: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
-          },
-          legendFormat='{{ queue }} rps',
-          format='ops',
-          yAxisLabel='Jobs per Second',
-        )
-        .addSeriesOverride(seriesOverrides.goldenMetric('/.* rps$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLineCountVizURL('sidekiq', elasticFilters, elasticQueries),
-          title: 'ElasticSearch: RPS visualization',
-          targetBlank: true,
-        }),
-
-        basic.percentageTimeseries(
-          stableId='error-ratio',
-          title='Error Ratio',
-          description='Percentage of jobs that fail with an error. Lower is better.',
-          query=|||
-            sum by (queue) (
-              (%(errorRate)s{environment="$environment", queue=~"$queue"} >= 0)
-            )
-            /
-            sum by (queue) (
-              (%(opsRate)s{environment="$environment", queue=~"$queue"} >= 0)
-            )
-          ||| % {
-            errorRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
-            opsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
-          },
-          legendFormat='{{ queue }} error ratio',
-          yAxisLabel='Error Percentage',
-          legend_show=true,
-          decimals=2,
-        )
-        .addSeriesOverride(seriesOverrides.goldenMetric('/.* error ratio$/'))
-        .addDataLink(elasticsearchLogSearchDataLink)
-        .addDataLink({
-          url: elasticsearchLinks.buildElasticLineCountVizURL(
-            'sidekiq',
-            elasticFilters + [matching.matchFilter('json.job_status', 'fail')],
-            elasticQueries
-          ),
-          title: 'ElasticSearch: errors visualization',
-          targetBlank: true,
-        }),
-      ], cols=4, rowHeight=8, startRow=101
+    [
+      panel.apdexTimeSeries(
+        stableId='queue-apdex',
+        title='Queue Apdex',
+        description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
+        query=|||
+          sum by (queue) (
+            %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
+          )
+          /
+          sum by (queue) (
+            %(apdexWeight)s{environment="$environment",queue=~"$queue"}
+          )
+        ||| % {
+          apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_success_total', '5m'),
+          apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_total', '5m'),
+        },
+        yAxisLabel='% Jobs within Max Queuing Duration SLO',
+        legendFormat='{{ queue }} queue apdex',
+        legend_show=true,
+      )
+      .addSeriesOverride(override.goldenMetric('/.* queue apdex$/'))
+      .addDataLink(elasticsearchLogSearchDataLink)
+      .addDataLink({
+        url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.queueing_duration_s'),
+        title: 'ElasticSearch: queue latency visualization',
+        targetBlank: true,
+      }),
+      panel.apdexTimeSeries(
+        stableId='execution-apdex',
+        title='Execution Apdex',
+        description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
+        query=|||
+          sum by (queue) (
+            %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
+          )
+          /
+          sum by (queue) (
+            %(apdexWeight)s{environment="$environment",queue=~"$queue"}
+          )
+        ||| % {
+          apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '5m'),
+          apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '5m'),
+        },
+        yAxisLabel='% Jobs within Max Execution Duration SLO',
+        legendFormat='{{ queue }} execution apdex',
+        legend_show=true,
+      )
+      .addSeriesOverride(override.goldenMetric('/.* execution apdex$/'))
+      .addDataLink(elasticsearchLogSearchDataLink)
+      .addDataLink({
+        url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.duration_s'),
+        title: 'ElasticSearch: execution latency visualization',
+        targetBlank: true,
+      }),
+      panel.timeSeries(
+        stableId='request-rate',
+        title='Execution Rate (RPS)',
+        description='Jobs executed per second',
+        query=|||
+          sum by (queue) (%(metric)s{environment="$environment", queue=~"$queue"})
+        ||| % {
+          metric: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+        },
+        legendFormat='{{ queue }} rps',
+        format='ops',
+        yAxisLabel='Jobs per Second',
+      )
+      .addSeriesOverride(override.goldenMetric('/.* rps$/'))
+      .addDataLink(elasticsearchLogSearchDataLink)
+      .addDataLink({
+        url: elasticsearchLinks.buildElasticLineCountVizURL('sidekiq', elasticFilters, elasticQueries),
+        title: 'ElasticSearch: RPS visualization',
+        targetBlank: true,
+      }),
+      panel.percentageTimeSeries(
+        stableId='error-ratio',
+        title='Error Ratio',
+        description='Percentage of jobs that fail with an error. Lower is better.',
+        query=|||
+          sum by (queue) (
+            (%(errorRate)s{environment="$environment", queue=~"$queue"} >= 0)
+          )
+          /
+          sum by (queue) (
+            (%(opsRate)s{environment="$environment", queue=~"$queue"} >= 0)
+          )
+        ||| % {
+          errorRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
+          opsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+        },
+        legendFormat='{{ queue }} error ratio',
+        yAxisLabel='Error Percentage',
+        legend_show=true,
+      )
+      .addSeriesOverride(override.goldenMetric('/.* error ratio$/'))
+      .addDataLink(elasticsearchLogSearchDataLink)
+      .addDataLink({
+        url: elasticsearchLinks.buildElasticLineCountVizURL(
+          'sidekiq',
+          elasticFilters + [matching.matchFilter('json.job_status', 'fail')],
+          elasticQueries
+        ),
+        title: 'ElasticSearch: errors visualization',
+        targetBlank: true,
+      }),
+    ],
+    cols=4,
+    rowHeight=8,
+    startRow=101,
   )
   +
   layout.rowGrid(
     'Enqueuing (rate of jobs enqueuing)',
-    if useTimeSeriesPlugin then
-      [
-        enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
-        enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
-        panel.timeSeries(
-          stableId='enqueued-by-scheduling-type',
-          title='Jobs Enqueued by Schedule',
-          description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
-          query=|||
-            sum by (queue, scheduling) (
-              rate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", queue=~"$queue"}[$__interval])
-              )
-          |||,
-          legendFormat='{{ queue }} - {{ scheduling }}',
-        ),
-        panel.queueLengthTimeSeries(
-          stableId='queue-length',
-          title='Queue length',
-          description='The number of unstarted jobs in a queue',
-          query=|||
-            max by (name) (max_over_time(sidekiq_queue_size{environment="$environment", name=~"$queue"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0))
-          |||,
-          legendFormat='{{ name }}',
-          format='short',
-          interval='1m',
-          intervalFactor=3,
-          yAxisLabel='',
-        ),
-      ]
-    else
-      [
-        enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
-        enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
-        basic.timeseries(
-          stableId='enqueued-by-scheduling-type',
-          title='Jobs Enqueued by Schedule',
-          description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
-          query=|||
-            sum by (queue, scheduling) (
-              rate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", queue=~"$queue"}[$__interval])
-              )
-          |||,
-          legendFormat='{{ queue }} - {{ scheduling }}',
-        ),
-        basic.queueLengthTimeseries(
-          stableId='queue-length',
-          title='Queue length',
-          description='The number of unstarted jobs in a queue',
-          query=|||
-            max by (name) (max_over_time(sidekiq_queue_size{environment="$environment", name=~"$queue"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0))
-          |||,
-          legendFormat='{{ name }}',
-          format='short',
-          interval='1m',
-          intervalFactor=3,
-          yAxisLabel='',
-        ),
-      ],
+    [
+      enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
+      enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
+      panel.timeSeries(
+        stableId='enqueued-by-scheduling-type',
+        title='Jobs Enqueued by Schedule',
+        description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
+        query=|||
+          sum by (queue, scheduling) (
+            rate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", queue=~"$queue"}[$__interval])
+            )
+        |||,
+        legendFormat='{{ queue }} - {{ scheduling }}',
+      ),
+      panel.queueLengthTimeSeries(
+        stableId='queue-length',
+        title='Queue length',
+        description='The number of unstarted jobs in a queue',
+        query=|||
+          max by (name) (max_over_time(sidekiq_queue_size{environment="$environment", name=~"$queue"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0))
+        |||,
+        legendFormat='{{ name }}',
+        format='short',
+        interval='1m',
+        intervalFactor=3,
+        yAxisLabel='',
+      ),
+    ],
     startRow=201,
   )
   +
@@ -582,30 +390,17 @@ basic.dashboard(
     'Error Rate (the rate at which jobs fail)',
     [
       errorRateTimeseries('Errors', aggregators='queue', legendFormat='{{ queue }}'),
-      if useTimeSeriesPlugin then
-        panel.timeSeries(
-          title='Dead Jobs',
-          query=|||
-            sum by (queue) (
-              increase(sidekiq_jobs_dead_total{%(selector)s}[5m])
-            )
-          ||| % {
-            selector: selectors.serializeHash(selector),
-          },
-          legendFormat='{{ queue }}',
-        )
-      else
-        basic.timeseries(
-          title='Dead Jobs',
-          query=|||
-            sum by (queue) (
-              increase(sidekiq_jobs_dead_total{%(selector)s}[5m])
-            )
-          ||| % {
-            selector: selectors.serializeHash(selector),
-          },
-          legendFormat='{{ queue }}',
-        ),
+      panel.timeSeries(
+        title='Dead Jobs',
+        query=|||
+          sum by (queue) (
+            increase(sidekiq_jobs_dead_total{%(selector)s}[5m])
+          )
+        ||| % {
+          selector: selectors.serializeHash(selector),
+        },
+        legendFormat='{{ queue }}',
+      ),
     ],
     startRow=601,
   )
@@ -630,148 +425,76 @@ basic.dashboard(
   +
   layout.rowGrid(
     'SQL',
-    if useTimeSeriesPlugin then
-      [
-        panel.multiTimeSeries(
-          stableId='total-sql-queries-rate',
-          title='Total SQL Queries Rate',
-          format='ops',
-          queries=[
-            {
-              query: |||
-                sum by (endpoint_id) (
-                  rate(
-                    gitlab_transaction_db_count_total{%(selector)s}[$__interval]
-                  )
+    [
+      panel.multiTimeSeries(
+        stableId='total-sql-queries-rate',
+        title='Total SQL Queries Rate',
+        format='ops',
+        queries=[
+          {
+            query: |||
+              sum by (endpoint_id) (
+                rate(
+                  gitlab_transaction_db_count_total{%(selector)s}[$__interval]
                 )
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - total',
-            },
-            {
-              query: |||
-                sum by (endpoint_id) (
-                  rate(
-                    gitlab_transaction_db_primary_count_total{%(selector)s}[$__interval]
-                  )
+              )
+            ||| % { selector: selectors.serializeHash(selector) },
+            legendFormat: '{{ endpoint_id }} - total',
+          },
+          {
+            query: |||
+              sum by (endpoint_id) (
+                rate(
+                  gitlab_transaction_db_primary_count_total{%(selector)s}[$__interval]
                 )
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - primary',
-            },
-            {
-              query: |||
-                sum by (endpoint_id) (
-                  rate(
-                    gitlab_transaction_db_replica_count_total{%(selector)s}[$__interval]
-                  )
+              )
+            ||| % { selector: selectors.serializeHash(selector) },
+            legendFormat: '{{ endpoint_id }} - primary',
+          },
+          {
+            query: |||
+              sum by (endpoint_id) (
+                rate(
+                  gitlab_transaction_db_replica_count_total{%(selector)s}[$__interval]
                 )
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - replica',
-            },
-          ]
-        ),
-        panel.timeSeries(
-          stableId='sql-transaction',
-          title='SQL Transactions Rate',
-          query=|||
-            sum by (endpoint_id) (
-              rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])
-            )
-          ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat='{{ endpoint_id }}',
-        ),
-        panel.multiTimeSeries(
-          stableId='sql-transaction-holding-duration',
-          title='SQL Transaction Holding Duration',
-          format='short',
-          queries=[
-            {
-              query: |||
-                sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
-                /
-                sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - p50',
-            },
-            {
-              query: |||
-                histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(selector)s}[$__interval])) by (endpoint_id, le))
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - p95',
-            },
-          ],
-        ),
-      ]
-    else
-      [
-        basic.multiTimeseries(
-          stableId='total-sql-queries-rate',
-          title='Total SQL Queries Rate',
-          format='ops',
-          queries=[
-            {
-              query: |||
-                sum by (endpoint_id) (
-                  rate(
-                    gitlab_transaction_db_count_total{%(selector)s}[$__interval]
-                  )
-                )
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - total',
-            },
-            {
-              query: |||
-                sum by (endpoint_id) (
-                  rate(
-                    gitlab_transaction_db_primary_count_total{%(selector)s}[$__interval]
-                  )
-                )
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - primary',
-            },
-            {
-              query: |||
-                sum by (endpoint_id) (
-                  rate(
-                    gitlab_transaction_db_replica_count_total{%(selector)s}[$__interval]
-                  )
-                )
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - replica',
-            },
-          ]
-        ),
-        basic.timeseries(
-          stableId='sql-transaction',
-          title='SQL Transactions Rate',
-          query=|||
-            sum by (endpoint_id) (
-              rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])
-            )
-          ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat='{{ endpoint_id }}',
-        ),
-        basic.multiTimeseries(
-          stableId='sql-transaction-holding-duration',
-          title='SQL Transaction Holding Duration',
-          format='s',
-          queries=[
-            {
-              query: |||
-                sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
-                /
-                sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - p50',
-            },
-            {
-              query: |||
-                histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(selector)s}[$__interval])) by (endpoint_id, le))
-              ||| % { selector: selectors.serializeHash(selector) },
-              legendFormat: '{{ endpoint_id }} - p95',
-            },
-          ],
-        ),
-      ],
+              )
+            ||| % { selector: selectors.serializeHash(selector) },
+            legendFormat: '{{ endpoint_id }} - replica',
+          },
+        ]
+      ),
+      panel.timeSeries(
+        stableId='sql-transaction',
+        title='SQL Transactions Rate',
+        query=|||
+          sum by (endpoint_id) (
+            rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])
+          )
+        ||| % { selector: selectors.serializeHash(selector) },
+        legendFormat='{{ endpoint_id }}',
+      ),
+      panel.multiTimeSeries(
+        stableId='sql-transaction-holding-duration',
+        title='SQL Transaction Holding Duration',
+        format='short',
+        queries=[
+          {
+            query: |||
+              sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
+              /
+              sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
+            ||| % { selector: selectors.serializeHash(selector) },
+            legendFormat: '{{ endpoint_id }} - p50',
+          },
+          {
+            query: |||
+              histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(selector)s}[$__interval])) by (endpoint_id, le))
+            ||| % { selector: selectors.serializeHash(selector) },
+            legendFormat: '{{ endpoint_id }} - p95',
+          },
+        ],
+      ),
+    ],
     startRow=901
   )
 )

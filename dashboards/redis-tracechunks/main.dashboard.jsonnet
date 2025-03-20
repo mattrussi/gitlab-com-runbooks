@@ -1,4 +1,4 @@
 local redisCommon = import 'gitlab-dashboards/redis_common_graphs.libsonnet';
 
-redisCommon.redisDashboard('redis-tracechunks', cluster=false, useTimeSeriesPlugin=true)
+redisCommon.redisDashboard('redis-tracechunks', cluster=false)
 .overviewTrailer()

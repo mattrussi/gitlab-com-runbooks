@@ -8,8 +8,6 @@ local panel = import 'grafana/time-series/panel.libsonnet';
 
 local haproxyRejections = 'haproxy_backend_sessions_total{env=~"${environment}", backend=~"deny_https?"}';
 
-local useTimeSeriesPlugin = true;
-
 local rate = function(metric)
   'rate(%s[$__rate_interval])' % metric;
 
@@ -23,32 +21,17 @@ local dashboardRow = function(title, startRow, panels)
   );
 
 local trafficGraph = function(title, source)
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      legendFormat='{{env}}',
-      format='short',
-      interval='',
-      query=|||
-        sum by(backend) (
-          %s
-        )
-      ||| % source,
-    )
-  else
-    basic.timeseries(
-      title=title,
-      legendFormat='{{env}}',
-      format='short',
-      stack=false,
-      interval='',
-      intervalFactor=2,
-      query=|||
-        sum by(backend) (
-          %s
-        )
-      ||| % source,
-    );
+  panel.timeSeries(
+    title=title,
+    legendFormat='{{env}}',
+    format='short',
+    interval='',
+    query=|||
+      sum by(backend) (
+        %s
+      )
+    ||| % source,
+  );
 
 basic.dashboard(
   'HAProxy rejections due to rate limiting and blocks',

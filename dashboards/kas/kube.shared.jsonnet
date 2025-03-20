@@ -1,3 +1,3 @@
 local kubeDashboards = import 'gitlab-dashboards/kube_service_dashboards.libsonnet';
 
-kubeDashboards.dashboardsForService('kas', useTimeSeriesPlugin=true)
+kubeDashboards.dashboardsForService('kas')

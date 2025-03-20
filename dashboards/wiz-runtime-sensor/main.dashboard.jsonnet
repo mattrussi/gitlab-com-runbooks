@@ -20,7 +20,6 @@ serviceDashboard.overview('wiz-runtime-sensor')
       groupname: 'wiz-sensor',
     },
     startRow=1001,
-    useTimeSeriesPlugin=true,
   ),
 )
 .overviewTrailer()

@@ -10,12 +10,11 @@ local selectorHash = {
   env: '$environment',
   type: 'ci',
 };
-local useTimeSeriesPlugin = true;
 
 serviceDashboard.overview('ci-runners', expectMultipleSeries=true)
 .addTemplate(templates.runnerShard())
 .addPanel(
-  nodeMetrics.nodeMetricsDetailRow(selectorHash, title='🖥️ HAProxy Node Metrics', useTimeSeriesPlugin=useTimeSeriesPlugin),
+  nodeMetrics.nodeMetricsDetailRow(selectorHash, title='🖥️ HAProxy Node Metrics'),
   gridPos={
     x: 0,
     y: 350,
@@ -35,7 +34,6 @@ serviceDashboard.overview('ci-runners', expectMultipleSeries=true)
         stage: '$stage',
       },
       startRow=401,
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={

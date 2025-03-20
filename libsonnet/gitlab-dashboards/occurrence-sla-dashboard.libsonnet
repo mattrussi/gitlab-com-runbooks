@@ -33,7 +33,7 @@ local clampRatio(ratioQuery) =
     )
   ||| % [strings.indent(ratioQuery, 4)];
 
-local serviceSlaRow(availability, service, sloThreshold, selector, useTimeSeriesPlugin=false) =
+local serviceSlaRow(availability, service, sloThreshold, selector) =
   local slaAvailabilityRatio = clampRatio(
     availability.availabilityRatio(
       aggregationLabels=[],
@@ -57,37 +57,22 @@ local serviceSlaRow(availability, service, sloThreshold, selector, useTimeSeries
       colors=[budgetMinutesColor],
       colorMode='value',
     ),
-    if useTimeSeriesPlugin then
-      panel.slaTimeSeries(
-        title='%s SLA over time period' % [service],
-        description='Availability over time, higher is better.',
-        yAxisLabel='SLA',
-        query=clampRatio(availability.availabilityRatio(
-          aggregationLabels=[],
-          selector=selector,
-          services=[service],
-          range='$__interval',
-        )),
-        legendFormat='%s SLA' % [service],
-        legend_show=false
-      )
-    else
-      basic.slaTimeseries(
-        title='%s SLA over time period' % [service],
-        description='Availability over time, higher is better.',
-        yAxisLabel='SLA',
-        query=clampRatio(availability.availabilityRatio(
-          aggregationLabels=[],
-          selector=selector,
-          services=[service],
-          range='$__interval',
-        )),
-        legendFormat='%s SLA' % [service],
-        legend_show=false
-      ),
+    panel.slaTimeSeries(
+      title='%s SLA over time period' % [service],
+      description='Availability over time, higher is better.',
+      yAxisLabel='SLA',
+      query=clampRatio(availability.availabilityRatio(
+        aggregationLabels=[],
+        selector=selector,
+        services=[service],
+        range='$__interval',
+      )),
+      legendFormat='%s SLA' % [service],
+      legend_show=false
+    ),
   ];
 
-local overallSlaRow(availability, keyServiceWeights, sloThreshold, selector, useTimeSeriesPlugin=false) =
+local overallSlaRow(availability, keyServiceWeights, sloThreshold, selector) =
   local dashboardServiceWeights = {
     [service]: '$%s_weight' % [templateServiceName(service)]
     for service in std.objectFields(keyServiceWeights)
@@ -108,27 +93,17 @@ local overallSlaRow(availability, keyServiceWeights, sloThreshold, selector, use
       colors=[budgetMinutesColor],
       colorMode='value',
     ),
-    if useTimeSeriesPlugin then
-      panel.slaTimeSeries(
-        title='Overall GitLab.com SLA over time period',
-        description='Availability over time, higher is better.',
-        yAxisLabel='SLA',
-        query=clampRatio(availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '$__interval')),
-        legendFormat='Overall SLA',
-        legend_show=false
-      )
-    else
-      basic.slaTimeseries(
-        title='Overall GitLab.com SLA over time period',
-        description='Availability over time, higher is better.',
-        yAxisLabel='SLA',
-        query=clampRatio(availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '$__interval')),
-        legendFormat='Overall SLA',
-        legend_show=false
-      ),
+    panel.slaTimeSeries(
+      title='Overall GitLab.com SLA over time period',
+      description='Availability over time, higher is better.',
+      yAxisLabel='SLA',
+      query=clampRatio(availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '$__interval')),
+      legendFormat='Overall SLA',
+      legend_show=false
+    ),
   ];
 
-local dashboard(availability, keyServiceWeights, slo, selector, sortedServices, useTimeSeriesPlugin=false) =
+local dashboard(availability, keyServiceWeights, slo, selector, sortedServices) =
   local serviceWeightTemplates = [
     template.custom(
       name='%s_weight' % [templateServiceName(service)],
@@ -151,7 +126,7 @@ local dashboard(availability, keyServiceWeights, slo, selector, sortedServices, 
       collapse=false,
       startRow=5,
       panels=layout.columnGrid(
-        rowsOfPanels=[overallSlaRow(availability, keyServiceWeights, slo, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)],
+        rowsOfPanels=[overallSlaRow(availability, keyServiceWeights, slo, selector)],
         columnWidths=[4, 4, 16],
         rowHeight=5,
         startRow=10
@@ -164,7 +139,7 @@ local dashboard(availability, keyServiceWeights, slo, selector, sortedServices, 
       startRow=15,
       panels=layout.columnGrid(
         rowsOfPanels=[
-          serviceSlaRow(availability, service, slo, selector, useTimeSeriesPlugin=useTimeSeriesPlugin)
+          serviceSlaRow(availability, service, slo, selector)
           for service in sortedServices
         ],
         columnWidths=[4, 4, 16],
@@ -175,7 +150,7 @@ local dashboard(availability, keyServiceWeights, slo, selector, sortedServices, 
   );
 
 {
-  dashboard(keyServiceWeights, aggregationSet, slo, extraSelector={}, sortedServices=std.objectFields(keyServiceWeights), useTimeSeriesPlugin=true):
+  dashboard(keyServiceWeights, aggregationSet, slo, extraSelector={}, sortedServices=std.objectFields(keyServiceWeights)):
     local availability = availabilityPromql.new(keyServiceWeights, aggregationSet);
-    dashboard(availability, keyServiceWeights, slo, extraSelector, sortedServices, useTimeSeriesPlugin=useTimeSeriesPlugin),
+    dashboard(availability, keyServiceWeights, slo, extraSelector, sortedServices),
 }
