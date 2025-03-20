@@ -9,8 +9,6 @@ local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local statPanel = grafana.statPanel;
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Application Detail',
   tags=['container registry', 'docker', 'registry'],
@@ -46,7 +44,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.version(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(crCommon.version(startRow=1))
 .addPanel(
   row.new(title='Host Resources Usage'),
   gridPos={
@@ -56,7 +54,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.generalCounters(startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(common.generalCounters(startRow=1001))
 .addPanel(
   row.new(title='HTTP API'),
   gridPos={
@@ -66,7 +64,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.http(startRow=2001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(crCommon.http(startRow=2001))
 .addPanel(
   row.new(title='Storage Drivers'),
   gridPos={
@@ -76,7 +74,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.storageDrivers(startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(crCommon.storageDrivers(startRow=3001))
 .addPanel(
   row.new(title='Cache'),
   gridPos={
@@ -86,7 +84,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.cache(startRow=4001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(crCommon.cache(startRow=4001))
 .addPanel(
   row.new(title='Network'),
   gridPos={

@@ -11,8 +11,6 @@ local httpsGitCiGatewayIngressTrafficFrontend = 'haproxy_frontend_bytes_in_total
 local httpsGitCiGatewayEgressTrafficFrontend = 'haproxy_frontend_bytes_out_total{frontend="https_git_ci_gateway",env=~"${environment}"}';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local rate = function(metric)
   'rate(%s[$__rate_interval])' % metric;
 
@@ -32,76 +30,39 @@ local environmentTemplate = grafana.template.new(
 );
 
 local trafficGraph = function(title, source)
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      legendFormat='{{env}}',
-      format='binBps',
-      interval='',
-      intervalFactor=10,
-      query=|||
-        sum by(env) (
-          %s
-        )
-      ||| % source,
-    )
-  else
-    basic.timeseries(
-      title=title,
-      legendFormat='{{env}}',
-      format='binBps',
-      stack=false,
-      interval='',
-      intervalFactor=10,
-      query=|||
-        sum by(env) (
-          %s
-        )
-      ||| % source,
-    );
+  panel.timeSeries(
+    title=title,
+    legendFormat='{{env}}',
+    format='binBps',
+    interval='',
+    intervalFactor=10,
+    query=|||
+      sum by(env) (
+        %s
+      )
+    ||| % source,
+  );
 
 local trafficRatioGraph = function(title, part, total)
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title=title,
-      legendFormat='{{env}}',
-      format='percentunit',
-      interval='',
-      intervalFactor=10,
-      query=|||
-        sum by(env) (
-          %(part)s
-        )
-        /
-        sum by(env) (
-          %(total)s
-        )
-      ||| % {
-        part: part,
-        total: total,
-      },
-    )
-  else
-    basic.timeseries(
-      title=title,
-      legendFormat='{{env}}',
-      format='percentunit',
-      stack=false,
-      interval='',
-      intervalFactor=10,
-      query=|||
-        sum by(env) (
-          %(part)s
-        )
-        /
-        sum by(env) (
-          %(total)s
-        )
-      ||| % {
-        part: part,
-        total: total,
-      },
-    );
+  panel.timeSeries(
+    title=title,
+    legendFormat='{{env}}',
+    format='percentunit',
+    interval='',
+    intervalFactor=10,
+    query=|||
+      sum by(env) (
+        %(part)s
+      )
+      /
+      sum by(env) (
+        %(total)s
+      )
+    ||| % {
+      part: part,
+      total: total,
+    },
+  );
 
 local httpsTrafficGraph =
   trafficGraph(

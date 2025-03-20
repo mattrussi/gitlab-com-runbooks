@@ -75,7 +75,6 @@ local getColumnWidths(
     legendFormatPrefix=null,
     includeLastWeek=true,
     fixedThreshold=null,
-    useTimeSeriesPlugin=true,
   )::
     local typeHash = if serviceType == null then {} else { type: serviceType };
     local selectorHashWithExtras = selectorHash + typeHash;
@@ -107,28 +106,18 @@ local getColumnWidths(
         compact=compact,
         includeLastWeek=includeLastWeek,
         fixedThreshold=fixedThreshold,
-        useTimeSeriesPlugin=useTimeSeriesPlugin,
       )
       +
       (
         if showSaturationCell then
           [[
-            if useTimeSeriesPlugin then
-              panels.utilizationRate(
-                serviceType,
-                selectorHash=selectorHashWithShard,
-                compact=compact,
-                stableId='%(stableIdPrefix)sservice-utilization' % formatConfig,
-                linewidth=1,
-              )
-            else
-              utilizationRatesPanel.panel(
-                serviceType,
-                selectorHash=selectorHashWithShard,
-                compact=compact,
-                stableId='%(stableIdPrefix)sservice-utilization' % formatConfig,
-                linewidth=1,
-              ),
+            panels.utilizationRate(
+              serviceType,
+              selectorHash=selectorHashWithShard,
+              compact=compact,
+              stableId='%(stableIdPrefix)sservice-utilization' % formatConfig,
+              linewidth=1,
+            ),
           ]]
         else
           []

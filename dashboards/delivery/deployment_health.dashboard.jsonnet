@@ -12,8 +12,6 @@ local textPanel = grafana.text;
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Deployment Health',
   tags=['release'],
@@ -27,35 +25,19 @@ basic.dashboard(
   gridPos={ x: 0, y: 0, w: 24, h: 8 },
 )
 .addPanel(
-  if useTimeSeriesPlugin then
-    panel.basic(
-      'Deploy Health',
-      description='Showcases whether or not an environment and its stage is healthy',
-      unit='none',
-      legend_show=false,
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:stage{env="$environment", stage="$stage"}',
-        legendFormat='Health'
-      ),
-    )
-  else
-    graphPanel.new(
-      'Deploy Health',
-      description='Showcases whether or not an environment and its stage is healthy',
-      decimals=0,
-      fill=0,
-      format='none',
-      legend_show=false,
-      min=0,
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:stage{env="$environment", stage="$stage"}',
-        legendFormat='Health'
-      ),
-    ), gridPos={ x: 0, y: 0, w: 16, h: 12 }
+  panel.basic(
+    'Deploy Health',
+    description='Showcases whether or not an environment and its stage is healthy',
+    unit='none',
+    legend_show=false,
+  )
+  .addTarget(
+    prometheus.target(
+      'gitlab_deployment_health:stage{env="$environment", stage="$stage"}',
+      legendFormat='Health'
+    ),
+  ),
+  gridPos={ x: 0, y: 0, w: 16, h: 12 }
 )
 .addPanel(
   textPanel.new(
@@ -137,39 +119,19 @@ basic.dashboard(
   gridPos={ x: 0, y: 1, w: 24, h: 8 },
 )
 .addPanel(
-  if useTimeSeriesPlugin then
-    panel.basic(
-      'Service Deployment Health',
-      description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
-      fill=100,
-      stack=true,
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:service{env="$environment", stage="$stage", type!="registry"}',
-        legendFormat='{{type}}',
-      ),
-    )
-  else
-    graphPanel.new(
-      'Service Deployment Health',
-      description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
-      decimals=0,
-      fill=10,
-      legend_alignAsTable=true,
-      legend_current=true,
-      legend_min=true,
-      legend_rightSide=true,
-      legend_values=true,
-      min=0,
-      stack=true
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:service{env="$environment", stage="$stage", type!="registry"}',
-        legendFormat='{{type}}',
-      ),
-    ), gridPos={ x: 0, y: 1, w: 16, h: 12 }
+  panel.basic(
+    'Service Deployment Health',
+    description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
+    fill=100,
+    stack=true,
+  )
+  .addTarget(
+    prometheus.target(
+      'gitlab_deployment_health:service{env="$environment", stage="$stage", type!="registry"}',
+      legendFormat='{{type}}',
+    ),
+  ),
+  gridPos={ x: 0, y: 1, w: 16, h: 12 }
 )
 .addPanel(
   textPanel.new(
@@ -197,51 +159,25 @@ basic.dashboard(
 )
 .addTemplate(templates.type)
 .addPanel(
-  if useTimeSeriesPlugin then
-    panel.basic(
-      'Component Deployment Health',
-      description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
-      fill=100,
-      stack=true,
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:service:apdex{env="$environment", stage="$stage", type="$type"}',
-        legendFormat='Apdex',
-      ),
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:service:errors{env="$environment", stage="$stage", type="$type"}',
-        legendFormat='Errors',
-      ),
-    )
-  else
-    graphPanel.new(
-      'Component Deployment Health',
-      description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
-      decimals=0,
-      fill=10,
-      legend_alignAsTable=true,
-      legend_current=true,
-      legend_min=true,
-      legend_rightSide=true,
-      legend_values=true,
-      min=0,
-      stack=true
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:service:apdex{env="$environment", stage="$stage", type="$type"}',
-        legendFormat='Apdex',
-      ),
-    )
-    .addTarget(
-      prometheus.target(
-        'gitlab_deployment_health:service:errors{env="$environment", stage="$stage", type="$type"}',
-        legendFormat='Errors',
-      ),
-    ), gridPos={ x: 0, y: 2, w: 16, h: 12 }
+  panel.basic(
+    'Component Deployment Health',
+    description='Showcases whether or not the environments stage is healthy with a breakdown by the individual services that contribute to the metric',
+    fill=100,
+    stack=true,
+  )
+  .addTarget(
+    prometheus.target(
+      'gitlab_deployment_health:service:apdex{env="$environment", stage="$stage", type="$type"}',
+      legendFormat='Apdex',
+    ),
+  )
+  .addTarget(
+    prometheus.target(
+      'gitlab_deployment_health:service:errors{env="$environment", stage="$stage", type="$type"}',
+      legendFormat='Errors',
+    ),
+  ),
+  gridPos={ x: 0, y: 2, w: 16, h: 12 }
 )
 .addPanel(
   textPanel.new(

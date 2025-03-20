@@ -5,11 +5,8 @@ local graphPanel = grafana.graphPanel;
 local panels = import 'gitlab-dashboards/panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
-
-local useTimeSeriesPlugin = true;
 
 local clusterNameTemplate = grafana.template.new(
   'cluster',
@@ -40,47 +37,20 @@ local destinationVersionTemplate = grafana.template.new(
 );
 
 local logicalReplicationLag =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      title='Logical replication lag (all slots in $environment)',
-      legend_min=false,
-      legend_current=false,
-      unit='bytes',
-      fill=100,
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(pg_replication_slots_confirmed_flush_lsn_bytes{env="$environment", slot_type="logical"}) by (fqdn, slot_type, slot_name)
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      'Logical replication lag (all slots in $environment)',
-      fill=10,
-      decimals=1,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='bytes',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(pg_replication_slots_confirmed_flush_lsn_bytes{env="$environment", slot_type="logical"}) by (fqdn, slot_type, slot_name)
-        |||,
-      ),
-    );
+  panel.basic(
+    title='Logical replication lag (all slots in $environment)',
+    legend_min=false,
+    legend_current=false,
+    unit='bytes',
+    fill=100,
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(pg_replication_slots_confirmed_flush_lsn_bytes{env="$environment", slot_type="logical"}) by (fqdn, slot_type, slot_name)
+      |||,
+    ),
+  );
 
 local context =
   panels.generalTextPanel(
@@ -100,766 +70,286 @@ local clusterRight =
   panels.generalTextPanel('Cluster on the right', content='🎯 Target cluster: PG${destination_version} ', transparent=true);
 
 local replicationLagSourceSeconds =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in seconds',
-      legend_min=false,
-      legend_current=false,
-      unit='seconds',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(pg_replication_lag{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in seconds',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='seconds',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(pg_replication_lag{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in seconds',
+    legend_min=false,
+    legend_current=false,
+    unit='seconds',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(pg_replication_lag{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
+      |||,
+    ),
+  );
 
 local replicationLagTargetSeconds =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in seconds',
-      legend_min=false,
-      legend_current=false,
-      unit='seconds',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in seconds',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='seconds',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in seconds',
+    legend_min=false,
+    legend_current=false,
+    unit='seconds',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
+      |||,
+    ),
+  );
 
 local replicationLagSourceBytes =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in bytes',
-      legend_min=false,
-      legend_current=false,
-      unit='bytes',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in bytes',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='bytes',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in bytes',
+    legend_min=false,
+    legend_current=false,
+    unit='bytes',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
+      |||,
+    ),
+  );
 
 local replicationLagTargetBytes =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in bytes',
-      legend_min=false,
-      legend_current=false,
-      unit='bytes',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in bytes',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='bytes',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 🏃🏻‍♀️ Physical replication lag on target standbys, in bytes',
+    legend_min=false,
+    legend_current=false,
+    unit='bytes',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
+      |||,
+    ),
+  );
 
 local sourceLeaderTPSCommits =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 🥇 Source leader TPS (commits) ✅',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/sec',
-      fill=100,
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 🥇 Source leader TPS (commits) ✅',
-      fill=10,
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/sec',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 🥇 Source leader TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
+    fill=100,
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
 
 local targetLeaderTPSCommits =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 🥇 Target leader TPS (commits) ✅',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/sec',
-      fill=100,
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 🥇 Target leader TPS (commits) ✅',
-      fill=10,
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/sec',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 🥇 Target leader TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
+    fill=100,
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
 
 local sourceStandbysTPSCommits =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 👥 Source standbys TPS (commits) ✅',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/sec'
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 👥 Source standbys TPS (commits) ✅',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/sec',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 👥 Source standbys TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec'
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local targetStandbysTPSCommits =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 👥 Target standbys TPS (commits) ✅',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/sec',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 👥 Target standbys TPS (commits) ✅',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/sec',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 👥 Target standbys TPS (commits) ✅',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/sec',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local sourceLeaderRollbackTPSErrors =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 🥇 Source leader rollback TPS – ERRORS ❌',
-      legend_min=false,
-      legend_current=false,
-      unit='err/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 🥇 Source leader rollback TPS – ERRORS ❌',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='err/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 🥇 Source leader rollback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
 
 local targetLeaderRollbackTPSErrors =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 🥇 Target leader rollback TPS – ERRORS ❌',
-      legend_min=false,
-      legend_current=false,
-      unit='err/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 🥇 Target leader rollback TPS – ERRORS ❌',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='err/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 🥇 Target leader rollback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
 
 local sourceStandbysRollbackTPSErrors =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 👥 Source standbys roolback TPS – ERRORS ❌',
-      legend_min=false,
-      legend_current=false,
-      unit='err/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 👥 Source standbys roolback TPS – ERRORS ❌',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='err/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 👥 Source standbys roolback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local targetStandbysRollbackTPSErrors =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 👥 Target standbys rollback TPS – ERRORS ❌',
-      legend_min=false,
-      legend_current=false,
-      unit='err/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 👥 Target standbys rollback TPS – ERRORS ❌',
-      decimals=3,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='err/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 👥 Target standbys rollback TPS – ERRORS ❌',
+    legend_min=false,
+    legend_current=false,
+    unit='err/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local sourceWritesTuple =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 Source writes (tuple ins/upd/del)',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)
-          and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 Source writes (tuple ins/upd/del)',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)
-          and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 Source writes (tuple ins/upd/del)',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)
+        and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
 
 local targetWritesTuple =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 Target writes (tuple ins/upd/del)',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)
-          and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 Target writes (tuple ins/upd/del)',
-      decimals=2,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
-          +
-          irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)
-          and on(instance) pg_replication_is_replica==0
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 Target writes (tuple ins/upd/del)',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
+        +
+        irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)
+        and on(instance) pg_replication_is_replica==0
+      |||,
+    ),
+  );
 
 local sourceIndexTupleFetches =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 Source index tuple fetches',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 Source index tuple fetches',
-      decimals=3,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 Source index tuple fetches',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local targetIndexTupleFetches =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 Target index tuple fetches',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 Target index tuple fetches',
-      decimals=3,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 Target index tuple fetches',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local sourceSeqTupleReads =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🏹 Source seq tuple reads',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🏹 Source seq tuple reads',
-      decimals=3,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🏹 Source seq tuple reads',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 local targetSeqTupleReads =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      '🎯 Target seq tuple reads',
-      legend_min=false,
-      legend_current=false,
-      unit='ops/s',
-    )
-    .addTarget(
-      target.prometheus(
-        |||
-          (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    )
-  else
-    panels.generalGraphPanel(
-      '🎯 Target seq tuple reads',
-      decimals=3,
-      legend_show=true,
-      legend_min=false,
-      legend_current=false
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='ops/s',
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
-        |||,
-      ),
-    );
+  panel.basic(
+    '🎯 Target seq tuple reads',
+    legend_min=false,
+    legend_current=false,
+    unit='ops/s',
+  )
+  .addTarget(
+    target.prometheus(
+      |||
+        (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+      |||,
+    ),
+  );
 
 basic.dashboard(
   'Postgres upgrade using logical',

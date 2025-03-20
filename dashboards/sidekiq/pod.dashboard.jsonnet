@@ -6,8 +6,6 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Pod Info',
   tags=['sidekiq'],
@@ -34,7 +32,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.version(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.version(startRow=1))
 .addPanel(
 
   row.new(title='Deployment Info'),
@@ -57,7 +55,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.cpu(startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.cpu(startRow=1001))
 .addPanel(
 
   row.new(title='Memory'),
@@ -68,7 +66,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=2001, container='sidekiq', useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.memory(startRow=2001, container='sidekiq'))
 .addPanel(
 
   row.new(title='Network'),
@@ -79,7 +77,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.network(startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(k8sPodsCommon.network(startRow=3001))
 + {
   links+: platformLinks.triage +
           platformLinks.services +

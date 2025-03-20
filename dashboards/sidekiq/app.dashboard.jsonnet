@@ -6,8 +6,6 @@ local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Application Info',
   tags=['sidekiq'],
@@ -32,7 +30,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.logMessages(startRow=1, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(common.logMessages(startRow=1))
 .addPanel(
   row.new(title='General Counters'),
   gridPos={
@@ -42,7 +40,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.generalRubyCounters(startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(common.generalRubyCounters(startRow=1001))
 + {
   links+: platformLinks.triage +
           platformLinks.services +

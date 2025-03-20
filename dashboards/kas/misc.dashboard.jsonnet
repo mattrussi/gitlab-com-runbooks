@@ -10,8 +10,6 @@ local selectorString = selectors.serializeHash(selector);
 local envSelector = { env: '$environment', type: 'kas' };
 local envSelectorString = selectors.serializeHash(envSelector);
 
-local useTimeSeriesPlugin = true;
-
 basic.dashboard(
   'Miscellaneous metrics',
   tags=[
@@ -97,60 +95,32 @@ basic.dashboard(
   layout.titleRowWithPanels(
     'gRPC metrics',
     layout.grid(
-      if useTimeSeriesPlugin then
-        [
-          panel.timeSeries(
-            title='OK gRPC calls/second',
-            description='OK gRPC calls',
-            query=|||
-              sum by (grpc_service, grpc_method) (
-                rate(grpc_server_handled_total{%s, grpc_code="OK"}[$__rate_interval])
-              )
-            ||| % selectorString,
-            legendFormat='{{grpc_service}}/{{grpc_method}}',
-            yAxisLabel='rps',
-            linewidth=1,
-          ),
-          panel.timeSeries(
-            title='Not OK gRPC calls/second',
-            description='Not OK gRPC calls',
-            query=|||
-              sum by (grpc_service, grpc_method, grpc_code) (
-                rate(grpc_server_handled_total{%s, grpc_code!="OK"}[$__rate_interval])
-              )
-            ||| % selectorString,
-            legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
-            yAxisLabel='rps',
-            linewidth=1,
-          ),
-        ]
-      else
-        [
-          basic.timeseries(
-            title='OK gRPC calls/second',
-            description='OK gRPC calls',
-            query=|||
-              sum by (grpc_service, grpc_method) (
-                rate(grpc_server_handled_total{%s, grpc_code="OK"}[$__rate_interval])
-              )
-            ||| % selectorString,
-            legendFormat='{{grpc_service}}/{{grpc_method}}',
-            yAxisLabel='rps',
-            linewidth=1,
-          ),
-          basic.timeseries(
-            title='Not OK gRPC calls/second',
-            description='Not OK gRPC calls',
-            query=|||
-              sum by (grpc_service, grpc_method, grpc_code) (
-                rate(grpc_server_handled_total{%s, grpc_code!="OK"}[$__rate_interval])
-              )
-            ||| % selectorString,
-            legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
-            yAxisLabel='rps',
-            linewidth=1,
-          ),
-        ],
+      [
+        panel.timeSeries(
+          title='OK gRPC calls/second',
+          description='OK gRPC calls',
+          query=|||
+            sum by (grpc_service, grpc_method) (
+              rate(grpc_server_handled_total{%s, grpc_code="OK"}[$__rate_interval])
+            )
+          ||| % selectorString,
+          legendFormat='{{grpc_service}}/{{grpc_method}}',
+          yAxisLabel='rps',
+          linewidth=1,
+        ),
+        panel.timeSeries(
+          title='Not OK gRPC calls/second',
+          description='Not OK gRPC calls',
+          query=|||
+            sum by (grpc_service, grpc_method, grpc_code) (
+              rate(grpc_server_handled_total{%s, grpc_code!="OK"}[$__rate_interval])
+            )
+          ||| % selectorString,
+          legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
+          yAxisLabel='rps',
+          linewidth=1,
+        ),
+      ],
       startRow=3000,
     ),
     collapse=false,
@@ -161,72 +131,38 @@ basic.dashboard(
   layout.titleRowWithPanels(
     'Performance',
     layout.grid(
-      if useTimeSeriesPlugin then
-        [
-          panel.timeSeries(
-            title='CPU throttling',
-            description='CPU throttling of kas',
-            query=|||
-              sum (rate(container_cpu_cfs_throttled_seconds_total{%s}[$__rate_interval]))
-            ||| % selectorString,
-            yAxisLabel='time',
-            legend_show=false,
-            linewidth=1,
-          ),
-          panel.timeSeries(
-            title='Go GC',
-            description='',
-            query=|||
-              1000*go_gc_duration_seconds{%s,quantile="1"}
-            ||| % selectorString,
-            yAxisLabel='milliseconds',
-            legend_show=false,
-            linewidth=1,
-          ),
-          panel.timeSeries(
-            title='Go goroutines',
-            description='',
-            query=|||
-              go_goroutines{%s}
-            ||| % selectorString,
-            yAxisLabel='',
-            legend_show=false,
-            linewidth=1,
-          ),
-        ]
-      else
-        [
-          basic.timeseries(
-            title='CPU throttling',
-            description='CPU throttling of kas',
-            query=|||
-              sum (rate(container_cpu_cfs_throttled_seconds_total{%s}[$__rate_interval]))
-            ||| % selectorString,
-            yAxisLabel='time',
-            legend_show=false,
-            linewidth=1,
-          ),
-          basic.timeseries(
-            title='Go GC',
-            description='',
-            query=|||
-              1000*go_gc_duration_seconds{%s,quantile="1"}
-            ||| % selectorString,
-            yAxisLabel='milliseconds',
-            legend_show=false,
-            linewidth=1,
-          ),
-          basic.timeseries(
-            title='Go goroutines',
-            description='',
-            query=|||
-              go_goroutines{%s}
-            ||| % selectorString,
-            yAxisLabel='',
-            legend_show=false,
-            linewidth=1,
-          ),
-        ],
+      [
+        panel.timeSeries(
+          title='CPU throttling',
+          description='CPU throttling of kas',
+          query=|||
+            sum (rate(container_cpu_cfs_throttled_seconds_total{%s}[$__rate_interval]))
+          ||| % selectorString,
+          yAxisLabel='time',
+          legend_show=false,
+          linewidth=1,
+        ),
+        panel.timeSeries(
+          title='Go GC',
+          description='',
+          query=|||
+            1000*go_gc_duration_seconds{%s,quantile="1"}
+          ||| % selectorString,
+          yAxisLabel='milliseconds',
+          legend_show=false,
+          linewidth=1,
+        ),
+        panel.timeSeries(
+          title='Go goroutines',
+          description='',
+          query=|||
+            go_goroutines{%s}
+          ||| % selectorString,
+          yAxisLabel='',
+          legend_show=false,
+          linewidth=1,
+        ),
+      ],
       startRow=5000,
     ),
     collapse=false,
@@ -237,36 +173,20 @@ basic.dashboard(
   layout.titleRowWithPanels(
     'Misc',
     layout.grid(
-      if useTimeSeriesPlugin then
-        [
-          panel.timeSeries(
-            title='Running version',
-            description='Running version of kas',
-            query=|||
-              count by (git_ref, stage) (gitlab_build_info{%s})
-            ||| % envSelectorString,
-            yAxisLabel='pods',
-            legend_show=false,
-            linewidth=1,
-            stack=true,
-            fill=30,
-          ),
-        ]
-      else
-        [
-          basic.timeseries(
-            title='Running version',
-            description='Running version of kas',
-            query=|||
-              count by (git_ref, stage) (gitlab_build_info{%s})
-            ||| % envSelectorString,
-            yAxisLabel='pods',
-            legend_show=false,
-            linewidth=1,
-            stack=true,
-            fill=3,
-          ),
-        ],
+      [
+        panel.timeSeries(
+          title='Running version',
+          description='Running version of kas',
+          query=|||
+            count by (git_ref, stage) (gitlab_build_info{%s})
+          ||| % envSelectorString,
+          yAxisLabel='pods',
+          legend_show=false,
+          linewidth=1,
+          stack=true,
+          fill=30,
+        ),
+      ],
       startRow=7000,
     ),
     collapse=false,

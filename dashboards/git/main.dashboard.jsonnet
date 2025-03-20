@@ -8,8 +8,6 @@ local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 serviceDashboard.overview('git')
 .addPanel(
   row.new(title='Workhorse'),
@@ -20,31 +18,19 @@ serviceDashboard.overview('git')
     h: 1,
   }
 )
-.addPanels(workhorseCommon.workhorsePanels(serviceType='git', serviceStage='$stage', startRow=1001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(workhorseCommon.workhorsePanels(serviceType='git', serviceStage='$stage', startRow=1001))
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.timeSeries(
-          title='Workhorse Git HTTP Sessions',
-          query=|||
-            gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="git"}
-          |||,
-          legendFormat='Sessions',
-          stableId='workhorse-sessions',
-        ),
-      ]
-    else
-      [
-        basic.timeseries(
-          title='Workhorse Git HTTP Sessions',
-          query=|||
-            gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="git"}
-          |||,
-          legendFormat='Sessions',
-          stableId='workhorse-sessions',
-        ),
-      ],
+    [
+      panel.timeSeries(
+        title='Workhorse Git HTTP Sessions',
+        query=|||
+          gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="git"}
+        |||,
+        legendFormat='Sessions',
+        stableId='workhorse-sessions',
+      ),
+    ],
     startRow=2000
   )
 )
@@ -57,7 +43,7 @@ serviceDashboard.overview('git')
     h: 1,
   }
 )
-.addPanels(railsCommon.railsPanels(serviceType='git', serviceStage='$stage', startRow=3001, useTimeSeriesPlugin=useTimeSeriesPlugin))
+.addPanels(railsCommon.railsPanels(serviceType='git', serviceStage='$stage', startRow=3001))
 .addPanel(
   row.new(title='sshd processes', collapse=true)
   .addPanels(
@@ -70,7 +56,6 @@ serviceDashboard.overview('git')
         stage: '$stage',
       },
       startRow=1,
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   ),
   gridPos={

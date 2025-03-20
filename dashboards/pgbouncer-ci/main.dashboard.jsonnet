@@ -1,3 +1,3 @@
 local panels = import 'gitlab-dashboards/pgbouncer-panels.libsonnet';
 
-panels.pgbouncer('pgbouncer-ci', useTimeSeriesPlugin=true).overviewTrailer()
+panels.pgbouncer('pgbouncer-ci').overviewTrailer()

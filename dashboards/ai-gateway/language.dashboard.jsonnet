@@ -4,7 +4,6 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
-local useTimeSeriesPlugin = true;
 local type = 'ai-gateway';
 local formatConfig = {
   selector: selectors.serializeHash({ env: '$environment', environment: '$environment', type: type }),
@@ -79,244 +78,122 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid(
-    if useTimeSeriesPlugin then
-      [
-        panel.percentageTimeSeries(
-          stableId='acceptance-rate',
-          title='Acceptance Rate / sec',
-          query=|||
-            sum by(lang) (
-              rate(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__rate_interval])
-            )
-            / on(lang) group_left()
-            sum by(lang) (
-              rate(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__rate_interval]) > 0
-            )
-          ||| % formatConfig,
-          legendFormat='{{lang}}',
-          yAxisLabel='Acceptance Rates per Second',
-          interval='5m',
-        ),
-        bargaugePanel(
-          'Acceptance by Language',
-          query=|||
-            topk(
-              10,
-              100 *
-                sum by(lang) (
-                  increase(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__range])
-                )
-                / on(lang) group_left()
-                sum by(lang) (
-                  increase(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__range]) > 0
-                )
-            )
-          ||| % formatConfig,
-          unit='percent',
-        ),
-        panel.timeSeries(
-          stableId='request-language',
-          title='Request Language / sec',
-          query=|||
-            sum by(lang, symbol) (
-              rate(code_suggestions_prompt_language_total{%(selector)s}[$__rate_interval])
-            )
-          ||| % formatConfig,
-          legendFormat='__auto',
-          format='ops',
-          yAxisLabel='Requests per Second',
-        ),
-        bargaugePanel(
-          'Usage by Language',
-          query=|||
-            topk(
-              10,
-              100 *
-                sum by(lang) (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,lang=~".+"}[$__range])
-                )
-                / on() group_left()
-                sum (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,lang=~".+"}[$__range])
-                )
-            )
-          ||| % formatConfig,
-          unit='percent',
-        ),
-        panel.timeSeries(
-          stableId='request-extension',
-          title='Request Extension / sec',
-          query=|||
-            sum by(extension) (
-              rate(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__rate_interval])
-            )
-          ||| % formatConfig,
-          legendFormat='__auto',
-          format='ops',
-          yAxisLabel='Requests per Second',
-        ),
-        bargaugePanel(
-          'Usage by Extension',
-          query=|||
-            topk(
-              10,
-              100 *
-                sum by(extension) (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__range])
-                )
-                / on() group_left()
-                sum (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__range])
-                )
-            )
-          ||| % formatConfig,
-          unit='percent',
-        ),
-        panel.timeSeries(
-          stableId='request-symbol',
-          title='Request Symbol / sec',
-          query=|||
-            sum by(lang) (
-              rate(code_suggestions_prompt_symbols_total{%(selector)s}[$__rate_interval])
-            )
-          ||| % formatConfig,
-          legendFormat='__auto',
-          format='ops',
-          yAxisLabel='Requests per Second',
-        ),
-        bargaugePanel(
-          'Extensions with Unknown Language',
-          query=|||
-            topk(
-              10,
-              sum by(extension) (
-                increase(code_suggestions_prompt_language_total{%(selector)s,lang="None",extension=~".+"}[$__range])
+    [
+      panel.percentageTimeSeries(
+        stableId='acceptance-rate',
+        title='Acceptance Rate / sec',
+        query=|||
+          sum by(lang) (
+            rate(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__rate_interval])
+          )
+          / on(lang) group_left()
+          sum by(lang) (
+            rate(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__rate_interval]) > 0
+          )
+        ||| % formatConfig,
+        legendFormat='{{lang}}',
+        yAxisLabel='Acceptance Rates per Second',
+        interval='5m',
+      ),
+      bargaugePanel(
+        'Acceptance by Language',
+        query=|||
+          topk(
+            10,
+            100 *
+              sum by(lang) (
+                increase(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__range])
               )
-            )
-          ||| % formatConfig,
-        ),
-      ]
-    else
-      [
-        basic.percentageTimeseries(
-          stableId='acceptance-rate',
-          title='Acceptance Rate / sec',
-          query=|||
-            sum by(lang) (
-              rate(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__rate_interval])
-            )
-            / on(lang) group_left()
-            sum by(lang) (
-              rate(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__rate_interval]) > 0
-            )
-          ||| % formatConfig,
-          legendFormat='{{lang}}',
-          yAxisLabel='Acceptance Rates per Second',
-          interval='5m',
-          decimals=1,
-        ),
-        bargaugePanel(
-          'Acceptance by Language',
-          query=|||
-            topk(
-              10,
-              100 *
-                sum by(lang) (
-                  increase(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__range])
-                )
-                / on(lang) group_left()
-                sum by(lang) (
-                  increase(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__range]) > 0
-                )
-            )
-          ||| % formatConfig,
-          unit='percent',
-        ),
-        basic.timeseries(
-          stableId='request-language',
-          title='Request Language / sec',
-          query=|||
-            sum by(lang, symbol) (
-              rate(code_suggestions_prompt_language_total{%(selector)s}[$__rate_interval])
-            )
-          ||| % formatConfig,
-          legendFormat='__auto',
-          format='ops',
-          yAxisLabel='Requests per Second',
-          decimals=1,
-        ),
-        bargaugePanel(
-          'Usage by Language',
-          query=|||
-            topk(
-              10,
-              100 *
-                sum by(lang) (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,lang=~".+"}[$__range])
-                )
-                / on() group_left()
-                sum (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,lang=~".+"}[$__range])
-                )
-            )
-          ||| % formatConfig,
-          unit='percent',
-        ),
-        basic.timeseries(
-          stableId='request-extension',
-          title='Request Extension / sec',
-          query=|||
-            sum by(extension) (
-              rate(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__rate_interval])
-            )
-          ||| % formatConfig,
-          legendFormat='__auto',
-          format='ops',
-          yAxisLabel='Requests per Second',
-          decimals=1,
-        ),
-        bargaugePanel(
-          'Usage by Extension',
-          query=|||
-            topk(
-              10,
-              100 *
-                sum by(extension) (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__range])
-                )
-                / on() group_left()
-                sum (
-                  increase(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__range])
-                )
-            )
-          ||| % formatConfig,
-          unit='percent',
-        ),
-        basic.timeseries(
-          stableId='request-symbol',
-          title='Request Symbol / sec',
-          query=|||
-            sum by(lang) (
-              rate(code_suggestions_prompt_symbols_total{%(selector)s}[$__rate_interval])
-            )
-          ||| % formatConfig,
-          legendFormat='__auto',
-          format='ops',
-          yAxisLabel='Requests per Second',
-          decimals=1,
-        ),
-        bargaugePanel(
-          'Extensions with Unknown Language',
-          query=|||
-            topk(
-              10,
-              sum by(extension) (
-                increase(code_suggestions_prompt_language_total{%(selector)s,lang="None",extension=~".+"}[$__range])
+              / on(lang) group_left()
+              sum by(lang) (
+                increase(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__range]) > 0
               )
+          )
+        ||| % formatConfig,
+        unit='percent',
+      ),
+      panel.timeSeries(
+        stableId='request-language',
+        title='Request Language / sec',
+        query=|||
+          sum by(lang, symbol) (
+            rate(code_suggestions_prompt_language_total{%(selector)s}[$__rate_interval])
+          )
+        ||| % formatConfig,
+        legendFormat='__auto',
+        format='ops',
+        yAxisLabel='Requests per Second',
+      ),
+      bargaugePanel(
+        'Usage by Language',
+        query=|||
+          topk(
+            10,
+            100 *
+              sum by(lang) (
+                increase(code_suggestions_prompt_language_total{%(selector)s,lang=~".+"}[$__range])
+              )
+              / on() group_left()
+              sum (
+                increase(code_suggestions_prompt_language_total{%(selector)s,lang=~".+"}[$__range])
+              )
+          )
+        ||| % formatConfig,
+        unit='percent',
+      ),
+      panel.timeSeries(
+        stableId='request-extension',
+        title='Request Extension / sec',
+        query=|||
+          sum by(extension) (
+            rate(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__rate_interval])
+          )
+        ||| % formatConfig,
+        legendFormat='__auto',
+        format='ops',
+        yAxisLabel='Requests per Second',
+      ),
+      bargaugePanel(
+        'Usage by Extension',
+        query=|||
+          topk(
+            10,
+            100 *
+              sum by(extension) (
+                increase(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__range])
+              )
+              / on() group_left()
+              sum (
+                increase(code_suggestions_prompt_language_total{%(selector)s,extension=~".+"}[$__range])
+              )
+          )
+        ||| % formatConfig,
+        unit='percent',
+      ),
+      panel.timeSeries(
+        stableId='request-symbol',
+        title='Request Symbol / sec',
+        query=|||
+          sum by(lang) (
+            rate(code_suggestions_prompt_symbols_total{%(selector)s}[$__rate_interval])
+          )
+        ||| % formatConfig,
+        legendFormat='__auto',
+        format='ops',
+        yAxisLabel='Requests per Second',
+      ),
+      bargaugePanel(
+        'Extensions with Unknown Language',
+        query=|||
+          topk(
+            10,
+            sum by(extension) (
+              increase(code_suggestions_prompt_language_total{%(selector)s,lang="None",extension=~".+"}[$__range])
             )
-          ||| % formatConfig,
-        ),
-      ],
+          )
+        ||| % formatConfig,
+      ),
+    ],
     cols=2,
     rowHeight=10,
     startRow=0,

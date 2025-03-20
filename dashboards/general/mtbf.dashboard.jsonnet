@@ -5,8 +5,6 @@ local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 local daysSinceLastFailure(serviceSelector, serviceName) =
   local title = 'Time since last failure (%(serviceName)s)' % {
     serviceName: serviceName,
@@ -28,38 +26,21 @@ local daysSinceLastFailure(serviceSelector, serviceName) =
   );
 
 local mtbf(serviceSelector, serviceName) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      title='Mean time between failures (%(serviceName)s)' % {
-        serviceName: serviceName,
-      },
-      format='short',
-      query=|||
-        $__range_s / changes(
-          max(
-            gitlab_slo:last_violation_leading_timestamp{stage='$stage', env="$environment", environment="$environment", type=~"%(serviceSelector)s"}
-          )[$__range:]
-        )
-      ||| % {
-        serviceSelector: serviceSelector,
-      }
-    )
-  else
-    basic.timeseries(
-      title='Mean time between failures (%(serviceName)s)' % {
-        serviceName: serviceName,
-      },
-      format='s',
-      query=|||
-        $__range_s / changes(
-          max(
-            gitlab_slo:last_violation_leading_timestamp{stage='$stage', env="$environment", environment="$environment", type=~"%(serviceSelector)s"}
-          )[$__range:]
-        )
-      ||| % {
-        serviceSelector: serviceSelector,
-      }
-    );
+  panel.timeSeries(
+    title='Mean time between failures (%(serviceName)s)' % {
+      serviceName: serviceName,
+    },
+    format='short',
+    query=|||
+      $__range_s / changes(
+        max(
+          gitlab_slo:last_violation_leading_timestamp{stage='$stage', env="$environment", environment="$environment", type=~"%(serviceSelector)s"}
+        )[$__range:]
+      )
+    ||| % {
+      serviceSelector: serviceSelector,
+    }
+  );
 
 local serviceColumns(service='', title='') =
   local serviceSelector = (if service == '' then '.*' else service);

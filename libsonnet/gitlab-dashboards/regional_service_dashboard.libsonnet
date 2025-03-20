@@ -9,7 +9,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 // TODO: remove the `location` label from the legends when we don't need it
 // anymore after migrating to mimir.
 // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
-local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsAggregationSet, useTimeSeriesPlugin=false) =
+local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsAggregationSet) =
   local metricsCatalogServiceInfo = metricsCatalog.getService(serviceType);
   local formatConfig = { serviceType: serviceType };
   local selectorHash = { env: '$environment', environment: '$environment', type: serviceType, stage: '$stage' };
@@ -27,7 +27,6 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
       showErrorRatio=metricsCatalogServiceInfo.hasErrorRate(),
       showOpsRate=true,
       expectMultipleSeries=true,
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     );
 
   basic.dashboard(
@@ -48,7 +47,6 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
       startRow=1000,
       legendFormatPrefix='{{ region }} {{ location }}',
       expectMultipleSeries=true,
-      useTimeSeriesPlugin=useTimeSeriesPlugin,
     )
   )
   .trailer();

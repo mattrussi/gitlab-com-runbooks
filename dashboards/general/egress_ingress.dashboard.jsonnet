@@ -2,14 +2,11 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local timepickerlib = import 'github.com/grafana/grafonnet-lib/grafonnet/timepicker.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local row = grafana.row;
 local templates = import 'grafana/templates.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 local graphPanel = grafana.graphPanel;
-
-local useTimeSeriesPlugin = true;
 
 local generalGraphPanel(
   title,
@@ -22,41 +19,17 @@ local generalGraphPanel(
   linewidth=2,
   sort=0,
       ) =
-  if useTimeSeriesPlugin then
-    panel.basic(
-      title,
-      linewidth=linewidth,
-      description=description,
-      legend_show=false,
-      legend_min=false,
-      legend_rightSide=true,
-      legend_hideEmpty=false,
-      unit=format,
-      fill=fill * 10,
-    )
-  else
-    graphPanel.new(
-      title,
-      linewidth=linewidth,
-      fill=fill,
-      format=format,
-      formatY1=formatY1,
-      formatY2=formatY2,
-      datasource='$PROMETHEUS_DS',
-      description=description,
-      decimals=decimals,
-      sort=sort,
-      legend_show=false,
-      legend_values=false,
-      legend_min=false,
-      legend_max=true,
-      legend_current=true,
-      legend_total=false,
-      legend_avg=true,
-      legend_alignAsTable=true,
-      legend_hideEmpty=false,
-      legend_rightSide=true,
-    );
+  panel.basic(
+    title,
+    linewidth=linewidth,
+    description=description,
+    legend_show=false,
+    legend_min=false,
+    legend_rightSide=true,
+    legend_hideEmpty=false,
+    unit=format,
+    fill=fill * 10,
+  );
 
 local networkPanel(
   title,
@@ -64,31 +37,13 @@ local networkPanel(
   tx_metric='node_network_transmit_bytes_total',
   rcv_metric='node_network_receive_bytes_total'
       ) =
-  if useTimeSeriesPlugin then
-    generalGraphPanel(title, format='bytes')
-    .addTarget(
-      target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
-    )
-    .addTarget(
-      target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
-    )
-  else
-    generalGraphPanel(title)
-    .addTarget(
-      promQuery.target('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
-    )
-    .addTarget(
-      promQuery.target('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='bytes',
-      label='bytes',
-    )
-    .addYaxis(
-      format='byte',
-      show=false,
-    );
+  generalGraphPanel(title, format='bytes')
+  .addTarget(
+    target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
+  )
+  .addTarget(
+    target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
+  );
 
 local networkPanelK8s(
   title,
@@ -96,58 +51,22 @@ local networkPanelK8s(
   tx_metric='container_network_transmit_bytes_total:labeled',
   rcv_metric='container_network_receive_bytes_total:labeled'
       ) =
-  if useTimeSeriesPlugin then
-    generalGraphPanel(title, format='bytes')
-    .addTarget(
-      target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
-    )
-    .addTarget(
-      target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
-    )
-  else
-    generalGraphPanel(title)
-    .addTarget(
-      promQuery.target('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
-    )
-    .addTarget(
-      promQuery.target('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='bytes',
-      label='bytes',
-    )
-    .addYaxis(
-      format='byte',
-      show=false,
-    );
+  generalGraphPanel(title, format='bytes')
+  .addTarget(
+    target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
+  )
+  .addTarget(
+    target.prometheus('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
+  );
 
 local osPanel(title) =
-  if useTimeSeriesPlugin then
-    generalGraphPanel(title, format='bytes')
-    .addTarget(
-      target.prometheus('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}[1h]))', legendFormat='egress {{ bucket_name }}', interval='1h')
-    )
-    .addTarget(
-      target.prometheus('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}[1h])) * -1', legendFormat='ingress {{ bucket_name }}', interval='1h')
-    )
-  else
-    generalGraphPanel(title)
-    .addTarget(
-      promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}[1h]))', legendFormat='egress {{ bucket_name }}', interval='1h')
-    )
-    .addTarget(
-      promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}[1h])) * -1', legendFormat='ingress {{ bucket_name }}', interval='1h')
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='bytes',
-      label='bytes',
-    )
-    .addYaxis(
-      format='byte',
-      show=false,
-    );
+  generalGraphPanel(title, format='bytes')
+  .addTarget(
+    target.prometheus('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}[1h]))', legendFormat='egress {{ bucket_name }}', interval='1h')
+  )
+  .addTarget(
+    target.prometheus('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}[1h])) * -1', legendFormat='ingress {{ bucket_name }}', interval='1h')
+  );
 
 basic.dashboard(
   'Network Ingress/Egress Overview',

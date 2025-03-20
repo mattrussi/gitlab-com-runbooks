@@ -8,8 +8,6 @@ local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.li
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
 local saturationGraphs = import 'stage-groups/verify-runner/saturation_graphs.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 stageGroupDashboards.dashboard('runner', components=[], displayEmptyGuidance=false)
 .addTemplates([
   dashboardFilters.shard,
@@ -21,16 +19,15 @@ stageGroupDashboards.dashboard('runner', components=[], displayEmptyGuidance=fal
     startRow=1000,
     selectorHash=dashboardFilters.selectorHash,
     showDashboardListPanel=true,
-    useTimeSeriesPlugin=useTimeSeriesPlugin,
   )
 )
 .addPanels(
   layout.rowGrid(
     'Runners saturation',
     [
-      saturationGraphs.runnerSaturation(aggregators=['shard'], saturationType='concurrent', useTimeSeriesPlugin=useTimeSeriesPlugin),
-      saturationGraphs.runnerSaturation(aggregators=['instance'], saturationType='concurrent', useTimeSeriesPlugin=useTimeSeriesPlugin),
-      saturationGraphs.runnerSaturation(aggregators=['instance', 'runner'], saturationType='limit', useTimeSeriesPlugin=useTimeSeriesPlugin),
+      saturationGraphs.runnerSaturation(aggregators=['shard'], saturationType='concurrent'),
+      saturationGraphs.runnerSaturation(aggregators=['instance'], saturationType='concurrent'),
+      saturationGraphs.runnerSaturation(aggregators=['instance', 'runner'], saturationType='limit'),
     ],
     startRow=2000
   )

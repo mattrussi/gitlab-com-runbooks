@@ -2,8 +2,6 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 
-local useTimeSeriesPlugin = true;
-
 serviceDashboard.overview('frontend')
 .addPanel(
   grafana.row.new(title='HAProxy Process'),
@@ -24,7 +22,6 @@ serviceDashboard.overview('frontend')
       stage: '$stage',
     },
     startRow=1001,
-    useTimeSeriesPlugin=useTimeSeriesPlugin,
   )
 )
 .overviewTrailer()

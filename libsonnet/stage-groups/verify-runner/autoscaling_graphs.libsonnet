@@ -1,8 +1,5 @@
 local panels = import './panels.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local override = import 'grafana/time-series/override.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
@@ -10,57 +7,31 @@ local threshold = import 'grafana/time-series/threshold.libsonnet';
 
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
-local vmStates(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Autoscaled VMs states',
-      legendFormat='{{shard}}: {{state}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, state) (
-          gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Autoscaled VMs states',
-      legendFormat='{{shard}}: {{state}}',
-      format='short',
-      query=runnersManagerMatching.formatQuery(|||
-        sum by(shard, state) (
-          gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
-        )
-      |||, partition),
-    );
+local vmStates(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Autoscaled VMs states',
+    legendFormat='{{shard}}: {{state}}',
+    format='short',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard, state) (
+        gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
 
-local vmOperationsRate(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Autoscaled VM operations rate',
-      legendFormat='{{shard}}: {{action}}',
-      format='ops',
-      fill=10,
-      stack=true,
-      query=runnersManagerMatching.formatQuery(|||
-        sum by (shard, action) (
-          increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}[$__rate_interval])
-        )
-      |||, partition),
-    )
-  else
-    basic.timeseries(
-      'Autoscaled VM operations rate',
-      legendFormat='{{shard}}: {{action}}',
-      format='ops',
-      fill=1,
-      stack=true,
-      query=runnersManagerMatching.formatQuery(|||
-        sum by (shard, action) (
-          increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}[$__rate_interval])
-        )
-      |||, partition),
-    );
+local vmOperationsRate(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Autoscaled VM operations rate',
+    legendFormat='{{shard}}: {{action}}',
+    format='ops',
+    fill=10,
+    stack=true,
+    query=runnersManagerMatching.formatQuery(|||
+      sum by (shard, action) (
+        increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}[$__rate_interval])
+      )
+    |||, partition),
+  );
 
 local vmCreationTiming(partition=runnersManagerMatching.defaultPartition) =
   panels.heatmap(
@@ -76,63 +47,34 @@ local vmCreationTiming(partition=runnersManagerMatching.defaultPartition) =
     intervalFactor=2,
   );
 
-local idleEfficiency(partition=runnersManagerMatching.defaultPartition, useTimeSeriesPlugin=true) =
-  if useTimeSeriesPlugin then
-    panel.timeSeries(
-      'Idle efficiency',
-      legendFormat='{{shard}}',
-      format='percentunit',
-      query=runnersManagerMatching.formatQuery(|||
-        1 - (
-          sum by(shard) (
-            gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s, state=~"idle|acquired"}
-          )
-          /
-          sum by(shard) (
-            gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
-          )
+local idleEfficiency(partition=runnersManagerMatching.defaultPartition) =
+  panel.timeSeries(
+    'Idle efficiency',
+    legendFormat='{{shard}}',
+    format='percentunit',
+    query=runnersManagerMatching.formatQuery(|||
+      1 - (
+        sum by(shard) (
+          gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s, state=~"idle|acquired"}
         )
-      |||, partition),
-      description=|||
-        Shows what percentages of instances are in the idle or acquired state. There is no golden rule here and the metric
-        should be analyzed together with raw numbers showing the different instance states, but in a very generlized view:
-        the higher number the better, more than 50% is what we aim to if there is a constant number of jobs in the
-        incoming queue for a shard. For shards that have times with no jobs in the queue, having the efficiency dropped
-        below 50% is something normal, but in that case we aim to have a small raw number of idle instances.
-      |||,
-      thresholdSteps=[
-        threshold.warningLevel(0.5),
-        threshold.optimalLevel(0.5),
-      ],
-    )
-  else
-    basic.timeseries(
-      'Idle efficiency',
-      legendFormat='{{shard}}',
-      format='percentunit',
-      query=runnersManagerMatching.formatQuery(|||
-        1 - (
-          sum by(shard) (
-            gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s, state=~"idle|acquired"}
-          )
-          /
-          sum by(shard) (
-            gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
-          )
+        /
+        sum by(shard) (
+          gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
         )
-      |||, partition),
-      description=|||
-        Shows what percentages of instances are in the idle or acquired state. There is no golden rule here and the metric
-        should be analyzed together with raw numbers showing the different instance states, but in a very generlized view:
-        the higher number the better, more than 50% is what we aim to if there is a constant number of jobs in the
-        incoming queue for a shard. For shards that have times with no jobs in the queue, having the efficiency dropped
-        below 50% is something normal, but in that case we aim to have a small raw number of idle instances.
-      |||,
-      thresholds=[
-        thresholds.warningLevel('lt', 0.5),
-        thresholds.optimalLevel('gt', 0.5),
-      ],
-    );
+      )
+    |||, partition),
+    description=|||
+      Shows what percentages of instances are in the idle or acquired state. There is no golden rule here and the metric
+      should be analyzed together with raw numbers showing the different instance states, but in a very generlized view:
+      the higher number the better, more than 50% is what we aim to if there is a constant number of jobs in the
+      incoming queue for a shard. For shards that have times with no jobs in the queue, having the efficiency dropped
+      below 50% is something normal, but in that case we aim to have a small raw number of idle instances.
+    |||,
+    thresholdSteps=[
+      threshold.warningLevel(0.5),
+      threshold.optimalLevel(0.5),
+    ],
+  );
 
 local gcpRegionQuotas =
   panel.timeSeries(
