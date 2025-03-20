@@ -84,12 +84,12 @@
 
   </details>
 
-2. **Create a Merge Request (MR) in [`cells/tissue`](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/):**
+2. **Create a Merge Request (MR) in [`cells/tissue`](https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/) and get it merged:**
    - Use the `TENANT_MODEL` JSON output from the previous command
    - Important: Always place the cell initially in the `quarantine ring` (-1 folder) regardless of the target ring
    - Ensure the filename matches `<tenant_id>.json`
 
-4. **Trigger the Instrumentor Stages for cell provisioning:**
+3. **Trigger the Instrumentor Stages for cell provisioning:**
 
    ```bash
    ./ringctl cell deploy -e <cellsdev|cellsprod> <tenant_id> --only-gitlab-upgrade=false
@@ -109,7 +109,7 @@
    > This is expected as the cell project was just created and Google is still enabling the API.
    > Retry the job after approximately 10 minutes to resolve this issue.
 
-5. **Access your new cell:**
+4. **Access your new cell:**
    - Once the pipeline completes successfully, access your cell through the domain specified in the `managed_domain` field of the `TENANT_MODEL`
    - Example: `cell-c01jpmm6vgv82xqkf9.gitlab-cells.dev`
 
