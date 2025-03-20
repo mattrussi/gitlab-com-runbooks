@@ -7,7 +7,6 @@ PGBouncer is a stateless service that acts as a connection pooler for Postgres, 
 We operate multiple PGBouncer fleets, that handle different portions of the site traffic. As of writing (08/2024), the following fleets exist in production:
 
 - ci
-- embedding
 - registry
 - sidekiq-ci
 - sidekiq
