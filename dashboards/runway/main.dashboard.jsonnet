@@ -8,12 +8,12 @@ serviceDashboard.overview(
   includeStandardEnvironmentAnnotations=false,
 )
 .addAnnotation(
-    grafana.annotation.datasource(
-      'runway-deploy',
-      '-- Grafana --',
-      iconColor='#fda324',
-      tags=['platform:runway', 'env:${environment}'],
-      builtIn=1,
-    ),
+  grafana.annotation.datasource(
+    'runway-deploy',
+    '-- Grafana --',
+    iconColor='#fda324',
+    tags=['platform:runway', 'env:${environment}'],
+    builtIn=1,
+  ),
 )
 .overviewTrailer()

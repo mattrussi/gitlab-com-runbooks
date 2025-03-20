@@ -144,12 +144,7 @@ basic.dashboard(
         title='',
         panelTitle='Job Duration',
         description='Median duration over the selected time range',
-        query='
-          quantile(0.5,
-            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[$__range])
-              unless
-            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[12h] offset $__range)
-          )',
+        query='\n          quantile(0.5,\n            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[$__range])\n              unless\n            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[12h] offset $__range)\n          )',
         legendFormat='Median',
         colorMode='value',
         textMode='value',
@@ -159,11 +154,7 @@ basic.dashboard(
       )
       .addTarget(
         promQuery.target(
-          'max(
-            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[$__range])
-              unless
-            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[12h] offset $__range)
-          )',
+          'max(\n            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[$__range])\n              unless\n            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[12h] offset $__range)\n          )',
           legendFormat='Max',
           instant=true
         )

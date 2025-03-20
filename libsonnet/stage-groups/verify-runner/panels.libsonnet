@@ -12,7 +12,7 @@ local heatmap(
   color_colorScheme='Oranges',  // used when color_mode='spectrum' is set
   color_exponent=0.5,
   legend_show=false,
-  description="",
+  description='',
       ) =
   heatmapPanel.new(
     title=title,

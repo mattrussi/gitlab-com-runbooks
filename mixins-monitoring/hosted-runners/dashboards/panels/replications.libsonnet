@@ -2,13 +2,13 @@ local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
-local barPanel(title, legendFormat, format, query ) =
-    basic.timeseries(
-        title=title,
-        legendFormat=legendFormat,
-        format=format,
-        query=query,
-        fill=1
+local barPanel(title, legendFormat, format, query) =
+  basic.timeseries(
+    title=title,
+    legendFormat=legendFormat,
+    format=format,
+    query=query,
+    fill=1
   ) + {
     lines: false,
     bars: true,
@@ -20,7 +20,7 @@ local pendingOperations(selector) =
     legendFormat='Pending operations',
     format='short',
     query=|||
-        avg_over_time(aws_s3_operations_pending_replication_sum{%(selector)s}[10m])
+      avg_over_time(aws_s3_operations_pending_replication_sum{%(selector)s}[10m])
     ||| % { selector: selector }
   );
 
@@ -30,7 +30,7 @@ local latency(selector) =
     legendFormat='Latency',
     format='ms',
     query=|||
-        avg_over_time(aws_s3_replication_latency_maximum{%(selector)s}[10m])
+      avg_over_time(aws_s3_replication_latency_maximum{%(selector)s}[10m])
     ||| % { selector: selector }
   );
 
@@ -41,7 +41,7 @@ local bytesPending(selector) =
     legendFormat='Bytes pending',
     format='bytes',
     query=|||
-        avg_over_time(aws_s3_bytes_pending_replication_maximum{%(selector)s}[10m])
+      avg_over_time(aws_s3_bytes_pending_replication_maximum{%(selector)s}[10m])
     ||| % { selector: selector }
   );
 
@@ -51,7 +51,7 @@ local operationsFailed(selector) =
     legendFormat='Failed replication',
     format='short',
     query=|||
-        avg_over_time(aws_s3_operations_failed_replication_sum{%(selector)s}[10m])
+      avg_over_time(aws_s3_operations_failed_replication_sum{%(selector)s}[10m])
     ||| % { selector: selector }
   );
 
@@ -62,6 +62,6 @@ local operationsFailed(selector) =
     pendingOperations:: pendingOperations,
     latency:: latency,
     bytesPending:: bytesPending,
-    operationsFailed:: operationsFailed
-  }
+    operationsFailed:: operationsFailed,
+  },
 }
