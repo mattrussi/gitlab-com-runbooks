@@ -314,7 +314,7 @@ Selected elastic documents and resources:
 
 ### Advanced search integration in Gitlab (indexing Gitlab data)
 
-[advanced-search-integration-in-gitlab.md](docs/elastic/advanced-search-integration-in-gitlab.md)
+[advanced-search-in-gitlab.md](docs/elastic/advanced-search-in-gitlab.md)
 
 ### Zoekt integration in Gitlab (indexing code, BETA)
 
