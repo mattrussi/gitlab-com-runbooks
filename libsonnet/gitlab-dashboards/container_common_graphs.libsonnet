@@ -50,17 +50,17 @@ local panel = import 'grafana/time-series/panel.libsonnet';
 
   averageGeneralCounters(startRow)::
     layout.grid([
-      basic.timeseries(
+      panel.timeSeries(
         title='Process CPU Time',
         query='avg(rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"}[$__interval]))',
         format='percentunit',
       ),
-      basic.timeseries(
+      panel.timeSeries(
         title='Resident Memory Usage',
         query='avg(process_resident_memory_bytes{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"})',
         format='bytes',
       ),
-      basic.timeseries(
+      panel.timeSeries(
         title='Open File Descriptors',
         query='avg(process_open_fds{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace", environment="$environment", stage="$stage"})',
       ),

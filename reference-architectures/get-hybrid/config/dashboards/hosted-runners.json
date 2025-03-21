@@ -31,14 +31,258 @@
             "type": "row"
          },
          {
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 2,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Apdex %",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "links": [
+                     {
+                        "targetBlank": true,
+                        "title": "hosted-runners Service Apdex SLO Analysis",
+                        "url": "/d/alerts-component_shard_slo_apdex?${__url_time_range}&${__all_variables}&var-type=hosted-runners"
+                     }
+                  ],
+                  "max": 1,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#FF4500",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#F2495C",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 4
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*shard (apdex|error ratio|RPS)$/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#E7D551",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "{{component}} - {{shard}} apdex avg"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#5794F280",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillBelowTo",
+                           "value": "{{component}} - {{shard}} apdex"
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "last week"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#dddddd80",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "{{component}} - {{shard}} apdex"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#E7D551",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 9,
                "w": 6,
@@ -46,164 +290,60 @@
                "y": 1
             },
             "id": 3,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "total": false,
-               "values": true
-            },
-            "lines": true,
-            "linewidth": 2,
-            "nullPointMode": "null",
             "options": {
-               "dataLinks": [
-                  {
-                     "targetBlank": true,
-                     "title": "hosted-runners Service Apdex SLO Analysis",
-                     "url": "/d/alerts-component_shard_slo_apdex?${__url_time_range}&${__all_variables}&var-type=hosted-runners"
-                  }
-               ]
-            },
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [
-               {
-                  "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-                  "color": "#FF4500",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 2,
-                  "nullPointMode": "connected",
-                  "spaceLength": 10,
-                  "zindex": -2
-               },
-               {
-                  "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-                  "color": "#F2495C",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 4,
-                  "nullPointMode": "connected",
-                  "spaceLength": 4,
-                  "zindex": -2
-               },
-               {
-                  "alias": "/.*shard (apdex|error ratio|RPS)$/",
-                  "color": "#E7D551"
-               },
-               {
-                  "alias": "{{component}} - {{shard}} apdex avg",
-                  "color": "#5794F2",
-                  "dashLength": 1,
-                  "fillBelowTo": "{{component}} - {{shard}} apdex",
-                  "linewidth": 1,
-                  "spaceLength": 1,
-                  "zindex": -3
-               },
-               {
-                  "alias": "last week",
-                  "color": "#dddddd80",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "fill": 0,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 1,
-                  "nullPointMode": "connected",
-                  "spaceLength": 2,
-                  "zindex": -3
-               },
-               {
-                  "alias": "{{component}} - {{shard}} apdex",
-                  "color": "#E7D551",
-                  "zindex": 3
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
                }
-            ],
-            "spaceLength": 10,
+            },
+            "pluginVersion": "v11.4.0",
             "stableId": "service-hosted-runners-apdex",
-            "stack": false,
-            "steppedLine": false,
             "targets": [
                {
                   "expr": "min_over_time(gitlab_component_shard_apdex:ratio_5m{type=\"hosted-runners\"}[$__interval])\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{component}} - {{shard}} apdex",
-                  "refId": "A"
+                  "legendFormat": "{{component}} - {{shard}} apdex"
                },
                {
                   "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"hosted-runners\"})\n))\n",
                   "format": "time_series",
                   "interval": "5m",
                   "intervalFactor": 1,
-                  "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-                  "refId": "B"
+                  "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
                },
                {
                   "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"hosted-runners\"})\n))\n",
                   "format": "time_series",
                   "interval": "5m",
                   "intervalFactor": 1,
-                  "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-                  "refId": "C"
+                  "legendFormat": "1h Outage SLO (2% of monthly error budget)"
                },
                {
                   "expr": "avg_over_time(gitlab_component_shard_apdex:ratio_5m{type=\"hosted-runners\"}[$__interval])\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{component}} - {{shard}} apdex avg",
-                  "refId": "D"
+                  "legendFormat": "{{component}} - {{shard}} apdex avg"
                },
                {
                   "expr": "clamp_min(\n  gitlab_component_shard_apdex:ratio_5m{type=\"hosted-runners\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"hosted-runners\"})\n))\n))\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "last week",
-                  "refId": "E"
+                  "legendFormat": "last week"
                }
             ],
             "title": "hosted-runners Service Apdex",
-            "tooltip": {
-               "shared": true,
-               "sort": 1,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "mode": "time",
-               "show": true
-            },
-            "yaxes": [
-               {
-                  "format": "percentunit",
-                  "label": "Apdex %",
-                  "logBase": 1,
-                  "max": 1,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "datasource": "$PROMETHEUS_DS",
@@ -410,14 +550,258 @@
             "type": "stat"
          },
          {
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 2,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Error %",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "links": [
+                     {
+                        "targetBlank": true,
+                        "title": "hosted-runners Service Error-Rate SLO Analysis",
+                        "url": "/d/alerts-component_shard_slo_error?${__url_time_range}&${__all_variables}&var-type=hosted-runners"
+                     }
+                  ],
+                  "min": 0,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#FF4500",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#F2495C",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 4
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*shard (apdex|error ratio|RPS)$/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#E7D551",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "{{component}} - {{shard}} error ratio avg"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#5794F280",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "last week"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#dddddd80",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "{{component}} - {{shard}} error ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#E7D551",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillBelowTo",
+                           "value": "{{component}} - {{shard}} error ratio avg"
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 9,
                "w": 6,
@@ -425,165 +809,60 @@
                "y": 1
             },
             "id": 5,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "total": false,
-               "values": true
-            },
-            "lines": true,
-            "linewidth": 2,
-            "nullPointMode": "null",
             "options": {
-               "dataLinks": [
-                  {
-                     "targetBlank": true,
-                     "title": "hosted-runners Service Error-Rate SLO Analysis",
-                     "url": "/d/alerts-component_shard_slo_error?${__url_time_range}&${__all_variables}&var-type=hosted-runners"
-                  }
-               ]
-            },
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [
-               {
-                  "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
-                  "color": "#FF4500",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 2,
-                  "nullPointMode": "connected",
-                  "spaceLength": 10,
-                  "zindex": -2
-               },
-               {
-                  "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
-                  "color": "#F2495C",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 4,
-                  "nullPointMode": "connected",
-                  "spaceLength": 4,
-                  "zindex": -2
-               },
-               {
-                  "alias": "/.*shard (apdex|error ratio|RPS)$/",
-                  "color": "#E7D551"
-               },
-               {
-                  "alias": "{{component}} - {{shard}} error ratio avg",
-                  "color": "#5794F2",
-                  "dashLength": 1,
-                  "fillGradient": 10,
-                  "linewidth": 1,
-                  "spaceLength": 1,
-                  "zindex": -3
-               },
-               {
-                  "alias": "last week",
-                  "color": "#dddddd80",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "fill": 0,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 1,
-                  "nullPointMode": "connected",
-                  "spaceLength": 2,
-                  "zindex": -3
-               },
-               {
-                  "alias": "{{component}} - {{shard}} error ratio",
-                  "color": "#E7D551",
-                  "fillBelowTo": "{{component}} - {{shard}} error ratio avg",
-                  "zindex": 3
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
                }
-            ],
-            "spaceLength": 10,
+            },
+            "pluginVersion": "v11.4.0",
             "stableId": "service-hosted-runners-error-rate",
-            "stack": false,
-            "steppedLine": false,
             "targets": [
                {
                   "expr": "clamp_max(\n  max_over_time(gitlab_component_shard_errors:ratio_5m{type=\"hosted-runners\"}[$__interval])\n,\n  1\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{component}} - {{shard}} error ratio",
-                  "refId": "A"
+                  "legendFormat": "{{component}} - {{shard}} error ratio"
                },
                {
                   "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"hosted-runners\"})\n)\n",
                   "format": "time_series",
                   "interval": "5m",
                   "intervalFactor": 1,
-                  "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
-                  "refId": "B"
+                  "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
                },
                {
                   "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"hosted-runners\"})\n)\n",
                   "format": "time_series",
                   "interval": "5m",
                   "intervalFactor": 1,
-                  "legendFormat": "1h Outage SLO (2% of monthly error budget)",
-                  "refId": "C"
+                  "legendFormat": "1h Outage SLO (2% of monthly error budget)"
                },
                {
                   "expr": "clamp_max(\n  avg_over_time(gitlab_component_shard_errors:ratio_5m{type=\"hosted-runners\"}[$__interval])\n,\n  1\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{component}} - {{shard}} error ratio avg",
-                  "refId": "D"
+                  "legendFormat": "{{component}} - {{shard}} error ratio avg"
                },
                {
                   "expr": "clamp_max(\n  gitlab_component_shard_errors:ratio_5m{type=\"hosted-runners\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"hosted-runners\"})\n)\n))\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "last week",
-                  "refId": "E"
+                  "legendFormat": "last week"
                }
             ],
             "title": "hosted-runners Service Error Ratio",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "mode": "time",
-               "show": true
-            },
-            "yaxes": [
-               {
-                  "format": "percentunit",
-                  "label": "Error %",
-                  "logBase": 1,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "datasource": "$PROMETHEUS_DS",
@@ -790,14 +1069,231 @@
             "type": "stat"
          },
          {
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 2,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Operations per Second",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*shard (apdex|error ratio|RPS)$/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#E7D551",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "{{component}} - {{shard}} RPS"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#E7D551",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "last week"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#dddddd80",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "upper normal"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 8
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#73BF69",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillBelowTo",
+                           "value": "lower normal"
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 30
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "lower normal"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 8
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#73BF69",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 1
+                        },
+                        {
+                           "id": "custom.spanNulls",
+                           "value": true
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 6,
@@ -805,149 +1301,123 @@
                "y": 1
             },
             "id": 7,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "total": false,
-               "values": true
-            },
-            "lines": true,
-            "linewidth": 2,
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [
-               {
-                  "alias": "/.*shard (apdex|error ratio|RPS)$/",
-                  "color": "#E7D551"
-               },
-               {
-                  "alias": "{{component}} - {{shard}} RPS",
-                  "color": "#E7D551",
-                  "zindex": 3
-               },
-               {
-                  "alias": "last week",
-                  "color": "#dddddd80",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "fill": 0,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 1,
-                  "nullPointMode": "connected",
-                  "spaceLength": 2,
-                  "zindex": -3
-               },
-               {
-                  "alias": "upper normal",
-                  "color": "#73BF69",
-                  "dashLength": 8,
-                  "dashes": true,
-                  "fillBelowTo": "lower normal",
-                  "legend": false,
-                  "lines": false,
-                  "linewidth": 1,
-                  "nullPointMode": "connected",
-                  "spaceLength": 8,
-                  "zindex": -3
-               },
-               {
-                  "alias": "lower normal",
-                  "color": "#73BF69",
-                  "dashLength": 8,
-                  "dashes": true,
-                  "legend": false,
-                  "lines": false,
-                  "linewidth": 1,
-                  "nullPointMode": "connected",
-                  "spaceLength": 8,
-                  "zindex": -3
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
                }
-            ],
-            "spaceLength": 10,
+            },
+            "pluginVersion": "v11.4.0",
             "stableId": "service-hosted-runners-ops-rate",
-            "stack": false,
-            "steppedLine": false,
             "targets": [
                {
                   "expr": "avg_over_time(gitlab_component_shard_ops:rate_5m{type=\"hosted-runners\"}[$__interval])\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{component}} - {{shard}} RPS",
-                  "refId": "A"
+                  "legendFormat": "{{component}} - {{shard}} RPS"
                },
                {
                   "expr": "gitlab_component_shard_ops:rate_5m{type=\"hosted-runners\"} offset 1w\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "last week",
-                  "refId": "B"
+                  "legendFormat": "last week"
                },
                {
                   "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"hosted-runners\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"hosted-runners\"}\n  ),\n  0\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "upper normal",
-                  "refId": "C"
+                  "legendFormat": "upper normal"
                },
                {
                   "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"hosted-runners\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"hosted-runners\"}\n  ),\n  0\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "lower normal",
-                  "refId": "D"
+                  "legendFormat": "lower normal"
                }
             ],
             "title": "hosted-runners Service RPS - Requests per Second",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "mode": "time",
-               "show": true
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Operations per Second",
-                  "logBase": 1,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 2,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Saturation %",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "max": 1,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 6,
@@ -955,72 +1425,38 @@
                "y": 1
             },
             "id": 8,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "total": false,
-               "values": true
-            },
-            "lines": true,
-            "linewidth": 1,
             "links": [
                {
                   "title": "hosted-runners Service | pending_builds resource Dashboard",
                   "url": "https://dashboards.gitlab.net/d/alerts-gitlab_runner_concurrent/?var-environment=gprd&var-type=hosted-runners&var-stage=main&var-component=pending_builds"
                }
             ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "spaceLength": 10,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
             "stableId": "service-utilization",
-            "stack": false,
-            "steppedLine": false,
             "targets": [
                {
                   "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"hosted-runners\"}[$__interval]\n  )\n) by (component)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ component }} component",
-                  "refId": "A"
+                  "legendFormat": "{{ component }} component"
                }
             ],
             "title": "Saturation",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "mode": "time",
-               "show": true
-            },
-            "yaxes": [
-               {
-                  "format": "percentunit",
-                  "label": "Saturation %",
-                  "logBase": 1,
-                  "max": 1,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "columns": [ ],
@@ -1779,15 +2215,74 @@
             "type": "stat"
          },
          {
-            "aliasColors": { },
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Erros",
+                     "axisPlacement": "left",
+                     "drawStyle": "bars",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -1795,88 +2290,101 @@
                "y": 1002
             },
             "id": 19,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": false,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum (\n  rate(\n    gitlab_runner_errors_total{shard=~\"$shard\"} [$__rate_interval]\n  )\n) by (level, shard)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}}: {{level}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}}: {{level}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Runner Manager Caught Errors",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Erros",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Erros",
+                     "axisPlacement": "left",
+                     "drawStyle": "bars",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -1884,88 +2392,129 @@
                "y": 1002
             },
             "id": 20,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": false,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by (shard, failure_reason) (\n  rate(gitlab_runner_failed_jobs_total{shard=~\"$shard\"}[$__rate_interval])\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}}: {{failure_reason}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}}: {{failure_reason}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Failed Job errors",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Erros",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Saturation %",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*SLO$/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#F2495C",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 4
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -1973,114 +2522,115 @@
                "y": 1002
             },
             "id": 21,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
-            },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [
-               {
-                  "alias": "/.*SLO$/",
-                  "color": "#F2495C",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "linewidth": 4,
-                  "spaceLength": 4,
-                  "stack": false
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
                }
-            ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "gitlab_component_saturation:ratio{type=\"hosted-runners\", shard=~\"$shard\"}\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ shard }} jobs running",
-                  "refId": "A"
+                  "legendFormat": "{{ shard }} jobs running"
                },
                {
                   "expr": "0.85",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "Soft SLO",
-                  "refId": "B"
+                  "legendFormat": "Soft SLO"
                },
                {
                   "expr": "0.95",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "Hard SLO",
-                  "refId": "C"
+                  "legendFormat": "Hard SLO"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Runner saturation of concurrent",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "percentunit",
-                  "label": "Saturation %",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Api requests",
+                     "axisPlacement": "left",
+                     "drawStyle": "",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2088,88 +2638,101 @@
                "y": 1003
             },
             "id": 22,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": false,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by(status, shard, endpoint) (\n  increase(\n    gitlab_runner_api_request_statuses_total{shard=~\"$shard\"} [$__rate_interval]\n  )\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}} : api {{endpoint}} : status {{status}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}} : api {{endpoint}} : status {{status}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Total number of api requests",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Api requests",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Running jobs",
+                     "axisPlacement": "left",
+                     "drawStyle": "bars",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2177,77 +2740,31 @@
                "y": 1003
             },
             "id": 23,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": false,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by (executor_stage, stage, shard) (\n  gitlab_runner_jobs{state=\"running\", shard=~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}} : {{executor_stage}} : {{stage}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}} : {{executor_stage}} : {{stage}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Running jobs phase",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Running jobs",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "content": "The Grafana Hosted Runner Manager Dashboard for dedicated environments provides a real-time view of GitLab runners' performance.\n\nIt tracks key metrics like job execution times, runner utilization, system health, and alerts for issues such as downtime\nor job failures. This dashboard helps optimize runner performance and resource management in dedicated setups, ensuring efficient CI/CD workflows.\n",
@@ -2371,15 +2888,74 @@
             "yBucketBound": "auto"
          },
          {
-            "aliasColors": { },
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Pending Builds",
+                     "axisPlacement": "left",
+                     "drawStyle": "bars",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2387,88 +2963,101 @@
                "y": 2001
             },
             "id": 27,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": false,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by (instance) (increase(\n  ci_pending_builds{shared_runners=\"no\"} [$__rate_interval]\n))\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "pending builds",
-                  "refId": "A"
+                  "legendFormat": "pending builds"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Pending Builds",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Pending Builds",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2476,88 +3065,101 @@
                "y": 2001
             },
             "id": 28,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by (shard) (\n  increase(\n    gitlab_runner_acceptable_job_queuing_duration_exceeded_total{shard=~\"$shard\"}[$__rate_interval]\n  )\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Acceptable job queuing duration exceeded",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2565,88 +3167,137 @@
                "y": 2002
             },
             "id": 29,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by (shard) (\n  rate(\n    gitlab_runner_acceptable_job_queuing_duration_exceeded_total{shard=~\"$shard\"}[$__rate_interval]\n  )\n)\n/\nsum by (shard) (\n  rate(\n    gitlab_runner_jobs_total{shard=~\"$shard\"}[$__rate_interval]\n  )\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Jobs Queuing Failure Rate",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "percent",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*SLO$/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 4
+                              ],
+                              "fill": "dash"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#F2495C",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 2
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2654,107 +3305,108 @@
                "y": 2002
             },
             "id": 30,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
-            },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [
-               {
-                  "alias": "/.*SLO$/",
-                  "color": "#F2495C",
-                  "dashLength": 4,
-                  "dashes": true,
-                  "legend": true,
-                  "lines": true,
-                  "linewidth": 2,
-                  "spaceLength": 4
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
                }
-            ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by (shard) (\n  rate(gitlab_runner_job_queue_duration_seconds_sum{shard=~\"$shard\"}[5m])\n)\n/\nsum by (shard) (\n  gitlab_component_shard_ops:rate_5m{component=\"pending_builds\", shard=~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}}"
                },
                {
                   "expr": "300",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "Hard SLO",
-                  "refId": "B"
+                  "legendFormat": "Hard SLO"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Average duration of queuing",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "s",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Rate per second",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -2762,77 +3414,31 @@
                "y": 2002
             },
             "id": 31,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum(\n  rate(\n    gitlab_ci_queue_operations_total{}[$__interval]\n  )\n) by (operation)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "queuing operation {{ operation }}",
-                  "refId": "A"
+                  "legendFormat": "queuing operation {{ operation }}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Rate of builds queue operations",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Rate per second",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "collapse": false,
@@ -2854,15 +3460,93 @@
             "type": "row"
          },
          {
-            "aliasColors": { },
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "bars",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*Avg$/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#ff0000",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.lineWidth",
+                           "value": 4
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 12,
@@ -2870,91 +3554,38 @@
                "y": 3001
             },
             "id": 33,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
-            },
-            "lines": false,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [
-               {
-                  "alias": "/.*Avg$/",
-                  "color": "#ff0000",
-                  "linewidth": 4
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
                }
-            ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by(shard) (\n  increase(gitlab_runner_job_duration_seconds_sum{shard=~\"$shard\"}[$__rate_interval])\n)/60\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{shard}}",
-                  "refId": "A"
+                  "legendFormat": "{{shard}}"
                },
                {
                   "expr": "avg (\n  increase(gitlab_runner_job_duration_seconds_sum{shard=~\"$shard\"}[$__rate_interval])\n)/60\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "Avg",
-                  "refId": "B"
+                  "legendFormat": "Avg"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Finished Job Minutes Increase",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "s",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "cards": {
@@ -3064,15 +3695,74 @@
             "type": "row"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -3080,88 +3770,101 @@
                "y": 4001
             },
             "id": 36,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by(job) (\n  fleeting_provisioner_instances{state=~\"running|deleting\", shard=~\"$shard\"}\n)\n/\nsum by(job) (\n  fleeting_provisioner_max_instances{shard=~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{job}}",
-                  "refId": "A"
+                  "legendFormat": "{{job}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Fleeting instances saturation",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "percentunit",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "percentunit"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -3169,88 +3872,101 @@
                "y": 4001
             },
             "id": 37,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by(job) (\n  fleeting_taskscaler_tasks{shard=~\"$shard\", state!~\"idle|reserved\"}\n)\n/\nsum by(job) (\n  fleeting_provisioner_max_instances{shard=~\"$shard\"}\n  *\n  fleeting_taskscaler_max_tasks_per_instance{shard=~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{job}}",
-                  "refId": "A"
+                  "legendFormat": "{{job}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Taskscaler tasks saturation",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "percentunit",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -3258,77 +3974,31 @@
                "y": 4001
             },
             "id": 38,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by(job) (\n  fleeting_taskscaler_max_use_count_per_instance{shard=~\"$shard\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "{{job}}",
-                  "refId": "A"
+                  "legendFormat": "{{job}}"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Taskscaler max use count per instance",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "cards": {
@@ -3702,15 +4372,74 @@
             "type": "row"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Requests per second",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -3718,88 +4447,101 @@
                "y": 5001
             },
             "id": 44,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by () (\n  gitlab_component_shard_ops:rate_5m{component=\"polling\", type=\"hosted-runners\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "overall",
-                  "refId": "A"
+                  "legendFormat": "overall"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Polling RPS - Overall",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Requests per second",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
-            "aliasColors": { },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "$PROMETHEUS_DS",
-            "decimals": 0,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "$PROMETHEUS_DS"
+            },
             "description": "",
-            "fill": 0,
-            "fillGradient": 0,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "axisColorMode": "text",
+                     "axisGridShow": true,
+                     "axisLabel": "Errors",
+                     "axisPlacement": "left",
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "lineWidth": 2,
+                     "pointSize": 5,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     }
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsNull",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byValue",
+                        "options": {
+                           "op": "gte",
+                           "reducer": "allIsZero",
+                           "value": 0
+                        }
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hideFrom",
+                           "value": {
+                              "legend": true,
+                              "tooltip": false,
+                              "viz": false
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 10,
                "w": 8,
@@ -3807,77 +4549,31 @@
                "y": 5001
             },
             "id": 45,
-            "legend": {
-               "alignAsTable": true,
-               "avg": true,
-               "current": true,
-               "hideEmpty": true,
-               "max": true,
-               "min": true,
-               "rightSide": false,
-               "show": true,
-               "sideWidth": null,
-               "total": false,
-               "values": true
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+               }
             },
-            "lines": true,
-            "linewidth": 2,
-            "links": [ ],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "repeat": null,
-            "seriesOverrides": [ ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "expr": "sum by () (\n  gitlab_component_shard_errors:rate_5m{component=\"polling\", type=\"hosted-runners\"}\n)\n",
                   "format": "time_series",
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "overall",
-                  "refId": "A"
+                  "legendFormat": "overall"
                }
             ],
-            "thresholds": [ ],
-            "timeFrom": null,
-            "timeShift": null,
             "title": "Polling Error - Overall",
-            "tooltip": {
-               "shared": true,
-               "sort": 2,
-               "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-               "buckets": null,
-               "mode": "time",
-               "name": null,
-               "show": true,
-               "values": [ ]
-            },
-            "yaxes": [
-               {
-                  "format": "short",
-                  "label": "Errors",
-                  "logBase": 1,
-                  "max": null,
-                  "min": 0,
-                  "show": true
-               },
-               {
-                  "format": "short",
-                  "label": null,
-                  "logBase": 1,
-                  "max": 1,
-                  "min": 0,
-                  "show": false
-               }
-            ]
+            "type": "timeseries"
          },
          {
             "content": "This SLI monitors job polling operations from runners (not only hosted runners), via Workhorse's /api/v4/jobs/request route.\n\n5xx responses are considered to be errors, and could indicate postgres timeouts (after 15s) on the main query used in assigning jobs to runners.\n",

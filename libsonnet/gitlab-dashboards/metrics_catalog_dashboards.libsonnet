@@ -409,7 +409,7 @@ local sliDetailErrorRatePanel(
                     null,
 
                   if misc.isPresent(aggregationSet.aggregationLabels) && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
-                    basic.percentageTimeseries(
+                    panel.percentageTimeseries(
                       title='Apdex attribution for ' + sli.name + ' Latency - ' + aggregationSet.title,
                       description='Attributes apdex downscoring',
                       query=sli.apdex.apdexAttribution(
@@ -420,7 +420,6 @@ local sliDetailErrorRatePanel(
                       ),
                       legendFormat=aggregationSet.legendFormat % { sliName: sli.name },
                       intervalFactor=1,
-                      decimals=2,
                       linewidth=1,
                       fill=4,
                       stack=true,

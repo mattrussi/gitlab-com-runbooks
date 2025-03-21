@@ -1,5 +1,5 @@
-local promQuery = import 'grafana/prom_query.libsonnet';
 local basic = import 'runbooks/libsonnet/grafana/basic.libsonnet';
+local panel = import 'runbooks/libsonnet/grafana/time-series/panel.libsonnet';
 local selectors = import 'runbooks/libsonnet/promql/selectors.libsonnet';
 
 local overallAvailability(selector) =
@@ -70,7 +70,7 @@ local budgetSpent(selector) =
   );
 
 local rollingAvailability(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Rolling availability',
     description="Percentage of ci_runner_jobs over the dashboard's range that did not have internal errors, looking back over the dashboard's range window.",
     query=|||
@@ -87,7 +87,6 @@ local rollingAvailability(selector) =
     format='percentunit',
     min=0,
     max=1,
-    decimals=3,
     fill=0,
     stableId='hosted-runners-rolling-availability'
   );
@@ -167,7 +166,7 @@ local queuingViolationsCount(selector) =
   );
 
 local jobQueuingSLOOverTime(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Job Queuing Latency SLO Over Time',
     description="Percentage of all jobs looking back over the dashboard's range that were executed within an acceptable time. Excludes jobs that were delayed because the scaleMax threshold was hit.",
     query=|||
@@ -194,7 +193,6 @@ local jobQueuingSLOOverTime(selector) =
     format='percentunit',
     min=0.9,
     max=1,
-    decimals=3,
     fill=0,
     stableId='job-queuing-slo-over-time'
   );
