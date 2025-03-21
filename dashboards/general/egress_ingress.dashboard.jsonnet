@@ -6,7 +6,6 @@ local row = grafana.row;
 local templates = import 'grafana/templates.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
-local graphPanel = grafana.graphPanel;
 
 local generalGraphPanel(
   title,

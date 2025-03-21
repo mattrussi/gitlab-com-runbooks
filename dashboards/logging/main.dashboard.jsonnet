@@ -3,7 +3,6 @@ local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
-local graphPanel = grafana.graphPanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';

@@ -2,7 +2,6 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prometheus = grafana.prometheus;
-local graphPanel = grafana.graphPanel;
 local panel = import 'grafana/time-series/panel.libsonnet';
 
 local explainer = |||

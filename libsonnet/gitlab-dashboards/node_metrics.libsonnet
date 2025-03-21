@@ -1,6 +1,5 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local threshold = import 'grafana/time-series/threshold.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';

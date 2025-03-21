@@ -5,7 +5,6 @@ local basic = import 'grafana/basic.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
 local target = import 'grafana/time-series/target.libsonnet';
 local annotation = grafana.annotation;
-local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local statPanel = grafana.statPanel;
 
