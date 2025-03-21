@@ -18,13 +18,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": null,
+  "id": 3484,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$prometheus"
+        "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
       },
       "fieldConfig": {
         "defaults": {
@@ -93,16 +93,17 @@
         "rowHeight": 0.9,
         "showValue": "always",
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$prometheus"
+            "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -195,7 +196,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "CPU or Uncategorised wait event"
+              "options": "CPU*"
             },
             "properties": [
               {
@@ -311,12 +312,12 @@
               "options": {
                 "mode": "exclude",
                 "names": [
+                  "BufferPin",
+                  "CPU*",
                   "IO",
                   "IPC",
                   "LWLock",
                   "Lock",
-                  "Timeout",
-                  "CPU or Uncategorised wait event",
                   "CPU count"
                 ],
                 "prefix": "All except:",
@@ -355,37 +356,25 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$prometheus"
+            "uid": "mimir-gitlab-gprd"
           },
           "editorMode": "code",
-          "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
+          "expr": "(sum by (wait_type) (rate(pg_wait_sampling_count{fqdn=\"$fqdn\"}[$__rate_interval])))/100",
           "hide": false,
           "instant": false,
           "legendFormat": "{{wait_type}}",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$prometheus"
-          },
-          "editorMode": "code",
-          "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=\"\"})/600",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "CPU or Uncategorised wait event",
-          "range": true,
-          "refId": "B"
         },
         {
           "datasource": {
@@ -601,16 +590,17 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$prometheus"
+            "uid": "mimir-gitlab-gprd"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
@@ -623,15 +613,28 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$prometheus"
+            "uid": "mimir-gitlab-gprd"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type,wait_event) (label_replace(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\"},\"wait_type\",\"CPU*\",\"wait_type\",\"\"))/600",
-          "hide": false,
+          "hide": true,
           "instant": false,
           "legendFormat": "{{wait_type}} - {{wait_event}}",
           "range": true,
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir-gitlab-gprd"
+          },
+          "editorMode": "code",
+          "expr": "(sum by (wait_type,wait_event) (irate(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\"}[$__rate_interval])))/100",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{wait_type}} - {{wait_event}}",
+          "range": true,
+          "refId": "D"
         },
         {
           "datasource": {
@@ -847,50 +850,25 @@
           "sortDesc": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "desc"
         }
       },
-      "pluginVersion": "11.4.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$prometheus"
+            "uid": "mimir-gitlab-gprd"
           },
           "editorMode": "code",
-          "expr": "sum by (queryid) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid!=\"0\"})/600",
+          "expr": "(sum by (queryid) (irate(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\"}[$__rate_interval])))/100",
           "hide": false,
           "instant": false,
           "legendFormat": "{{queryid}}",
           "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$prometheus"
-          },
-          "editorMode": "code",
-          "expr": "sum by (backend_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type=~\"$wait_type\", wait_event=~\"$wait_event\", queryid=\"0\"})/600",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "Postgres process - {{backend_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$prometheus"
-          },
-          "editorMode": "code",
-          "expr": "count without(cpu, mode) (node_cpu_seconds_total{fqdn=\"$fqdn\",mode=\"idle\"})",
-          "hide": true,
-          "instant": false,
-          "legendFormat": "CPU count",
-          "range": true,
-          "refId": "C"
+          "refId": "D"
         }
       ],
       "title": "ASH by queryid. Filter by wait type: $wait_type, wait event: $wait_event ",
@@ -967,12 +945,12 @@
       },
       {
         "current": {
-          "text": "patroni-main-v16-101-db-gprd.c.gitlab-production.internal",
-          "value": "patroni-main-v16-101-db-gprd.c.gitlab-production.internal"
+          "text": "patroni-main-v16-103-db-gprd.c.gitlab-production.internal",
+          "value": "patroni-main-v16-103-db-gprd.c.gitlab-production.internal"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$prometheus"
+          "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
         },
         "definition": "label_values(node_exporter_build_info{tier=\"db\", type=\"$type\", environment=\"$environment\"},fqdn)",
         "description": "\tlabel_values(up{environment=\"$environment\",tier=\"db\",type=\"$type\"},fqdn)",
@@ -1108,7 +1086,8 @@
     ]
   },
   "timezone": "utc",
-  "title": "[NEW][04] Postgres Wait sampling dashboard",
-  "version": 60,
+  "title": "[postgres.ai][04] Wait sampling dashboard",
+  "uid": "be87sc7iz1lvkf",
+  "version": 69,
   "weekStart": ""
 }
