@@ -16,13 +16,21 @@ This page provides instructions for switching the LLM provider in case of an out
 
 We use a [feature flag to switch which model and model provider](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_generation/ai_gateway_messages.rb#L37) are active for code generation.
 
-If the primary model provider experiences an outage, enable the feature flag by running the following command in the `#production` Slack channel: `/chatops run feature set incident_fail_over_generation_provider true`
+If the primary model provider experiences an outage, enable the feature flag by running the following command in the `#production` Slack channel: 
 
-After the primary LLM provider is back online, we can change back to the primary model by running `/chatops run feature set incident_fail_over_generation_provider false` in the `#production` Slack channel to disable the feature flag
+```
+/chatops run feature set incident_fail_over_generation_provider true
+```
+
+After the primary LLM provider is back online, we can change back to the primary model by running this command in the `#production` Slack channel to disable the feature flag:
+
+```
+/chatops run feature set incident_fail_over_generation_provider false
+```
 
 ## How to switch to backup for code completion
 
-Currently the primary LLMs are [code-gecko002 and codestral@2405 provided by vertex_ai](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/tasks/code_completion.rb#L40), and the backup is [claude-3-5-sonnet-20240620 provided by anthropic](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/prompts/code_completion/anthropic.rb).
+We use a [feature flag to switch which model and model provider](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/code_suggestions/tasks/code_completion.rb#L38) are active for code completion. 
 
 We are using a [feature flag](https://gitlab.com/gitlab-org/gitlab/-/issues/501503) to control whether to enable the failover solution.
 
