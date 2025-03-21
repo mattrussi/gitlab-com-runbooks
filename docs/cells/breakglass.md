@@ -148,6 +148,11 @@ Admin access provides typical operational readwrite abilities for managing cell 
 This level of access requires an approver, and typically will also link to an issue detailing why the access is required.
 We should prefer making changes through IaC wherever possible.
 
+> [!note]
+> This entitlement requires approval from a member of the `gcp-ops-sg@gitlab.com` Google group.
+> **Who can approve**: Any SRE or Infrastructure Manager in this group.
+> **Next steps**: Please ask a team member to approve your PAM request.
+
 #### [project_breakglass](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L55-L110)
 
 - Get access with `gcloud` access:
