@@ -91,10 +91,10 @@ flowchart TD
 
 1. Create a branch with your changes in [Instrumentor].
    - Wait for the CI jobs in Instrumentor to build the images.
-2. [Provision a new Cell]((./provisioning.md#how-to-de-provision-a-cell)) to with your Instrumentor changes.
+2. [Provision a new Cell]((./provisioning.md#how-to-de-provision-a-cell)) with your Instrumentor changes.
    - Make sure to place the new cell in the quarantine ring.
-     This `-1` folder for the environment and is checked in the script.
-   - Make sure to use your `branch name`(in kebab case) as `instrumentor_version` in your cell.
+     This is the `-1` folder for the environment and is checked in the script.
+   - Make sure to use your `branch name` (in kebab case) as `instrumentor_version` in your cell.
 3. For iteration make changes in your branch, commit and push to a remote branch.
    - Alternatively, you can edit the filesystem contents of the connected pod.
      If taking this approach then ensure you are regularly syncing changes as the pod will be killed when `$SLEEP_TIME` has elapsed, if not before.

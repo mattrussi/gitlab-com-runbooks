@@ -21,9 +21,9 @@ Wait for the CI jobs to complete, which will build Instrumentor images for your 
 [Provision a new Cell]((./provisioning.md#how-to-de-provision-a-cell)) by updating the `instrumentor_version` in the `TENANT_MODEL` with your branch name.
 
 > [!note]
-> The instrumentor_version must use kebab case.
+> The `instrumentor_version` must use kebab case.
 > Image tags in [Instrumentor] automatically transform branch names to match this format.
-> Example: no_hooks_gitaly becomes no-hooks-gitaly.
+> Example: `no_hooks_gitaly` becomes `no-hooks-gitaly`.
 
 **Step 4: Test Your Changes**
 
