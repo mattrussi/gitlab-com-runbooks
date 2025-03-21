@@ -7,7 +7,6 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local graphPanel = grafana.graphPanel;
 local basic = import 'grafana/basic.libsonnet';
 local sliPromQL = import 'key-metric-panels/sli_promql.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';

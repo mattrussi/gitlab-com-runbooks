@@ -1,6 +1,5 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
-local graphPanel = grafana.graphPanel;
 local tablePanel = grafana.tablePanel;
 local basic = import 'grafana/basic.libsonnet';
 local panel = import 'grafana/time-series/panel.libsonnet';
