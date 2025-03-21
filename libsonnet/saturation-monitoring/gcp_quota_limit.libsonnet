@@ -100,4 +100,30 @@ local selectors = import 'promql/selectors.libsonnet';
       ],
     },
   }),
+
+  gcp_quota_limit_vertex_ai_tokens: resourceSaturationPoint(self.gcp_quota_limit {
+    severity: 's4',
+    appliesTo: ['ai-gateway'],
+    grafana_dashboard_uid: 'sat_gcp_quota_vertex_ai_tokens',
+    // TODO: remove this location label, it is used in Thanos environments where
+    // the `region` label is overridden as an external label advertised by prometheus
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
+    resourceLabels: ['base_model', 'region', 'location'],
+    burnRatePeriod: '5m',
+    description: |||
+      GCP Quota utilization / limit ratio for tokens per minute per model and region. This quota is currently only enforced for the
+      `mistralai-codestral-2501` model used by Code Suggestions
+
+      Saturation on the quota may cause problems with the requests.
+
+      To fix, we can request a quota increase for the specific resource to the GCP support team.
+    |||,
+    query: |||
+      (
+        sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_tokens_per_minute_per_base_model_usage{%(selector)s})
+      /
+        stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_tokens_per_minute_per_base_model_limit{%(selector)s}
+      ) > 0
+    |||,
+  }),
 }

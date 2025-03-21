@@ -137,6 +137,66 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",type="ai-gateway"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko"}
+  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai_tokens
+    for: 15m
+    annotations:
+      title: The GCP Quota utilization per environment resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the GCP Quota utilization per environment resource:
+
+        GCP Quota utilization / limit ratio for tokens per minute per model and region. This quota is currently only enforced for the `mistralai-codestral-2501` model used by Code Suggestions
+
+        Saturation on the quota may cause problems with the requests.
+
+        To fix, we can request a quota increase for the specific resource to the GCP support team.
+      grafana_dashboard_id: alerts-sat_gcp_quota_vertex_ai_tokens
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_gcp_quota_vertex_ai_tokens?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3742035846"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(base_model,environment,location,region,shard,stage,tier,type) (
+          clamp_min(
+            clamp_max(
+              (
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_tokens_per_minute_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              /
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_tokens_per_minute_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(base_model,environment,location,region,shard,stage,tier,type) (
+          clamp_min(
+            clamp_max(
+              (
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_tokens_per_minute_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              /
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_tokens_per_minute_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_tokens",type="ai-gateway"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_tokens"}
   - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences
     for: 5m
     annotations:
