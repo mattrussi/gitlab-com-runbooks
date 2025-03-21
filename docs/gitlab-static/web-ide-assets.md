@@ -22,7 +22,7 @@ graph TD
   Z(User) ==> |Open Web IDE| UI(https://gitlab.com/-/ide/project/some-group/some-repo/merge_requests/1234)
   UI ==> |"fetch assets from:\nhttps://{UUID}.cdn.web-ide.gitlab-static.net/web-ide-vscode/..."| CZ(Cloudflare Zone:\ngitlab-static.net):::orange
   subgraph Cloudflare[" "]
-    CZ ==> |Worker Route\n*.cdn.web-ide.gitlab-static.net/*| Worker(Worker: gitlab-web-ide-vscode-production):::worker
+    CZ ==> |Worker Route\n*.cdn.web-ide.gitlab-static.net/*| Worker(Worker: gitlab-web-ide-production):::worker
     Worker ==> IsCached{"Is requested URL (minus UUID)\nin cache?"}
     IsCached ==> |Yes| ReturnCache[[Return content from cache]]:::finish
     IsCached ==> |No| R2[("Fetch from R2 bucket:\ngitlab-web-ide-{env}")]
@@ -31,7 +31,7 @@ graph TD
     CacheIt ==> ReturnContent[[Return content to user]]:::finish
   end
 
-  click Worker "https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/tree/main/cloudflare" _blank
+  click Worker "https://gitlab.com/gitlab-org/gitlab-web-ide/-/tree/main/packages/cloudflare" _blank
 
   %% Styling
   classDef orange fill:#f96,stroke:#000,stroke-width:2px;
@@ -47,7 +47,7 @@ Cloudflare R2 buckets are S3 API compatible and we use `rclone` to recursively c
 buckets.
 
 Take a look at the `.gitlab-ci.yml` file:
-<https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/blob/main/.gitlab-ci.yml>
+<https://gitlab.com/gitlab-org/gitlab-web-ide/-/blob/main/.gitlab-ci.yml>
 
 Look for the `deploy-assets-*` jobs. You'll notice that production & staging assets are only deployed when it's a
 tagged commit on the default branch, however staging assets can also be deployed on demand from an MR by triggering the
@@ -56,9 +56,9 @@ job manually.
 ### Cloudflare Worker changes
 
 All the Cloudflare Worker configuration and logic lives here:
-<https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/tree/main/cloudflare>
+<https://gitlab.com/gitlab-org/gitlab-web-ide/-/tree/main/packages/cloudflare>
 
 Any changes made to this directory will trigger one of the `deploy-cloudflare-worker-*` jobs.
 
-Refer to the [`README.md`](https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/blob/main/cloudflare/README.md)
+Refer to the [`README.md`](https://gitlab.com/gitlab-org/gitlab-web-ide/-/blob/main/packages/cloudflare/README.md)
 for more info on the Cloudflare Wrangler CLI tool and how to inspect logs, test changes locally, etc.
