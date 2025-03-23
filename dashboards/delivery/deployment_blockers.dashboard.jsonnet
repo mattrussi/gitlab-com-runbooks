@@ -14,328 +14,328 @@ local gstgHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_dep
 
 local textPanel =
   g.panel.text.new('')
-  + g.panel.text.options.withMode('markdown')
+  + g.panel.text.options.withMode("markdown")
   + g.panel.text.options.withContent(|||
-    # Deployment Blockers
+      # Deployment Blockers
 
-    Deployment failures are currently automatically captured under [release/tasks issues](https://gitlab.com/gitlab-org/release/tasks/-/issues).
-    Each week a report is generated to keep track of the deployment blockers of the GitLab.com environments, release managers are responsible for labeling these failures with appropriate `RootCause::*` labels
+      Deployment failures are currently automatically captured under [release/tasks issues](https://gitlab.com/gitlab-org/release/tasks/-/issues).
+      Each week a report is generated to keep track of the deployment blockers of the GitLab.com environments, release managers are responsible for labeling these failures with appropriate `RootCause::*` labels
 
-    This dashboard tracks the trend of recurring root causes for deployment blockers. Each root cause is displayed in separate rows with three panels: one for the count of blockers, one for `gprd` hours blocked, and one for `gstg` hours blocked. At the top, there is an overview of the failure types, including the total calculations for the entire specified time window.
+      This dashboard tracks the trend of recurring root causes for deployment blockers. Each root cause is displayed in separate rows with three panels: one for the count of blockers, one for `gprd` hours blocked, and one for `gstg` hours blocked. At the top, there is an overview of the failure types, including the total calculations for the entire specified time window.
 
-    Links:
-    - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
-    - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
-  |||);
+      Links:
+      - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
+      - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
+    |||);
 
 local barChartPanel(title, name, query) =
   g.panel.barChart.new(title)
-  + g.panel.barChart.options.withOrientation('horizontal')
-  + g.panel.barChart.options.legend.withDisplayMode('table')
+  + g.panel.barChart.options.withOrientation("horizontal")
+  + g.panel.barChart.options.legend.withDisplayMode("table")
   + g.panel.barChart.options.legend.withShowLegend(true)
-  + g.panel.barChart.options.legend.withPlacement('bottom')
-  + g.panel.barChart.options.legend.withCalcs(['sum'])
+  + g.panel.barChart.options.legend.withPlacement("bottom")
+  + g.panel.barChart.options.legend.withCalcs(["sum"])
   + g.panel.barChart.standardOptions.withDisplayName(name)
-  + g.panel.barChart.standardOptions.color.withMode('thresholds')
-  + g.panel.barChart.standardOptions.thresholds.withMode('absolute')
+  + g.panel.barChart.standardOptions.color.withMode("thresholds")
+  + g.panel.barChart.standardOptions.thresholds.withMode("absolute")
   + g.panel.barChart.standardOptions.thresholds.withSteps([
     {
-      value: null,
-      color: 'green',
-    },
+      "value": null,
+      "color": "green"
+    }
   ])
   + g.panel.barChart.queryOptions.withTargetsMixin([
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       query,
     )
-    + g.query.prometheus.withFormat('table')
+    + g.query.prometheus.withFormat("table")
     + g.query.prometheus.withLegendFormat('{{root_cause}}'),
   ])
   + g.panel.barChart.queryOptions.withTransformations([
-    g.panel.barChart.queryOptions.transformation.withId('groupBy')
+    g.panel.barChart.queryOptions.transformation.withId("groupBy")
     + g.panel.barChart.queryOptions.transformation.withOptions({
       fields: {
-        week: {
-          aggregations: [],
-          operation: 'groupby',
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
         },
-        root_cause: {
-          aggregations: [],
-          operation: 'groupby',
+        "root_cause": {
+          "aggregations": [],
+          "operation": "groupby"
         },
-        Value: {
-          aggregations: [
-            'lastNotNull',
+        "Value": {
+          "aggregations": [
+            "lastNotNull"
           ],
-          operation: 'aggregate',
-        },
-      },
+          "operation": "aggregate"
+        }
+      }
     }),
-    g.panel.barChart.queryOptions.transformation.withId('groupBy')
+    g.panel.barChart.queryOptions.transformation.withId("groupBy")
     + g.panel.barChart.queryOptions.transformation.withOptions({
       fields: {
-        root_cause: {
+        "root_cause": {
           aggregations: [],
-          operation: 'groupby',
+          operation: "groupby"
         },
-        'Value (lastNotNull)': {
-          aggregations: [
-            'sum',
+        "Value (lastNotNull)": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
-        },
-      },
-    }),
+          "operation": "aggregate"
+        }
+      }
+    })
   ]);
 
 local trendPanel(title, query, name) =
   g.panel.trend.new(title)
-  + g.panel.trend.options.withXField('week_index')
+  + g.panel.trend.options.withXField("week_index")
   + g.panel.trend.options.legend.withDisplayMode('list')
-  + g.panel.trend.options.legend.withPlacement('bottom')
-  + g.panel.trend.fieldConfig.defaults.custom.withDrawStyle('line')
-  + g.panel.trend.fieldConfig.defaults.custom.withLineInterpolation('linear')
+  + g.panel.trend.options.legend.withPlacement("bottom")
+  + g.panel.trend.fieldConfig.defaults.custom.withDrawStyle("line")
+  + g.panel.trend.fieldConfig.defaults.custom.withLineInterpolation("linear")
   + g.panel.trend.fieldConfig.defaults.custom.withLineWidth(1)
-  + g.panel.trend.fieldConfig.defaults.custom.withShowPoints('always')
+  + g.panel.trend.fieldConfig.defaults.custom.withShowPoints("always")
   + g.panel.trend.fieldConfig.defaults.custom.withSpanNulls(true)
   + g.panel.trend.fieldConfig.defaults.custom.withAxisBorderShow(true)
   + g.panel.trend.standardOptions.withDisplayName(name)
   + g.panel.trend.standardOptions.withDecimals(0)
-  + g.panel.trend.standardOptions.withUnit('short')
-  + g.panel.trend.standardOptions.color.withMode('palette-classic')
-  + g.panel.trend.standardOptions.thresholds.withMode('absolute')
+  + g.panel.trend.standardOptions.withUnit("short")
+  + g.panel.trend.standardOptions.color.withMode("palette-classic")
+  + g.panel.trend.standardOptions.thresholds.withMode("absolute")
   + g.panel.trend.standardOptions.thresholds.withSteps([
     {
-      value: null,
-      color: 'green',
-    },
+      "value": null,
+      "color": "green"
+    }
   ])
   + g.panel.trend.standardOptions.withOverrides([
     g.panel.trend.standardOptions.override.byName.new('week_index')
     + g.panel.trend.standardOptions.override.byName.withPropertiesFromOptions(
-      g.panel.trend.fieldConfig.defaults.custom.withAxisLabel('week_index')
-      + g.panel.trend.fieldConfig.defaults.custom.withAxisPlacement('hidden')
-    ),
+      g.panel.trend.fieldConfig.defaults.custom.withAxisLabel("week_index")
+      + g.panel.trend.fieldConfig.defaults.custom.withAxisPlacement("hidden")
+    )
   ])
   + g.panel.trend.queryOptions.withTargetsMixin([
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       query,
     )
-    + g.query.prometheus.withFormat('table'),
+    + g.query.prometheus.withFormat("table"),
   ])
   + g.panel.trend.queryOptions.withTransformations([
-    g.panel.trend.queryOptions.transformation.withId('groupBy')
+    g.panel.trend.queryOptions.transformation.withId("groupBy")
     + g.panel.trend.queryOptions.transformation.withOptions({
-      fields: {
-        week: {
-          aggregations: [],
-          operation: 'groupby',
+      "fields": {
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
         },
-        root_cause: {
-          aggregations: [],
-          operation: null,
+        "root_cause": {
+          "aggregations": [],
+          "operation": null
         },
-        Value: {
-          aggregations: [
-            'last',
+        "Value": {
+          "aggregations": [
+            "last"
           ],
-          operation: 'aggregate',
-        },
-      },
+          "operation": "aggregate"
+        }
+      }
     }),
-    g.panel.trend.queryOptions.transformation.withId('calculateField')
+    g.panel.trend.queryOptions.transformation.withId("calculateField")
     + g.panel.trend.queryOptions.transformation.withOptions({
-      alias: 'count',
+      alias: "count",
       binary: {
-        left: 'week',
+        left: "week"
       },
-      mode: 'index',
+      mode: "index",
       reduce: {
-        reducer: 'sum',
-      },
+        reducer: "sum"
+      }
     }),
-    g.panel.trend.queryOptions.transformation.withId('calculateField')
+    g.panel.trend.queryOptions.transformation.withId("calculateField")
     + g.panel.trend.queryOptions.transformation.withOptions({
-      alias: 'week_index',
+      alias: "week_index",
       binary: {
-        left: 'count',
-        right: '1',
+        left: "count",
+        right: "1"
       },
-      mode: 'binary',
+      mode: "binary",
       reduce: {
-        reducer: 'sum',
-      },
+        reducer: "sum"
+      }
     }),
-    g.panel.trend.queryOptions.transformation.withId('organize')
+    g.panel.trend.queryOptions.transformation.withId("organize")
     + g.panel.trend.queryOptions.transformation.withOptions({
       excludeByName: {
         Time: false,
-        count: true,
+        count: true
       },
       includeByName: {},
       indexByName: {},
       renameByName: {},
-    }),
+    })
   ]);
 
 local tablePanel =
   g.panel.table.new('')
   + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
   + g.panel.table.options.withShowHeader(true)
-  + g.panel.table.standardOptions.color.withMode('thresholds')
+  + g.panel.table.standardOptions.color.withMode("thresholds")
   + g.panel.table.queryOptions.withTargetsMixin([
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       blockersCount,
     )
-    + g.query.prometheus.withFormat('table'),
+    + g.query.prometheus.withFormat("table"),
 
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       gprdHoursBlocked,
     )
-    + g.query.prometheus.withFormat('table'),
+    + g.query.prometheus.withFormat("table"),
 
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       gstgHoursBlocked,
     )
-    + g.query.prometheus.withFormat('table'),
+    + g.query.prometheus.withFormat("table"),
 
   ])
   + g.panel.table.queryOptions.withTransformations([
-    g.panel.table.queryOptions.transformation.withId('merge')
+    g.panel.table.queryOptions.transformation.withId("merge")
     + g.panel.table.queryOptions.transformation.withOptions({}),
-    g.panel.table.queryOptions.transformation.withId('sortBy')
+    g.panel.table.queryOptions.transformation.withId("sortBy")
     + g.panel.table.queryOptions.transformation.withOptions({
-      fields: {},
-      sort: [
+      "fields": {},
+      "sort": [
         {
-          field: 'week',
-        },
-      ],
+          "field": "week"
+        }
+      ]
     }),
-    g.panel.table.queryOptions.transformation.withId('groupBy')
+    g.panel.table.queryOptions.transformation.withId("groupBy")
     + g.panel.table.queryOptions.transformation.withOptions({
-      fields: {
-        'Value #A': {
-          aggregations: [
-            'lastNotNull',
+      "fields": {
+        "Value #A": {
+          "aggregations": [
+            "lastNotNull"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #B': {
-          aggregations: [
-            'lastNotNull',
+        "Value #B": {
+          "aggregations": [
+            "lastNotNull"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #C': {
-          aggregations: [
-            'lastNotNull',
+        "Value #C": {
+          "aggregations": [
+            "lastNotNull"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        root_cause: {
-          aggregations: [],
-          operation: 'groupby',
+        "root_cause": {
+          "aggregations": [],
+          "operation": "groupby"
         },
-        week: {
-          aggregations: [],
-          operation: 'groupby',
-        },
-      },
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
+        }
+      }
     }),
-    g.panel.table.queryOptions.transformation.withId('groupBy')
+    g.panel.table.queryOptions.transformation.withId("groupBy")
     + g.panel.table.queryOptions.transformation.withOptions({
-      fields: {
-        'Value #A': {
-          aggregations: [
-            'sum',
+      "fields": {
+        "Value #A": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #A (lastNotNull)': {
-          aggregations: [
-            'sum',
+        "Value #A (lastNotNull)": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #B': {
-          aggregations: [
-            'sum',
+        "Value #B": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #B (lastNotNull)': {
-          aggregations: [
-            'sum',
+        "Value #B (lastNotNull)": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #C': {
-          aggregations: [
-            'sum',
+        "Value #C": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        'Value #C (lastNotNull)': {
-          aggregations: [
-            'sum',
+        "Value #C (lastNotNull)": {
+          "aggregations": [
+            "sum"
           ],
-          operation: 'aggregate',
+          "operation": "aggregate"
         },
-        root_cause: {
-          aggregations: [],
-          operation: 'aggregate',
+        "root_cause": {
+          "aggregations": [],
+          "operation": "aggregate"
         },
-        week: {
-          aggregations: [],
-          operation: 'groupby',
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
         },
-        week_index: {
-          aggregations: [],
-        },
-      },
+        "week_index": {
+          "aggregations": []
+        }
+      }
     }),
-    g.panel.table.queryOptions.transformation.withId('calculateField')
+    g.panel.table.queryOptions.transformation.withId("calculateField")
     + g.panel.table.queryOptions.transformation.withOptions({
-      alias: 'count',
-      mode: 'index',
+      alias: "count",
+      mode: "index",
       reduce: {
-        reducer: 'sum',
-      },
+        reducer: "sum"
+      }
     }),
-    g.panel.table.queryOptions.transformation.withId('calculateField')
+    g.panel.table.queryOptions.transformation.withId("calculateField")
     + g.panel.table.queryOptions.transformation.withOptions({
-      alias: 'week_index',
+      alias: "week_index",
       binary: {
-        left: 'count',
-        right: '1',
+        left: "count",
+        right: "1"
       },
-      mode: 'binary',
+      mode: "binary",
       reduce: {
-        reducer: 'sum',
-      },
+        reducer: "sum"
+      }
     }),
-    g.panel.table.queryOptions.transformation.withId('organize')
+    g.panel.table.queryOptions.transformation.withId("organize")
     + g.panel.table.queryOptions.transformation.withOptions({
-      excludeByName: {
-        count: true,
+      "excludeByName": {
+        "count": true
       },
-      includeByName: {},
-      indexByName: {},
-      renameByName: {
-        'Value #A (lastNotNull) (sum)': 'blockers_count',
-        'Value #A (sum)': 'blockers_count',
-        'Value #B (lastNotNull) (sum)': 'gprd_hours_blocked',
-        'Value #B (sum)': 'gprd_hours_blocked',
-        'Value #C (lastNotNull) (sum)': 'gstg_hours_blocked',
-        'Value #C (sum)': 'gstg_hours_blocked',
-      },
-    }),
+      "includeByName": {},
+      "indexByName": {},
+      "renameByName": {
+        "Value #A (lastNotNull) (sum)": "blockers_count",
+        "Value #A (sum)": "blockers_count",
+        "Value #B (lastNotNull) (sum)": "gprd_hours_blocked",
+        "Value #B (sum)": "gprd_hours_blocked",
+        "Value #C (lastNotNull) (sum)": "gstg_hours_blocked",
+        "Value #C (sum)": "gstg_hours_blocked"
+      }
+    })
   ]);
 
 basic.dashboard(

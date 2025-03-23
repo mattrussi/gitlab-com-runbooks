@@ -5,7 +5,7 @@ local gaugeMetric = metricsCatalog.gaugeMetric;
 metricsCatalog.serviceDefinition({
   type: 'cloud-sql',
   tier: 'db',
-  tenants: ['gitlab-gprd', 'gitlab-ops', 'gitlab-pre'],
+  tenants: [ 'gitlab-gprd', 'gitlab-ops', 'gitlab-pre' ],
 
   tags: ['cloud-sql'],
 

@@ -1,8 +1,8 @@
-local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
-local alertsForServices = import 'lib/alerts-generator.libsonnet';
-local aggregationRulesForServices = import 'lib/rules-generator.libsonnet';
-local saturationResource = import 'lib/saturation.libsonnet';
 local hostedRunnerserviceDefinition = import 'lib/service.libsonnet';
+local saturationResource = import 'lib/saturation.libsonnet';
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
+local aggregationRulesForServices = import 'lib/rules-generator.libsonnet';
+local alertsForServices = import 'lib/alerts-generator.libsonnet';
 local templates = import 'lib/templates.libsonnet';
 
 {
@@ -34,11 +34,11 @@ local templates = import 'lib/templates.libsonnet';
 
     minimumSamplesForTrafficCessation: 300,
 
-    templates:: templates,
+    templates:: templates
   },
 
   prometheusRulesGroups+:: aggregationRulesForServices(self._config),
 
-  prometheusAlertsGroups+:: alertsForServices(self._config),
+  prometheusAlertsGroups+:: alertsForServices(self._config)
 
 }

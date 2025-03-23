@@ -4,10 +4,10 @@ local defaultPartition = byRunnerManager;
 
 local formatQuery(query, partition, arguments={}) =
   local matcher =
-    if partition == byRunnerManager then 'instance=~"${runner_manager:pipe}"' else 'shard=~"${shard:pipe}"';
-  query % (arguments {
-             runnerManagersMatcher: matcher,
-           });
+      if partition == byRunnerManager then 'instance=~"${runner_manager:pipe}"' else 'shard=~"${shard:pipe}"';
+  query % (arguments + {
+    runnerManagersMatcher: matcher,
+  });
 
 {
   formatQuery:: formatQuery,

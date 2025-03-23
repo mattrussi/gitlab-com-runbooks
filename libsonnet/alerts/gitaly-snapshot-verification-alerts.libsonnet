@@ -1,7 +1,7 @@
 local alerts = import 'alerts/alerts.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
-local verificationDelayThreshold = 86400;  // 1 day
+local verificationDelayThreshold = 86400; // 1 day
 
 local gitalySnapshotVerificationAlerts() =
   [

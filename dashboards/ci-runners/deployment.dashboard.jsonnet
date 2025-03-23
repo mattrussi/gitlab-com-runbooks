@@ -3,9 +3,9 @@ local layout = import 'grafana/layout.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
 local deploymentDetails = import 'stage-groups/verify-runner/deployment_details.libsonnet';
+local runnersManagerMatching = import 'stage-groups/verify-runner/runner_managers_matching.libsonnet';
 local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
 local jobQueueGraphs = import 'stage-groups/verify-runner/job_queue_graphs.libsonnet';
-local runnersManagerMatching = import 'stage-groups/verify-runner/runner_managers_matching.libsonnet';
 
 dashboardHelpers.dashboard(
   'Deployment overview',
