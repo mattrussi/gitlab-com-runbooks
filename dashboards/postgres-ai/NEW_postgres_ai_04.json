@@ -599,7 +599,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "sum by (wait_type) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\"})/600",
