@@ -1925,7 +1925,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn, irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -2030,7 +2030,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn, irate(pg_stat_statements_seconds_total{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -2135,7 +2135,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,(irate(pg_stat_statements_seconds_total{fqdn=\"$fqdn\"}[$__rate_interval]))/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -2240,7 +2240,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_rows{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -2345,7 +2345,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,(irate(pg_stat_statements_rows{fqdn=\"$fqdn\"}[$__rate_interval]))/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -2450,7 +2450,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_block_read_seconds_total{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -2555,7 +2555,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,(irate(pg_stat_statements_block_read_seconds_total{fqdn=\"$fqdn\"}[$__rate_interval]))/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -2660,7 +2660,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_block_write_seconds_total{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -2765,7 +2765,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,(irate(pg_stat_statements_block_write_seconds_total{fqdn=\"$fqdn\"}[$__rate_interval]))/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -2870,7 +2870,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -2975,7 +2975,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3080,7 +3080,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3185,7 +3185,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3290,7 +3290,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3395,7 +3395,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3500,7 +3500,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3605,7 +3605,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "",
@@ -3710,7 +3710,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_wal_bytes{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -3815,7 +3815,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_wal_bytes{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -3920,7 +3920,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_wal_fpi{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -4025,7 +4025,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_wal_fpi{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -4130,7 +4130,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_temp_bytes_read{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -4235,7 +4235,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_temp_bytes_read{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -4340,7 +4340,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_temp_bytes_written{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -4445,7 +4445,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn,irate(pg_stat_statements_temp_bytes_written{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -4559,7 +4559,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_total_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -4663,7 +4663,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_total_time{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -4767,7 +4767,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_user_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -4871,7 +4871,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_user_time{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -4975,7 +4975,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_system_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -5079,7 +5079,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_system_time{fqdn=\"$fqdn\"}[$__rate_interval])/(irate(pg_stat_statements_calls{fqdn=\"$fqdn\"}[$__rate_interval])))",
@@ -5182,7 +5182,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_user_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -5286,7 +5286,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_user_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -5390,7 +5390,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_user_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -5494,7 +5494,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "topk($topn, irate(pg_stat_kcache_exec_user_time{fqdn=\"$fqdn\"}[$__rate_interval]))",
@@ -5774,7 +5774,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn, sum by (wait_type, wait_event, queryid) (pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\", wait_type!~\"Activity\"})/1500)",
@@ -5787,7 +5787,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "mimir-gitlab-gprd"
+            "uid": "$prometheus"
           },
           "editorMode": "code",
           "expr": "topk($topn, (sum by (wait_type, wait_event, queryid) (irate(pg_wait_sampling_count{fqdn=\"$fqdn\", wait_type!~\"\", wait_type!~\"Activity\"}[$__rate_interval])))/100)",
@@ -6003,7 +6003,7 @@
     ]
   },
   "timezone": "utc",
-  "title": "[postgres.ai][02] Postgres aggregated query performance analysis",
+  "title": "[NEW][postgres.ai][02] Postgres aggregated query performance analysis",
   "uid": "edxi03vbar9q8a",
   "version": 163,
   "weekStart": ""

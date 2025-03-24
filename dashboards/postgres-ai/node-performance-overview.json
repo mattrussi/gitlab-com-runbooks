@@ -7253,7 +7253,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "editorMode": "code",
               "expr": "",
@@ -7474,7 +7474,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "dsType": "influxdb",
               "editorMode": "code",
@@ -7614,7 +7614,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "dsType": "influxdb",
               "editorMode": "code",
@@ -7753,7 +7753,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "dsType": "influxdb",
               "editorMode": "code",
@@ -7891,7 +7891,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "mimir-gitlab-gprd"
+                "uid": "$prometheus"
               },
               "dsType": "influxdb",
               "editorMode": "code",
@@ -7958,7 +7958,7 @@
       {
         "current": {
           "text": "Mimir - Gitlab Gprd",
-          "value": "mimir-gitlab-gprd"
+          "value": "$prometheus"
         },
         "includeAll": false,
         "label": "Datasource",
@@ -8065,7 +8065,7 @@
     ]
   },
   "timezone": "utc",
-  "title": "[postgres.ai][01] Postgres node performance overview (high-level)",
+  "title": "[NEW][postgres.ai][01] Postgres node performance overview (high-level)",
   "uid": "bdyzrgbqqyku8a",
   "version": 189,
   "weekStart": ""
