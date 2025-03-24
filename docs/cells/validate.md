@@ -1,4 +1,4 @@
-# Validate Instrumentor Chagnes within Cells Infrastructure
+# Validate Instrumentor Changes within Cells Infrastructure
 
 ## Overview
 
@@ -18,7 +18,7 @@ Create a Merge Request (MR) with your changes to the [Instrumentor] repository.
 Wait for the CI jobs to complete, which will build Instrumentor images for your branch.
 
 **Step 3: Provision a Test Cell**
-[Provision a new Cell]((./provisioning.md#how-to-de-provision-a-cell)) by updating the `instrumentor_version` in the `TENANT_MODEL` with your branch name.
+[Provision a new Cell](./provisioning.md#how-to-de-provision-a-cell) by updating the `instrumentor_version` in the `TENANT_MODEL` with your branch name.
 
 > [!note]
 > The `instrumentor_version` must use kebab case.
