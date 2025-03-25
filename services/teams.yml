@@ -200,11 +200,11 @@ teams:
   url: https://handbook.gitlab.com/handbook/engineering/development/data-science/ai-powered/duo-workflow/
   manager: bastirehm
   label: group::duo workflow
-  slack_alerts_channel: g_mlops-alerts
+  slack_alerts_channel: g_duo_workflow_alerts
   product_stage_group: duo_workflow
   ignored_components:
   - graphql_query
-  slack_error_budget_channel: duo-chat-lounge
+  slack_error_budget_channel: g_duo_workflow_alerts
   send_error_budget_weekly_to_slack: true
 
 - name: code_review

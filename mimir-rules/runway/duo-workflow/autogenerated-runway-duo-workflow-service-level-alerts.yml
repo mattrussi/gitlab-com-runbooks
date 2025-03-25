@@ -30,9 +30,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: duo_workflow
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -41,12 +40,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server",monitor="global",type="duo-workflow"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.050000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server",monitor="global",type="duo-workflow"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -79,9 +78,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: duo_workflow
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -90,12 +88,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server",monitor="global",type="duo-workflow"}
-          > (6 * 0.001000)
+          > (6 * 0.050000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server",monitor="global",type="duo-workflow"}
-          > (6 * 0.001000)
+          > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -128,9 +126,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: duo_workflow
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -166,9 +163,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: duo_workflow
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
