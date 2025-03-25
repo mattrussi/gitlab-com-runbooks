@@ -92,7 +92,7 @@ It is unlikely that recent changes have caused this alert unless someone recentl
 # Escalation
 
 - If the cause of the snapshot failure is not clear from the logs and manual retry attempts are not succeeding after a short period (one or two hours), it may be necessary to escalate.
-- Slack channels where help is likely to be found: `#g_infra_ops`, `#production_engineering`
+- Slack channels where help is likely to be found: `#g_production-engineering_ops`, `#s_production_engineering`
 
 # Definitions
 

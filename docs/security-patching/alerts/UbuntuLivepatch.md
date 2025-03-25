@@ -10,7 +10,7 @@
 
 ## Services
 
-- All Ubuntu VM instances that are managed by Chef should be enrolled in Ubuntu Advantage and have Livepatch enabled.
+- [Some Ubuntu VM instances](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/security-patching/linux-os/linux-os-patching.md?ref_type=heads#services) that are managed by Chef should be enrolled in Ubuntu Advantage and have Livepatch enabled. This alert checks if a node is enrolled into Ubuntu Pro subscription and does not have Livepatch enabled.
 
 ## Metrics
 
@@ -21,7 +21,7 @@
 
 ## Alert Behavior
 
-- The alert looks for any instances in GPRD that report Livepatch as being disabled, while also having run chef-client recently.
+- The alert looks for any instances enrolled into Ubuntu Pro in GPRD and report Livepatch as being disabled, while also having run chef-client recently.
 
 ## Severities
 
@@ -29,7 +29,7 @@
 
 ## Verification
 
-- [Grafana Explore](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%223q5%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22canonical_livepatch_enabled%7Benvironment%3D%5C%22gprd%5C%22%7D%20%3D%3D%200%20and%20on%20%28fqdn,%20environment%29%20time%28%29%20-%20chef_client_last_run_timestamp_seconds%20%3C%203600%20%2A%206%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1)
+- [Grafana Explore](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%223q5%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22ubuntu_advantage_attached%7Benv%3D%5C%22gprd%5C%22%7D%20%3D%3D%201%20and%20canonical_livepatch_enabled%7Benvironment%3D%5C%22gprd%5C%22%7D%20%3D%3D%200%20and%20on%20%28fqdn,%20environment%29%20time%28%29%20-%20chef_client_last_run_timestamp_seconds%20%3C%203600%20%2A%206%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1)
 - You can verify the state of Livepatch on the machine using the command `sudo ua status`
 
 ## Troubleshooting
@@ -50,7 +50,7 @@
 # Escalation
 
 - If this alert fires, it is likely a good idea to first check with the service owner for the VM instance, and see if this isn't intentional.
-- For generic Livepatch related help, you can reach out in `#g_infra_ops` in Slack.
+- For generic Livepatch related help, you can reach out in `#g_production-engineering_ops` in Slack.
 
 # Definitions
 
