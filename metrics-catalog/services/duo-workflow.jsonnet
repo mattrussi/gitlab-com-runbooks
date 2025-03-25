@@ -21,11 +21,12 @@ metricsCatalog.serviceDefinition(
       'grpc_code',
     ] + runwayLabels,
 
-    serviceLevelIndicators: {
+    serviceLevelIndicators+: {
       server: {
         severity: 's4',
         userImpacting: true,
         featureCategory: 'duo_workflow',
+        useConfidenceLevelForSLIAlerts: '98%',
         description: |||
           This SLI monitors all Duo Workflow GRPC requests.
           GRPC failures which are considered to be the "server's fault" are counted as errors.
