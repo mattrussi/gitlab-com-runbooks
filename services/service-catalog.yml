@@ -832,6 +832,25 @@ services:
       monitors:
         primary_grafana_dashboard: ai-gateway-main/ai-gateway-overview
 
+  - name: duo-workflow
+    tier: sv
+    friendly_name: Duo Workflow
+    label: DuoWorkflow
+    owner: duo_workflow
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/duo-workflow/duo-workflow-service
+      documents:
+        architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/duo_workflow/
+      logging:
+        - name: gitlab.com
+          permalink: https://cloudlogging.app.goo.gl/uRgayzQX6A5Na4qA6
+        - name: staging.gitlab.com
+          permalink: https://cloudlogging.app.goo.gl/gp4NnQqoBcdx1FUK6
+    observability:
+      monitors:
+        primary_grafana_dashboard: duo-workflow-main/duo-workflow-overview
+
   - name: mailgun
     tier: sv
     friendly_name: Mailgun
