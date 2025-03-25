@@ -39,7 +39,6 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       sum without(ip_protocol) (
         max_over_time(
           stackdriver_gce_instance_compute_googleapis_com_nat_port_usage{
-            job=~"stackdriver|scrapeConfig/monitoring/prometheus-agent-stackdriver",
             project_id=~"gitlab-production|gitlab-staging-1",
             %(selectorWithoutType)s
           }[%(rangeInterval)s]
@@ -49,7 +48,6 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       sum without (nat_ip) (
         max_over_time(
           stackdriver_gce_instance_compute_googleapis_com_nat_allocated_ports{
-            job=~"stackdriver|scrapeConfig/monitoring/prometheus-agent-stackdriver",
             project_id=~"gitlab-production|gitlab-staging-1",
             %(selectorWithoutType)s
           }[%(rangeInterval)s]
