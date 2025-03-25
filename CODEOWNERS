@@ -8,8 +8,8 @@
 # (https://github.com/renovatebot/renovate/issues/14777)
 .tool-versions @andrewn @pguinoiseau @sxuereb @jarv @reprazent
 .gitlab-ci-asdf-versions.yml @andrewn @pguinoiseau @sxuereb @jarv @reprazent
-docs/ci-runners/* @gitlab-com/runner-group/saas @gitlab-org/reliability
-docs/zoekt/* @gitlab-org/search-team/migration-maintainers @gitlab-org/reliability
-docs/elastic/* @gitlab-org/search-team/migration-maintainers @gitlab-org/reliability
-mimir-rules/* @gitlab-org/scalability/observability
-mimir-rules-jsonnet/* @gitlab-org/scalability/observability
+/docs/ci-runners/ @gitlab-com/runner-group/saas @gitlab-org/reliability
+/docs/zoekt/ @gitlab-org/search-team/migration-maintainers @gitlab-org/reliability
+/docs/elastic/ @gitlab-org/search-team/migration-maintainers @gitlab-org/reliability
+/mimir-rules/ @gitlab-org/scalability/observability
+/mimir-rules-jsonnet/ @gitlab-org/scalability/observability
