@@ -13,4 +13,3 @@ groups:
       description: Livepatch is disabled on {{ $labels.fqdn }}
       runbook: docs/security-patching/alerts/UbuntuLivepatch.md
       title: Ubuntu Livepatch is disabled
-``
