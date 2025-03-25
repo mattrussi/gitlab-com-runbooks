@@ -1468,6 +1468,9 @@
             },
           },
         },
+        params_req: {
+          type: 'flattened',
+        },
         path: {
           type: 'text',
           fields: {
