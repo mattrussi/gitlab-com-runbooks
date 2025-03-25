@@ -281,6 +281,12 @@
         db_ci_replica_duration_s: {
           type: 'float',
         },
+        db_sec_duration_s: {
+          type: 'float',
+        },
+        db_sec_replica_duration_s: {
+          type: 'float',
+        },
         db_duration_s: {
           type: 'float',
         },
