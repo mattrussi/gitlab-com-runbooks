@@ -1,14 +1,9 @@
 local alerts = import 'alerts/alerts.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local jobsSlos = import 'recording-rules/sidekiq-jobs-slos.libsonnet';
 local minimumOpRate = import 'slo-alerts/minimum-op-rate.libsonnet';
 local serviceLevelAlerts = import 'slo-alerts/service-level-alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
-
-/* TODO: having some sort of criticality label on sidekiq jobs would allow us to
-   define different criticality labels for each worker. For now we need to use
-   a fixed value, which also needs to be a lower-common-denominator */
-local fixedApdexThreshold = 0.90;
-local fixedErrorRateThreshold = 0.10;
 
 local minimumSamplesForMonitoringApdex = 200; /* We don't really care if something runs only very infrequently, but is slow */
 
@@ -174,36 +169,6 @@ local sidekiqAlerts(registry, extraSelector) =
       },
     },
     {
-      alert: 'ScanDependenciesWorkerHighErrorRate',
-      expr: |||
-        sum by (env, worker) (
-          application_sli_aggregation:sidekiq_execution:error:rate_5m{
-            worker=~"Ai::RepositoryXray::ScanDependenciesWorker",
-            %(selector)s
-          }
-        ) > 0.001
-      ||| % {
-        selector: selectors.serializeHash(extraSelector),
-      },
-      'for': '5m',
-      labels: {
-        severity: 's4',
-        aggregation: 'sidekiq_execution',
-        sli_type: 'error',
-        alert_type: 'symptom',
-        team: 'code_creation',
-      },
-      annotations: {
-        title: 'High error rate for `{{ $labels.worker }}`',
-        description: |||
-          Sidekiq jobs error rate from `{{ $labels.worker }}` has exceeded 0.1%. This may be caused by exceptions from unexpected data types or values in the job execution.
-        |||,
-        grafana_dashboard_id: 'sidekiq-worker-detail',
-        grafana_min_zoom_hours: '6',
-        grafana_variables: 'environment,worker',
-      },
-    },
-    {
       alert: 'SidekiqJobsDeferredByDBHealthCheck',
       expr: |||
         sum by (env, worker, feature_category)  (
@@ -273,7 +238,7 @@ local sidekiqAlerts(registry, extraSelector) =
         opsRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringApdex),
-        apdexThreshold: fixedApdexThreshold,
+        apdexThreshold: jobsSlos.apdexThreshold(),
       },
       'for': '1h',
       labels: {
@@ -308,13 +273,13 @@ local sidekiqAlerts(registry, extraSelector) =
             %(errorRate1h)s{%(selector)s}
             /
             %(opsRate1h)s{%(selector)s}
-          ) > %(errorThreshold)s
+          ) > %(errorThreshold1h)s
           and
           (
             %(errorRate5m)s{%(selector)s}
             /
             %(opsRate5m)s{%(selector)s}
-          ) > %(errorThreshold)s
+          ) > %(errorThreshold5m)s
         )
         and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
         (
@@ -324,12 +289,15 @@ local sidekiqAlerts(registry, extraSelector) =
         )
       ||| % {
         errorRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '1h'),
-        opsRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
+        local opsRate1h = registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
+        opsRate1h: opsRate1h,
         errorRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
-        opsRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+        local opsRate5m = registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+        opsRate5m: opsRate5m,
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringErrors),
-        errorThreshold: fixedErrorRateThreshold,
+        errorThreshold1h: jobsSlos.customErrorRateQuery(opsRate1h),
+        errorThreshold5m: jobsSlos.customErrorRateQuery(opsRate5m),
       },
       'for': '1h',
       labels: {
