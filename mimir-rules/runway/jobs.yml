@@ -1,6 +1,19 @@
 groups:
 - name: runway-jobs.rules
   rules:
+  - record: runway_job:last_status
+    expr: |
+      sum by(type, env) (
+        label_replace(
+          stackdriver_cloud_run_job_run_googleapis_com_job_completed_execution_count{result="failed"},
+          "status", "failed", "", ""
+        ) * 0 + 1
+        or
+        label_replace(
+          stackdriver_cloud_run_job_run_googleapis_com_job_completed_execution_count{result="succeeded"},
+          "status", "succeeded", "", ""
+        ) * 0 + 2
+      )
   - alert: RunwayJobFailure
     expr: |
       sum by (type, env) (
