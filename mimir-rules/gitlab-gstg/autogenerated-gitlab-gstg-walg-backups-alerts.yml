@@ -40,9 +40,8 @@ groups:
       alert_type: symptom
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       severity: s3
-    expr: (gitlab_com:last_walg_backup_age_in_seconds{type!="patroni-embedding",  env="gstg"}
-      >= 60 * 15) or (gitlab_com:last_walg_backup_age_in_seconds{type="patroni-embedding",
-      env="gstg"} >= 60 * 60)
+    expr: gitlab_com:last_walg_backup_age_in_seconds{type!="patroni-embedding",  env="gstg"}
+      >= 60 * 15
   - alert: walgBaseBackupDelayed
     for: 5m
     annotations:
