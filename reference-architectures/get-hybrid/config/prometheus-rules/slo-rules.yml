@@ -255,6 +255,18 @@ groups:
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.005000"
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.995000"
+    labels:
       component: email_receiver
       tier: sv
       type: sidekiq
@@ -267,37 +279,25 @@ groups:
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.005000"
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
-      component: shard_urgent_cpu_bound
+      component: urgent_other
       tier: sv
       type: sidekiq
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.005000"
     labels:
-      component: shard_urgent_cpu_bound
-      tier: sv
-      type: sidekiq
-    record: slo:max:events:gitlab_service_errors:ratio
-  - expr: "0.995000"
-    labels:
-      component: shard_urgent_other
-      tier: sv
-      type: sidekiq
-    record: slo:min:events:gitlab_service_apdex:ratio
-  - expr: "0.005000"
-    labels:
-      component: shard_urgent_other
+      component: urgent_other
       tier: sv
       type: sidekiq
     record: slo:max:events:gitlab_service_errors:ratio
