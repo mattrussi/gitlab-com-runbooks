@@ -264,5 +264,27 @@ metricsCatalog.serviceDefinition({
           apdexScore: 0.995,
         },
       },
+
+      rails_queueing: {
+        userImpacting: true,
+        serviceAggregation: false,  // The requests are already counted in the `puma` SLI.
+        description: |||
+          Apdex for time spent waiting for a Puma worker
+        |||,
+
+        requestRate: rateMetric(
+          counter='gitlab_rails_queue_duration_seconds_count',
+          selector={},
+        ),
+
+        apdex: histogramApdex(
+          histogram='gitlab_rails_queue_duration_seconds_bucket',
+          selector={},
+          satisfiedThreshold=0.05,
+          toleratedThreshold=0.1
+        ),
+
+        significantLabels: [],
+      },
     },
 })

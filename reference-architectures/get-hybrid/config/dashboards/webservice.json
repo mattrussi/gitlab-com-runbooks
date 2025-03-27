@@ -4138,6 +4138,739 @@
           "links": [
             {
               "targetBlank": true,
+              "title": "rails_queueing SLI Apdex SLO Analysis",
+              "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=rails_queueing\u0026var-type=webservice"
+            }
+          ],
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "allIsNull",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "allIsZero",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/6h Degradation SLO \\(5% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FF4500",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/1h Outage SLO \\(2% of monthly error budget\\).*/"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 4
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_queueing apdex avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5794F280",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillBelowTo",
+                "value": "rails_queueing apdex"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Apdex SLI (upper 98% confidence boundary)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_queueing apdex"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#082e69",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 41
+      },
+      "id": 4121506195,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "pluginVersion": "v11.4.0",
+      "stableId": "sli-rails_queueing-apdex",
+      "targets": [
+        {
+          "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"rails_queueing\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "rails_queueing apdex"
+        },
+        {
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)"
+        },
+        {
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"rails_queueing\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "rails_queueing apdex avg"
+        },
+        {
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"rails_queueing\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})\n))\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "last week"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:confidence:ratio_5m{component=\"rails_queueing\",confidence=\"98%\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "Apdex SLI (upper 98% confidence boundary)"
+        }
+      ],
+      "title": "rails_queueing SLI Apdex",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "$PROMETHEUS_DS",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning: 1h deteriorating"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning: 6h recovering, 1h recovering"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded: 6h recovering, 1h degraded"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded: 6h degraded"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded: 6h degraded, 1h recovering"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded: 6h degraded, 1h degraded"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning: 1h recovering"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded: 1h degraded"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning: 6h deteriorating"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning: 6h deteriorating, 1h recovering"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning: 6h recovering"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning: 6h recovering, 1h deteriorating"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 8,
+        "x": 0,
+        "y": 48
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:confidence:ratio_1h{component=\"rails_queueing\",confidence=\"98%\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:confidence:ratio_5m{component=\"rails_queueing\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:confidence:ratio_1h{component=\"rails_queueing\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:confidence:ratio_30m{component=\"rails_queueing\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:confidence:ratio_6h{component=\"rails_queueing\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"rails_queueing\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "rails_queueing SLI | Latency/Apdex",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
+      "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Operations per Second",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "min": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "allIsNull",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "allIsZero",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*shard (apdex|error ratio|RPS)$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rails_queueing RPS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E7D551",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last week"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#dddddd80",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.spanNulls",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 41
+      },
+      "id": 1904440154,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "pluginVersion": "v11.4.0",
+      "stableId": "sli-rails_queueing-ops-rate",
+      "targets": [
+        {
+          "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"rails_queueing\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "rails_queueing RPS"
+        },
+        {
+          "expr": "gitlab_component_ops:rate_5m{component=\"rails_queueing\",type=\"webservice\"} offset 1w\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "last week"
+        }
+      ],
+      "title": "rails_queueing SLI RPS - Requests per Second",
+      "type": "timeseries"
+    },
+    {
+      "content": "### Description\n\nApdex for time spent waiting for a Puma worker\n\n",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 41
+      },
+      "id": 25,
+      "mode": "markdown",
+      "title": "Details",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$PROMETHEUS_DS"
+      },
+      "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Apdex %",
+            "axisPlacement": "left",
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "links": [
+            {
+              "targetBlank": true,
               "title": "workhorse SLI Apdex SLO Analysis",
               "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=workhorse\u0026var-type=webservice"
             }
@@ -4384,7 +5117,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 41
+        "y": 51
       },
       "id": 2586818196,
       "options": {
@@ -4620,9 +5353,9 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 48
+        "y": 58
       },
-      "id": 23,
+      "id": 27,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -4917,7 +5650,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 41
+        "y": 51
       },
       "id": 2047984749,
       "options": {
@@ -5153,9 +5886,9 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 48
+        "y": 58
       },
-      "id": 25,
+      "id": 29,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -5328,7 +6061,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 41
+        "y": 51
       },
       "id": 831392945,
       "options": {
@@ -5371,9 +6104,9 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 41
+        "y": 51
       },
-      "id": 27,
+      "id": 31,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -5650,7 +6383,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 51
+        "y": 61
       },
       "id": 1061500963,
       "options": {
@@ -5886,9 +6619,9 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 58
+        "y": 68
       },
-      "id": 29,
+      "id": 33,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -6183,7 +6916,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 51
+        "y": 61
       },
       "id": 1957610638,
       "options": {
@@ -6419,9 +7152,9 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 58
+        "y": 68
       },
-      "id": 31,
+      "id": 35,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -6594,7 +7327,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 51
+        "y": 61
       },
       "id": 3800674929,
       "options": {
@@ -6637,9 +7370,9 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 51
+        "y": 61
       },
-      "id": 33,
+      "id": 37,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -6916,7 +7649,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 61
+        "y": 71
       },
       "id": 3264851214,
       "options": {
@@ -7152,9 +7885,9 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 68
+        "y": 78
       },
-      "id": 35,
+      "id": 39,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -7449,7 +8182,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 61
+        "y": 71
       },
       "id": 769712142,
       "options": {
@@ -7685,9 +8418,9 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 68
+        "y": 78
       },
-      "id": 37,
+      "id": 41,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -7860,7 +8593,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 61
+        "y": 71
       },
       "id": 3915518396,
       "options": {
@@ -7903,9 +8636,9 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 61
+        "y": 71
       },
-      "id": 39,
+      "id": 43,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -7919,7 +8652,7 @@
         "x": 0,
         "y": 200
       },
-      "id": 40,
+      "id": 44,
       "panels": [
         {
           "datasource": {
@@ -7996,7 +8729,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 41,
+          "id": 45,
           "options": {
             "legend": {
               "calcs": [
@@ -8098,7 +8831,7 @@
             "x": 12,
             "y": 0
           },
-          "id": 42,
+          "id": 46,
           "options": {
             "legend": {
               "calcs": [
@@ -8211,7 +8944,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 43,
+          "id": 47,
           "options": {
             "legend": {
               "calcs": [
@@ -8313,7 +9046,7 @@
             "x": 8,
             "y": 10
           },
-          "id": 44,
+          "id": 48,
           "options": {
             "legend": {
               "calcs": [
@@ -8415,7 +9148,7 @@
             "x": 16,
             "y": 10
           },
-          "id": 45,
+          "id": 49,
           "options": {
             "legend": {
               "calcs": [
@@ -8460,7 +9193,7 @@
         "x": 0,
         "y": 210
       },
-      "id": 46,
+      "id": 50,
       "panels": [
         {
           "datasource": {
@@ -8537,7 +9270,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 47,
+          "id": 51,
           "options": {
             "legend": {
               "calcs": [
@@ -8639,7 +9372,7 @@
             "x": 12,
             "y": 0
           },
-          "id": 48,
+          "id": 52,
           "options": {
             "legend": {
               "calcs": [
@@ -8684,7 +9417,251 @@
         "x": 0,
         "y": 220
       },
-      "id": 49,
+      "id": 53,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Duration",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              "min": 0.01,
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byValue",
+                  "options": {
+                    "op": "gte",
+                    "reducer": "allIsNull",
+                    "value": 0
+                  }
+                },
+                "properties": [
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": true,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byValue",
+                  "options": {
+                    "op": "gte",
+                    "reducer": "allIsZero",
+                    "value": 0
+                  }
+                },
+                "properties": [
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": true,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 54,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
+          },
+          "pluginVersion": "v11.4.0",
+          "targets": [
+            {
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_rails_queue_duration_seconds_bucket{}[$__interval])\n  )\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "p95 overall"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.5)",
+              "line": false,
+              "op": "gt",
+              "value": 0.1,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.25)",
+              "line": false,
+              "op": "gt",
+              "value": 0.05,
+              "yaxis": "left"
+            }
+          ],
+          "title": "Estimated p95 rails_queueing Latency - Overall",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "axisColorMode": "text",
+                "axisGridShow": true,
+                "axisLabel": "Requests per Second",
+                "axisPlacement": "left",
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never",
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              "min": 0,
+              "unit": "short"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byValue",
+                  "options": {
+                    "op": "gte",
+                    "reducer": "allIsNull",
+                    "value": 0
+                  }
+                },
+                "properties": [
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": true,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byValue",
+                  "options": {
+                    "op": "gte",
+                    "reducer": "allIsZero",
+                    "value": 0
+                  }
+                },
+                "properties": [
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": true,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 55,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            }
+          },
+          "pluginVersion": "v11.4.0",
+          "targets": [
+            {
+              "expr": "sum by () (\n  rate(gitlab_rails_queue_duration_seconds_count{}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "overall"
+            }
+          ],
+          "title": "rails_queueing RPS - Overall",
+          "type": "timeseries"
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "🔬 SLI Detail: rails_queueing",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
+      "collapse": true,
+      "collapsed": true,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 230
+      },
+      "id": 56,
       "panels": [
         {
           "datasource": {
@@ -8761,7 +9738,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 50,
+          "id": 57,
           "options": {
             "legend": {
               "calcs": [
@@ -8883,7 +9860,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 51,
+          "id": 58,
           "options": {
             "legend": {
               "calcs": [
@@ -8985,7 +9962,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 52,
+          "id": 59,
           "options": {
             "legend": {
               "calcs": [
@@ -9087,7 +10064,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 53,
+          "id": 60,
           "options": {
             "legend": {
               "calcs": [
@@ -9220,7 +10197,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 54,
+          "id": 61,
           "options": {
             "legend": {
               "calcs": [
@@ -9322,7 +10299,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 55,
+          "id": 62,
           "options": {
             "legend": {
               "calcs": [
@@ -9424,7 +10401,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 56,
+          "id": 63,
           "options": {
             "legend": {
               "calcs": [
@@ -9526,7 +10503,7 @@
             "x": 0,
             "y": 20
           },
-          "id": 57,
+          "id": 64,
           "options": {
             "legend": {
               "calcs": [
@@ -9659,7 +10636,7 @@
             "x": 6,
             "y": 20
           },
-          "id": 58,
+          "id": 65,
           "options": {
             "legend": {
               "calcs": [
@@ -9761,7 +10738,7 @@
             "x": 12,
             "y": 20
           },
-          "id": 59,
+          "id": 66,
           "options": {
             "legend": {
               "calcs": [
@@ -9863,7 +10840,7 @@
             "x": 18,
             "y": 20
           },
-          "id": 60,
+          "id": 67,
           "options": {
             "legend": {
               "calcs": [
@@ -9906,9 +10883,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 230
+        "y": 240
       },
-      "id": 61,
+      "id": 68,
       "panels": [
         {
           "datasource": {
@@ -9985,7 +10962,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 62,
+          "id": 69,
           "options": {
             "legend": {
               "calcs": [
@@ -10098,7 +11075,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 63,
+          "id": 70,
           "options": {
             "legend": {
               "calcs": [
@@ -10200,7 +11177,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 64,
+          "id": 71,
           "options": {
             "legend": {
               "calcs": [
@@ -10302,7 +11279,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 65,
+          "id": 72,
           "options": {
             "legend": {
               "calcs": [
@@ -10426,7 +11403,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 66,
+          "id": 73,
           "options": {
             "legend": {
               "calcs": [
@@ -10528,7 +11505,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 67,
+          "id": 74,
           "options": {
             "legend": {
               "calcs": [
@@ -10630,7 +11607,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 68,
+          "id": 75,
           "options": {
             "legend": {
               "calcs": [
@@ -10732,7 +11709,7 @@
             "x": 0,
             "y": 20
           },
-          "id": 69,
+          "id": 76,
           "options": {
             "legend": {
               "calcs": [
@@ -10856,7 +11833,7 @@
             "x": 6,
             "y": 20
           },
-          "id": 70,
+          "id": 77,
           "options": {
             "legend": {
               "calcs": [
@@ -10958,7 +11935,7 @@
             "x": 12,
             "y": 20
           },
-          "id": 71,
+          "id": 78,
           "options": {
             "legend": {
               "calcs": [
@@ -11060,7 +12037,7 @@
             "x": 18,
             "y": 20
           },
-          "id": 72,
+          "id": 79,
           "options": {
             "legend": {
               "calcs": [
@@ -11103,9 +12080,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 240
+        "y": 250
       },
-      "id": 73,
+      "id": 80,
       "panels": [
         {
           "datasource": {
@@ -11182,7 +12159,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 74,
+          "id": 81,
           "options": {
             "legend": {
               "calcs": [
@@ -11295,7 +12272,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 75,
+          "id": 82,
           "options": {
             "legend": {
               "calcs": [
@@ -11397,7 +12374,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 76,
+          "id": 83,
           "options": {
             "legend": {
               "calcs": [
@@ -11499,7 +12476,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 77,
+          "id": 84,
           "options": {
             "legend": {
               "calcs": [
@@ -11623,7 +12600,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 78,
+          "id": 85,
           "options": {
             "legend": {
               "calcs": [
@@ -11725,7 +12702,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 79,
+          "id": 86,
           "options": {
             "legend": {
               "calcs": [
@@ -11827,7 +12804,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 80,
+          "id": 87,
           "options": {
             "legend": {
               "calcs": [
@@ -11929,7 +12906,7 @@
             "x": 0,
             "y": 20
           },
-          "id": 81,
+          "id": 88,
           "options": {
             "legend": {
               "calcs": [
@@ -12053,7 +13030,7 @@
             "x": 6,
             "y": 20
           },
-          "id": 82,
+          "id": 89,
           "options": {
             "legend": {
               "calcs": [
@@ -12155,7 +13132,7 @@
             "x": 12,
             "y": 20
           },
-          "id": 83,
+          "id": 90,
           "options": {
             "legend": {
               "calcs": [
@@ -12257,7 +13234,7 @@
             "x": 18,
             "y": 20
           },
-          "id": 84,
+          "id": 91,
           "options": {
             "legend": {
               "calcs": [
@@ -12302,7 +13279,7 @@
         "x": 0,
         "y": 500
       },
-      "id": 85,
+      "id": 92,
       "panels": [
         {
           "datasource": {
@@ -12558,7 +13535,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 86,
+          "id": 93,
           "legend": {
             "sortDesc": true
           },
@@ -12877,7 +13854,7 @@
             "x": 12,
             "y": 0
           },
-          "id": 87,
+          "id": 94,
           "legend": {
             "sortDesc": true
           },
@@ -13196,7 +14173,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 88,
+          "id": 95,
           "legend": {
             "sortDesc": true
           },
@@ -13279,7 +14256,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 89,
+      "id": 96,
       "mode": "markdown",
       "title": "Source",
       "type": "text"
