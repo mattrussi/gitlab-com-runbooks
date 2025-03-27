@@ -14,3 +14,4 @@ groups:
       grafana_datasource_id: mimir-gitlab-gprd
       description: Runway Job execution failed for {{ $labels.type }}
       title: Runway Job Execution Failure
+    keep_firing_for: 24h
