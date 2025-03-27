@@ -1017,6 +1017,35 @@ services:
         grafana_folder: pgbouncer-ci
         primary_grafana_dashboard: pgbouncer-main/pgbouncer-overview
 
+  - name: pgbouncer-sec
+    tier: db
+    friendly_name: Sec PGBouncer Primary Database Pool
+    label: pgbouncerSec
+    owner: database_operations
+    technical:
+      project:
+        - https://github.com/pgbouncer/pgbouncer
+      documents:
+        design:
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pgbouncer-sec
+        developer_guide:
+        service:
+          - https://pgbouncer.github.io/features.html
+        security:
+      dependencies:
+        - service: postgres
+      logging:
+        - name: pgbouncer
+          permalink: https://log.gprd.gitlab.net/goto/3fb9391e5ef07b47aac2fce6fda175d9
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/ae311f6f133cc1c45b62541977081043
+    observability:
+      monitors:
+        grafana_folder: pgbouncer-sec
+        primary_grafana_dashboard: pgbouncer-main/pgbouncer-overview
+
   - name: patroni
     tier: db
     friendly_name: Postgres (Patroni)
