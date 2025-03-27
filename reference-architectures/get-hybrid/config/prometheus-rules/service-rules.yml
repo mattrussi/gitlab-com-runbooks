@@ -9248,7 +9248,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_5m
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[5m])
+        rate(gitlab_sli_rails_request_apdex_success_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[5m])
       )
     labels:
       component: puma
@@ -9257,7 +9257,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[5m])
+        rate(gitlab_sli_rails_request_apdex_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[5m])
       )
     labels:
       component: puma
@@ -10066,7 +10066,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_30m
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[30m])
+        rate(gitlab_sli_rails_request_apdex_success_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[30m])
       )
     labels:
       component: puma
@@ -10075,7 +10075,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[30m])
+        rate(gitlab_sli_rails_request_apdex_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[30m])
       )
     labels:
       component: puma
@@ -10884,7 +10884,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_1h
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[1h])
+        rate(gitlab_sli_rails_request_apdex_success_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[1h])
       )
     labels:
       component: puma
@@ -10893,7 +10893,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[1h])
+        rate(gitlab_sli_rails_request_apdex_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[1h])
       )
     labels:
       component: puma
@@ -11702,7 +11702,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_6h
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[6h])
+        rate(gitlab_sli_rails_request_apdex_success_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[6h])
       )
     labels:
       component: puma
@@ -11711,7 +11711,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[6h])
+        rate(gitlab_sli_rails_request_apdex_total{endpoint_id!="GraphqlController#execute",job="gitlab-rails"}[6h])
       )
     labels:
       component: puma
