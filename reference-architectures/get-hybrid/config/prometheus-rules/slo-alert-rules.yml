@@ -3300,7 +3300,7 @@ groups:
   - alert: SidekiqServiceShardCatchallApdexSLOViolation
     annotations:
       description: |
-        All Sidekiq jobs
+        All other Sidekiq jobs (non-high urgency)
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3313,10 +3313,6 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{urgency="high"}[5m])
-            or
-            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high"}[5m])
-            or
             rate(sidekiq_jobs_completion_seconds_bucket{urgency="low"}[5m])
             or
             rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="low"}[5m])
@@ -3364,7 +3360,7 @@ groups:
   - alert: SidekiqServiceShardCatchallApdexSLOViolation
     annotations:
       description: |
-        All Sidekiq jobs
+        All other Sidekiq jobs (non-high urgency)
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3377,10 +3373,6 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{urgency="high"}[5m])
-            or
-            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high"}[5m])
-            or
             rate(sidekiq_jobs_completion_seconds_bucket{urgency="low"}[5m])
             or
             rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="low"}[5m])
@@ -3428,7 +3420,7 @@ groups:
   - alert: SidekiqServiceShardCatchallErrorSLOViolation
     annotations:
       description: |
-        All Sidekiq jobs
+        All other Sidekiq jobs (non-high urgency)
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3439,7 +3431,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(sidekiq_jobs_failed_total{}[5m])
+          rate(sidekiq_jobs_failed_total{urgency!="high"}[5m])
         )
       runbook: docs/sidekiq/README.md#alerts
       title: The shard_catchall SLI of the sidekiq service has an error rate violating
@@ -3477,7 +3469,7 @@ groups:
   - alert: SidekiqServiceShardCatchallErrorSLOViolation
     annotations:
       description: |
-        All Sidekiq jobs
+        All other Sidekiq jobs (non-high urgency)
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3488,7 +3480,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(sidekiq_jobs_failed_total{}[5m])
+          rate(sidekiq_jobs_failed_total{urgency!="high"}[5m])
         )
       runbook: docs/sidekiq/README.md#alerts
       title: The shard_catchall SLI of the sidekiq service has an error rate violating
@@ -3526,7 +3518,7 @@ groups:
   - alert: SidekiqServiceShardCatchallTrafficCessation
     annotations:
       description: |
-        All Sidekiq jobs
+        All other Sidekiq jobs (non-high urgency)
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3537,7 +3529,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[5m])
+          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf",urgency!="high"}[5m])
         )
       runbook: docs/sidekiq/README.md#alerts
       title: The shard_catchall SLI of the sidekiq service has not received any traffic
@@ -3561,7 +3553,7 @@ groups:
   - alert: SidekiqServiceShardCatchallTrafficAbsent
     annotations:
       description: |
-        All Sidekiq jobs
+        All other Sidekiq jobs (non-high urgency)
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -3574,7 +3566,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[5m])
+          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf",urgency!="high"}[5m])
         )
       runbook: docs/sidekiq/README.md#alerts
       title: The shard_catchall SLI of the sidekiq service has not reported any traffic
@@ -3583,6 +3575,562 @@ groups:
       gitlab_component_ops:rate_5m{component="shard_catchall",type="sidekiq"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="shard_catchall",type="sidekiq"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "627077500"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(sidekiq_jobs_completion_seconds_bucket{resource_boundary="cpu",urgency="high"}[5m])
+            or
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{resource_boundary="cpu",urgency="high"}[5m])
+          )
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_1h{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_apdex:confidence:ratio_5m{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",type="sidekiq"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "627077500"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(sidekiq_jobs_completion_seconds_bucket{resource_boundary="cpu",urgency="high"}[5m])
+            or
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{resource_boundary="cpu",urgency="high"}[5m])
+          )
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_6h{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_apdex:confidence:ratio_30m{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",type="sidekiq"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "953665318"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_failed_total{resource_boundary="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service has an error rate
+        violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_1h{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_errors:confidence:ratio_5m{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",type="sidekiq"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "953665318"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_failed_total{resource_boundary="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service has an error rate
+        violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_6h{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_errors:confidence:ratio_30m{component="shard_urgent_cpu_bound",confidence="98%",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",type="sidekiq"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: SidekiqServiceShardUrgentCpuBoundTrafficCessation
+    annotations:
+      description: |
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "659062113"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf",resource_boundary="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service has not received
+        any traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",type="sidekiq"} offset 1h >= 0.16666666666666666
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: SidekiqServiceShardUrgentCpuBoundTrafficAbsent
+    annotations:
+      description: |
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "659062113"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf",resource_boundary="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service has not reported
+        any traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",type="sidekiq"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",type="sidekiq"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "203761782"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(sidekiq_jobs_completion_seconds_bucket{resource_boundary!="cpu",urgency="high"}[5m])
+            or
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{resource_boundary!="cpu",urgency="high"}[5m])
+          )
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_other SLI of the sidekiq service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_1h{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_apdex:confidence:ratio_5m{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="shard_urgent_other",type="sidekiq"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "203761782"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(sidekiq_jobs_completion_seconds_bucket{resource_boundary!="cpu",urgency="high"}[5m])
+            or
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{resource_boundary!="cpu",urgency="high"}[5m])
+          )
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_other SLI of the sidekiq service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_6h{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_apdex:confidence:ratio_30m{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",type="sidekiq"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2399846707"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_failed_total{resource_boundary!="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_other SLI of the sidekiq service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_1h{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_errors:confidence:ratio_5m{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="shard_urgent_other",type="sidekiq"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
+    annotations:
+      description: |
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2399846707"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_failed_total{resource_boundary!="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_other SLI of the sidekiq service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_6h{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+        and on (type,component)
+        (
+          gitlab_component_errors:confidence:ratio_30m{component="shard_urgent_other",confidence="98%",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",type="sidekiq"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: SidekiqServiceShardUrgentOtherTrafficCessation
+    annotations:
+      description: |
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "907052725"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf",resource_boundary!="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_other SLI of the sidekiq service has not received any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="shard_urgent_other",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_urgent_other",type="sidekiq"} offset 1h >= 0.16666666666666666
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: SidekiqServiceShardUrgentOtherTrafficAbsent
+    annotations:
+      description: |
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "907052725"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf",resource_boundary!="cpu",urgency="high"}[5m])
+        )
+      runbook: docs/sidekiq/README.md#alerts
+      title: The shard_urgent_other SLI of the sidekiq service has not reported any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="shard_urgent_other",type="sidekiq"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="shard_urgent_other",type="sidekiq"}
     for: 30m
     labels:
       aggregation: component

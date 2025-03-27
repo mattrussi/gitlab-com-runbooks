@@ -10,6 +10,14 @@ local lowUrgencySelector = { urgency: 'low' };
 local throttledUrgencySelector = { urgency: 'throttled' };
 local noUrgencySelector = { urgency: '' };
 
+// Routing rule selectors
+local urgentCpuBoundSelector = { urgency: 'high', resource_boundary: 'cpu' };
+// For urgent non-CPU-bound jobs, we need to use a PromQL compatible approach
+local urgentNonCpuSelector = { urgency: 'high', resource_boundary: { ne: 'cpu' } };
+// For catching the rest, we'll use a simple non-high-urgency selector
+local nonUrgentSelector = { urgency: { ne: 'high' } };
+
+
 local slos = {
   urgent: {
     queueingDurationSeconds: 10,
@@ -73,27 +81,95 @@ metricsCatalog.serviceDefinition({
   useConfidenceLevelForSLIAlerts: '98%',
 
   serviceLevelIndicators: {
-    shard_catchall: {
+    shard_urgent_cpu_bound: {
       userImpacting: true,
       ignoreTrafficCessation: false,
       upscaleLongerBurnRates: true,
 
       description: |||
-        All Sidekiq jobs
+        Sidekiq jobs with resource_boundary=cpu and urgency=high
       |||,
 
       apdex: combined(
         [
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector,
+            selector=urgentCpuBoundSelector,
             satisfiedThreshold=slos.urgent.executionDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=highUrgencySelector,
+            selector=urgentCpuBoundSelector,
             satisfiedThreshold=slos.urgent.queueingDurationSeconds,
           ),
+        ]
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector={ le: '+Inf' } + urgentCpuBoundSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=urgentCpuBoundSelector,
+      ),
+
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
+
+      toolingLinks: [],
+    },
+
+    shard_urgent_other: {
+      userImpacting: true,
+      ignoreTrafficCessation: false,
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        Sidekiq jobs with urgency=high excluding resource_boundary=cpu
+      |||,
+
+      apdex: combined(
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=urgentNonCpuSelector,
+            satisfiedThreshold=slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=urgentNonCpuSelector,
+            satisfiedThreshold=slos.urgent.queueingDurationSeconds,
+          ),
+        ]
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector={ le: '+Inf' } + urgentNonCpuSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=urgentNonCpuSelector,
+      ),
+
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
+
+      toolingLinks: [],
+    },
+
+    shard_catchall: {
+      userImpacting: true,
+      ignoreTrafficCessation: false,
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        All other Sidekiq jobs (non-high urgency)
+      |||,
+
+      apdex: combined(
+        [
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
             selector=lowUrgencySelector,
@@ -126,18 +202,18 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector={ le: '+Inf' },
+        selector={ le: '+Inf' } + nonUrgentSelector,
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector={},
+        selector=nonUrgentSelector,
       ),
 
       // Note: these labels will also be included in the
       // intermediate recording rules specified in the
       // `recordingRuleMetrics` stanza above
-      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
 
       // Consider adding useful links for the environment in the future.
       toolingLinks: [],
