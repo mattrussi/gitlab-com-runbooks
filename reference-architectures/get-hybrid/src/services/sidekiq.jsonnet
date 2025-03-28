@@ -2,14 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
-
-// Original urgency selectors - kept for reference
-local highUrgencySelector = { urgency: 'high' };
-local lowUrgencySelector = { urgency: 'low' };
-local throttledUrgencySelector = { urgency: 'throttled' };
-local noUrgencySelector = { urgency: '' };
 
 // Queue-based selectors for the routing rules
 local urgentCpuBoundQueueSelector = { queue: 'urgent_cpu_bound' };
@@ -61,14 +54,26 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       podSelector=kubeSelector,
       ingressSelector=null,
-      // TODO: use a better selector for Sidekiq HPAs: https://gitlab.com/gitlab-com/runbooks/-/issues/87
-      hpaSelector={ horizontalpodautoscaler: 'gitlab-sidekiq-all-in-1-v2' },
+      // Using a pattern to match all sidekiq HPAs
+      hpaSelector={ horizontalpodautoscaler: { re: 'gitlab-sidekiq-.*' } },
       nodeSelector={ workload: 'sidekiq' },
       deploymentSelector=kubeSelector
     ),
   },
   kubeResources: {
-    'gitlab-sidekiq-all-in-1-v2': {
+    'gitlab-sidekiq-catchall-v2': {
+      kind: 'Deployment',
+      containers: [
+        'sidekiq',
+      ],
+    },
+    'gitlab-sidekiq-urgent-cpu-v2': {
+      kind: 'Deployment',
+      containers: [
+        'sidekiq',
+      ],
+    },
+    'gitlab-sidekiq-urgent-other-v2': {
       kind: 'Deployment',
       containers: [
         'sidekiq',
