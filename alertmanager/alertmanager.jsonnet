@@ -511,8 +511,34 @@ local routingTree = Route(
       continue=true,
       matchers={ env: { re: 'gstg(-ref)?' }, type: 'gitaly', tier: 'stor', component: 'disk_space' },
     ),
-  ]
-  + [
+  ] + [
+    Route(
+      receiver='incidentio_gstg',
+      continue=true,
+      matchers={
+        env: { re: 'gstg(-ref)?' },
+        slo_alert: 'yes',
+        type: { re: 'api|web|git|registry|web-pages' },
+
+        // Traffic volumes in staging are very low, and even lower in
+        // the regional clusters. Since SLO alerting requires reasonable
+        // traffic volumes, don't route regional alerts to the
+        // slackline channel as they create a lot of noise.
+        aggregation: { ne: 'regional_component' },
+      },
+    ),
+    Route(
+      receiver='incidentio_gstg',
+      matchers={
+        rules_domain: 'general',
+        alert_class: { ne: 'traffic_cessation' },
+        alertname: { nre: 'service_ops_out_of_bounds_upper_5m|service_ops_out_of_bounds_lower_5m' },
+        env: { re: 'gstg(-ref)?' },
+      },
+      continue=true,
+      group_by=['...']
+    ),
+  ] + [
     // Terminators go last
     Route(
       receiver='platform_insights_pagerduty',
