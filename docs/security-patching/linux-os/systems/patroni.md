@@ -21,7 +21,6 @@ As of writing (08/2024) the clusters we run in GPRD are:
 1. main
 1. ci
 1. registry
-1. embedding
 
 ## Process
 
