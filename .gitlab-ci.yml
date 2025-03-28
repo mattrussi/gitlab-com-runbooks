@@ -1100,6 +1100,7 @@ validate-incident-io-service-catalog:
     - !reference [.default-job-rules, rules]
     - *avoid-merge-train-rule
     - *if-merge-request-rule
+    - *gitlab-com-only-rule
   script:
     - catalog-importer validate --config incident-io-importer.jsonnet
 
@@ -1111,5 +1112,6 @@ sync-incident-io-service-catalog:
     - !reference [.default-job-rules, rules]
     - *avoid-merge-train-rule
     - *if-main-branch-rule
+    - *gitlab-com-only-rule
   script:
     - catalog-importer sync --api-key $INCIDENT_API_KEY --config incident-io-importer.jsonnet
