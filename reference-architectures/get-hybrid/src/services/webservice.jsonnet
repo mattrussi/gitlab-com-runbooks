@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local successCounterApdex = metricsCatalog.successCounterApdex;
 local workhorseRoutes = import 'gitlab-utils/workhorse-routes.libsonnet';
+local railsQueueingSli = import 'service-archetypes/helpers/rails_queueing_sli.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
@@ -95,7 +96,7 @@ metricsCatalog.serviceDefinition({
         // in that other SLI, we are ignoring queries that don't come from our
         // own application, because we have no control over those queries.
         endpoint_id: {
-          ne: 'GraphqlController#execute'
+          ne: 'GraphqlController#execute',
         },
       },
 
@@ -273,27 +274,5 @@ metricsCatalog.serviceDefinition({
           apdexScore: 0.995,
         },
       },
-
-      rails_queueing: {
-        userImpacting: true,
-        serviceAggregation: false,  // The requests are already counted in the `puma` SLI.
-        description: |||
-          Apdex for time spent waiting for a Puma worker
-        |||,
-
-        requestRate: rateMetric(
-          counter='gitlab_rails_queue_duration_seconds_count',
-          selector={},
-        ),
-
-        apdex: histogramApdex(
-          histogram='gitlab_rails_queue_duration_seconds_bucket',
-          selector={},
-          satisfiedThreshold=0.05,
-          toleratedThreshold=0.1
-        ),
-
-        significantLabels: [],
-      },
-    },
+    } + railsQueueingSli(0.05, 0.1),
 })
