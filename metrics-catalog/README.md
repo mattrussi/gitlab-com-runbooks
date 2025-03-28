@@ -68,6 +68,12 @@ metricsCatalog.serviceDefinition({
         selector='job="gitlab-workhorse-web", type="web", code=~"^5.*"'
       ),
 
+      // An SLI that is marked as experimental will generate all of
+      // the recording rules, but no alerts. This allows using the
+      // SLO analysis dashboards for making sure that SLO is
+      // appropriately set.
+      experimental: false
+
       // significantLabels are a list of labels that will be used as dimensions in generated dashboards
       // they will also be included in source recording rules
       significantLabels: ['fqdn', 'route'],
@@ -90,7 +96,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    puma: {                 // Defines a service called `puma`
+    puma: {                 // Defines an SLI called `puma`
       ...
     },
   },

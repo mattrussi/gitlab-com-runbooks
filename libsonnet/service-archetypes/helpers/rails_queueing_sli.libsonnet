@@ -7,6 +7,7 @@ function(satisfiedThreshold, toleratedThreshold, selector={})
     rails_queueing: {
       userImpacting: true,
       serviceAggregation: false,  // The requests are already counted in the `puma/rails_request` SLI.
+      experimental: true,
       description: |||
         Apdex for time spent waiting for a Puma worker
       |||,

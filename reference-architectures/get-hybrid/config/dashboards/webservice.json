@@ -4833,7 +4833,7 @@
       "type": "timeseries"
     },
     {
-      "content": "### Description\n\nApdex for time spent waiting for a Puma worker\n\n",
+      "content": "### Description\n\nApdex for time workhorse spends waiting for a Puma worker\n\n",
       "gridPos": {
         "h": 8,
         "w": 8,
