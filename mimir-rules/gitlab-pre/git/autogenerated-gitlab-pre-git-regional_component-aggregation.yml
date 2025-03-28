@@ -129,6 +129,140 @@ groups:
       )
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le="0.05",type="git"}
+        )
+        +
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le="0.1",type="git"}
+        )
+      )
+      /
+      2
+  - record: gitlab_regional_sli_apdex:weight:score_5m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le="+Inf",type="git"}
+      )
+  - record: gitlab_regional_sli_ops:rate_5m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m{env="pre",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:ratio_5m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_5m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:confidence:ratio_5m
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_errors:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:confidence:ratio_5m
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_apdex:success:rate_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_5m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 300)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_5m
+    labels:
       component: rails_request
       monitor: global
       tier: sv
@@ -491,6 +625,140 @@ groups:
       )
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le="0.05",type="git"}
+        )
+        +
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le="0.1",type="git"}
+        )
+      )
+      /
+      2
+  - record: gitlab_regional_sli_apdex:weight:score_30m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le="+Inf",type="git"}
+      )
+  - record: gitlab_regional_sli_ops:rate_30m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m{env="pre",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:ratio_30m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_30m
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:confidence:ratio_30m
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_errors:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:confidence:ratio_30m
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_apdex:success:rate_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_30m{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_30m
+    labels:
       component: rails_request
       monitor: global
       tier: sv
@@ -850,6 +1118,140 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_1h{component="gitlab_sshd",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_1h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le="0.05",type="git"}
+        )
+        +
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le="0.1",type="git"}
+        )
+      )
+      /
+      2
+  - record: gitlab_regional_sli_apdex:weight:score_1h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le="+Inf",type="git"}
+      )
+  - record: gitlab_regional_sli_ops:rate_1h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h{env="pre",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:ratio_1h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_1h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:confidence:ratio_1h
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_errors:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:confidence:ratio_1h
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_apdex:success:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 3600)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
@@ -1232,6 +1634,142 @@ groups:
       )
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_apdex:weight:score_6h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_ops:rate_6h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:rate_6h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:ratio_6h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_6h
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:confidence:ratio_6h
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_errors:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:confidence:ratio_6h
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_apdex:success:rate_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_6h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_6h
+    labels:
       component: rails_request
       monitor: global
       tier: sv
@@ -1576,6 +2114,142 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_3d{component="gitlab_sshd",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_3d
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_apdex:weight:score_3d
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_ops:rate_3d
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:rate_3d
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:ratio_3d
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_3d
+    labels:
+      component: rails_queueing
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:confidence:ratio_3d
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      (gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_errors:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200)),
+        0, 1
+      )
+  - record: gitlab_regional_sli_apdex:confidence:ratio_3d
+    labels:
+      component: rails_queueing
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}) * (1 - (gitlab_regional_sli_apdex:success:rate_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} / gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_3d{component="rails_queueing",env="pre",monitor="global",tier="sv",type="git"} * 259200)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:

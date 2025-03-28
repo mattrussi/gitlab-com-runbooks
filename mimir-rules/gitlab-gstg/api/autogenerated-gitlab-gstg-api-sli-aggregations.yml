@@ -89,6 +89,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{env="gstg",type=~"api"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: api - rails_queueing - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{env="gstg",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{env="gstg",type=~"api"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - rails_request - 5m burn-rate'
   interval: 1m
   rules:
@@ -203,6 +216,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{env="gstg",type=~"api"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: api - rails_queueing - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{env="gstg",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{env="gstg",type=~"api"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - rails_request - 30m burn-rate'
   interval: 2m
   rules:
@@ -316,6 +342,19 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{env="gstg",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{env="gstg",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{env="gstg",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: api - rails_request - 1h burn-rate'
   interval: 1m
