@@ -2,7 +2,6 @@
 legacy_version_file = false
 
 [tools]
-jsonnet-tool = "latest"
 # Please continue to use `.tool-versions` to specify tools, rather than adding them directly here.
 
 [plugins]
