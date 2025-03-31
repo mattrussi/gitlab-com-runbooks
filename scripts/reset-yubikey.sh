@@ -14,7 +14,16 @@ fi
 
 set -e
 
-PIN=${PIN:-000000}
+read -p "Enter the PIN to set on your YubiKey: " NEWPIN
+
+read -p "Re-enter the PIN to set on your YubiKey: " NEWPINVER
+
+if [ "x$NEWPIN" != "x$NEWPINVER" ] ; then
+  echo "PINs supplied do not match."
+  exit 1
+else
+  PIN=${NEWPIN:-000000}
+fi
 
 read -rp "THIS WILL RESET YOUR YUBIKEY WITH PIN=$PIN, type "CTRL+C" to cancel"
 
