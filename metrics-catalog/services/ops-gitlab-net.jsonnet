@@ -146,8 +146,9 @@ metricsCatalog.serviceDefinition({
             ],
           },
         },
-        satisfiedThreshold=1,
-        toleratedThreshold=10
+        satisfiedThreshold=1.0,
+        toleratedThreshold=10.0,
+        metricsFormat='openmetrics'
       ),
 
       requestRate: rateMetric(
@@ -197,8 +198,8 @@ metricsCatalog.serviceDefinition({
       apdex: combined(
         [
           gitalyHelper.grpcServiceApdex(mainApdexSelector),
-          gitalyHelper.grpcServiceApdex(slowMethodApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
-          gitalyHelper.grpcServiceApdex(operationServiceApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
+          gitalyHelper.grpcServiceApdex(slowMethodApdexSelector, satisfiedThreshold=10.0, toleratedThreshold=30.0),
+          gitalyHelper.grpcServiceApdex(operationServiceApdexSelector, satisfiedThreshold=10.0, toleratedThreshold=30.0),
         ]
       ),
 
@@ -257,8 +258,9 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
         selector=gitlabSshdBaseSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=5
+        satisfiedThreshold=1.0,
+        toleratedThreshold=5.0,
+        metricsFormat='openmetrics',
       ),
 
       errorRate: rateMetric(
@@ -294,6 +296,7 @@ metricsCatalog.serviceDefinition({
         selector=sqlBaseSelector,
         satisfiedThreshold=0.1,
         toleratedThreshold=0.25,
+        metricsFormat='openmetrics',
       ),
 
       requestRate: rateMetric(

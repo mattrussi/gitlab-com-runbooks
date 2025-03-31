@@ -13,7 +13,7 @@ groups:
       type: istio
     expr: |
       sum by (env,environment) (
-        sli_aggregations:pilot_proxy_convergence_time_bucket:rate_5m{app="istiod",env="ops",job="pilot",le="1000"}
+        sli_aggregations:pilot_proxy_convergence_time_bucket:rate_5m{app="istiod",env="ops",job="pilot",le="1000.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -135,7 +135,7 @@ groups:
       type: istio
     expr: |
       sum by (env,environment) (
-        sli_aggregations:pilot_proxy_convergence_time_bucket:rate_30m{app="istiod",env="ops",job="pilot",le="1000"}
+        sli_aggregations:pilot_proxy_convergence_time_bucket:rate_30m{app="istiod",env="ops",job="pilot",le="1000.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -257,7 +257,7 @@ groups:
       type: istio
     expr: |
       sum by (env,environment) (
-        sli_aggregations:pilot_proxy_convergence_time_bucket:rate_1h{app="istiod",env="ops",job="pilot",le="1000"}
+        sli_aggregations:pilot_proxy_convergence_time_bucket:rate_1h{app="istiod",env="ops",job="pilot",le="1000.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

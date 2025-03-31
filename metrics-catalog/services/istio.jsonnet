@@ -8,7 +8,7 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'istio',
   tier: 'inf',
-  tenants: [ 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
 
   tags: ['golang'],
 
@@ -49,13 +49,14 @@ metricsCatalog.serviceDefinition({
 
       local selector = {
         job: 'pilot',
-        app: 'istiod'
+        app: 'istiod',
       },
 
       apdex: histogramApdex(
         histogram='pilot_proxy_convergence_time_bucket',
         selector=selector,
-        satisfiedThreshold=1000,
+        satisfiedThreshold=1000.0,
+        metricsFormat='openmetrics',
       ),
 
       requestRate: rateMetric(
@@ -72,7 +73,7 @@ metricsCatalog.serviceDefinition({
       trafficCessationAlertConfig: false,
 
       local selector = {
-        job: 'pilot'
+        job: 'pilot',
       },
 
       requestRate: rateMetric(
@@ -90,6 +91,6 @@ metricsCatalog.serviceDefinition({
   skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'Istio is an infrastructure component, developers do not interact with it',
     'Service exists in the dependency graph': 'This service does not interfact directly with any other services',
-    'Structured logs available in Kibana': 'Istio service is not deployed in production'
+    'Structured logs available in Kibana': 'Istio service is not deployed in production',
   },
 })
