@@ -15,11 +15,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="ops",job="gitlab-shell",le="1",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="ops",job="gitlab-shell",le="1.0",type="ops-gitlab-net"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="ops",job="gitlab-shell",le="5",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="ops",job="gitlab-shell",le="5.0",type="ops-gitlab-net"}
         )
       )
       /
@@ -190,11 +190,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="ops",job="gitlab-shell",le="1",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="ops",job="gitlab-shell",le="1.0",type="ops-gitlab-net"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="ops",job="gitlab-shell",le="5",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="ops",job="gitlab-shell",le="5.0",type="ops-gitlab-net"}
         )
       )
       /
@@ -365,11 +365,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="ops",job="gitlab-shell",le="1",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="ops",job="gitlab-shell",le="1.0",type="ops-gitlab-net"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="ops",job="gitlab-shell",le="5",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="ops",job="gitlab-shell",le="5.0",type="ops-gitlab-net"}
         )
       )
       /

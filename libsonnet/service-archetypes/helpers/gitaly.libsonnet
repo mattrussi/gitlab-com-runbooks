@@ -82,7 +82,7 @@ local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=
       grpc_type: 'unary',
     },
     satisfiedThreshold=satisfiedThreshold,
-    toleratedThreshold=toleratedThreshold
+    toleratedThreshold=toleratedThreshold,
   );
 
 local gitalyGRPCErrorRate(baseSelector) =
