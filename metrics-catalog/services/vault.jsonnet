@@ -9,7 +9,7 @@ local googleLoadBalancerComponents = import './lib/google_load_balancer_componen
 metricsCatalog.serviceDefinition({
   type: 'vault',
   tier: 'inf',
-  tenants: [ 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-ops', 'gitlab-pre'],
 
   tags: ['golang'],
 
@@ -65,7 +65,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='istio_request_duration_milliseconds_bucket',
         selector=selector,
-        satisfiedThreshold=1000,
+        satisfiedThreshold=1000.0,
       ),
 
       requestRate: rateMetric(
@@ -97,7 +97,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='istio_request_duration_milliseconds_bucket',
         selector=selector,
-        satisfiedThreshold=1000,
+        satisfiedThreshold=1000.0,
       ),
 
       requestRate: rateMetric(
