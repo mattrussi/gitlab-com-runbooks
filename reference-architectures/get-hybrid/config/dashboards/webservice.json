@@ -9755,7 +9755,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -9877,7 +9877,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -9979,7 +9979,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10081,7 +10081,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10214,7 +10214,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"1\",route_id!=\"\"}[$__interval])\n  )\n  +\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"10\",route_id!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"1\",route_id!=\"\"}[$__interval])\n  )\n  +\n  sum by (route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"10\",route_id!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10316,7 +10316,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10418,7 +10418,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10520,7 +10520,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10653,7 +10653,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"1\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n  +\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"10\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"1\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n  +\n  sum by (code) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!=\"project_uploads\",route_id!=\"action_cable\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10755,7 +10755,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10857,7 +10857,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id!~\"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$\",route_id!~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -10979,7 +10979,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11092,7 +11092,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11194,7 +11194,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11296,7 +11296,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route_id) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",route_id!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11420,7 +11420,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n    -\n    (\n      sum by (route_id) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"10\",route_id!=\"\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(route_id) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~\"5..\",le=\"+Inf\",route_id!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11522,7 +11522,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11624,7 +11624,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route_id) (\n  rate(gitlab_workhorse_http_requests_total{route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11726,7 +11726,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (code,le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11850,7 +11850,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n\n    -\n    (\n      sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"10\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",endpoint_id!=\"GraphqlController#execute\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n\n    -\n    (\n      sum by (code) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"10\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n\n    )\n  )\n  / ignoring(code) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!=\"\",le=\"+Inf\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -11952,7 +11952,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -12054,7 +12054,7 @@
           "pluginVersion": "v11.4.0",
           "targets": [
             {
-              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",endpoint_id!=\"GraphqlController#execute\",route_id!=\"health\",route_id!=\"liveness\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (code) (\n  rate(gitlab_workhorse_http_requests_total{code!=\"\",route_id!=\"health\",route_id!=\"liveness\",route_id!=\"api_graphql\",route_id=~\"^api.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
