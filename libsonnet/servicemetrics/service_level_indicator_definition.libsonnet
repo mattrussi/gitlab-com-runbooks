@@ -33,6 +33,7 @@ local serviceLevelIndicatorDefaults = {
   dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
   shardLevelMonitoring: false,
   emittedBy: [],  // Which services emit the metrics for this SLI, e.g. rails_redis_client SLI is emitted by web service
+  experimental: false,
 
   useConfidenceLevelForSLIAlerts: null,  // Use confidence intervals when alerting on SLIs. These have better performance in low RPS situations.
 };
@@ -61,6 +62,10 @@ local validateSeverity(object, message) =
   else
     std.assertEqual(true, { __assert: message });
 
+local validateExperimentalServiceAggregation(sli, message) =
+  assert !(sli.experimental && sli.serviceAggregation) : message;
+  sli;
+
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   local withDefaults = serviceLevelIndicatorDefaults
                        { emittedBy: [inheritedDefaults.type] } +
@@ -77,6 +82,8 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   validateHasField(withDefaults, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
   +
   validateSeverity(withDefaults, '%s does not have a valid severity, must be s1-s4' % [sliName])
+  +
+  validateExperimentalServiceAggregation(withDefaults, '%s cannot be marked as experimental=true have serviceAggregation=true' % [sliName])
   +
   validateFeatureCategory(withDefaults, sliName)
   {

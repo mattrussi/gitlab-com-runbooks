@@ -4833,7 +4833,7 @@
       "type": "timeseries"
     },
     {
-      "content": "### Description\n\nApdex for time spent waiting for a Puma worker\n\n",
+      "content": "### Description\n\nApdex for time workhorse spends waiting for a free Puma worker.  When this alerts, a noticeable proportion of requests are arriving a Puma when there are no free workers, and thus queue for processing until a worker is free.\n\nSuch queuing adds latency to the request which will often be user visible.\n\nTypically other apdex alerts will also be out of spec at the same time; this SLI adds signal that queuing is part of the problem, rather than only being slow processing requests with spare capacity in Puma for other requests.\n\nIt typically indicates higher use of the system than it has been provisioned to handle; it can be resolved by either adding Puma workers (pods and nodes) or by finding high RPS traffic that can be eliminated.\n\n",
       "gridPos": {
         "h": 8,
         "w": 8,

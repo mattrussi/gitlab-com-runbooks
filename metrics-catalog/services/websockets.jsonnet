@@ -6,6 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local railsQueueingSli = import 'service-archetypes/helpers/rails_queueing_sli.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'websockets' };
 
@@ -114,11 +115,8 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Rails', index='rails'),
     ],
 
-    // Experimentally evaluate this SLI with
-    // confidence levels, to assess how well this approach
-    // works
     useConfidenceLevelForSLIAlerts: '98%',
 
     dependsOn: dependOnPatroni.sqlComponents,
-  }),
+  }) + railsQueueingSli(0.1, 0.25, selector={ type: 'websockets' }),  // This is using a P95, rather than P99.5
 })

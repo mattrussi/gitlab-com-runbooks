@@ -409,6 +409,71 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{cluster="gitlab-3okls",env="gprd",type=~"api"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: api - rails_queueing - 5m burn-rate - gprd-gitlab-gke'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 5m burn-rate - gprd-us-east1-b'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 5m burn-rate - gprd-us-east1-c'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 5m burn-rate - gprd-us-east1-d'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"api"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - rails_request - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -947,6 +1012,71 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{cluster="gitlab-3okls",env="gprd",type=~"api"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: api - rails_queueing - 30m burn-rate - gprd-gitlab-gke'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 30m burn-rate - gprd-us-east1-b'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 30m burn-rate - gprd-us-east1-c'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 30m burn-rate - gprd-us-east1-d'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"api"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - rails_request - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1484,6 +1614,71 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{cluster="gitlab-3okls",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 1h burn-rate - gprd-gitlab-gke'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 1h burn-rate - gprd-us-east1-b'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 1h burn-rate - gprd-us-east1-c'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 1h burn-rate - gprd-us-east1-d'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: api - rails_queueing - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_rails_queue_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_rails_queue_duration_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: api - rails_request - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m

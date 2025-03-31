@@ -6,6 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local railsQueueingSli = import 'service-archetypes/helpers/rails_queueing_sli.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'ai-assisted' };
 
@@ -98,5 +99,10 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Rails', index='rails'),
     ],
     severity: 's3',  // Don't page SREs for this SLI
+  }) + railsQueueingSli(0.1, 0.25, selector={ type: 'ai-assisted' }, overrides={
+    monitoringThresholds+: {
+      severity: 's3',
+      apdexScore: 0.995,
+    },
   }),
 })

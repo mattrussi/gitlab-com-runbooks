@@ -199,7 +199,10 @@ local trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector
 
 
 local alertsForService(service, alertDescriptors, extraSelector, tenant=null) =
-  local slis = service.listServiceLevelIndicators();
+  local alertingSlis = std.filter(
+    function(sli) !sli.experimental,
+    service.listServiceLevelIndicators()
+  );
 
   local rules = std.map(
     function(alert)
@@ -227,7 +230,7 @@ local alertsForService(service, alertDescriptors, extraSelector, tenant=null) =
         (
           trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector)
         ),
-      slis
+      alertingSlis
     )
   );
 
