@@ -7,6 +7,7 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+local railsQueueingSli = import 'service-archetypes/helpers/rails_queueing_sli.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'internal-api' };
 
@@ -121,6 +122,11 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Rails', index='rails'),
     ],
     dependsOn: dependOnPatroni.sqlComponents,
+  }) + railsQueueingSli(0.05, 0.25, selector={ type: 'internal-api' }, overrides={
+    monitoringThresholds+: {
+      severity: 's3',
+      apdexScore: 0.995,
+    },
   }),
   capacityPlanning: {
     components: [

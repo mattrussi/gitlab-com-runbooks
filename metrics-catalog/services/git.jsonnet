@@ -9,6 +9,7 @@ local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_ind
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
+local railsQueueingSli = import 'service-archetypes/helpers/rails_queueing_sli.libsonnet';
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 local railsSelector = { job: 'gitlab-rails', type: 'git' };
@@ -305,5 +306,10 @@ metricsCatalog.serviceDefinition({
     ],
 
     dependsOn: dependOnPatroni.sqlComponents,
+  }) + railsQueueingSli(0.05, 0.1, selector={ type: 'git' }, overrides={
+    monitoringThresholds+: {
+      severity: 's3',
+      apdexScore: 0.995,
+    },
   }),
 })

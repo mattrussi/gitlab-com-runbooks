@@ -45,6 +45,7 @@ local combinedServiceLevelIndicatorDefinition(
         staticLabels: staticLabels,
 
         serviceAggregation: serviceAggregation,
+        experimental: misc.any(function(component) component.experimental, componentsInitialised),
 
         hasFeatureCategoryFromSourceMetrics()::
           misc.all(function(component) component.hasFeatureCategoryFromSourceMetrics(), componentsInitialised),

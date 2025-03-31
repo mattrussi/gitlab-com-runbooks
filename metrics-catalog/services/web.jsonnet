@@ -9,6 +9,7 @@ local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_ind
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
+local railsQueueingSli = import 'service-archetypes/helpers/rails_queueing_sli.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'web' };
 
@@ -340,5 +341,10 @@ metricsCatalog.serviceDefinition({
   }) + sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
+  }) + railsQueueingSli(0.1, 0.25, selector={ type: 'web' }, overrides={
+    monitoringThresholds+: {
+      severity: 's3',
+      apdexScore: 0.995,
+    },
   }),
 })
