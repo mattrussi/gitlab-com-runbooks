@@ -4166,7 +4166,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4217,7 +4217,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4266,7 +4266,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has an error rate violating
@@ -4315,7 +4315,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has an error rate violating
@@ -4364,7 +4364,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has not received any traffic
@@ -4401,7 +4401,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse SLI of the webservice service has not reported any traffic
@@ -4440,7 +4440,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4494,7 +4494,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md#alerts
@@ -4546,7 +4546,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has an error rate violating
@@ -4597,7 +4597,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has an error rate violating
@@ -4648,7 +4648,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has not received any
@@ -4687,7 +4687,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
         )
       runbook: docs/webservice/README.md#alerts
       title: The workhorse_api SLI of the webservice service has not reported any

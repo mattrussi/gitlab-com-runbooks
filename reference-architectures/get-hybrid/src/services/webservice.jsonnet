@@ -90,13 +90,12 @@ metricsCatalog.serviceDefinition({
           ne: [
             'health',
             'liveness',
+            // Ignoring GraphQL here because that is also monitored in the `graphql_query` SLI below
+            // in that other SLI, we are ignoring queries that don't come from our
+            // own application, because we have no control over those queries.
+            'GraphqlController#execute',
+            'api_graphql',
           ],
-        },
-        // Ignoring GraphQL here because that is also monitored in the `graphql_query` SLI below
-        // in that other SLI, we are ignoring queries that don't come from our
-        // own application, because we have no control over those queries.
-        endpoint_id: {
-          ne: 'GraphqlController#execute',
         },
       },
 

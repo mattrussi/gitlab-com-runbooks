@@ -9512,11 +9512,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="1",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="1",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
       )
       /
@@ -9528,7 +9528,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
       )
     labels:
       component: workhorse
@@ -9537,7 +9537,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
       )
     labels:
       component: workhorse
@@ -9547,7 +9547,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[5m])
         )
       )
       or
@@ -9655,7 +9655,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
       )
     labels:
       component: workhorse_api
@@ -9664,7 +9664,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
       )
     labels:
       component: workhorse_api
@@ -9673,7 +9673,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
       )
     labels:
       component: workhorse_api
@@ -9683,7 +9683,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[5m])
         )
       )
       or
@@ -10330,11 +10330,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="1",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="1",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
         )
       )
       /
@@ -10346,7 +10346,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
       )
     labels:
       component: workhorse
@@ -10355,7 +10355,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
       )
     labels:
       component: workhorse
@@ -10365,7 +10365,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[30m])
         )
       )
       or
@@ -10473,7 +10473,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[30m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[30m])
       )
     labels:
       component: workhorse_api
@@ -10482,7 +10482,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[30m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[30m])
       )
     labels:
       component: workhorse_api
@@ -10491,7 +10491,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[30m])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[30m])
       )
     labels:
       component: workhorse_api
@@ -10501,7 +10501,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[30m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[30m])
         )
       )
       or
@@ -11148,11 +11148,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="1",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="1",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
         )
       )
       /
@@ -11164,7 +11164,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
       )
     labels:
       component: workhorse
@@ -11173,7 +11173,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
       )
     labels:
       component: workhorse
@@ -11183,7 +11183,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[1h])
         )
       )
       or
@@ -11291,7 +11291,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[1h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[1h])
       )
     labels:
       component: workhorse_api
@@ -11300,7 +11300,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[1h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[1h])
       )
     labels:
       component: workhorse_api
@@ -11309,7 +11309,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[1h])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[1h])
       )
     labels:
       component: workhorse_api
@@ -11319,7 +11319,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[1h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[1h])
         )
       )
       or
@@ -11966,11 +11966,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="1",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="1",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
         )
       )
       /
@@ -11982,7 +11982,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!="project_uploads",route_id!="action_cable",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
       )
     labels:
       component: workhorse
@@ -11991,7 +11991,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
       )
     labels:
       component: workhorse
@@ -12001,7 +12001,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id!~"^git_info_refs$|^git_lfs_objects$|^git_receive_pack$|^git_upload_pack$",route_id!~"^api.*"}[6h])
         )
       )
       or
@@ -12109,7 +12109,7 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="10",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[6h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="10",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[6h])
       )
     labels:
       component: workhorse_api
@@ -12118,7 +12118,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",endpoint_id!="GraphqlController#execute",le="+Inf",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[6h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{code!~"5..",le="+Inf",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[6h])
       )
     labels:
       component: workhorse_api
@@ -12127,7 +12127,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[6h])
+        rate(gitlab_workhorse_http_requests_total{route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[6h])
       )
     labels:
       component: workhorse_api
@@ -12137,7 +12137,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",endpoint_id!="GraphqlController#execute",route_id!="health",route_id!="liveness",route_id=~"^api.*"}[6h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route_id!="health",route_id!="liveness",route_id!="GraphqlController#execute",route_id!="api_graphql",route_id=~"^api.*"}[6h])
         )
       )
       or
