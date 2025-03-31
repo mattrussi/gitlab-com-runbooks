@@ -98,6 +98,7 @@ metricsCatalog.serviceDefinition({
         histogram='istio_request_duration_milliseconds_bucket',
         selector=selector,
         satisfiedThreshold=1000.0,
+        metricsFormat='openmetrics',
       ),
 
       requestRate: rateMetric(

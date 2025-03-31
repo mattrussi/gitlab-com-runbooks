@@ -56,6 +56,7 @@ metricsCatalog.serviceDefinition({
         histogram='pilot_proxy_convergence_time_bucket',
         selector=selector,
         satisfiedThreshold=1000.0,
+        metricsFormat='openmetrics',
       ),
 
       requestRate: rateMetric(
