@@ -40,7 +40,7 @@ RUN apk add --no-cache \
   openssl tar yamllint zlib npm \
   parallel coreutils
 
-ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
+ENV PATH=$PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 # Download and install gcloud
 RUN curl --silent -o /tmp/google-cloud-sdk.tar.gz -L --fail  https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz && \
