@@ -4153,7 +4153,13 @@ groups:
   - alert: WebserviceServiceRailsQueueingApdexSLOViolation
     annotations:
       description: |
-        Apdex for time spent waiting for a Puma worker
+        Apdex for time spent waiting for a Puma worker.  When this alerts, a noticeable proportion of requests are arriving at puma when there are no free workers and thus are accepted for processing but queued until a worker is free
+
+        Such queuing adds latency to the request which will often be user visible.
+
+        Typically other apdex alerts will also be out of spec at the same time; this SLI adds signal that queuing is part of the problem, rather than only being slow processing requests with spare capacity in Puma for other requests.
+
+        It typically indicates higher use of the system  than it is has been provisioned to handle; it can be resolved by either adding Puma threads (pods and nodes) or by finding high RPS traffic that can be eliminated.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -4205,7 +4211,13 @@ groups:
   - alert: WebserviceServiceRailsQueueingApdexSLOViolation
     annotations:
       description: |
-        Apdex for time spent waiting for a Puma worker
+        Apdex for time spent waiting for a Puma worker.  When this alerts, a noticeable proportion of requests are arriving at puma when there are no free workers and thus are accepted for processing but queued until a worker is free
+
+        Such queuing adds latency to the request which will often be user visible.
+
+        Typically other apdex alerts will also be out of spec at the same time; this SLI adds signal that queuing is part of the problem, rather than only being slow processing requests with spare capacity in Puma for other requests.
+
+        It typically indicates higher use of the system  than it is has been provisioned to handle; it can be resolved by either adding Puma threads (pods and nodes) or by finding high RPS traffic that can be eliminated.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -4257,7 +4269,13 @@ groups:
   - alert: WebserviceServiceRailsQueueingTrafficCessation
     annotations:
       description: |
-        Apdex for time spent waiting for a Puma worker
+        Apdex for time spent waiting for a Puma worker.  When this alerts, a noticeable proportion of requests are arriving at puma when there are no free workers and thus are accepted for processing but queued until a worker is free
+
+        Such queuing adds latency to the request which will often be user visible.
+
+        Typically other apdex alerts will also be out of spec at the same time; this SLI adds signal that queuing is part of the problem, rather than only being slow processing requests with spare capacity in Puma for other requests.
+
+        It typically indicates higher use of the system  than it is has been provisioned to handle; it can be resolved by either adding Puma threads (pods and nodes) or by finding high RPS traffic that can be eliminated.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -4292,7 +4310,13 @@ groups:
   - alert: WebserviceServiceRailsQueueingTrafficAbsent
     annotations:
       description: |
-        Apdex for time spent waiting for a Puma worker
+        Apdex for time spent waiting for a Puma worker.  When this alerts, a noticeable proportion of requests are arriving at puma when there are no free workers and thus are accepted for processing but queued until a worker is free
+
+        Such queuing adds latency to the request which will often be user visible.
+
+        Typically other apdex alerts will also be out of spec at the same time; this SLI adds signal that queuing is part of the problem, rather than only being slow processing requests with spare capacity in Puma for other requests.
+
+        It typically indicates higher use of the system  than it is has been provisioned to handle; it can be resolved by either adding Puma threads (pods and nodes) or by finding high RPS traffic that can be eliminated.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

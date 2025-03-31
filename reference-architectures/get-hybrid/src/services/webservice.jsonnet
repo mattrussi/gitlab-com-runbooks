@@ -95,7 +95,7 @@ metricsCatalog.serviceDefinition({
         // in that other SLI, we are ignoring queries that don't come from our
         // own application, because we have no control over those queries.
         endpoint_id: {
-          ne: 'GraphqlController#execute'
+          ne: 'GraphqlController#execute',
         },
       },
 
@@ -278,7 +278,19 @@ metricsCatalog.serviceDefinition({
         userImpacting: true,
         serviceAggregation: false,  // The requests are already counted in the `puma` SLI.
         description: |||
-          Apdex for time spent waiting for a Puma worker
+          Apdex for time spent waiting for a Puma worker.  When this alerts, a noticeable proportion of
+          requests are arriving at puma when there are no free workers and thus are accepted for
+          processing but queued until a worker is free
+
+          Such queuing adds latency to the request which will often be user visible.
+
+          Typically other apdex alerts will also be out of spec at the same time; this SLI adds
+          signal that queuing is part of the problem, rather than only being slow processing requests
+          with spare capacity in Puma for other requests.
+
+          It typically indicates higher use of the system  than it is has been provisioned to handle;
+          it can be resolved by either adding Puma threads (pods and nodes) or by finding high RPS traffic
+          that can be eliminated.
         |||,
 
         requestRate: rateMetric(
