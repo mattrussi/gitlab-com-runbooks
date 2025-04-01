@@ -14,11 +14,11 @@ fi
 
 set -e
 
-read -p "Enter the PIN to set on your YubiKey: " NEWPIN
+read -rp "Enter the PIN to set on your YubiKey: " NEWPIN
 
-read -p "Re-enter the PIN to set on your YubiKey: " NEWPINVER
+read -rp "Re-enter the PIN to set on your YubiKey: " NEWPINVER
 
-if [ "x$NEWPIN" != "x$NEWPINVER" ] ; then
+if [ "x$NEWPIN" != "x$NEWPINVER" ]; then
   echo "PINs supplied do not match."
   exit 1
 else

@@ -53,7 +53,7 @@ applications where this YubiKey is used will not be affected.[^1]**
 When doing a rebase with multiple commits, or using ssh automation like `knife ssh ...` it will be painful using the default `yubikey-agent` configuration since a touch is required for every signature or ssh session.
 This is default configuration but we set a touch policy of "cached" with the following script, this will cache touches for 15 seconds:
 
-1. Validate `ykman` has access to the YubiKey. It should output the device model, serial number, firmware etc., 
+1. Validate `ykman` has access to the YubiKey. It should output the device model, serial number, firmware etc.,
    and state of the applications such as FIDO and PIV.  If there are an issues, re-insert your YubiKey.
 
    ```shell
