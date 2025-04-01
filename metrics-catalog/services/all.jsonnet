@@ -48,6 +48,7 @@
   import 'pd-event-logger.jsonnet',
   import 'pgbouncer-ci.jsonnet',
   import 'pgbouncer-registry.jsonnet',
+  import 'pgbouncer-sec.jsonnet',
   import 'pgbouncer.jsonnet',
   import 'plantuml.jsonnet',
   import 'postgres-archive.jsonnet',
