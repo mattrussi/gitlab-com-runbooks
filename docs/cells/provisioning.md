@@ -160,7 +160,6 @@ This is currently a manual process.
 6. If the target cell is in a sane state, create an MR which moves the JSON file from the -1 directory to the target Ring directory
 7. Obtain review, approval and merge the MR.
 
-
 ## How to De-Provision a Cell
 
 1. **Ensure the target cell is in the quarantine ring:**
