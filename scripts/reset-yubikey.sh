@@ -25,7 +25,7 @@ else
   PIN=${NEWPIN:-000000}
 fi
 
-read -rp "THIS WILL RESET YOUR YUBIKEY WITH PIN=$PIN, type "CTRL+C" to cancel"
+read -rp "Press enter to RESET YOUR YUBIKEY WITH PIN=$PIN, type "CTRL+C" to cancel"
 
 set -x
 # Reset PIV module
