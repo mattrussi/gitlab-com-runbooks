@@ -7,8 +7,9 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 // Queue-based selectors for the routing rules
 local urgentCpuBoundQueueSelector = { queue: 'urgent_cpu_bound' };
 local urgentOtherQueueSelector = { queue: 'urgent_other' };
+local importersQueueSelector = { queue: 'importers' };
 // For default, use a simpler approach that just selects queues that are not the specific queues
-local defaultQueueSelector = { queue: { ne: ['urgent_cpu_bound', 'urgent_other'] } };
+local defaultQueueSelector = { queue: { ne: ['urgent_cpu_bound', 'urgent_other', 'importers'] } };
 
 local slos = {
   urgent: {
@@ -74,6 +75,12 @@ metricsCatalog.serviceDefinition({
       ],
     },
     'gitlab-sidekiq-urgent-other-v2': {
+      kind: 'Deployment',
+      containers: [
+        'sidekiq',
+      ],
+    },
+    'gitlab-sidekiq-importers-v2 ': {
       kind: 'Deployment',
       containers: [
         'sidekiq',
@@ -156,6 +163,45 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
         selector=urgentOtherQueueSelector,
+      ),
+
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
+
+      toolingLinks: [],
+    },
+
+    importers: {
+      userImpacting: true,
+      ignoreTrafficCessation: false,
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        Sidekiq jobs in the importers queue
+      |||,
+
+      apdex: combined(
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=importersQueueSelector,
+            satisfiedThreshold=slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=importersQueueSelector,
+            satisfiedThreshold=slos.urgent.queueingDurationSeconds,
+          ),
+        ]
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector={ le: '+Inf' } + importersQueueSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=importersQueueSelector,
       ),
 
       significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],

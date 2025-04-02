@@ -7882,12 +7882,12 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "1", "", "")
       )
@@ -7899,12 +7899,12 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "1", "", "")
       )
@@ -7915,7 +7915,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
       )
     labels:
       component: default
@@ -7925,7 +7925,7 @@ groups:
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
       )
       or
@@ -8145,6 +8145,158 @@ groups:
       )
     labels:
       component: email_receiver
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_5m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",queue="importers"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",queue="importers"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue="importers"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",queue="importers"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue="importers"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue="importers"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
+      (gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_5m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_5m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_5m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"} * 300))
+            )
+            /
+            (gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="importers",tier="sv",type="sidekiq"} * 300)),
+        0, 1
+      )
+    labels:
+      component: importers
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_5m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_5m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="importers",tier="sv",type="sidekiq"} * 300)),
+        0, 1
+      )
+    labels:
+      component: importers
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -8474,12 +8626,12 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "1", "", "")
       )
@@ -8491,12 +8643,12 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "1", "", "")
       )
@@ -8507,7 +8659,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
       )
     labels:
       component: default
@@ -8517,7 +8669,7 @@ groups:
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
       )
       or
@@ -8737,6 +8889,158 @@ groups:
       )
     labels:
       component: email_receiver
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_30m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",queue="importers"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",queue="importers"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue="importers"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",queue="importers"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue="importers"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue="importers"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      (gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_30m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_30m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_30m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"} * 1800))
+            )
+            /
+            (gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="importers",tier="sv",type="sidekiq"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: importers
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_30m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_30m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_30m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"} * 1800))
+            )
+            /
+            (gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="importers",tier="sv",type="sidekiq"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: importers
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -9066,12 +9370,12 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "1", "", "")
       )
@@ -9083,12 +9387,12 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
         , "_c", "1", "", "")
       )
@@ -9099,7 +9403,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
       )
     labels:
       component: default
@@ -9109,7 +9413,7 @@ groups:
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue!="urgent_cpu_bound",queue!="urgent_other"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue!="urgent_cpu_bound",queue!="urgent_other",queue!="importers"}
         )
       )
       or
@@ -9329,6 +9633,158 @@ groups:
       )
     labels:
       component: email_receiver
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_1h
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",queue="importers"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",queue="importers"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="importers"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",queue="importers"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="importers"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue="importers"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
+      (gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_1h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_1h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_1h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"} * 3600))
+            )
+            /
+            (gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="importers",tier="sv",type="sidekiq"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: importers
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_1h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_1h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_1h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"} * 3600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="importers",tier="sv",type="sidekiq"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: importers
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -9852,6 +10308,98 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_6h
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_6h{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="importers",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: importers
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      (gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_6h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_6h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_6h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"} * 21600))
+            )
+            /
+            (gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="importers",tier="sv",type="sidekiq"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: importers
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_6h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_6h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_6h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="importers",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"} * 21600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="importers",tier="sv",type="sidekiq"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: importers
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_6h
+  - expr: |
+      sum by () (
         gitlab_component_errors:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
@@ -10048,6 +10596,14 @@ groups:
   - expr: "1"
     labels:
       component: email_receiver
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: importers
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
