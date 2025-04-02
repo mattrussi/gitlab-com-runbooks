@@ -38,7 +38,7 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "e6f3db92b7d61f348aed812087f2865b207d7148",
+      "version": "357eee054c4a50b1033e22493fd9503c1174bf56",
       "sum": "G7B6E5sqWirDbMWRhifbLRfGgRFbIh9WCYa6X3kMh6g="
     },
     {
@@ -48,7 +48,7 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "e6f3db92b7d61f348aed812087f2865b207d7148",
+      "version": "357eee054c4a50b1033e22493fd9503c1174bf56",
       "sum": "3Y6dQTp63xl/Llg6sNU43SoPNny+bf9pvdyD6/Hqzl8="
     },
     {
@@ -58,7 +58,7 @@
           "subdir": "mixin-utils"
         }
       },
-      "version": "e6f3db92b7d61f348aed812087f2865b207d7148",
+      "version": "357eee054c4a50b1033e22493fd9503c1174bf56",
       "sum": "SRElwa/XrKAN8aZA9zvdRUx8iebl2It7KNQ7VFvMcBA="
     },
     {
@@ -78,8 +78,8 @@
           "subdir": ""
         }
       },
-      "version": "1199b50e9d2ff53d4bb5fb2304ad1fb69d38e609",
-      "sum": "LfbgcJbilu4uBdKYZSvmkoOTPwEAzg10L3/VqKAIWtA="
+      "version": "4eee017d21cb63a303925d1dcd9fc5c496809b46",
+      "sum": "Kh0GbIycNmJPzk6IOMXn1BbtLNyaiiimclYk7+mvsns="
     },
     {
       "source": {
@@ -88,8 +88,8 @@
           "subdir": ""
         }
       },
-      "version": "1fa3b6731c93eac6d5b8c3c3b087afab2baabb42",
-      "sum": "9dZ07oPK/NS5ARi3kasenwVeZlGCfAxBTwRS3rC6KWE="
+      "version": "a6d2cb58f7509d61bc48f16f63f1acf000aab9b7",
+      "sum": "yQtU8B5/mRTGb0yy0eAJHPz2OMhabG+8inc3fvPKBxA="
     },
     {
       "source": {
@@ -98,7 +98,7 @@
           "subdir": "mixin"
         }
       },
-      "version": "0414eef64d6a3897ae4c09ac2fcb0aa1c1fb9cd1",
+      "version": "08e5907cbaa47801aa56dcdaba005609f2de28df",
       "sum": "ieCD4eMgGbOlrI8GmckGPHBGQDcLasE1rULYq56W/bs="
     },
     {

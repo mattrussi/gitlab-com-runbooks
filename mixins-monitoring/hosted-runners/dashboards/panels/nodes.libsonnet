@@ -1,9 +1,9 @@
-local promQuery = import 'grafana/prom_query.libsonnet';
 local basic = import 'runbooks/libsonnet/grafana/basic.libsonnet';
+local panel = import 'runbooks/libsonnet/grafana/time-series/panel.libsonnet';
 local selectors = import 'runbooks/libsonnet/promql/selectors.libsonnet';
 
 local cpuUsage(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='CPU Usage',
     query=|||
       (
@@ -12,7 +12,6 @@ local cpuUsage(selector) =
         count without (cpu, mode) (node_cpu_seconds_total{mode="idle", %(selector)s})
       )
     ||| % { selector: selector },
-    legendFormat='CPU #{{cpu}}',
     format='percentunit',
     fill=10,
     min=0,
@@ -22,7 +21,7 @@ local cpuUsage(selector) =
   );
 
 local loadAverage(selector) =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     title='Load Average',
     queries=[
       {
@@ -49,7 +48,7 @@ local loadAverage(selector) =
   );
 
 local memoryUsage(selector) =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     title='Memory Usage',
     queries=[
       {
@@ -108,11 +107,10 @@ local memoryUsageGauge(selector) =
     ],
     graphMode='gauge',
     stableId='node-memory-usage-gauge',
-    decimals=0
   );
 
 local diskIO(selector) =
-  basic.multiTimeseries(
+  panel.multiTimeSeries(
     title='Disk I/O',
     queries=[
       {
@@ -134,7 +132,7 @@ local diskIO(selector) =
   );
 
 local diskSpaceUsage(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Disk Space Usage',
     description='Disk space usage per mount point',
     query=|||
@@ -151,12 +149,11 @@ local diskSpaceUsage(selector) =
     format='percentunit',
     min=0,
     max=1,
-    decimals=1,
     stableId='node-disk-space-usage'
   );
 
 local networkReceived(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Network Received',
     description='Network received (bits/s)',
     query='rate(node_network_receive_bytes_total{%(selector)s, device!~"lo|docker"}[$__rate_interval]) * 8' % { selector: selector },
@@ -167,7 +164,7 @@ local networkReceived(selector) =
   );
 
 local networkTransmitted(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Network Transmitted',
     description='Network transmitted (bits/s)',
     query='rate(node_network_transmit_bytes_total{%(selector)s, device!~"lo|docker"}[$__rate_interval]) * 8' % { selector: selector },
