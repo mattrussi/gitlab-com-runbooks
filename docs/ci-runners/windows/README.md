@@ -66,6 +66,8 @@ In this case, you should not run the automatically created Ansible apply
 job, but instead create your own. While it is not dangerous to run the
 apply job, it will fail because the runner process is still running.
 
+**Note:** if you're just trying to _revert_ an autoscaler image upgrade, there is no need to proceed with the following steps to restart the runner manager processes.
+
 ### Applying The Upgrade
 
 Now that the images are recreated and Ansible is updated,
