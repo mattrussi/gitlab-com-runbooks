@@ -18,7 +18,9 @@ metricsCatalog.serviceDefinition(
   {
     local runwayLabels = runwayHelper.labels(self),
     local commonServerLabels = [
-      'grpc_code', 'grpc_method', 'grpc_service',
+      'grpc_code',
+      'grpc_method',
+      'grpc_service',
     ] + runwayLabels,
 
     serviceLevelIndicators+: {

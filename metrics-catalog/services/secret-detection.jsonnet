@@ -7,6 +7,6 @@ metricsCatalog.serviceDefinition(
     type='secret-detection',
     team='secret_detection',
     featureCategory='secret_detection',
-    externalLoadBalancer=false // The service is not public facing and is accessible only to Rails monolith
+    externalLoadBalancer=false  // The service is not public facing and is accessible only to Rails monolith
   )
 )

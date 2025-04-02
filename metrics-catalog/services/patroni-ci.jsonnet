@@ -27,7 +27,7 @@ metricsCatalog.serviceDefinition(
     ],
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
     serviceLevelIndicators+: {
       rails_replica_sql+: {
         apdex: histogramApdex(

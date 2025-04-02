@@ -1,3 +1,3 @@
 {
-    mixins: ['hosted-runners']
+  mixins: ['hosted-runners'],
 }
