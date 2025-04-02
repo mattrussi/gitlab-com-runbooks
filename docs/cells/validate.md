@@ -30,7 +30,7 @@ Wait for the CI jobs to complete, which will build Instrumentor images for your 
 Validate that your changes are working as expected in the cell environment.
 
 > [!note]
-> To iterate on your Instrumentor changes, follow the [`Instrument Developement Flow`](./infra-development.md#development-flow)
+> To iterate on your Instrumentor changes, follow the [`Instrument Development Flow`](./infra-development.md#development-flow)
 
 **Step 5: Clean Up**
 
