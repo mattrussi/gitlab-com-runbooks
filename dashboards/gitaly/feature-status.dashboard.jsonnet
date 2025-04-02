@@ -11,7 +11,7 @@ local selector = {
   grpc_method: '$method',
 };
 
-// Creating custom timeseries panel because basic.timeseries uses graph rather than timeseries type, and it does not support all functionalities we want.
+// Creating custom timeseries panel because panel.timeseries uses graph rather than timeseries type, and it does not support all functionalities we want.
 local customTimeseriesPanel(
   title,
   expr,

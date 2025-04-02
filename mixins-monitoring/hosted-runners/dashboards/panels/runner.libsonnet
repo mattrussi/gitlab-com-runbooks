@@ -1,8 +1,9 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
 
 local heatmapPanel = grafana.heatmapPanel;
 local text = grafana.text;
@@ -27,7 +28,7 @@ local headlineMetricsRow(
     selectorHash=selectorHashWithExtras,
     stableIdPrefix='',
     showApdex=hasApdex,
-    legendFormatPrefix="{{component}} - {{shard}}",
+    legendFormatPrefix='{{component}} - {{shard}}',
     showErrorRatio=hasErrorRate,
     showOpsRate=hasRequestRate,
     showSaturationCell=showSaturationCell,
@@ -72,7 +73,7 @@ local heatmap(
     tooltip_showHistogram=true,
   )
   .addTarget(
-    promQuery.target(
+    target.prometheus(
       query,
       format='time_series',
       legendFormat='{{le}}',
@@ -310,7 +311,7 @@ local statPanel(
   );
 
 local hostedRunnerSaturation(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Runner saturation of concurrent',
     legendFormat='{{ shard }} jobs running',
     linewidth=2,
@@ -321,12 +322,12 @@ local hostedRunnerSaturation(selector) =
       gitlab_component_saturation:ratio{type="hosted-runners", %(selector)s}
     ||| % { selector: selector }
   ).addTarget(
-    promQuery.target(
+    target.prometheus(
       expr='0.85',
       legendFormat='Soft SLO',
     )
   ).addTarget(
-    promQuery.target(
+    target.prometheus(
       expr='0.95',
       legendFormat='Hard SLO',
     )
@@ -341,7 +342,7 @@ local hostedRunnerSaturation(selector) =
   });
 
 local totalApiRequests(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Total number of api requests',
     query=|||
       sum by(status, shard, endpoint) (
@@ -352,13 +353,11 @@ local totalApiRequests(selector) =
     ||| % { selector: selector },
     legendFormat='{{shard}} : api {{endpoint}} : status {{status}}',
     yAxisLabel='Api requests',
-  ) + {
-    lines: false,
-    bars: true,
-  };
+    drawStyle=''
+  );
 
 local runningJobPhase(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Running jobs phase',
     yAxisLabel='Running jobs',
     query=|||
@@ -366,14 +365,12 @@ local runningJobPhase(selector) =
         gitlab_runner_jobs{state="running", %(selector)s}
       )
     ||| % { selector: selector },
-    legendFormat='{{shard}} : {{executor_stage}} : {{stage}}'
-  ) + {
-    lines: false,
-    bars: true,
-  };
+    legendFormat='{{shard}} : {{executor_stage}} : {{stage}}',
+    drawStyle='bars',
+  );
 
 local runnerCaughtErrors(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Runner Manager Caught Errors',
     yAxisLabel='Erros',
     query=|||
@@ -384,13 +381,11 @@ local runnerCaughtErrors(selector) =
       ) by (level, shard)
     ||| % { selector: selector },
     legendFormat='{{shard}}: {{level}}',
-  ) + {
-    lines: false,
-    bars: true,
-  };
+    drawStyle='bars',
+  );
 
 local jobsCaughtErrors(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Failed Job errors',
     yAxisLabel='Erros',
     query=|||
@@ -399,10 +394,8 @@ local jobsCaughtErrors(selector) =
       )
     ||| % { selector: selector },
     legendFormat='{{shard}}: {{failure_reason}}',
-  ) + {
-    lines: false,
-    bars: true,
-  };
+    drawStyle='bars',
+  );
 
 local statusPanel(title='Status', legendFormat='', query, valueMapping) =
   basic.statPanel(
@@ -439,7 +432,7 @@ local pendingJobQueueDuration(selector) =
   );
 
 local ciPendingBuilds() =
-  basic.timeseries(
+  panel.timeSeries(
     title='Pending Builds',
     query=|||
       sum by (instance) (increase(
@@ -448,13 +441,11 @@ local ciPendingBuilds() =
     |||,
     legendFormat='pending builds',
     yAxisLabel='Pending Builds',
-  ) + {
-    lines: false,
-    bars: true,
-  };
+    drawStyle='bars',
+  );
 
 local jobQueuingExceeded(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Acceptable job queuing duration exceeded',
     query=|||
       sum by (shard) (
@@ -467,7 +458,7 @@ local jobQueuingExceeded(selector) =
   );
 
 local jobsQueuingFailureRate(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Jobs Queuing Failure Rate',
     legendFormat='{{shard}}',
     format='percent',
@@ -489,7 +480,7 @@ local jobsQueuingFailureRate(selector) =
   );
 
 local averageDurationOfQueuing(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Average duration of queuing',
     legendFormat='{{shard}}',
     linewidth=2,
@@ -506,7 +497,7 @@ local averageDurationOfQueuing(selector) =
       )
     ||| % { selector: selector }
   ).addTarget(
-    promQuery.target(
+    target.prometheus(
       expr='300',
       legendFormat='Hard SLO',
     )
@@ -522,7 +513,7 @@ local averageDurationOfQueuing(selector) =
   });
 
 local differentQueuingPhase() =
-  basic.timeseries(
+  panel.timeSeries(
     title='Rate of builds queue operations',
     legendFormat='queuing operation {{ operation }}',
     linewidth=2,
@@ -538,7 +529,7 @@ local differentQueuingPhase() =
 
 
 local finishedJobMinutesIncrease(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Finished Job Minutes Increase',
     legendFormat='{{shard}}',
     linewidth=2,
@@ -548,9 +539,10 @@ local finishedJobMinutesIncrease(selector) =
       sum by(shard) (
         increase(gitlab_runner_job_duration_seconds_sum{%(selector)s}[$__rate_interval])
       )/60
-    ||| % { selector: selector }
+    ||| % { selector: selector },
+    drawStyle='bars',
   ).addTarget(
-    promQuery.target(
+    target.prometheus(
       expr=|||
         avg (
           increase(gitlab_runner_job_duration_seconds_sum{%(selector)s}[$__rate_interval])
@@ -562,10 +554,7 @@ local finishedJobMinutesIncrease(selector) =
     alias: '/.*Avg$/',
     color: '#ff0000',
     linewidth: 4,
-  }) + {
-    lines: false,
-    bars: true,
-  };
+  });
 
 local finishedJobDurationsHistogram(selector) =
   heatmap(
@@ -582,7 +571,7 @@ local finishedJobDurationsHistogram(selector) =
   );
 
 local fleetingInstancesSaturation(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Fleeting instances saturation',
     query=|||
       sum by(job) (
@@ -598,7 +587,7 @@ local fleetingInstancesSaturation(selector) =
   );
 
 local taskScalerSaturation(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Taskscaler tasks saturation',
     query=|||
       sum by(job) (
@@ -616,7 +605,7 @@ local taskScalerSaturation(selector) =
   );
 
 local taskScalerMaxPerInstance(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Taskscaler max use count per instance',
     query=|||
       sum by(job) (
@@ -691,7 +680,7 @@ local provisionerInstanceLifeDuration(selector) =
   );
 
 local pollingRPS() =
-  basic.timeseries(
+  panel.timeSeries(
     title='Polling RPS - Overall',
     legendFormat='overall',
     linewidth=2,
@@ -704,7 +693,7 @@ local pollingRPS() =
   );
 
 local pollingError() =
-  basic.timeseries(
+  panel.timeSeries(
     title='Polling Error - Overall',
     legendFormat='overall',
     linewidth=2,
@@ -745,5 +734,5 @@ local pollingError() =
   provisionerInstanceLifeDuration:: provisionerInstanceLifeDuration,
   statusPanel:: statusPanel,
   pollingRPS:: pollingRPS,
-  pollingError:: pollingError
+  pollingError:: pollingError,
 }

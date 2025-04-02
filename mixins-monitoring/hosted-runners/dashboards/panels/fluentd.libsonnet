@@ -1,9 +1,9 @@
-local basic = import 'grafana/basic.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
+local panel = import 'grafana/time-series/panel.libsonnet';
+local target = import 'grafana/time-series/target.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local emitRecords(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Current emit records',
     legendFormat='{{shard}} - {{plugin}}',
     format='short',
@@ -15,7 +15,7 @@ local emitRecords(selector) =
   );
 
 local retryWait(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Current retry wait',
     legendFormat='{{shard}} - {{plugin}}',
     format='short',
@@ -27,7 +27,7 @@ local retryWait(selector) =
   );
 
 local writeCounts(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Current write counts',
     legendFormat='{{shard}} - {{plugin}}',
     format='short',
@@ -39,7 +39,7 @@ local writeCounts(selector) =
   );
 
 local errorAndRetryRate(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Fluentd output error/retry rate',
     legendFormat='{{shard}} - {{plugin}} - Retry rate',
     format='ops',
@@ -49,7 +49,7 @@ local errorAndRetryRate(selector) =
       )
     ||| % { selector: selector }
   ).addTarget(
-    promQuery.target(
+    target.prometheus(
       expr=|||
         sum by (shard, plugin) (
             rate(fluentd_output_status_num_errors{%(selector)s}[5m])
@@ -60,7 +60,7 @@ local errorAndRetryRate(selector) =
   );
 
 local outputFlushTime(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Fluentd output status flush time rate',
     legendFormat='{{shard}} - {{plugin}} - Time',
     format='ms',
@@ -72,7 +72,7 @@ local outputFlushTime(selector) =
   );
 
 local bufferLength(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Maximum buffer length in last 5min',
     legendFormat='{{shard}} - {{plugin}} - Count',
     format='short',
@@ -84,7 +84,7 @@ local bufferLength(selector) =
   );
 
 local bufferTotalSize(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Total size of queue buffers',
     legendFormat='{{shard}} - {{plugin}}',
     format='bytes',
@@ -96,7 +96,7 @@ local bufferTotalSize(selector) =
   );
 
 local bufferFreeSpace(selector) =
-  basic.timeseries(
+  panel.timeSeries(
     title='Buffer available space ratio',
     legendFormat='{{shard}} - {{plugin}}',
     format='percent',
