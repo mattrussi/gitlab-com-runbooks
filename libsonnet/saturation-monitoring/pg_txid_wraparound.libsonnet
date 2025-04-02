@@ -6,31 +6,31 @@ local dbPlatform = std.get(config, 'dbPlatform', null);
 
 // All of the below metrics are reported by the postgres exporter
 local originalQuery = |||
-      (
-        max without (series) (
-          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
-          or
-          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
-        )
-        and on (instance, job) (pg_replication_is_replica{%(selector)s} == 0)
-      )
-      /
-      (%(wraparoundValue)s)
-    |||;
+  (
+    max without (series) (
+      label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
+      or
+      label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
+    )
+    and on (instance, job) (pg_replication_is_replica{%(selector)s} == 0)
+  )
+  /
+  (%(wraparoundValue)s)
+|||;
 
 // `pg_database_wraparound_age_datfrozenxid_seconds` provided by the postgres exporter
 // `pg_database_wraparound_age_datminxid_seconds` provided by the postgres exporter
 local rdsQuery = |||
-      (
-        max (
-          pg_database_wraparound_age_datfrozenxid_seconds{%(selector)s}
-          or
-          pg_database_wraparound_age_datminmxid_seconds{%(selector)s}
-        )
-      )
-      /
-      (%(wraparoundValue)s)
-    |||;
+  (
+    max (
+      pg_database_wraparound_age_datfrozenxid_seconds{%(selector)s}
+      or
+      pg_database_wraparound_age_datminmxid_seconds{%(selector)s}
+    )
+  )
+  /
+  (%(wraparoundValue)s)
+|||;
 
 {
   pg_xid_wraparound: resourceSaturationPoint({

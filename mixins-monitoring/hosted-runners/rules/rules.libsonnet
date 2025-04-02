@@ -1,5 +1,5 @@
 {
   prometheusRules+:: {
-    groups+: $.prometheusRulesGroups
+    groups+: $.prometheusRulesGroups,
   },
 }

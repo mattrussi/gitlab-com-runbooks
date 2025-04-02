@@ -1,6 +1,5 @@
-
 {
   prometheusAlerts+:: {
-    groups+: $.prometheusAlertsGroups
-  }
+    groups+: $.prometheusAlertsGroups,
+  },
 }
