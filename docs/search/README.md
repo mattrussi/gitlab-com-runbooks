@@ -53,6 +53,7 @@
 * [Privileged Access Management](../runway/privileged_access_management.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Domain Registration](../uncategorized/domain-registration.md)

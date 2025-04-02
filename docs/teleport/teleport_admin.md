@@ -188,8 +188,8 @@ and [production](https://production.teleport.gitlab.net) instances teleport.
 
 When our license is about to expire, we need to obtain a new license file and update our Teleport instances with.
 Read more about the *Enterprise License file* [here](https://goteleport.com/docs/choose-an-edition/teleport-enterprise/license/) and managing it [here](https://goteleport.com/docs/admin-guides/deploy-a-cluster/license/).
-In short, you need to login to [gitlab.teleport.sh](https://gitlab.teleport.sh) as an admin and download the new license file (`license.pem`).
-You can also ask an admin user to do so and share the license file with you through a secure channel (*1Password*).
+In short, you need to login to [gitlab-tp.teleport.sh](https://gitlab-tp.teleport.sh/) as an admin and download the new license file (`license.pem`).
+You can also ask an admin user to do so and share the license file with you through a secure channel (*1Password*). Admin users include the business owners listed in the [tech stack](https://gitlab.com/gitlab-com/www-gitlab-com/-/blob/master/data/tech_stack.yml) - search for "title: teleport".
 
 Add the new license to Vault.
 
