@@ -113,6 +113,53 @@
    - Once the pipeline completes successfully, access your cell through the domain specified in the `managed_domain` field of the `TENANT_MODEL`
    - Example: `cell-c01jpmm6vgv82xqkf9.gitlab-cells.dev`
 
+## Moving Cells to Rings
+
+Moving Cells between Rings is a logical operation that only impacts when that Cell will receive patches.
+Cells in Quarentine (-1) Ring do not recieve any automation.
+All other Rings will receive operations in order.
+
+### Moving A Cell into Quarantine
+
+1. Using `ringctl`:
+
+   ```bash
+   % ringctl cell quarantine <cell-id> --ring <ring-id> -b <branch-name>
+   ```
+
+  <details>
+  <summary> Example Run </summary>
+
+  ```bash
+  % ringctl cell quarantine c01j2t2v563b55mswz --ring 0 -b jts/test
+  time=2025-04-01T15:49:04.424-04:00 level=WARN msg="DELIVERY_METRICS_URL or DELIVERY_METRICS_TOKEN not set, disabling metrics" DELIVERY_METRICS_URL=""
+  time=2025-04-01T15:49:04.424-04:00 level=WARN msg="using default text icons; please select your preferred set of icons and store the value in the ringctl.yml file"
+  time=2025-04-01T15:49:04.530-04:00 level=INFO msg="tissue client initialized" instance=https://ops.gitlab.net branch=jts/test dry_run=false amp=cellsdev project=gitlab-com/gl-infra/cells/tissue version=dev-g92b52bf-dirty local=false
+  time=2025-04-01T15:49:04.864-04:00 level=WARN msg="branch not found, searching in default branch" branch=jts/test default_branch=main
+  New branch: jts/test
+  You can open a merge request visiting
+        https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/-/merge_requests/new?merge_request%5Bsource_branch%5D=jts%2Ftest
+  time=2025-04-01T15:49:06.670-04:00 level=INFO msg="cell operation" ring=-1 amp=cellsdev action=move url=https://ops.gitlab.net/gitlab-com/gl-infra/cells/tissue/-/commit/6ac6e3fca1b34cbc1022c966e4f7a2028bf5899e
+  time=2025-04-01T15:49:06.671-04:00 level=INFO msg="Successfully quarantined cell" cell_id=c01j2t2v563b55mswz
+  ```
+
+  </details>
+
+2. Open the Merge Request using the provided log output containing a link
+3. Obtain review, approval, and merge the MR.
+
+## Moving a Cell out of Quarantine
+
+This is currently a manual process.
+
+1. Interrogate the target cell configuration and the target Ring destination
+2. Validate the version of Instrumentor is the same.
+3. Validation the configuration of the cell is the same.
+3. Validate the version of GitLab is installed, is the same.
+5. If any of the above differ, [create a patch](./patching.md) to address any concerns.
+6. If the target cell is in a sane state, create an MR which moves the JSON file from the -1 directory to the target Ring directory
+7. Obtain review, approval and merge the MR.
+
 ## How to De-Provision a Cell
 
 1. **Ensure the target cell is in the quarantine ring:**
