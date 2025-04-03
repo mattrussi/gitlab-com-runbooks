@@ -4,15 +4,14 @@ To start with the right foot let's define a set of tasks that are nice things to
 
 By performing these tasks we will keep the [broken window effect][broken_window_effect] under control, preventing future pain and mess.
 
-## Before you go on call
+## Before your week of on-call shifts
 
 - Join the `#eoc-general` slack channel
 - Familiarize yourself with [Pagerduty][pagerduty] and [Incident.io][incidentio]
 - Make sure you can receive test pages from [Pagerduty][pagerduty]
 - Be prepared to respond to alerts within 15 minutes during your on-call time
-- Be prepared to drive incidents to resolution during your on-call time
 
-## Going on call
+## Beginning your daily on-call shift
 
 Here is a suggested checklist of things to do at the start of an on-call shift:
 
@@ -31,14 +30,14 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
   - `#incidents-dotcom`
 - At the start of each on-call day, read the on-call handover issue that has been assigned to you by the previous EOC, and familiarize yourself with any ongoing incidents.
 
-At the end of a shift:
+## Ending your faily on-call shift
 
 - *Turn off slack channel notifications*: Open notification preferences in monitored Slack channels from the previous checklist and return alerts to the desired values.
 - *Leave noisy alert channels*: `/leave` alert channels (It's good to stay in `#alerts` and `#alerts-general`)
 - [Comment on any open S1 incidents][open_s1_incidents]
 - At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
 
-## Going off call
+## Completing your week on on-call shifts
 
 - Take a deep breath! You did it!
 - Review your incidents and see if any of them need corrective actions, to be marked as resolved, or reviews filled out.
