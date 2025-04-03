@@ -4,7 +4,7 @@
 
 ## Summary
 
-Cells uses Cloudflare as DNS Provider. Cells DNS setup is based on the implementation for [Gitlab Dedicated Tenants](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/blob/main/architecture/blueprints/cloudflare_waf.md#1-gitlab-dedicated-dns-setup). We leverage the [Cloudflare DNS Subdomain Setup](https://developers.cloudflare.com/dns/zone-setups/subdomain-setup/) which allows us manage Cloudflare settings individually for each cell subdomain.
+Cells uses Cloudflare as DNS Provider by default. Cells DNS setup is based on the implementation for [Gitlab Dedicated Tenants](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/blob/main/architecture/blueprints/cloudflare_waf.md#1-gitlab-dedicated-dns-setup). We leverage the [Cloudflare DNS Subdomain Setup](https://developers.cloudflare.com/dns/zone-setups/subdomain-setup/) which allows us manage Cloudflare settings individually for each cell subdomain.
 
 Cloudflare Parent Domain zones are created and managed in [Amp](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp). Tenant Subdomain zones and their corresponding DNS records are created and managed by [Instrumentor](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor). We create a Cloudflare subdomain zone for each tenant. The Parent Domain Zone will contain NS records for each subdomain zone for DNS delegation. All DNS for GitLab Cells tenants is managed by Cloudflare regardless of the cloud provider where the tenant is hosted at.
 
@@ -52,10 +52,37 @@ For each of the environments in Amp:
    - [`cellsprod`](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/amp/-/blob/main/environments/cellsprod/common.hcl)
 1. Once that is merged, check the zone has created successfully in Cloudflare. It will match the `root_domain_name` in the `common.hcl` settings.
 
-### Step 2: Cells Tenant Domain Zones Setup and Migration from Route53
+### Step 2: Cells Tenant Domain Zones Setup
 
-Cells Tenant Domain Zones are created by Instrumentor and delegated from the Parent Domain Zone for the corresponding Cell environment.
-In order to migrate a Cells Tenant from Route53 to Cloudflare DNS we need to setup their tenant model in Tissue during each migration stage:
+Cloudflare DNS is now [the default](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor/-/blob/main/gcp/jsonnet/cloudflare-helpers.libsonnet#L8) for all cells. Instrumentor sets the following tenant model defaults for cells:
+
+```json
+"cloudflare_waf": {
+  "enabled": true,
+  "migration_stage": "COMPLETE"
+}
+```
+
+There is no need to define this on each cell tenant model in tissue, however you can do so in order to make it explicit that the cell is using Cloudflare DNS.
+
+```
+➜  tissue git:(main) ✗ ringctl patch create replace /cloudflare_waf/enabled "true" replace /cloudflare_waf/migration_stage "COMPLETE" --priority 3 --related-to "$RELATED_ISSUE"
+```
+
+### Cells Environments in Tissue
+
+- cellsdev[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsdev]
+- cellsprod[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsprod/]
+
+### Domain Registration and Nameserver Setup
+
+The `gitlab-cells.dev` domain for the `cellsdev` environment is registered in [Gandi](https://admin.gandi.net/domain/4ec14596-4d5a-11e8-9fb1-00163ee24379/gitlab-cells.dev/nameservers). Cloudflare is the authoritative DNS provider for `gitlab-cells.dev` as we [have set the corresponding nameservers](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/26246) in Gandi.
+
+The `cells.gitlab.com` domain for the `cellsprod` environment is a subdomain of `gitlab.com` and is thus registered in Cloudflare. However it is delegated to the AWS account for the `cellsprod` Amp instance (`058264099888`). We will replace the NS delegation records with the corresponding nameservers once the Cloudflare zone for `cells.gitlab.com` is created.
+
+### Migration from Route53 to Cloudflare DNS
+
+In order to migrate a Cells Tenant from Route53 to Cloudflare DNS we need to configure their tenant model in Tissue during each migration stage:
 
 ```json
 "cloudflare_waf": {
@@ -72,19 +99,8 @@ Migration Stages available on the Tenant Model:
 - `REMOVE_ROUTE53_RECORDS`: Removes all tenant DNS records from Route53 zone.
 - `COMPLETE`: This removes the DNS Delegation records from Route53. Only to be used when the Registrar Nameservers of the Parent Domain Zone are set to Cloudflare's Nameservers.
 
-In Cells we can update the tenant model for each ring using `ringctl` patches and the command would look as follows:
+In Cells we can update the tenant model for each ring using `ringctl` patches. For example to enable Cloudflare and set the `DELEGATE_TENANT_DNS` migration stage the command would look as follows:
 
 ```
-➜  tissue git:(main) ✗ ringctl patch create replace /cloudflare_waf/enabled "true" replace /cloudflare_waf/migration_stage "DELEGATE_TENANT_DNS" --priority 3 --related-to "$RELATED_ISSUE"
+➜  tissue git:(main) ✗ ringctl patch create replace /cloudflare_waf/enabled "true" replace /cloudflare_waf/migration_stage "COMPLETE" --priority 3 --related-to "$RELATED_ISSUE"
 ```
-
-### Cells Environments in Tissue
-
-- cellsdev[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsdev]
-- cellsprod[https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsprod/]
-
-### Domain Registration and Nameserver Setup
-
-The `gitlab-cells.dev` domain for the `cellsdev` environment is registered in [Gandi](https://admin.gandi.net/domain/4ec14596-4d5a-11e8-9fb1-00163ee24379/gitlab-cells.dev/nameservers). Cloudflare is the authoritative DNS provider for `gitlab-cells.dev` as we [have set the corresponding nameservers](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/26246) in Gandi.
-
-The `cells.gitlab.com` domain for the `cellsprod` environment is a subdomain of `gitlab.com` and is thus registered in Cloudflare. However it is delegated to the AWS account for the `cellsprod` Amp instance (`058264099888`). We will replace the NS delegation records with the corresponding nameservers once the Cloudflare zone for `cells.gitlab.com` is created.

@@ -14,7 +14,7 @@ metricsCatalog.serviceDefinition(
     redisCluster=true
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ]
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-shared-state')
 )

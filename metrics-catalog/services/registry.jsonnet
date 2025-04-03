@@ -174,7 +174,7 @@ metricsCatalog.serviceDefinition(
     },
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   }
   +
   {
