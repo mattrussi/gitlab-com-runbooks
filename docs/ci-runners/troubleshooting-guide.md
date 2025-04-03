@@ -62,18 +62,6 @@ Depending on the cause, the resolution can range anywhere between restarting the
 5. Check the process logs as described in [docs general troubleshooting tips](https://docs.gitlab.com/runner/faq/#general-troubleshooting-tips).
 
 
-#### Post checks
-
-1. Check the status of machines:
-
-    ```bash
-    $ sudo su
-    # /root/machines_operations.sh list
-    # /root/machines_operations.sh count
-    ```
-
-    Number of machines in `FAILING` state should be less than 20-30.
-2. Check MK - `Docker_machine` service should be back to normal
 
 ## Shared Runners Cost Factors
 >
