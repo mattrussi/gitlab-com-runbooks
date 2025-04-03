@@ -31,7 +31,7 @@ This should be done from within a registry instance in K8s, using the built-in `
     **TODO:** Why should we choose the oldest registry Pod? Deployments will be blocked during a PDM change request anyway. So, all the pods will be running the same version. Is there any other reason to select the oldest registry pod? Or can we just use any registry pod?
 
    ```sh
-   kubectl get pods -n gitlab -l app=registry
+   kubectl get pods -n gitlab -l app=registry --sort-by=.metadata.creationTimestamp | head -n 2
    ```
 
 1. Access the pod:
