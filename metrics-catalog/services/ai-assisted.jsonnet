@@ -100,8 +100,9 @@ metricsCatalog.serviceDefinition({
     ],
     severity: 's3',  // Don't page SREs for this SLI
   }) + railsQueueingSli(0.1, 0.25, selector={ type: 'ai-assisted' }, overrides={
+    severity: 's2',
+    experimental: false,
     monitoringThresholds+: {
-      severity: 's3',
       apdexScore: 0.995,
     },
   }),

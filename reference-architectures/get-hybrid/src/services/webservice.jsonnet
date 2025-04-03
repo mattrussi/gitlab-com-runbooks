@@ -272,5 +272,5 @@ metricsCatalog.serviceDefinition({
           apdexScore: 0.995,
         },
       },
-    } + railsQueueingSli(0.05, 0.1),
+    } + railsQueueingSli(0.05, 0.1, overrides={ experimental: true }),
 })

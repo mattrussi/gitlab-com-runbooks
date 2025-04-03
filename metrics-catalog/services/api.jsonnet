@@ -281,8 +281,9 @@ metricsCatalog.serviceDefinition({
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
   }) + railsQueueingSli(0.25, 1, selector={ type: 'api' }, overrides={
+    severity: 's2',
+    experimental: false,
     monitoringThresholds+: {
-      severity: 's3',
       apdexScore: 0.995,
     },
   }),
