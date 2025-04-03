@@ -8,27 +8,27 @@ groups:
     labels:
       slo: apdex_ratio
     expr: |
-      gitlab_service_apdex:ratio_5m{env="pre",monitor="global",type="monitoring"}
+      gitlab_service_apdex:ratio_5m{monitor="global",type="duo-workflow"}
       >= bool on(tier, type) group_left
-      slo:min:gitlab_service_apdex:ratio{monitor="global",type="monitoring"}
+      slo:min:gitlab_service_apdex:ratio{monitor="global",type="duo-workflow"}
   - record: slo:observation_status
     labels:
       slo: error_ratio
     expr: |
-      gitlab_service_errors:ratio_5m{env="pre",monitor="global",type="monitoring"}
+      gitlab_service_errors:ratio_5m{monitor="global",type="duo-workflow"}
       <= bool on(tier, type) group_left
-      slo:max:gitlab_service_errors:ratio{monitor="global",type="monitoring"}
+      slo:max:gitlab_service_errors:ratio{monitor="global",type="duo-workflow"}
   - record: slo:observation_status
     labels:
       slo: monitoring_apdex_ratio
     expr: |
-      gitlab_service_apdex:ratio_5m{env="pre",monitor="global",type="monitoring"}
+      gitlab_service_apdex:ratio_5m{monitor="global",type="duo-workflow"}
       >= bool on(tier, type) group_left
-      slo:min:gitlab_service_apdex:ratio{monitor="global",type="monitoring"}
+      slo:min:gitlab_service_apdex:ratio{monitor="global",type="duo-workflow"}
   - record: slo:observation_status
     labels:
       slo: monitoring_error_ratio
     expr: |
-      gitlab_service_errors:ratio_5m{env="pre",monitor="global",type="monitoring"}
+      gitlab_service_errors:ratio_5m{monitor="global",type="duo-workflow"}
       <= bool on(tier, type) group_left
-      slo:max:gitlab_service_errors:ratio{monitor="global",type="monitoring"}
+      slo:max:gitlab_service_errors:ratio{monitor="global",type="duo-workflow"}

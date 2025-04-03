@@ -7,6 +7,7 @@ groups:
   - record: slo:max:gitlab_service_errors:ratio
     labels:
       monitor: global
+      slo: monitoring_error_ratio
       tier: sv
       type: plantuml
     expr: "0.999000"

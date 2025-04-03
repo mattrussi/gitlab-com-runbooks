@@ -31,6 +31,24 @@ local apdexRatioExpression(service, selector) =
     selectorWithoutEnv: selectors.serializeHash(selectors.without(selector, ['env'])),
   };
 
+local errorMonitoringRatioExpression(service, selector) =
+  expr % {
+    ratioMetric: serviceAggregation.getErrorRatioMetricForBurnRate('5m'),
+    selector: selectors.serializeHash(selector),
+    comparisonOperator: '<=',
+    slo: 'slo:max:gitlab_monitoring_service_errors:ratio',
+    selectorWithoutEnv: selectors.serializeHash(selectors.without(selector, ['env'])),
+  };
+
+local apdexMonitoringRatioExpression(service, selector) =
+  expr % {
+    ratioMetric: serviceAggregation.getApdexRatioMetricForBurnRate('5m'),
+    selector: selectors.serializeHash(selector),
+    comparisonOperator: '>=',
+    slo: 'slo:min:gitlab_monitoring_service_apdex:ratio',
+    selectorWithoutEnv: selectors.serializeHash(selectors.without(selector, ['env'])),
+  };
+
 local rulesForService(service, selector) =
   local selectorWithAggregationSetSelector = selectors.merge(selector, serviceAggregation.selector);
   [
@@ -42,6 +60,16 @@ local rulesForService(service, selector) =
     {
       record: 'slo:observation_status',
       labels: { slo: 'error_ratio' },
+      expr: errorRatioExpression(service, selectorWithAggregationSetSelector),
+    },
+    {
+      record: 'slo:observation_status',
+      labels: { slo: 'monitoring_apdex_ratio' },
+      expr: apdexRatioExpression(service, selectorWithAggregationSetSelector),
+    },
+    {
+      record: 'slo:observation_status',
+      labels: { slo: 'monitoring_error_ratio' },
       expr: errorRatioExpression(service, selectorWithAggregationSetSelector),
     },
   ];
