@@ -95,7 +95,8 @@ metricsCatalog.serviceDefinition(
           histogram='registry_database_query_duration_seconds_bucket',
           selector={ type: 'registry' },
           satisfiedThreshold=0.5,
-          toleratedThreshold=1
+          toleratedThreshold=1,
+          metricsFormat='migrating'
         ),
 
         requestRate: rateMetric(
@@ -119,7 +120,8 @@ metricsCatalog.serviceDefinition(
           histogram='registry_gc_run_duration_seconds_bucket',
           selector={ type: 'registry' },
           satisfiedThreshold=0.5,
-          toleratedThreshold=1
+          toleratedThreshold=1,
+          metricsFormat='migrating'
         ),
 
         requestRate: rateMetric(
@@ -174,7 +176,7 @@ metricsCatalog.serviceDefinition(
     },
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   }
   +
   {

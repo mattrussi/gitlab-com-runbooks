@@ -13,7 +13,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_5m{env="ops",le="60"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_5m{env="ops",le=~"60|60\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -96,7 +96,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_30m{env="ops",le="60"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_30m{env="ops",le=~"60|60\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -179,7 +179,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_1h{env="ops",le="60"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_1h{env="ops",le=~"60|60\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

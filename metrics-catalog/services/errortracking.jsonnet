@@ -60,8 +60,9 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='traefik_service_request_duration_seconds_bucket',
         selector=errortrackingSelector { code: { noneOf: ['4xx', '5xx'] } },
-        satisfiedThreshold='1.2',
-        toleratedThreshold='5'
+        satisfiedThreshold=1.2,
+        toleratedThreshold=5,
+        metricsFormat='migrating'
       ),
 
       emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873

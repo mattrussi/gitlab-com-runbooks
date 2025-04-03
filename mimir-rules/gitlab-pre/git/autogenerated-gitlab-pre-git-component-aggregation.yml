@@ -52,11 +52,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le="1",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le=~"1|1\\.0",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le="5",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le=~"5|5\\.0",type="git"}
         )
       )
       /
@@ -282,11 +282,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le="0.05",type="git"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le=~"0\\.05",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le="0.1",type="git"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="pre",le=~"0\\.1",type="git"}
         )
       )
       /
@@ -492,11 +492,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"30|30\\.0",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"60|60\\.0",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
         )
       )
       /
@@ -575,7 +575,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="internal-api"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"1|1\\.0",route="^/api/",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -694,11 +694,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le="1",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le=~"1|1\\.0",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le="5",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le=~"5|5\\.0",type="git"}
         )
       )
       /
@@ -924,11 +924,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le="0.05",type="git"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le=~"0\\.05",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le="0.1",type="git"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="pre",le=~"0\\.1",type="git"}
         )
       )
       /
@@ -1134,11 +1134,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"30|30\\.0",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"60|60\\.0",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
         )
       )
       /
@@ -1217,7 +1217,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="internal-api"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"1|1\\.0",route="^/api/",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1336,11 +1336,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le="1",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le=~"1|1\\.0",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le="5",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le=~"5|5\\.0",type="git"}
         )
       )
       /
@@ -1566,11 +1566,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le="0.05",type="git"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le=~"0\\.05",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le="0.1",type="git"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="pre",le=~"0\\.1",type="git"}
         )
       )
       /
@@ -1776,11 +1776,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"30|30\\.0",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"60|60\\.0",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}
         )
       )
       /
@@ -1859,7 +1859,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="internal-api"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-git",le=~"1|1\\.0",route="^/api/",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

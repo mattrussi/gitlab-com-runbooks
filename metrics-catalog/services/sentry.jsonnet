@@ -52,6 +52,7 @@ metricsCatalog.serviceDefinition({
         histogram='sentry_jobs_duration',
         selector=sentryQuerySelector,
         satisfiedThreshold=10,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -81,6 +82,7 @@ metricsCatalog.serviceDefinition({
         histogram='nginx_ingress_controller_request_duration_seconds_bucket',
         selector=sentryQuerySelector,
         satisfiedThreshold=10,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(

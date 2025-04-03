@@ -13,11 +13,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le="0.1",type="websockets"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le=~"0\\.1",type="websockets"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le="0.25",type="websockets"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le=~"0\\.25",type="websockets"}
         )
       )
       /
@@ -350,11 +350,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le="0.1",type="websockets"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le=~"0\\.1",type="websockets"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le="0.25",type="websockets"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le=~"0\\.25",type="websockets"}
         )
       )
       /
@@ -687,11 +687,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le="0.1",type="websockets"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le=~"0\\.1",type="websockets"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le="0.25",type="websockets"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le=~"0\\.25",type="websockets"}
         )
       )
       /

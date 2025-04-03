@@ -7,7 +7,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'camoproxy',
   tier: 'sv',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.8,
@@ -51,7 +51,8 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='camo_response_duration_seconds_bucket',
-        satisfiedThreshold=10
+        satisfiedThreshold=10,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(

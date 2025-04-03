@@ -75,7 +75,7 @@ local gitalyGRPCErrorRateIgnoredCodes = [
 // GRPC service. Since this is an SLI only, not all operations are included,
 // only unary ones, and even then known slow operations are excluded from
 // the apdex calculation
-local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=1) =
+local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=1, metricsFormat='migrating') =
   histogramApdex(
     histogram='grpc_server_handling_seconds_bucket',
     selector=baseSelector {
@@ -83,6 +83,7 @@ local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=
     },
     satisfiedThreshold=satisfiedThreshold,
     toleratedThreshold=toleratedThreshold,
+    metricsFormat=metricsFormat,
   );
 
 local gitalyGRPCErrorRate(baseSelector) =

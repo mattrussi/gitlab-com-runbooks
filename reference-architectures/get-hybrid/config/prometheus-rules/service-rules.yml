@@ -21,11 +21,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"0\\.5"}[5m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"1|1\\.0"}[5m])
         )
       )
       /
@@ -170,11 +170,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"0\\.5"}[30m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"1|1\\.0"}[30m])
         )
       )
       /
@@ -319,11 +319,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"0\\.5"}[1h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"1|1\\.0"}[1h])
         )
       )
       /
@@ -468,11 +468,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"0\\.5"}[6h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le=~"1|1\\.0"}[6h])
         )
       )
       /
@@ -628,11 +628,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"30|30\\.0"}[5m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"60|60\\.0"}[5m])
         )
       )
       /
@@ -775,11 +775,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"30|30\\.0"}[30m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"60|60\\.0"}[30m])
         )
       )
       /
@@ -922,11 +922,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"30|30\\.0"}[1h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"60|60\\.0"}[1h])
         )
       )
       /
@@ -1069,11 +1069,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"30|30\\.0"}[6h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le=~"60|60\\.0"}[6h])
         )
       )
       /
@@ -1530,11 +1530,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"0\\.5"}[5m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"1|1\\.0"}[5m])
         )
       )
       /
@@ -1796,11 +1796,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"0\\.5"}[30m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"1|1\\.0"}[30m])
         )
       )
       /
@@ -2062,11 +2062,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"0\\.5"}[1h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"1|1\\.0"}[1h])
         )
       )
       /
@@ -2328,11 +2328,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"0\\.5"}[6h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le=~"1|1\\.0"}[6h])
         )
       )
       /
@@ -4172,11 +4172,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[5m])
         )
       )
       /
@@ -4316,11 +4316,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"0\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
         )
       )
       /
@@ -4443,11 +4443,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"10|10\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
         )
       )
       /
@@ -4570,11 +4570,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
         )
       )
       /
@@ -4697,11 +4697,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"5|5\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
       )
       /
@@ -4824,11 +4824,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
       )
       /
@@ -4951,11 +4951,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
       )
       /
@@ -5081,11 +5081,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[30m])
         )
       )
       /
@@ -5225,11 +5225,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"0\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
         )
       )
       /
@@ -5352,11 +5352,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"10|10\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
         )
       )
       /
@@ -5479,11 +5479,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
         )
       )
       /
@@ -5606,11 +5606,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"5|5\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
       )
       /
@@ -5733,11 +5733,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
       )
       /
@@ -5860,11 +5860,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
       )
       /
@@ -5990,11 +5990,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[1h])
         )
       )
       /
@@ -6134,11 +6134,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"0\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
         )
       )
       /
@@ -6261,11 +6261,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"10|10\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
         )
       )
       /
@@ -6388,11 +6388,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
         )
       )
       /
@@ -6515,11 +6515,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"5|5\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
       )
       /
@@ -6642,11 +6642,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
       )
       /
@@ -6769,11 +6769,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
       )
       /
@@ -6899,11 +6899,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/blobs/{digest}"}[6h])
         )
       )
       /
@@ -7043,11 +7043,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"0\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
         )
       )
       /
@@ -7170,11 +7170,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"10|10\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
         )
       )
       /
@@ -7297,11 +7297,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
         )
       )
       /
@@ -7424,11 +7424,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"5|5\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
       )
       /
@@ -7551,11 +7551,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
       )
       /
@@ -7678,11 +7678,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
       )
       /
@@ -9385,11 +9385,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.05"}[5m])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.05"}[5m])
         )
         +
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.1"}[5m])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.1"}[5m])
         )
       )
       /
@@ -10203,11 +10203,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.05"}[30m])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.05"}[30m])
         )
         +
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.1"}[30m])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.1"}[30m])
         )
       )
       /
@@ -11021,11 +11021,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.05"}[1h])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.05"}[1h])
         )
         +
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.1"}[1h])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.1"}[1h])
         )
       )
       /
@@ -11839,11 +11839,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.05"}[6h])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.05"}[6h])
         )
         +
         sum by () (
-          rate(gitlab_rails_queue_duration_seconds_bucket{le="0.1"}[6h])
+          rate(gitlab_rails_queue_duration_seconds_bucket{le=~"0\\.1"}[6h])
         )
       )
       /

@@ -71,7 +71,7 @@ groups:
       type: camoproxy
     expr: |
       sum by (env,environment) (
-        sli_aggregations:camo_response_duration_seconds_bucket:rate_5m{env="gstg",le="10"}
+        sli_aggregations:camo_response_duration_seconds_bucket:rate_5m{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -212,7 +212,7 @@ groups:
       type: camoproxy
     expr: |
       sum by (env,environment) (
-        sli_aggregations:camo_response_duration_seconds_bucket:rate_30m{env="gstg",le="10"}
+        sli_aggregations:camo_response_duration_seconds_bucket:rate_30m{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -353,7 +353,7 @@ groups:
       type: camoproxy
     expr: |
       sum by (env,environment) (
-        sli_aggregations:camo_response_duration_seconds_bucket:rate_1h{env="gstg",le="10"}
+        sli_aggregations:camo_response_duration_seconds_bucket:rate_1h{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

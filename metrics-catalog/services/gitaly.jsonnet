@@ -72,8 +72,8 @@ metricsCatalog.serviceDefinition({
       apdex: combined(
         [
           gitalyHelper.grpcServiceApdex(mainApdexSelector),
-          gitalyHelper.grpcServiceApdex(slowMethodApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
-          gitalyHelper.grpcServiceApdex(operationServiceApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
+          gitalyHelper.grpcServiceApdex(slowMethodApdexSelector, satisfiedThreshold=10, toleratedThreshold=30, metricsFormat='migrating'),
+          gitalyHelper.grpcServiceApdex(operationServiceApdexSelector, satisfiedThreshold=10, toleratedThreshold=30, metricsFormat='migrating'),
         ]
       ),
 

@@ -93,7 +93,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="pre",le="1000",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="pre",le="1000.0",source_workload="istio-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -469,7 +469,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="pre",le="1000",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="pre",le="1000.0",source_workload="istio-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -845,7 +845,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="pre",le="1000",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="pre",le="1000.0",source_workload="istio-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

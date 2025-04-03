@@ -224,7 +224,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:registry_storage_action_seconds_bucket:rate_5m{env="gprd",le="1"}
+        sli_aggregations:registry_storage_action_seconds_bucket:rate_5m{env="gprd",le=~"1|1\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -282,7 +282,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_object_storage_upload_time_bucket:rate_5m{env="gprd",le="25"}
+        sli_aggregations:gitlab_workhorse_object_storage_upload_time_bucket:rate_5m{env="gprd",le=~"25|25\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -573,7 +573,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:registry_storage_action_seconds_bucket:rate_30m{env="gprd",le="1"}
+        sli_aggregations:registry_storage_action_seconds_bucket:rate_30m{env="gprd",le=~"1|1\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -631,7 +631,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_object_storage_upload_time_bucket:rate_30m{env="gprd",le="25"}
+        sli_aggregations:gitlab_workhorse_object_storage_upload_time_bucket:rate_30m{env="gprd",le=~"25|25\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -922,7 +922,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:registry_storage_action_seconds_bucket:rate_1h{env="gprd",le="1"}
+        sli_aggregations:registry_storage_action_seconds_bucket:rate_1h{env="gprd",le=~"1|1\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -980,7 +980,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_object_storage_upload_time_bucket:rate_1h{env="gprd",le="25"}
+        sli_aggregations:gitlab_workhorse_object_storage_upload_time_bucket:rate_1h{env="gprd",le=~"25|25\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

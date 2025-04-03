@@ -30,6 +30,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='jaeger_collector_save_latency_bucket',
         satisfiedThreshold=10,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -48,6 +49,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='jaeger_query_latency_bucket',
         satisfiedThreshold=10,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(

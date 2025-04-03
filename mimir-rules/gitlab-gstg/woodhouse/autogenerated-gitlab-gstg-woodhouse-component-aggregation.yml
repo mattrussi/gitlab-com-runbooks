@@ -12,7 +12,7 @@ groups:
       type: woodhouse
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_5m{env="gstg",job="woodhouse",le="10"}
+        sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_5m{env="gstg",job="woodhouse",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -88,7 +88,7 @@ groups:
       type: woodhouse
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_5m{env="gstg",job="woodhouse",le="1",route!="/ready"}
+        sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_5m{env="gstg",job="woodhouse",le=~"1|1\\.0",route!="/ready"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -167,7 +167,7 @@ groups:
       type: woodhouse
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_30m{env="gstg",job="woodhouse",le="10"}
+        sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_30m{env="gstg",job="woodhouse",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -243,7 +243,7 @@ groups:
       type: woodhouse
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_30m{env="gstg",job="woodhouse",le="1",route!="/ready"}
+        sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_30m{env="gstg",job="woodhouse",le=~"1|1\\.0",route!="/ready"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -322,7 +322,7 @@ groups:
       type: woodhouse
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_1h{env="gstg",job="woodhouse",le="10"}
+        sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_1h{env="gstg",job="woodhouse",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -398,7 +398,7 @@ groups:
       type: woodhouse
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_1h{env="gstg",job="woodhouse",le="1",route!="/ready"}
+        sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_1h{env="gstg",job="woodhouse",le=~"1|1\\.0",route!="/ready"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

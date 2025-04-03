@@ -151,7 +151,8 @@ metricsCatalog.serviceDefinition({
           }],
         },
         satisfiedThreshold=30,
-        toleratedThreshold=60
+        toleratedThreshold=60,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -201,7 +202,8 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         selector=baseSelector,
         // Note: 1s is too slow for an auth request. This threshold should be lower
-        satisfiedThreshold=1
+        satisfiedThreshold=1,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -276,7 +278,8 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
         selector=baseSelector,
         satisfiedThreshold=1,
-        toleratedThreshold=5
+        toleratedThreshold=5,
+        metricsFormat='migrating'
       ),
 
       errorRate: rateMetric(

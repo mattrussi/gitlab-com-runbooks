@@ -14,11 +14,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_5m{env="pre",le="0.5",type="registry"}
+          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_5m{env="pre",le=~"0\\.5",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_5m{env="pre",le="1",type="registry"}
+          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_5m{env="pre",le=~"1|1\\.0",type="registry"}
         )
       )
       /
@@ -55,11 +55,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_5m{env="pre",le="0.5",type="registry"}
+          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_5m{env="pre",le=~"0\\.5",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_5m{env="pre",le="1",type="registry"}
+          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_5m{env="pre",le=~"1|1\\.0",type="registry"}
         )
       )
       /
@@ -271,11 +271,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -331,11 +331,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="3",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"3|3\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="6",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"6|6\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -372,11 +372,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -413,11 +413,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -454,11 +454,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"0\\.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"0\\.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -495,11 +495,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"1|1\\.0",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le=~"2\\.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -539,11 +539,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_30m{env="pre",le="0.5",type="registry"}
+          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_30m{env="pre",le=~"0\\.5",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_30m{env="pre",le="1",type="registry"}
+          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_30m{env="pre",le=~"1|1\\.0",type="registry"}
         )
       )
       /
@@ -580,11 +580,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_30m{env="pre",le="0.5",type="registry"}
+          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_30m{env="pre",le=~"0\\.5",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_30m{env="pre",le="1",type="registry"}
+          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_30m{env="pre",le=~"1|1\\.0",type="registry"}
         )
       )
       /
@@ -796,11 +796,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -856,11 +856,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="3",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"3|3\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="6",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"6|6\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -897,11 +897,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -938,11 +938,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -979,11 +979,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"0\\.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"0\\.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -1020,11 +1020,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"1|1\\.0",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le=~"2\\.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -1064,11 +1064,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_1h{env="pre",le="0.5",type="registry"}
+          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_1h{env="pre",le=~"0\\.5",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_1h{env="pre",le="1",type="registry"}
+          sli_aggregations:registry_database_query_duration_seconds_bucket:rate_1h{env="pre",le=~"1|1\\.0",type="registry"}
         )
       )
       /
@@ -1105,11 +1105,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_1h{env="pre",le="0.5",type="registry"}
+          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_1h{env="pre",le=~"0\\.5",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_1h{env="pre",le="1",type="registry"}
+          sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_1h{env="pre",le=~"1|1\\.0",type="registry"}
         )
       )
       /
@@ -1321,11 +1321,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"2\\.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"25|25\\.0",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -1381,11 +1381,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="3",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"3|3\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="6",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"6|6\\.0",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -1422,11 +1422,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"1|1\\.0",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"2\\.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -1463,11 +1463,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"25|25\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"60|60\\.0",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -1504,11 +1504,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"0\\.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"0\\.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -1545,11 +1545,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"1|1\\.0",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le=~"2\\.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /

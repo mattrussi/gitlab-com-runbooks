@@ -111,7 +111,8 @@ metricsCatalog.serviceDefinition({
         histogram='prometheus_http_request_duration_seconds_bucket',
         selector=prometheusSelector,
         satisfiedThreshold=1,
-        toleratedThreshold=3
+        toleratedThreshold=3,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -267,6 +268,7 @@ metricsCatalog.serviceDefinition({
         histogram='grafana_image_renderer_service_http_request_duration_seconds_bucket',
         selector=grafanaSelector,
         satisfiedThreshold=30,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
