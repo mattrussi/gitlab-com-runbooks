@@ -22,7 +22,7 @@ This should be done from within a registry instance in K8s, using the built-in `
 
 1. Confirm that the registry version indicated in the Change Request matches the one (and there is only one) running in the target environment ([dashboard](https://dashboards.gitlab.net/d/registry-app/registry-application-detail?orgId=1&from=now-5m&to=now&viewPanel=3));
 
-1. Connect to the target cluster for which maintenance is occurring ([runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/k8s-oncall-setup.md#kubernetes-api-access));
+1. Connect to a cluster from the environment for which maintenance is occurring ([runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/k8s-oncall-setup.md#kubernetes-api-access));
 
     **TODO:** It is unclear whether PDMs need to be run on multiple clusters. As this is DB related, and all the pods are connecting to the same DB, we believe it only needs to be run once from any cluster that has registry deployed. It would be good to have that information in the runbook.
 
