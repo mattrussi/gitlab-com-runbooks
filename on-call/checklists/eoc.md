@@ -65,7 +65,7 @@ You can also always reach out to your team, the `#eoc-general` Slack channel, or
 ### Incidents
 
 For each new incident you are aware of, regardless of the source, you should declare an incident in [Incident.io][incidentio].
-You can declare incidents in Slack using the `/inc` command.
+You can declare incidents in Slack using the `/incident` command.
 You can also declare incidents in the incident.io web application.
 
 ### Alerts
