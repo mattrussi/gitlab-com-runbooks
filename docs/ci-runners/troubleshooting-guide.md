@@ -6,42 +6,42 @@
 
 ## Common Runner Issues and Resolutions
 
-### Remove Broken Runner VMs
-
-Execute this command to remove a specific broken runner:
-
-```bash
-ssh your_user@docker-ci-1.gitlap.com sudo -H docker-machine rm -f runner-30d62d59-auto-scale-1486026893-d25821d9
-```
-
-For batch removal of failing runners, see the "CI runner manager report a high number of errors" section below.
 
 ### Runners Manager is Down
 
-Builds are not processed when the runners manager is down.
+There are a wide range of possibilities, although uncommon, for when the runners manager is failing to process jobs.
+
+The reason could be anywhere between the GitLab instance and the runner-manager VM itself.
 
 #### Possible checks
 
-1. Try to login to problem node and run `sudo gitlab-runner status`. If gitlab-runner is not running (output is `gitlab-runner: Service is not running!`), consider restart it.
+1. Try to login to the problematic node and run `sudo gitlab-runner status`. If the `gitlab-runner` process is not running (output is `gitlab-runner: Service is not running!`), then check that `chef-client` is enabled before attempting to start the process again.
+1. Is the issue occurring in only one VM in a given shard? This could indicate the issue is local to that specific runner-manager.
+1. Is the issue widespread in all the VMs in a particular shard? This could indicate a faulty configuration, either in Terraform or Chef.
+1. Is the issue widespread in all .com hosted shards? This indicates an issue with the GitLab instance, or some other intermediate component; for example, the HAProxy nodes. 
 
 #### Resolution
 
-1. Consider restart runners manager by running `sudo service gitlab-runner restart`.
+Depending on the cause, the resolution can range anywhere between restarting the `gitlab-runner` process, to reverting a recent change.
 
 ### CI runner manager report a high number of errors
 
 #### Possible checks
 
-1. Check DigitalOcean status on Twitter: [@DOStatus](https://twitter.com/DOStatus).
-2. SSH into the machine having issues. For example:
+1. Check the CI Runenrs Incident Support dashboards [in Grafana](https://dashboards.gitlab.net/dashboards/f/ci-runners/ci-runners).
+2. Check the Failures by instance and reason in [this dashboard](https://dashboards.gitlab.net/goto/D8gWNgAHg?orgId=1).
+3. Check [.com runner logs](https://log.gprd.gitlab.net/app/r/s/f7x01) for unexpected increase in a particular error.
+4. Examine a failed job in detail.
+5. SSH into one of the runner-manager VMs experiencing the errors, for example:
 
     ```bash
-    ssh shared-runners-manager-1.gitlab.com
+    ssh runners-manager-private-blue-1.c.gitlab-ci-155816.internal
     ```
 
 3. Check the status of machines:
 
     ```bash
+    $ sudo gitlab-runner status
     $ sudo su
     # /root/machines_operations.sh list
     # /root/machines_operations.sh count
@@ -49,9 +49,9 @@ Builds are not processed when the runners manager is down.
 
 4. You can also do a check using Docker Machine:
     > **Notice:**
-    > `docker-machine ls` is doing an API call for each machine configured on the host. This will increase the
-    > DigitalOcean Token Rate Limits usage. Please use this command carefully and consider to skip this step if
-    > `DO_TOKEN_RATE_LIMITS` service for this host in Check MK is also *WARNING* or *CRITICAL*.
+    > `docker-machine ls` is doing an API call for each machine configured on the host. This might increase the
+    > GCP quota Limits usage. Please use this command carefully and consider to skip this step if
+    > we're approaching any of the quota limits for an affected project.
 
     ```bash
     $ sudo su
@@ -59,25 +59,8 @@ Builds are not processed when the runners manager is down.
     ```
 
     Save this output for later troubleshooting.
-5. Check logs in `/var/log/upstart/gitlab-runner.log`.
+5. Check the process logs as described in [docs general troubleshooting tips](https://docs.gitlab.com/runner/faq/#general-troubleshooting-tips).
 
-#### Resolution
-
-1. Remove the failing machines via the `machines_operations.sh` script:
-    > **Notice:**
-    > Below command can also remove machines that were created recently and didn't received
-    > a `DropletID` value yet. We should update the script to remove only machines marked as
-    > `FAILING` which are created more than 2 minutes ago (or less/more?).
-
-    ```bash
-    $ sudo su
-    # /root/machines_operations.sh remove-failing
-    ```
-
-2. Do a cross-check of machines on DigitalOcean and remove machines that are no longer managed
-   by the host.
-    > **Notice:**
-    > We need a script for this!
 
 #### Post checks
 
