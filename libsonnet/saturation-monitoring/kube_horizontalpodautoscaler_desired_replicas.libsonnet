@@ -20,10 +20,14 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
     grafana_dashboard_uid: 'sat_kube_horizontalpodautoscaler',
     resourceLabels: ['horizontalpodautoscaler', 'shard'],
     query: |||
-      kube_horizontalpodautoscaler_status_desired_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s", namespace!~"%(ignored_namespaces)s"}
+      (
+        kube_horizontalpodautoscaler_status_desired_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s", namespace!~"%(ignored_namespaces)s"} * 0.3
+        +
+        avg_over_time(kube_horizontalpodautoscaler_status_desired_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s", namespace!~"%(ignored_namespaces)s"}[1d]) * 0.7
+      )
       /
       kube_horizontalpodautoscaler_spec_max_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s", namespace!~"%(ignored_namespaces)s"}
-    |||,
+    |||,  // the numerator applies a daily weighted moving average to smooth the jitter coming from hitting the max replicas every couple of hours
     queryFormatConfig: {
       // Ignore non-autoscaled shards and throttled shards
       ignored_sidekiq_shards: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) !shard.autoScaling || shard.urgency == 'throttled')),
