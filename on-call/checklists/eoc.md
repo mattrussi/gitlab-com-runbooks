@@ -36,7 +36,7 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
 - *Turn off slack channel notifications*: Open notification preferences in monitored Slack channels from the previous checklist and return alerts to the desired values.
 - *Leave noisy alert channels*: `/leave` alert channels (It's good to stay in `#alerts` and `#alerts-general`)
 - Make sure any high severity (S1/S2) incidents have been handed over to someone. If it's unclear who, ask the next on-call engineer to pick up the incident lead role in incident.io for those incidents.
-- At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
+- Update the [on-call handover][oncall-handover-issues] issue for the next EoC to include any important context or time sensitive tasks. For sensitive informatio, comment on the issue as in internal note.
 
 ## Completing your week on on-call shifts
 
@@ -137,6 +137,7 @@ to undocumented implementation in the PagerDuty API.
 
 [active-production-incident-issues]:https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JH40E0GPSVDHKS7QGRSQP9ZH&status_category%5Bone_of%5D=active
 [open_s1_incidents]:                https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JH40E0GPSVDHKS7QGRSQP9ZH&status_category%5Bone_of%5D=active&severity%5Bone_of%5D=01JHNSE93M7DM83PZ55WZ9G8EX
+[oncall-handover-issues]:           https://gitlab.com/gitlab-com/gl-infra/on-call-handovers/issues
 
 [incidentio]:                       https://app.incident.io
 
