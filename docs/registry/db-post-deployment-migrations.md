@@ -22,13 +22,11 @@ This should be done from within a registry instance in K8s, using the built-in `
 
 1. Confirm that the registry version indicated in the Change Request matches the one (and there is only one) running in the target environment ([dashboard](https://dashboards.gitlab.net/d/registry-app/registry-application-detail?orgId=1&from=now-5m&to=now&viewPanel=3));
 
-1. Connect to a cluster from the environment for which maintenance is occurring ([runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/k8s-oncall-setup.md#kubernetes-api-access));
+1. Connect to any cluster from the environment for which maintenance is occurring ([runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/k8s-oncall-setup.md#kubernetes-api-access));
 
-    **TODO:** It is unclear whether PDMs need to be run on multiple clusters. As this is DB related, and all the pods are connecting to the same DB, we believe it only needs to be run once from any cluster that has registry deployed. It would be good to have that information in the runbook.
+    **Note** that the regional clusters in `gprd` and `gstg` do not have any Registry pods. So, you can connect to any one of the three zonal clusters.
 
 1. Find the oldest container registry Pod (ignore Pods that have `-migrations-` in the name!):
-
-    **TODO:** Why should we choose the oldest registry Pod? Deployments will be blocked during a PDM change request anyway. So, all the pods will be running the same version. Is there any other reason to select the oldest registry pod? Or can we just use any registry pod?
 
    ```sh
    kubectl get pods -n gitlab -l app=registry --sort-by=.metadata.creationTimestamp | head -n 2
