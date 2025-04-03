@@ -53,7 +53,13 @@ applications where this YubiKey is used will not be affected.[^1]**
 When doing a rebase with multiple commits, or using ssh automation like `knife ssh ...` it will be painful using the default `yubikey-agent` configuration since a touch is required for every signature or ssh session.
 This is default configuration but we set a touch policy of "cached" with the following script, this will cache touches for 15 seconds:
 
-1. Validate `ykman` has access to the key, you may need to re-insert your yubikey, run `ykman info` to confirm.
+1. Validate `ykman` has access to the YubiKey. It should output the device model, serial number, firmware etc.,
+   and state of the applications such as FIDO and PIV.  If there are an issues, re-insert your YubiKey.
+
+   ```shell
+   ykman info
+   ```
+
 1. Run the [`scripts/yubikey-reset.sh` script](https://gitlab.com/gitlab-com/runbooks/-/blob/master/scripts/reset-yubikey.sh), `PIN=<your pin> scripts/reset-yubikey.sh`, **this will invalidate the previous key and set a new one**:
 
 ### Workaround if your YubiKey is not responding
