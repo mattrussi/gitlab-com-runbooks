@@ -95,7 +95,6 @@ Ideally, try to leave the environment in a stable situation.
 Create those issues and link them as follow-ups in incident.io.
 1. For higher severity incidents, help the IMOC get the incident review process in place, and update timelines, etc.
 
-
 ### Security
 
 If you find any abnormal or suspicious activity during the course of your on call on-call rotation, please do not hesitate to [contact security](https://handbook.gitlab.com/handbook/security/security-operations/sirt/engaging-security-on-call/).
