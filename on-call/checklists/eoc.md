@@ -30,7 +30,7 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
   - `#incidents-dotcom`
 - At the start of each on-call day, read the on-call handover issue that has been assigned to you by the previous EOC, and familiarize yourself with any ongoing incidents.
 
-## Ending your faily on-call shift
+## Ending your daily on-call shift
 
 - *Turn off slack channel notifications*: Open notification preferences in monitored Slack channels from the previous checklist and return alerts to the desired values.
 - *Leave noisy alert channels*: `/leave` alert channels (It's good to stay in `#alerts` and `#alerts-general`)
@@ -48,7 +48,7 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
 
 ### On-call issues
 
-First check [active production incident issues][active-production-incident-issues] to familiarize yourself with what has been happening lately.
+First check [active GitLab.com production incident issues][active-production-incident-issues] to familiarize yourself with what has been happening lately.
 Also, keep an eye on the [#production][slack-production] and [#incidents-dotcom][slack-incident-management] channels for discussion around any on-going issues.
 
 ### Useful Dashboard to keep open
@@ -123,8 +123,8 @@ Currently a maintenance window cannot be created for a duration smaller than 1 m
 to undocumented implementation in the PagerDuty API.
 
 
-[active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
-[open_s1_incidents]:                https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
+[active-production-incident-issues]:https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JH40E0GPSVDHKS7QGRSQP9ZH&status_category%5Bone_of%5D=active
+[open_s1_incidents]:                https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JH40E0GPSVDHKS7QGRSQP9ZH&status_category%5Bone_of%5D=active&severity%5Bone_of%5D=01JHNSE93M7DM83PZ55WZ9G8EX
 
 [incidentio]:                       https://app.incident.io
 
