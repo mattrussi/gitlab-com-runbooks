@@ -34,6 +34,7 @@ local versionTemplate = grafana.template.new(
   regex='/.*\\v(\\d{2})/',
   refresh='load',
   sort=1,
+  current='16'
 );
 
 local logicalReplicationLag =
