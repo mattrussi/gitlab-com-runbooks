@@ -29,12 +29,13 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
   `All new messages`*:
   - `#incidents-dotcom`
 - At the start of each on-call day, read the on-call handover issue that has been assigned to you by the previous EOC, and familiarize yourself with any ongoing incidents.
+- Review the [active incidents][active-production-incident-issues] and see if you need to take on the incident lead role, or if there are any outstanding actions.
 
 ## Ending your daily on-call shift
 
 - *Turn off slack channel notifications*: Open notification preferences in monitored Slack channels from the previous checklist and return alerts to the desired values.
 - *Leave noisy alert channels*: `/leave` alert channels (It's good to stay in `#alerts` and `#alerts-general`)
-- [Comment on any open S1 incidents][open_s1_incidents]
+- Make sure any high severity (S1/S2) incidents have been handed over to someone. If it's unclear who, ask the next on-call engineer to pick up the incident lead role in incident.io for those incidents.
 - At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
 
 ## Completing your week on on-call shifts
@@ -59,16 +60,17 @@ Also, keep an eye on the [#production][slack-production] and [#incidents-dotcom]
 
 In Slack, there is an alias (@sre-oncall) that will notify the current EoC.
 Responding to these requests is best effort and you are empowered to decide the best response given the current production situation.
-You can also always reach out to your team, the `#eoc-general` Slack channel, or others to help delegate work that 
+You can also always reach out to your team, the `#eoc-general` Slack channel, or others to help delegate work that is going to prevent you from being ready to respond to incidents.
 
 ### Incidents
 
 For each new incident you are aware of, regardless of the source, you should declare an incident in [Incident.io][incidentio].
 You can declare incidents in Slack using the `/inc` command.
+You can also declare incidents in the incident.io web application.
 
 ### Alerts
 
-Alertmanager, deadmansnitch, incidents, and any other alert generating process will go to the `GitLab Production` service in Pagerduty and page someone (you).
+Alertmanager, deadmansnitch, incidents, and any other alert generating process are directed to the `GitLab Production` service in Pagerduty and will page someone (you).
 If you want to see current alerts, you can check [Pagerdury][pagerduty].
 Alerts that page you or appear in Slack are not the only way to know there is a incident going on.
 You may be made aware of other problems from individuals mentioning problems to you, or opening incidents, or seeing problems first-hand.
@@ -78,9 +80,20 @@ When you are paged, or are made aware of a problem, follow this general workflow
 
 1. Acknowledge the alert if you are able to investigate and work the problem.
 You have 15 minutes to acknowledge before the alert is escelated automatically to the Incident Manager On Call (IMOC).
-
-
-1. If the alert is not part of an existing incident, open an incident using the `/inc` Slack command.
+1. If the alert is not part of an existing incident, quickly assess the impact and open a new incident with an appropriate severity.
+If the severity is hard to determine, assume the impact is greater and open the incident with a higher severity.
+1. During lower severity (S3/S4) incidents, you will be responsible for updating the incident overview.
+1. During higher severity (S1/S2) incidents, the IMOC is usually tasked with making incident updates and helping coordinate resources in the incident.
+1. Try to help log and note any characterization of the problem.
+Look for error logs, dashboards, etc, that help illustrate the cause, or symptoms of the incident.
+Look at feature categories and the service to help identify who might need to help solve this incident.
+1. Be sure to look for recent deployments, or feature flags to see if they are related to the incident.
+1. If you know what must be done to end the incident, perform the actions! If not, reach out to the most likely group who could help solve the incident, the IMOC, or others.
+1. Once the incident is no longer impacting users, focus on the steps it may take to completely resolve the incident.
+Ideally, try to leave the environment in a stable situation.
+1. Identify follow-up actions (corrective actions or infradev issues) that would prevent the incident from re-ocurring.
+Create those issues and link them as follow-ups in incident.io.
+1. For higher severity incidents, help the IMOC get the incident review process in place, and update timelines, etc.
 
 
 ### Security
