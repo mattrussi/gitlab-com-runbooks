@@ -123,8 +123,9 @@ metricsCatalog.serviceDefinition({
     ],
     dependsOn: dependOnPatroni.sqlComponents,
   }) + railsQueueingSli(0.05, 0.25, selector={ type: 'internal-api' }, overrides={
+    severity: 's2',
+    experimental: false,
     monitoringThresholds+: {
-      severity: 's3',
       apdexScore: 0.995,
     },
   }),
