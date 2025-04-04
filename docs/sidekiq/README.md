@@ -39,6 +39,7 @@
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
+* [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)

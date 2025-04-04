@@ -244,6 +244,27 @@ Just wait, replication self recovers :wine_glass:
 If it takes too long, kill the blocking query:
 [terminate_slow_queries.sh](../../scripts/database/terminate_slow_queries.sh)
 
+If a blocking query is not the cause, you may consider using load balancer
+feature flags to alter the amount of replication lag we tolerate for replica
+queries in order to prevent a site wide outage.
+
+These two ops feature flags influence the application database load balancer
+to use replicas that would normally not be used due to their replication lag
+time exceeding max_replication_lag_time.
+
+One doubles max_replication_lag_time, and the other ignores it completely.
+
+The intent is for them to be used to prevent an outage in the event the
+replicas cannot keep up with the WAL rate and the primary becomes saturated
+without available replicas.
+
+- `load_balancer_double_replication_lag_time` should be tried first.
+- `load_balancer_ignore_replication_lag_time` should be a last resort.
+
+You can also look for any sidekiq workers that do a lot of inserts, udpates,
+or deletes. They can be deferred using chatops as described in
+[Deferring Sidekiq jobs](https://docs.gitlab.com/development/feature_flags/#deferring-sidekiq-jobs).
+
 ## Replication Slots
 
 ### Symptoms
