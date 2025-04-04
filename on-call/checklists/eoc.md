@@ -1,10 +1,17 @@
-# Engineer On Call (EOC)
+# Engineer On Call (EOC) for GitLab.com
 
 To start with the right foot let's define a set of tasks that are nice things to do before you go any further in your week.
 
 By performing these tasks we will keep the [broken window effect][broken_window_effect] under control, preventing future pain and mess.
 
-## Going on call
+## Before your week of on-call shifts
+
+- Join the `#eoc-general` slack channel
+- Familiarize yourself with [Pagerduty][pagerduty] and [Incident.io][incidentio]
+- Make sure you can receive test pages from [Pagerduty][pagerduty]
+- Be prepared to respond to alerts within 15 minutes during your on-call time
+
+## Beginning your daily on-call shift
 
 Here is a suggested checklist of things to do at the start of an on-call shift:
 
@@ -15,22 +22,23 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
   Click `Save`
 - *Join alert slack channels if not already a member*:
   - `#production`
-  - `#incident-management`
+  - `#incidents-dotcom`
   - `#alerts-prod-abuse`
   - `#g_security_vulnmgmt_notifications`
 - *Turn on slack channel notifications for these slack channels for
   `All new messages`*:
-  - `#incident-management`
+  - `#incidents-dotcom`
 - At the start of each on-call day, read the on-call handover issue that has been assigned to you by the previous EOC, and familiarize yourself with any ongoing incidents.
+- Review the [active incidents][active-production-incident-issues] and see if you need to take on the incident lead role, or if there are any outstanding actions.
 
-At the end of a shift:
+## Ending your daily on-call shift
 
 - *Turn off slack channel notifications*: Open notification preferences in monitored Slack channels from the previous checklist and return alerts to the desired values.
 - *Leave noisy alert channels*: `/leave` alert channels (It's good to stay in `#alerts` and `#alerts-general`)
-- [Comment on any open S1 incidents][open_s1_incidents]
-- At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
+- Make sure any high severity (S1/S2) incidents have been handed over to someone. If it's unclear who, ask the next on-call engineer to pick up the incident lead role in incident.io for those incidents.
+- Update the [on-call handover][oncall-handover-issues] issue for the next EoC to include any important context or time sensitive tasks. For sensitive informatio, comment on the issue as in internal note.
 
-## Going off call
+## Completing your week on on-call shifts
 
 - Take a deep breath! You did it!
 - Review your incidents and see if any of them need corrective actions, to be marked as resolved, or reviews filled out.
@@ -41,38 +49,51 @@ At the end of a shift:
 
 ### On-call issues
 
-First check [active production incident issues][active-production-incident-issues] to familiarize yourself with what has been happening lately.
-Also, keep an eye on the [#production][slack-production] and [#incident-management][slack-incident-management] channels for discussion around any on-going issues.
+First check [active GitLab.com production incident issues][active-production-incident-issues] to familiarize yourself with what has been happening lately.
+Also, keep an eye on the [#production][slack-production] and [#incidents-dotcom][slack-incident-management] channels for discussion around any on-going issues.
 
 ### Useful Dashboard to keep open
 
 - [Platform Triage](https://dashboards.gitlab.net/goto/EEjfId3Ig?orgId=1)
 
+### Slack sre-oncall alias
+
+In Slack, there is an alias (@sre-oncall) that will notify the current EoC.
+Responding to these requests is best effort and you are empowered to decide the best response given the current production situation.
+You can also always reach out to your team, the `#eoc-general` Slack channel, or others to help delegate work that is going to prevent you from being ready to respond to incidents.
+
+### Incidents
+
+For each new incident you are aware of, regardless of the source, you should declare an incident in [Incident.io][incidentio].
+You can declare incidents in Slack using the `/incident` command.
+You can also declare incidents in the incident.io web application.
+
 ### Alerts
 
-Start by checking how many alerts are in flight right now
+Alertmanager, deadmansnitch, incidents, and any other alert generating process are directed to the `GitLab Production` service in Pagerduty and will page someone (you).
+If you want to see current alerts, you can check [Pagerdury][pagerduty].
+Alerts that page you or appear in Slack are not the only way to know there is a incident going on.
+You may be made aware of other problems from individuals mentioning problems to you, or opening incidents, or seeing problems first-hand.
+There is no wrong way to be made aware of an incident.
 
-- go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/mnbqU9Smz/fleet-overview?orgId=1) and check the number of Active Alerts, it should be 0. If it is not 0
-    - go to the alerts dashboard and check what is being triggered
-        - [azure][prometheus-azure]
-        - [gprd prometheus][prometheus-gprd]
-        - [gprd prometheus-app][prometheus-app-gprd]
-    - watch the [#alerts][slack-alerts] and [#alerts-general][slack-alerts-general] channels for alert notifications;
-      each alert here should point you to the right [runbook][runbook-repo] to fix it.
-    - if they don't, you have more work to do.
-    - be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
+When you are paged, or are made aware of a problem, follow this general workflow of steps:
 
-### Prometheus targets down
-
-Check how many targets are not scraped at the moment. alerts are in flight right now, to do this:
-
-- go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Targets down. It should be 0. If it is not 0
-    - go to the [targets down list] and check what is.
-        - [azure][prometheus-azure-targets-down]
-        - [gprd prometheus][prometheus-gprd-targets-down]
-        - [gprd prometheus-app][prometheus-app-gprd-targets-down]
-    - try to figure out why there is scraping problems and try to fix it. Note that sometimes there can be temporary scraping problems because of exporter errors.
-    - be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
+1. Acknowledge the alert if you are able to investigate and work the problem.
+You have 15 minutes to acknowledge before the alert is escelated automatically to the Incident Manager On Call (IMOC).
+1. If the alert is not part of an existing incident, quickly assess the impact and open a new incident with an appropriate severity.
+If the severity is hard to determine, assume the impact is greater and open the incident with a higher severity.
+1. During lower severity (S3/S4) incidents, you will be responsible for updating the incident overview.
+1. During higher severity (S1/S2) incidents, the IMOC is usually tasked with making incident updates and helping coordinate resources in the incident.
+1. Try to help log and note any characterization of the problem.
+Look for error logs, dashboards, etc, that help illustrate the cause, or symptoms of the incident.
+Look at feature categories and the service to help identify who might need to help solve this incident.
+1. Be sure to look for recent deployments, or feature flags to see if they are related to the incident.
+1. If you know what must be done to end the incident, perform the actions! If not, reach out to the most likely group who could help solve the incident, the IMOC, or others.
+1. Once the incident is no longer impacting users, focus on the steps it may take to completely resolve the incident.
+Ideally, try to leave the environment in a stable situation.
+1. Identify follow-up actions (corrective actions or infradev issues) that would prevent the incident from re-ocurring.
+Create those issues and link them as follow-ups in incident.io.
+1. For higher severity incidents, help the IMOC get the incident review process in place, and update timelines, etc.
 
 ### Security
 
@@ -114,9 +135,13 @@ Currently a maintenance window cannot be created for a duration smaller than 1 m
 to undocumented implementation in the PagerDuty API.
 
 
-[active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
-[open_s1_incidents]:                https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
+[active-production-incident-issues]:https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JH40E0GPSVDHKS7QGRSQP9ZH&status_category%5Bone_of%5D=active
+[open_s1_incidents]:                https://app.incident.io/gitlab/incidents?incident_type%5Bone_of%5D=01JH40E0GPSVDHKS7QGRSQP9ZH&status_category%5Bone_of%5D=active&severity%5Bone_of%5D=01JHNSE93M7DM83PZ55WZ9G8EX
+[oncall-handover-issues]:           https://gitlab.com/gitlab-com/gl-infra/on-call-handovers/issues
 
+[incidentio]:                       https://app.incident.io
+
+[pagerduty]:                        https://gitlab.pagerduty.com
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users
 [pagerduty-amer]:                   https://gitlab.pagerduty.com/schedules#POL1GSQ
 [pagerduty-apac]:                   https://gitlab.pagerduty.com/schedules#PF02RF0
@@ -137,7 +162,7 @@ to undocumented implementation in the PagerDuty API.
 
 [slack-alerts]:                     https://gitlab.slack.com/channels/alerts
 [slack-alerts-general]:             https://gitlab.slack.com/channels/feed_alerts-general
-[slack-incident-management]:        https://gitlab.slack.com/channels/incident-management
+[slack-incident-management]:        https://gitlab.slack.com/channels/incidents-dotcom
 [slack-production]:                 https://gitlab.slack.com/channels/production
 
 [broken_window_effect]:             https://en.wikipedia.org/wiki/Broken_windows_theory
