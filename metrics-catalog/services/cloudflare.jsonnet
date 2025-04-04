@@ -4,11 +4,11 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'cloudflare',
   tier: 'lb',
-  tenants: ['gitlab-ops'],
+  tenants: ['gitlab-ops', 'gitlab-gprd', 'gitlab-gstg'],
   monitoringThresholds: {
-    // Error SLO disabled as monitoring data is unreliable.
+    // Monitoring data may be unreliable.
     // See: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5465
-    //errorRatio: 0.999,
+    errorRatio: 0.99,
   },
   serviceDependencies: {
     frontend: true,
@@ -26,7 +26,7 @@ metricsCatalog.serviceDefinition({
     gitlab_zone: {
       severity: 's3',
       team: 'foundations',
-      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
+      userImpacting: true,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
         Aggregation of all public traffic for GitLab.com passing through Cloudflare.
@@ -106,7 +106,10 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='cloudflare_zone_requests_status',
         selector=zoneSelector {
-          status: { re: '5..' },
+          status: [
+            { re: '5..' },
+            { ne: '502' },
+          ],
         },
       ),
 

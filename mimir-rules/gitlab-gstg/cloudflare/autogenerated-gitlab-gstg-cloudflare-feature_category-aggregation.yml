@@ -14,7 +14,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="ops",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="gstg",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -27,13 +27,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="ops",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="gstg",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
 - name: 'Feature Category Metrics: cloudflare - Burn-Rate 30m'
@@ -49,7 +49,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="ops",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="gstg",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -62,13 +62,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="ops",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="gstg",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
 - name: 'Feature Category Metrics: cloudflare - Burn-Rate 1h'
@@ -84,7 +84,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="ops",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="gstg",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -97,13 +97,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="ops",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="gstg",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
 - name: 'Feature Category Metrics: cloudflare - Burn-Rate 6h'
@@ -119,7 +119,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
@@ -131,7 +131,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -143,7 +143,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -155,7 +155,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
 - name: 'Feature Category Metrics: cloudflare - Burn-Rate 3d'
   interval: 2m
@@ -170,7 +170,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     labels:
@@ -182,7 +182,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -194,7 +194,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -206,5 +206,5 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="cloud_gitlab_zone",env="ops",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="cloud_gitlab_zone",env="gstg",feature_category="cloud_connector",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
