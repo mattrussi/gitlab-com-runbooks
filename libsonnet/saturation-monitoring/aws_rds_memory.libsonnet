@@ -28,7 +28,7 @@ local rdsInstanceRAMBytes = std.get(config.options, 'rdsInstanceRAMBytes', null)
     // MB of available RAM that is freeable.
     query: |||
       1- (
-        sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
+        sum by (dbinstance_identifier, type) (aws_rds_freeable_memory_maximum)
         /
         %(rdsInstanceRAMBytes)s
       )

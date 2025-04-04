@@ -26,7 +26,7 @@ local rdsInstanceRAMBytes = std.get(config.options, 'rdsInstanceRAMBytes', null)
     // Reference: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html
     // We leverage this as part of our query below.
     query: |||
-      sum by (dbinstance_identifier) (aws_rds_database_connections_maximum)
+      sum by (dbinstance_identifier, type) (aws_rds_database_connections_maximum)
       /
       clamp_min((%(rdsInstanceRAMBytes)s)/9531392, 5000)
     |||,

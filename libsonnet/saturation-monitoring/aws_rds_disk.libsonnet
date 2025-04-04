@@ -27,7 +27,7 @@ local rdsMaxAllocatedStorageGB = std.get(config.options, 'rdsMaxAllocatedStorage
     // Sum ALL relations stored on the RDS instance
     // `rdsMaxAllocatedStorage` is specified as GB, convert to bytes to match `pg_database_size_bytes`
     query: |||
-      sum(pg_database_size_bytes)
+      sum by (type) (pg_database_size_bytes)
       /
       (%(rdsMaxAllocatedStorageGB)s * (1024 * 1024 * 1024))
     |||,
