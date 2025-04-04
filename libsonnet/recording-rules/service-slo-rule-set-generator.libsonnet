@@ -149,12 +149,22 @@ local generateServiceSLORules(serviceDefinition) =
         labels=labelsWithTriggerDurations,
         expr='%f' % [serviceDefinition.contractualThresholds.apdexRatio]
       )
+    else if hasMonitoringThresholds && std.objectHas(serviceDefinition.monitoringThresholds, 'apdexScore') then
+      minApdexDeprecatedSingleBurnSLO(
+        labels=labelsWithTriggerDurations { slo: 'monitoring_apdex_ratio' },
+        expr='%f' % [serviceDefinition.monitoringThresholds.apdexScore]
+      )
     else null,
 
     if hasContractualThresholds && std.objectHas(serviceDefinition.contractualThresholds, 'errorRatio') then
       maxErrorsDeprecatedSingleBurnSLO(
         labels=labelsWithTriggerDurations,
         expr='%f' % [serviceDefinition.contractualThresholds.errorRatio],
+      )
+    else if hasMonitoringThresholds && std.objectHas(serviceDefinition.monitoringThresholds, 'errorRatio') then
+      maxErrorsDeprecatedSingleBurnSLO(
+        labels=labelsWithTriggerDurations { slo: 'monitoring_error_ratio' },
+        expr='%f' % [serviceDefinition.monitoringThresholds.errorRatio],
       )
     else null,
 
