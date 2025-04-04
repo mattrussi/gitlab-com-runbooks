@@ -26,20 +26,16 @@ This should be done from within a registry instance in K8s, using the built-in `
 
     **Note** that the regional clusters in `gprd` and `gstg` do not have any Registry pods. So, you can connect to any one of the three zonal clusters.
 
-1. Find the oldest container registry Pod (ignore Pods that have `-migrations-` in the name!):
+1. Find the oldest container registry Pod (ignore Pods that have `-migrations-` in the name!) and access it using `kubectl`:
 
    ```sh
-   kubectl get pods -n gitlab -l app=registry --sort-by=.metadata.creationTimestamp | head -n 2
+   POD_NAME=$(kubectl get pods -n gitlab -l app=registry --sort-by=.metadata.creationTimestamp -o name | grep -v -- "-migrations-" | head -n 1) && \
+       [ -n "$POD_NAME" ] && kubectl exec -n gitlab -it $POD_NAME -- /bin/bash || \
+       echo "Pod name \"$POD_NAME\" is invalid."
    ```
 
-1. Access the pod:
-
-   ```sh
-   kubectl exec -n gitlab -it <pod_name> -- /bin/bash
-   ```
-
-   If it's on a `gprd` cluster, notify `#security_operations` slack channel that you are exec-ing into the pod with
-   a link to the change request, as they will receive a SIRT alert about it.
+   > [!note]
+   > If you are running `kubectl exec` on a cluster in the `gprd` environment, then notify `#security_operations` slack channel that you are exec-ing into the pod with a link to the change request, as they will receive a SIRT alert about it.
 
 1. List pending migrations:
 
