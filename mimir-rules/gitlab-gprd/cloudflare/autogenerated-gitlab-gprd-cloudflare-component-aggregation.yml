@@ -13,7 +13,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="ops",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="gprd",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -25,13 +25,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="ops",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="gprd",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="cloud_gitlab_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_5m{component="cloud_gitlab_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -42,11 +42,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_5m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_5m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -56,11 +56,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -71,7 +71,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="ops",zone="gitlab.net"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="gprd",zone="gitlab.net"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -83,13 +83,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="ops",status=~"5..",zone="gitlab.net"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="gprd",status=~"5..",zone="gitlab.net"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="gitlab_net_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_5m{component="gitlab_net_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -100,11 +100,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_5m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_5m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -114,11 +114,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -129,7 +129,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="ops",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_5m{env="gprd",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -141,13 +141,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="ops",status=~"5..",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_5m{env="gprd",status=~"5..",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="gitlab_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_5m{component="gitlab_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -158,11 +158,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_5m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_5m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -172,11 +172,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
 - name: 'Global SLI Metrics: cloudflare - Burn-Rate 30m'
   interval: 2m
@@ -190,7 +190,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="ops",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="gprd",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -202,13 +202,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="ops",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="gprd",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="cloud_gitlab_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_30m{component="cloud_gitlab_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -219,11 +219,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_30m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_30m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -233,11 +233,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -248,7 +248,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="ops",zone="gitlab.net"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="gprd",zone="gitlab.net"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -260,13 +260,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="ops",status=~"5..",zone="gitlab.net"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="gprd",status=~"5..",zone="gitlab.net"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="gitlab_net_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_30m{component="gitlab_net_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -277,11 +277,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_30m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_30m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -291,11 +291,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -306,7 +306,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="ops",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_30m{env="gprd",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -318,13 +318,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="ops",status=~"5..",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_30m{env="gprd",status=~"5..",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="gitlab_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_30m{component="gitlab_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -335,11 +335,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_30m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_30m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -349,11 +349,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
 - name: 'Global SLI Metrics: cloudflare - Burn-Rate 1h'
   interval: 1m
@@ -367,7 +367,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="ops",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="gprd",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -379,13 +379,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="ops",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="gprd",status=~"5..",status!="502",zone=~"cloud.gitlab.com|cloud.staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -396,11 +396,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -410,11 +410,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -425,7 +425,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="ops",zone="gitlab.net"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="gprd",zone="gitlab.net"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -437,13 +437,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="ops",status=~"5..",zone="gitlab.net"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="gprd",status=~"5..",zone="gitlab.net"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -454,11 +454,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -468,11 +468,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -483,7 +483,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="ops",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
+        sli_aggregations:cloudflare_zone_requests_total:rate_1h{env="gprd",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -495,13 +495,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="ops",status=~"5..",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
+          sli_aggregations:cloudflare_zone_requests_status:rate_1h{env="gprd",status=~"5..",zone=~"gitlab.com|staging.gitlab.com"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="gitlab_zone",env="ops",monitor="global",stage="main",tier="lb",type="cloudflare"}
+          gitlab_component_ops:rate_1h{component="gitlab_zone",env="gprd",monitor="global",stage="main",tier="lb",type="cloudflare"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -512,11 +512,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -526,11 +526,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
 - name: 'Global SLI Metrics: cloudflare - Burn-Rate 6h'
   interval: 2m
@@ -544,7 +544,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -555,7 +555,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -566,7 +566,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -577,7 +577,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -587,11 +587,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_6h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_6h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -601,11 +601,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -616,7 +616,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -627,7 +627,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -638,7 +638,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -649,7 +649,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -659,11 +659,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_6h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_6h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -673,11 +673,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -688,7 +688,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -699,7 +699,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -710,7 +710,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -721,7 +721,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -731,11 +731,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_6h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_6h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -745,11 +745,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
 - name: 'Global SLI Metrics: cloudflare - Burn-Rate 3d'
   interval: 2m
@@ -763,7 +763,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -774,7 +774,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -785,7 +785,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -796,7 +796,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -806,11 +806,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_3d{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_3d{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -820,11 +820,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="cloud_gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="cloud_gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -835,7 +835,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -846,7 +846,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -857,7 +857,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -868,7 +868,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -878,11 +878,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_3d{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_3d{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -892,11 +892,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="gitlab_net_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="gitlab_net_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -907,7 +907,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -918,7 +918,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -929,7 +929,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -940,7 +940,7 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -950,11 +950,11 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_errors:rate_3d{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_ops:rate_3d{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -964,9 +964,9 @@ groups:
       type: cloudflare
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="gitlab_zone",env="ops",monitor="global",tier="lb",type="cloudflare"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="gitlab_zone",env="gprd",monitor="global",tier="lb",type="cloudflare"} offset 30s
       )
