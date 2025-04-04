@@ -152,6 +152,36 @@ services:
     observability:
       monitors:
 
+  - name: release-tooling
+    friendly_name: Delivery Release Tooling
+    tier: inf
+    teams:
+      - release
+    label: release-Tooling
+    owner: release
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/release-tools
+        - https://ops.gitlab.net/gitlab-com/gl-infra/deployer
+        - https://ops.gitlab.net/gitlab-com/gl-infra/deploy-tooling
+        - https://ops.gitlab.net/gitlab-com/gl-infra/patcher
+        - https://gitlab.com/gitlab-org/merge-train
+        - https://gitlab.com/gitlab-com/gl-infra/release-environments
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+
   - name: camoproxy
     tier: sv
     friendly_name: Camoproxy
