@@ -8,7 +8,6 @@ function(satisfiedThreshold, toleratedThreshold, selector={}, overrides={})
       useConfidenceLevelForSLIAlerts: '98%',
       userImpacting: true,
       serviceAggregation: false,  // The requests are already counted in the `puma/rails_request` SLI.
-      experimental: true,
       description: |||
         Apdex for time workhorse spends waiting for a free Puma worker.  When this alerts, a noticeable proportion of requests are arriving a Puma when there are no free workers, and thus queue for processing until a worker is free.
 
