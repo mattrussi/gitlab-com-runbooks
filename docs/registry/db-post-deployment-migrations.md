@@ -22,27 +22,25 @@ This should be done from within a registry instance in K8s, using the built-in `
 
 1. Confirm that the registry version indicated in the Change Request matches the one (and there is only one) running in the target environment ([dashboard](https://dashboards.gitlab.net/d/registry-app/registry-application-detail?orgId=1&from=now-5m&to=now&viewPanel=3));
 
-1. Connect to the target cluster for which maintenance is occurring ([runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/k8s-oncall-setup.md#kubernetes-api-access));
+1. Connect to any cluster from the environment for which maintenance is occurring ([runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/k8s-oncall-setup.md#kubernetes-api-access));
 
-1. Find the oldest container registry Pod (ignore Pods that have `-migrations-` in the name!):
+    **Note** that the regional clusters in `gprd` and `gstg` do not have any Registry pods. So, you can connect to any one of the three zonal clusters.
 
-   ```sh
-   kubectl get pods -n gitlab -l app=registry
-   ```
-
-1. Access the pod:
+1. Find the oldest container registry Pod (ignore Pods that have `-migrations-` in the name!) and access it using `kubectl`:
 
    ```sh
-   kubectl exec -it <pod_name> -- sh
+   POD_NAME=$(kubectl get pods -n gitlab -l app=registry --sort-by=.metadata.creationTimestamp -o name | grep -v -- "-migrations-" | head -n 1) && \
+       [ -n "$POD_NAME" ] && kubectl exec -n gitlab -it $POD_NAME -- /bin/bash || \
+       echo "Pod name \"$POD_NAME\" is invalid."
    ```
 
-   If it's on a `gprd` cluster, notify `#sd_security_operations` slack channel that you are exec-ing into the pod with
-   a link to the change request, as they will receive a SIRT alert about it.
+   > [!note]
+   > If you are running `kubectl exec` on a cluster in the `gprd` environment, then notify `#security_operations` slack channel that you are exec-ing into the pod with a link to the change request, as they will receive a SIRT alert about it.
 
 1. List pending migrations:
 
    ```sh
-   registry database migrate status /etc/docker/registry/config.yml
+   SKIP_POST_DEPLOYMENT_MIGRATIONS=false registry database migrate status /etc/docker/registry/config.yml
    ```
 
    You should see something like this:
@@ -60,6 +58,8 @@ This should be done from within a registry instance in K8s, using the built-in `
 
    In this example, there is one pending post-deployment migration named `20221123174403_post_add_layers_simplified_usage_index_batch_1`. You know it's pending because `APPLIED` is empty. You know it's a post-deployment because of the `(post deployment)` suffix.
 
+   Note that we're explicitly disabling the `SKIP_POST_DEPLOYMENT_MIGRATIONS` environment variable for these commands. If we don't, then the registry CLI will ignore post-deployment migrations. This environment variable is set to `true` for our deployments ([sample](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/62be0606e27a2af17d91d3857e914dc08a631283/releases/gitlab/values/gprd-cny.yaml.gotmpl#L224)) to avoid having these migrations applied alongside regular schema migrations during upgrades.
+
 1. Confirm that there are no pending regular migrations in the list above;
 
 1. Confirm that the number and name of pending post-deployment migrations matches those described in the change request;
@@ -69,7 +69,7 @@ This should be done from within a registry instance in K8s, using the built-in `
 1. Proceed to apply post-deployment migrations:
 
    ```sh
-   registry database migrate up /etc/docker/registry/config.yml
+   SKIP_POST_DEPLOYMENT_MIGRATIONS=false registry database migrate up /etc/docker/registry/config.yml
    ```
 
    You should see something like this:
