@@ -19,3 +19,4 @@ toolbelt/.env/*
 /pingdom/pingdom
 public/
 joblog.txt
+.ruby-lsp/
