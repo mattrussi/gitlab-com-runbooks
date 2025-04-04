@@ -627,11 +627,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le="0.25",type="api"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le=~"0\\.25",type="api"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le="1",type="api"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_5m{env="gprd",le=~"1|1\\.0",type="api"}
         )
       )
       /
@@ -837,11 +837,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le=~"1|1\\.0",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le=~"10|10\\.0",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
       )
       /
@@ -1538,11 +1538,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le="0.25",type="api"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le=~"0\\.25",type="api"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le="1",type="api"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_30m{env="gprd",le=~"1|1\\.0",type="api"}
         )
       )
       /
@@ -1748,11 +1748,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le=~"1|1\\.0",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le=~"10|10\\.0",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
       )
       /
@@ -2449,11 +2449,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le="0.25",type="api"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le=~"0\\.25",type="api"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le="1",type="api"}
+          sli_aggregations:gitlab_rails_queue_duration_seconds_bucket:rate_1h{env="gprd",le=~"1|1\\.0",type="api"}
         )
       )
       /
@@ -2659,11 +2659,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le=~"1|1\\.0",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{code!~"5..",env="gprd",job=~"gitlab-workhorse|gitlab-workhorse-api",le=~"10|10\\.0",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="api"}
         )
       )
       /

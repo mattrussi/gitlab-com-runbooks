@@ -305,6 +305,7 @@ metricsCatalog.serviceDefinition(
           selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'anthropic' },
           satisfiedThreshold=30,
           toleratedThreshold=60,
+          metricsFormat='migrating'
         ),
 
         errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: 'anthropic', 'error': 'yes' }),
@@ -348,6 +349,7 @@ metricsCatalog.serviceDefinition(
           selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'vertex-ai' },
           satisfiedThreshold=2,
           toleratedThreshold=5,
+          metricsFormat='migrating'
         ),
 
         errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: 'vertex-ai', 'error': 'yes' }),
@@ -391,6 +393,7 @@ metricsCatalog.serviceDefinition(
           histogram='inference_request_duration_seconds_bucket',
           selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: { noneOf: ['vertex-ai', 'anthropic'] } },
           satisfiedThreshold=30,
+          metricsFormat='migrating'
         ),
 
         errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: { noneOf: ['vertex-ai', 'anthropic'] }, 'error': 'yes' }),

@@ -14,11 +14,11 @@ groups:
     expr: |
       (
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="30",model_engine="anthropic",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le=~"30|30\\.0",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="60",model_engine="anthropic",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le=~"60|60\\.0",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
       )
       /
@@ -73,7 +73,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,feature_category) (
-        sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="30",model_engine!~"anthropic|vertex-ai",streaming="no",type="ai-gateway"}
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le=~"30|30\\.0",model_engine!~"anthropic|vertex-ai",streaming="no",type="ai-gateway"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -126,11 +126,11 @@ groups:
     expr: |
       (
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="2",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le=~"2|2\\.0",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="5",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le=~"5|5\\.0",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
         )
       )
       /
@@ -621,11 +621,11 @@ groups:
     expr: |
       (
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="30",model_engine="anthropic",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le=~"30|30\\.0",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="60",model_engine="anthropic",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le=~"60|60\\.0",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
       )
       /
@@ -680,7 +680,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,feature_category) (
-        sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="30",model_engine!~"anthropic|vertex-ai",streaming="no",type="ai-gateway"}
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le=~"30|30\\.0",model_engine!~"anthropic|vertex-ai",streaming="no",type="ai-gateway"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -733,11 +733,11 @@ groups:
     expr: |
       (
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="2",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le=~"2|2\\.0",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="5",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le=~"5|5\\.0",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
         )
       )
       /
@@ -1228,11 +1228,11 @@ groups:
     expr: |
       (
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="30",model_engine="anthropic",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le=~"30|30\\.0",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="60",model_engine="anthropic",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le=~"60|60\\.0",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
       )
       /
@@ -1287,7 +1287,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,feature_category) (
-        sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="30",model_engine!~"anthropic|vertex-ai",streaming="no",type="ai-gateway"}
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le=~"30|30\\.0",model_engine!~"anthropic|vertex-ai",streaming="no",type="ai-gateway"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -1340,11 +1340,11 @@ groups:
     expr: |
       (
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="2",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le=~"2|2\\.0",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,feature_category) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="5",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le=~"5|5\\.0",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
         )
       )
       /

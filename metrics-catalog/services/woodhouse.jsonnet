@@ -67,6 +67,7 @@ metricsCatalog.serviceDefinition({
         histogram='woodhouse_http_request_duration_seconds_bucket',
         selector=selector,
         satisfiedThreshold=1,
+        metricsFormat='migrating'
       ),
       requestRate: rateMetric(
         counter='woodhouse_http_requests_total',
@@ -99,6 +100,7 @@ metricsCatalog.serviceDefinition({
         histogram='woodhouse_async_job_duration_seconds_bucket',
         selector=selector,
         satisfiedThreshold=10,
+        metricsFormat='migrating'
       ),
       requestRate: rateMetric(
         counter='woodhouse_async_jobs_total',

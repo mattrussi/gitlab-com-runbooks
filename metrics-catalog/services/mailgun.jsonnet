@@ -23,7 +23,7 @@ metricsCatalog.serviceDefinition({
       team: 'sre_reliability',
       requestRate: rateMetric('mailgun_delivery_accepted_total'),
       errorRate: rateMetric('mailgun_delivery_errors_total'),
-      apdex: histogramApdex('mailgun_delivery_time_seconds_bucket', satisfiedThreshold=60),
+      apdex: histogramApdex('mailgun_delivery_time_seconds_bucket', satisfiedThreshold=60, metricsFormat='migrating'),
       significantLabels: ['delivery_status_code'],
     },
   },

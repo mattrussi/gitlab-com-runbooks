@@ -14,11 +14,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le="1",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le=~"1|1\\.0",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le="5",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_5m{env="pre",le=~"5|5\\.0",type="git"}
         )
       )
       /
@@ -125,11 +125,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le="1",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le=~"1|1\\.0",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le="5",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_30m{env="pre",le=~"5|5\\.0",type="git"}
         )
       )
       /
@@ -236,11 +236,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le="1",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le=~"1|1\\.0",type="git"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le="5",type="git"}
+          sli_aggregations:gitlab_shell_sshd_session_established_duration_seconds_bucket:rate_1h{env="pre",le=~"5|5\\.0",type="git"}
         )
       )
       /

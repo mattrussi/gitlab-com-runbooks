@@ -35,7 +35,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='registry_storage_action_seconds_bucket',
         selector={},
-        satisfiedThreshold=1
+        satisfiedThreshold=1,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -57,7 +58,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_object_storage_upload_time_bucket',
         selector={},
-        satisfiedThreshold=25
+        satisfiedThreshold=25,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(

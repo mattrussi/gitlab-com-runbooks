@@ -13,11 +13,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_5m{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="platform_insights"}
+          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_5m{code!~"4xx|5xx",job="default/traefik",le=~"1\\.2",service=~".*errortracking-api.*",team="platform_insights"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_5m{code!~"4xx|5xx",job="default/traefik",le="5",service=~".*errortracking-api.*",team="platform_insights"}
+          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_5m{code!~"4xx|5xx",job="default/traefik",le=~"5|5\\.0",service=~".*errortracking-api.*",team="platform_insights"}
         )
       )
       /
@@ -100,11 +100,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_30m{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="platform_insights"}
+          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_30m{code!~"4xx|5xx",job="default/traefik",le=~"1\\.2",service=~".*errortracking-api.*",team="platform_insights"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_30m{code!~"4xx|5xx",job="default/traefik",le="5",service=~".*errortracking-api.*",team="platform_insights"}
+          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_30m{code!~"4xx|5xx",job="default/traefik",le=~"5|5\\.0",service=~".*errortracking-api.*",team="platform_insights"}
         )
       )
       /
@@ -187,11 +187,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_1h{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="platform_insights"}
+          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_1h{code!~"4xx|5xx",job="default/traefik",le=~"1\\.2",service=~".*errortracking-api.*",team="platform_insights"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_1h{code!~"4xx|5xx",job="default/traefik",le="5",service=~".*errortracking-api.*",team="platform_insights"}
+          sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_1h{code!~"4xx|5xx",job="default/traefik",le=~"5|5\\.0",service=~".*errortracking-api.*",team="platform_insights"}
         )
       )
       /

@@ -202,7 +202,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_5m{env="gprd",job="grafana-image-renderer",le="30",shard="default",type="monitoring"}
+        sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_5m{env="gprd",job="grafana-image-renderer",le=~"30|30\\.0",shard="default",type="monitoring"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -279,11 +279,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_5m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}
+          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_5m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le=~"1|1\\.0",type="monitoring"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_5m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}
+          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_5m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le=~"3|3\\.0",type="monitoring"}
         )
       )
       /
@@ -694,7 +694,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_30m{env="gprd",job="grafana-image-renderer",le="30",shard="default",type="monitoring"}
+        sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_30m{env="gprd",job="grafana-image-renderer",le=~"30|30\\.0",shard="default",type="monitoring"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -771,11 +771,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_30m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}
+          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_30m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le=~"1|1\\.0",type="monitoring"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_30m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}
+          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_30m{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le=~"3|3\\.0",type="monitoring"}
         )
       )
       /
@@ -1186,7 +1186,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_1h{env="gprd",job="grafana-image-renderer",le="30",shard="default",type="monitoring"}
+        sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_1h{env="gprd",job="grafana-image-renderer",le=~"30|30\\.0",shard="default",type="monitoring"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1263,11 +1263,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_1h{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}
+          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_1h{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le=~"1|1\\.0",type="monitoring"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_1h{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}
+          sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_1h{env="gprd",job!="prometheus-metamon",job=~"prometheus.*",le=~"3|3\\.0",type="monitoring"}
         )
       )
       /

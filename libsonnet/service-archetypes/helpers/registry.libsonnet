@@ -2,12 +2,13 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-local registryApdex(selector, satisfiedThreshold, toleratedThreshold=null) =
+local registryApdex(selector, satisfiedThreshold, toleratedThreshold=null, metricsFormat='migrating') =
   histogramApdex(
     histogram='registry_http_request_duration_seconds_bucket',
     selector=selector,
     satisfiedThreshold=satisfiedThreshold,
     toleratedThreshold=toleratedThreshold,
+    metricsFormat=metricsFormat,
   );
 
 local mainApdex(selector, customRouteSLIs) =

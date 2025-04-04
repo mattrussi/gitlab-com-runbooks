@@ -161,7 +161,8 @@ metricsCatalog.serviceDefinition({
           },
         },
         satisfiedThreshold=1,
-        toleratedThreshold=10
+        toleratedThreshold=10,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(

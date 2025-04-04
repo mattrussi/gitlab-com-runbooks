@@ -28,7 +28,8 @@ function(satisfiedThreshold, toleratedThreshold, selector={}, overrides={})
         histogram='gitlab_rails_queue_duration_seconds_bucket',
         selector=selector,
         satisfiedThreshold=satisfiedThreshold,
-        toleratedThreshold=toleratedThreshold
+        toleratedThreshold=toleratedThreshold,
+        metricsFormat='migrating',
       ),
 
       significantLabels: [],

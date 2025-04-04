@@ -68,7 +68,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:jaeger_collector_save_latency_bucket:rate_5m{env="gstg",le="10"}
+        sli_aggregations:jaeger_collector_save_latency_bucket:rate_5m{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -144,7 +144,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:jaeger_query_latency_bucket:rate_5m{env="gstg",le="10"}
+        sli_aggregations:jaeger_query_latency_bucket:rate_5m{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -279,7 +279,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:jaeger_collector_save_latency_bucket:rate_30m{env="gstg",le="10"}
+        sli_aggregations:jaeger_collector_save_latency_bucket:rate_30m{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -355,7 +355,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:jaeger_query_latency_bucket:rate_30m{env="gstg",le="10"}
+        sli_aggregations:jaeger_query_latency_bucket:rate_30m{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -490,7 +490,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:jaeger_collector_save_latency_bucket:rate_1h{env="gstg",le="10"}
+        sli_aggregations:jaeger_collector_save_latency_bucket:rate_1h{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -566,7 +566,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:jaeger_query_latency_bucket:rate_1h{env="gstg",le="10"}
+        sli_aggregations:jaeger_query_latency_bucket:rate_1h{env="gstg",le=~"10|10\\.0"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

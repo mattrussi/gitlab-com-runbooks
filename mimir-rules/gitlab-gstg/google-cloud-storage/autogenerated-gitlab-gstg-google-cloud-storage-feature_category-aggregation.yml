@@ -45,7 +45,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:registry_storage_action_seconds_bucket:rate_5m{env="gstg",le="1"}
+        sli_aggregations:registry_storage_action_seconds_bucket:rate_5m{env="gstg",le=~"1|1\\.0"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -113,7 +113,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:registry_storage_action_seconds_bucket:rate_30m{env="gstg",le="1"}
+        sli_aggregations:registry_storage_action_seconds_bucket:rate_30m{env="gstg",le=~"1|1\\.0"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -181,7 +181,7 @@ groups:
       type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:registry_storage_action_seconds_bucket:rate_1h{env="gstg",le="1"}
+        sli_aggregations:registry_storage_action_seconds_bucket:rate_1h{env="gstg",le=~"1|1\\.0"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
