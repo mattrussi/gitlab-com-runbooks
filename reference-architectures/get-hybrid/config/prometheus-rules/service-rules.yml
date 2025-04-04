@@ -7865,20 +7865,172 @@ groups:
   name: 'Component-Level SLIs: sidekiq - 5m burn-rate'
   rules:
   - expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[5m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m
   - expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[5m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m
   - expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[5m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_failed_total_rate5m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
+      (gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_5m{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_5m{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_5m{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"} * 300))
+            )
+            /
+            (gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="default",tier="sv",type="sidekiq"} * 300)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_5m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_5m{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="default",tier="sv",type="sidekiq"} * 300)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_5m
   - expr: |
       sum by () (
         rate(sidekiq_jobs_completion_seconds_count{worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m])
@@ -8000,201 +8152,303 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",queue="urgent_cpu_bound"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",queue="urgent_cpu_bound"}
         )
         , "_c", "1", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency=""}
-        )
-        , "_c", "5", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",urgency=""}
-        )
-        , "_c", "6", "", "")
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue="urgent_cpu_bound"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",queue="urgent_cpu_bound"}
         )
         , "_c", "1", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency=""}
-        )
-        , "_c", "5", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency=""}
-        )
-        , "_c", "6", "", "")
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue="urgent_cpu_bound"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_ops:rate_5m
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue="urgent_cpu_bound"}
         )
       )
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
         )
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_5m
   - expr: |
       sum by () (
-        gitlab_component_errors:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_errors:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:ratio_5m
   - expr: |
       sum by () (
-        gitlab_component_apdex:success:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:success:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:ratio_5m
   - expr: |
-      (gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} == 0)
+      (gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0)
       or
       clamp(
         (
           (
-            (gitlab_component_errors:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_errors:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300))
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300))
           )
           -
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_errors:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_errors:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300))
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300))
             )
             /
-            (gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300)
+            (gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300)),
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       confidence: 98%
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:confidence:ratio_5m
   - expr: |
-      clamp_min(gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"} == 0, 1)
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0, 1)
       or
       clamp(
         (
           (
-            (gitlab_component_apdex:success:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_apdex:success:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300))
           )
           +
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_apdex:success:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_apdex:success:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300))
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300))
             )
             /
-            (gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300)
+            (gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"} * 300)),
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 300)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_5m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",queue="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",queue="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",queue="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",queue="urgent_other"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue="urgent_other"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
+      (gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300))
+            )
+            /
+            (gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_5m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="urgent_other",tier="sv",type="sidekiq"} * 300)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -8203,20 +8457,172 @@ groups:
   name: 'Component-Level SLIs: sidekiq - 30m burn-rate'
   rules:
   - expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[30m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m
   - expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[30m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m
   - expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[30m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_failed_total_rate30m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      (gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_30m{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_30m{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_30m{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"} * 1800))
+            )
+            /
+            (gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="default",tier="sv",type="sidekiq"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_30m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_30m{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_30m{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"} * 1800))
+            )
+            /
+            (gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="default",tier="sv",type="sidekiq"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_30m
   - expr: |
       sum by () (
         rate(sidekiq_jobs_completion_seconds_count{worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m])
@@ -8338,201 +8744,303 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",queue="urgent_cpu_bound"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",queue="urgent_cpu_bound"}
         )
         , "_c", "1", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency=""}
-        )
-        , "_c", "5", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",urgency=""}
-        )
-        , "_c", "6", "", "")
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue="urgent_cpu_bound"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",queue="urgent_cpu_bound"}
         )
         , "_c", "1", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency=""}
-        )
-        , "_c", "5", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency=""}
-        )
-        , "_c", "6", "", "")
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue="urgent_cpu_bound"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_ops:rate_30m
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue="urgent_cpu_bound"}
         )
       )
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
         )
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_30m
   - expr: |
       sum by () (
-        gitlab_component_errors:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_errors:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:ratio_30m
   - expr: |
       sum by () (
-        gitlab_component_apdex:success:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:success:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:ratio_30m
   - expr: |
-      (gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} == 0)
+      (gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0)
       or
       clamp(
         (
           (
-            (gitlab_component_errors:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_errors:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800))
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800))
           )
           -
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_errors:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_errors:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800))
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800))
             )
             /
-            (gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800)
+            (gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800)),
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       confidence: 98%
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:confidence:ratio_30m
   - expr: |
-      clamp_min(gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"} == 0, 1)
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0, 1)
       or
       clamp(
         (
           (
-            (gitlab_component_apdex:success:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_apdex:success:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800))
           )
           +
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_apdex:success:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_apdex:success:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800))
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800))
             )
             /
-            (gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800)
+            (gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"} * 1800)),
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 1800)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_30m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",queue="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",queue="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",queue="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",queue="urgent_other"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue="urgent_other"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      (gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800))
+            )
+            /
+            (gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_30m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800))
+            )
+            /
+            (gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="urgent_other",tier="sv",type="sidekiq"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -8541,20 +9049,172 @@ groups:
   name: 'Component-Level SLIs: sidekiq - 1h burn-rate'
   rules:
   - expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1h] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h
   - expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1h] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h
   - expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,resource_boundary,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1h] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_failed_total_rate1h
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue!="urgent_cpu_bound",queue!="urgent_other"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue!="urgent_cpu_bound",queue!="urgent_other"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
+      (gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_1h{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_1h{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_1h{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"} * 3600))
+            )
+            /
+            (gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="default",tier="sv",type="sidekiq"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_1h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_1h{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_1h{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"} * 3600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="default",tier="sv",type="sidekiq"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_1h
   - expr: |
       sum by () (
         rate(sidekiq_jobs_completion_seconds_count{worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h])
@@ -8676,201 +9336,303 @@ groups:
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",queue="urgent_cpu_bound"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",queue="urgent_cpu_bound"}
         )
         , "_c", "1", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency=""}
-        )
-        , "_c", "5", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",urgency=""}
-        )
-        , "_c", "6", "", "")
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="urgent_cpu_bound"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",queue="urgent_cpu_bound"}
         )
         , "_c", "1", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency=""}
-        )
-        , "_c", "5", "", "")
-        or
-        label_replace(sum by () (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency=""}
-        )
-        , "_c", "6", "", "")
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="urgent_cpu_bound"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_ops:rate_1h
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue="urgent_cpu_bound"}
         )
       )
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
         )
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_1h
   - expr: |
       sum by () (
-        gitlab_component_errors:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_errors:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:ratio_1h
   - expr: |
       sum by () (
-        gitlab_component_apdex:success:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:success:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:ratio_1h
   - expr: |
-      (gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} == 0)
+      (gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0)
       or
       clamp(
         (
           (
-            (gitlab_component_errors:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_errors:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600))
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600))
           )
           -
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_errors:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_errors:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600))
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600))
             )
             /
-            (gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600)
+            (gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600)),
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       confidence: 98%
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:confidence:ratio_1h
   - expr: |
-      clamp_min(gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"} == 0, 1)
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0, 1)
       or
       clamp(
         (
           (
-            (gitlab_component_apdex:success:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_apdex:success:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600))
           )
           +
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_apdex:success:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_apdex:success:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600))
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600))
             )
             /
-            (gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600)
+            (gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"} * 3600)),
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 3600)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_1h
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",queue="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",queue="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="urgent_other"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by () (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",queue="urgent_other"}
+        )
+        , "_c", "1", "", "")
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="urgent_other"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue="urgent_other"}
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"}
+        )
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
+      (gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600))
+            )
+            /
+            (gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_1h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="urgent_other",tier="sv",type="sidekiq"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -8878,6 +9640,98 @@ groups:
 - interval: 2m
   name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
   rules:
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="default",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: default
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      (gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_6h{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_6h{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_6h{component="default",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"} * 21600))
+            )
+            /
+            (gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="default",tier="sv",type="sidekiq"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_6h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_6h{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_6h{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="default",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"} * 21600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="default",tier="sv",type="sidekiq"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: default
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_6h
   - expr: |
       sum by () (
         rate(sidekiq_jobs_completion_seconds_count{worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[6h])
@@ -8998,92 +9852,184 @@ groups:
     record: gitlab_component_apdex:confidence:ratio_6h
   - expr: |
       sum by () (
-        gitlab_component_errors:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_errors:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:ratio_6h
   - expr: |
       sum by () (
-        gitlab_component_apdex:success:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:success:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
       /
       sum by () (
-        gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+        gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       tier: sv
       type: sidekiq
     record: gitlab_component_apdex:ratio_6h
   - expr: |
-      (gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} == 0)
+      (gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0)
       or
       clamp(
         (
           (
-            (gitlab_component_errors:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_errors:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600))
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600))
           )
           -
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_errors:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_errors:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600))
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600))
             )
             /
-            (gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600)
+            (gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600)),
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
       confidence: 98%
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:confidence:ratio_6h
   - expr: |
-      clamp_min(gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"} == 0, 1)
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} == 0, 1)
       or
       clamp(
         (
           (
-            (gitlab_component_apdex:success:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"})
+            (gitlab_component_apdex:success:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"})
             +
-            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600))
           )
           +
           2.326348
           *
           sqrt(
             (
-              (gitlab_component_apdex:success:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"}))
+              (gitlab_component_apdex:success:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"}))
               +
-              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600))
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600))
             )
             /
-            (gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600)
+            (gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600)
           )
         )
         /
-        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"} * 21600)),
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="urgent_cpu_bound",tier="sv",type="sidekiq"} * 21600)),
         0, 1
       )
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:confidence:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: urgent_other
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      (gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_errors:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600))
+            )
+            /
+            (gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
+      confidence: 98%
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:confidence:ratio_6h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="urgent_other",tier="sv",type="sidekiq"} / gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="urgent_other",tier="sv",type="sidekiq"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: urgent_other
       confidence: 98%
       tier: sv
       type: sidekiq
@@ -9091,6 +10037,14 @@ groups:
 - interval: 1m
   name: 'Component mapping: sidekiq'
   rules:
+  - expr: "1"
+    labels:
+      component: default
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_service:mapping
   - expr: "1"
     labels:
       component: email_receiver
@@ -9101,7 +10055,15 @@ groups:
     record: gitlab_component_service:mapping
   - expr: "1"
     labels:
-      component: shard_catchall
+      component: urgent_cpu_bound
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: urgent_other
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv

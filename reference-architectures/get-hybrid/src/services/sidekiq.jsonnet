@@ -2,13 +2,13 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
-local highUrgencySelector = { urgency: 'high' };
-local lowUrgencySelector = { urgency: 'low' };
-local throttledUrgencySelector = { urgency: 'throttled' };
-local noUrgencySelector = { urgency: '' };
+// Queue-based selectors for the routing rules
+local urgentCpuBoundQueueSelector = { queue: 'urgent_cpu_bound' };
+local urgentOtherQueueSelector = { queue: 'urgent_other' };
+// For default, use a simpler approach that just selects queues that are not the specific queues
+local defaultQueueSelector = { queue: { ne: ['urgent_cpu_bound', 'urgent_other'] } };
 
 local slos = {
   urgent: {
@@ -54,14 +54,26 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       podSelector=kubeSelector,
       ingressSelector=null,
-      // TODO: use a better selector for Sidekiq HPAs: https://gitlab.com/gitlab-com/runbooks/-/issues/87
-      hpaSelector={ horizontalpodautoscaler: 'gitlab-sidekiq-all-in-1-v2' },
+      // Using a pattern to match all sidekiq HPAs
+      hpaSelector={ horizontalpodautoscaler: { re: 'gitlab-sidekiq-.*' } },
       nodeSelector={ workload: 'sidekiq' },
       deploymentSelector=kubeSelector
     ),
   },
   kubeResources: {
-    'gitlab-sidekiq-all-in-1-v2': {
+    'gitlab-sidekiq-catchall-v2': {
+      kind: 'Deployment',
+      containers: [
+        'sidekiq',
+      ],
+    },
+    'gitlab-sidekiq-urgent-cpu-v2': {
+      kind: 'Deployment',
+      containers: [
+        'sidekiq',
+      ],
+    },
+    'gitlab-sidekiq-urgent-other-v2': {
       kind: 'Deployment',
       containers: [
         'sidekiq',
@@ -73,52 +85,103 @@ metricsCatalog.serviceDefinition({
   useConfidenceLevelForSLIAlerts: '98%',
 
   serviceLevelIndicators: {
-    shard_catchall: {
+    urgent_cpu_bound: {
       userImpacting: true,
       ignoreTrafficCessation: false,
       upscaleLongerBurnRates: true,
 
       description: |||
-        All Sidekiq jobs
+        Sidekiq jobs in the urgent_cpu_bound queue
       |||,
 
       apdex: combined(
         [
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector,
+            selector=urgentCpuBoundQueueSelector,
             satisfiedThreshold=slos.urgent.executionDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=highUrgencySelector,
+            selector=urgentCpuBoundQueueSelector,
             satisfiedThreshold=slos.urgent.queueingDurationSeconds,
           ),
+        ]
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector={ le: '+Inf' } + urgentCpuBoundQueueSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=urgentCpuBoundQueueSelector,
+      ),
+
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
+
+      toolingLinks: [],
+    },
+
+    urgent_other: {
+      userImpacting: true,
+      ignoreTrafficCessation: false,
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        Sidekiq jobs in the urgent_other queue
+      |||,
+
+      apdex: combined(
+        [
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=lowUrgencySelector,
+            selector=urgentOtherQueueSelector,
+            satisfiedThreshold=slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=urgentOtherQueueSelector,
+            satisfiedThreshold=slos.urgent.queueingDurationSeconds,
+          ),
+        ]
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector={ le: '+Inf' } + urgentOtherQueueSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=urgentOtherQueueSelector,
+      ),
+
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
+
+      toolingLinks: [],
+    },
+
+    default: {
+      userImpacting: true,
+      ignoreTrafficCessation: false,
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        All other Sidekiq jobs (not in urgent_cpu_bound or urgent_other queues)
+      |||,
+
+      apdex: combined(
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=defaultQueueSelector,
             satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=lowUrgencySelector,
-            satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=throttledUrgencySelector,
-            satisfiedThreshold=slos.throttled.executionDurationSeconds,
-          ),
-          // TODO: remove this once all unattribute jobs are removed
-          // Treat `urgency=""` as low urgency jobs.
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=noUrgencySelector,
-            satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=noUrgencySelector,
+            selector=defaultQueueSelector,
             satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
           ),
         ]
@@ -126,22 +189,19 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector={ le: '+Inf' },
+        selector={ le: '+Inf' } + defaultQueueSelector,
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector={},
+        selector=defaultQueueSelector,
       ),
 
-      // Note: these labels will also be included in the
-      // intermediate recording rules specified in the
-      // `recordingRuleMetrics` stanza above
-      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'resource_boundary'],
 
-      // Consider adding useful links for the environment in the future.
       toolingLinks: [],
     },
+
     email_receiver: {
       userImpacting: true,
       severity: 's3',
@@ -167,7 +227,6 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['error'],
 
-      // Consider adding useful links for the environment in the future.
       toolingLinks: [],
     },
   },
