@@ -152,6 +152,8 @@ teams:
   slack_error_budget_channel: g_global_search
   send_error_budget_weekly_to_slack: true
   product_stage_group: global_search
+  alerts:
+  - gstg
   ignored_components:
   - graphql_query
 
